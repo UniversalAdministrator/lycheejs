@@ -169,9 +169,22 @@ lychee.define('harvester.Main').requires([
 		this.bind('init', function() {
 
 			let git    = new _harvester.data.Git();
+			let config = git.config();
 			let report = git.report();
 
-			console.log(report.status);
+			// XXX: Too much log for terminal
+			// delete report.log.master;
+			// delete report.log.development;
+			// delete report.log.branch;
+			// console.log(report);
+
+			if (report.status === _harvester.data.Git.STATUS.update) {
+				console.info('Can update!');
+			} else if (report.status === _harvester.data.Git.STATUS.manual) {
+				console.error('History is ahead :(');
+			} else if (report.status === _harvester.data.Git.STATUS.ignore) {
+				console.warn('Nothing to do!');
+			}
 
 		}, this, true);
 

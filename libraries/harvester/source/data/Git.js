@@ -11,6 +11,50 @@ lychee.define('harvester.data.Git').requires([
 	 * HELPERS
 	 */
 
+	const _parse_remotes = function(content) {
+
+		let remotes = {};
+		let pointer = null;
+
+		content.split('\n').map(function(line) {
+
+			if (line.startsWith('[remote')) {
+
+				let tmp = line.split('"')[1] || null;
+				if (tmp !== null) {
+
+					pointer = remotes[tmp] = {
+						url:   null,
+						fetch: null
+					};
+
+				} else {
+
+					pointer = null;
+
+				}
+
+			} else if (pointer !== null) {
+
+				let tmp = line.trim().split('=').map(function(val) {
+					return val.trim();
+				});
+
+				if (tmp[0] === 'url') {
+					pointer.url = tmp[1];
+				} else if (tmp[0] === 'fetch') {
+					pointer.fetch = tmp[1];
+				}
+
+			}
+
+		});
+
+
+		return remotes;
+
+	};
+
 	const _parse_log = function(content) {
 
 		return content.split('\n').map(function(line) {
@@ -142,6 +186,18 @@ lychee.define('harvester.data.Git').requires([
 
 		},
 
+		config: function() {
+
+			let config  = (this.filesystem.read('/config') || '').toString().trim();
+			let remotes = _parse_remotes(config);
+
+
+			return {
+				remotes: remotes
+			};
+
+		},
+
 		report: function() {
 
 			let head       = (this.filesystem.read('/HEAD')       || '').toString().trim();
@@ -171,7 +227,7 @@ lychee.define('harvester.data.Git').requires([
 			let log    = _get_log.call(this);
 			let status = Composite.STATUS.manual;
 
-			if (log.length === 0) {
+			if (log.diff.length === 0) {
 
 				if (head === fetch_head) {
 
@@ -192,10 +248,24 @@ lychee.define('harvester.data.Git').requires([
 				}
 
 
-				// XXX: User broke their git history
+				// XXX: Verify that user did not break their git history
 				if (fetch_head !== orig_head) {
-					status = Composite.STATUS.manual;
+
+					let check = log.development.find(function(other) {
+						return other.hash === orig_head;
+					});
+
+					if (check !== undefined) {
+						status = Composite.STATUS.update;
+					} else {
+						status = Composite.STATUS.manual;
+					}
+
 				}
+
+			} else {
+
+				status = Composite.STATUS.manual;
 
 			}
 
