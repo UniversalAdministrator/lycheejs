@@ -112,8 +112,8 @@ lychee.define('harvester.mod.Harvester').requires([
 					_TIMEOUTS[id] = Date.now() + 24 * 60 * 60 * 1000;
 
 
-					// XXX: This is necessary, because lychee projects
-					// are not shipped in their own repositories
+					// XXX: lychee.js Libraries / Projects are not
+					// shipped in their own repositories.
 
 					let timeout = _TIMEOUT || null;
 					if (timeout === null || Date.now() > timeout) {
@@ -123,16 +123,24 @@ lychee.define('harvester.mod.Harvester').requires([
 							console.info('harvester.mod.Harvester: FETCH ("' + report.branch + '")');
 						}
 
-						_TIMEOUT = Date.now() + 24 * 60 * 60 * 1000;
+						timeout = _TIMEOUT = Date.now() + 24 * 60 * 60 * 1000;
 
 					}
 
 
-					if (report.branch === 'master' || report.branch === 'development') {
+					// XXX: This filters unnecessary checkouts
 
-						let result = _git.checkout(report.branch, id);
-						if (result === true) {
-							console.log('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
+					if (timeout !== null) {
+
+						if (report.branch === 'master' || report.branch === 'development') {
+
+							let result = _git.checkout(report.branch, id);
+							if (result === true) {
+								console.info('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
+							} else {
+								console.error('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
+							}
+
 						}
 
 					}

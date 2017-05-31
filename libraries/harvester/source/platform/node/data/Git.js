@@ -220,9 +220,22 @@ lychee.define('harvester.data.Git').tags({
 					let real = _path.relative(cwd, root);
 					if (real.substr(0, 2) !== '..') {
 
-						result = _child_process.execSync('git checkout --quiet "origin/' + branch + '" ./' + real, {
+						let handle = _child_process.spawnSync('git', [
+							'checkout',
+							'--quiet',
+							'origin/' + branch,
+							'./' + real
+						], {
 							cwd: cwd
-						}).toString();
+						});
+
+						let stdout = (handle.stdout || '').toString().trim();
+						let stderr = (handle.stderr || '').toString().trim();
+						if (stderr !== '') {
+							result = null;
+						} else {
+							result = stdout;
+						}
 
 					}
 

@@ -141,8 +141,7 @@ lychee.define('harvester.Watcher').requires([
 
 		if (sandbox === true) {
 
-			// XXX: Temporary test
-			// Harvester  = null;
+			Harvester  = null;
 			Fertilizer = null;
 			Strainer   = null;
 
