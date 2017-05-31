@@ -1,9 +1,12 @@
 
 lychee.define('harvester.mod.Harvester').requires([
+	'harvester.data.Git',
 	'harvester.net.Client'
 ]).exports(function(lychee, global, attachments) {
 
 	const _Client = lychee.import('harvester.net.Client');
+	const _Git    = lychee.import('harvester.data.Git');
+	const _git    = new _Git();
 	let   _CLIENT = null;
 
 
@@ -36,6 +39,14 @@ lychee.define('harvester.mod.Harvester').requires([
 		 */
 
 		can: function(project) {
+
+			let report = _git.report();
+			if (report.status === _Git.STATUS.update) {
+				console.info('Can update');
+			} else if (report.status === _Git.STATUS.manual) {
+				console.warn('Cannot update, history is ahead');
+			}
+
 
 			if (_CLIENT === null) {
 

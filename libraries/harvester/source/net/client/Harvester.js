@@ -1,11 +1,8 @@
 
-lychee.define('harvester.net.client.Harvester').requires([
-	'harvester.data.Git'
-]).includes([
+lychee.define('harvester.net.client.Harvester').includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
-	const _Git     = lychee.import('harvester.data.Git');
 	const _Service = lychee.import('lychee.net.Service');
 	let   _ID      = null;
 

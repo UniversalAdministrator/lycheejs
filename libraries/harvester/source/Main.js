@@ -165,44 +165,20 @@ lychee.define('harvester.Main').requires([
 
 		}, this, true);
 
-
 		this.bind('init', function() {
 
-			let git    = new _harvester.data.Git();
-			let config = git.config();
-			let report = git.report();
+			let watcher = this.watcher || null;
+			if (watcher !== null) {
 
-			// XXX: Too much log for terminal
-			// delete report.log.master;
-			// delete report.log.development;
-			// delete report.log.branch;
-			// console.log(report);
+				watcher.init(settings.sandbox);
 
-			if (report.status === _harvester.data.Git.STATUS.update) {
-				console.info('Can update!');
-			} else if (report.status === _harvester.data.Git.STATUS.manual) {
-				console.error('History is ahead :(');
-			} else if (report.status === _harvester.data.Git.STATUS.ignore) {
-				console.warn('Nothing to do!');
+				this.__interval = _setInterval(function() {
+					watcher.update();
+				}.bind(this), 30000);
+
 			}
 
 		}, this, true);
-
-
-		// this.bind('init', function() {
-
-		// 	let watcher = this.watcher || null;
-		// 	if (watcher !== null) {
-
-		// 		watcher.init(settings.sandbox);
-
-		// 		this.__interval = _setInterval(function() {
-		// 			watcher.update();
-		// 		}.bind(this), 30000);
-
-		// 	}
-
-		// }, this, true);
 
 	};
 

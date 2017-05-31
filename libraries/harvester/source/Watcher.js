@@ -141,7 +141,8 @@ lychee.define('harvester.Watcher').requires([
 
 		if (sandbox === true) {
 
-			Harvester  = null;
+			// XXX: Temporary test
+			// Harvester  = null;
 			Fertilizer = null;
 			Strainer   = null;
 
@@ -251,15 +252,15 @@ lychee.define('harvester.Watcher').requires([
 
 			if (sandbox === true) {
 
-				console.info('harvester.Watcher: SANDBOX mode active   ');
-				console.info('harvester.Watcher: Software Bots disabled');
+				console.warn('harvester.Watcher: Sandbox Mode enabled  ');
+				console.warn('harvester.Watcher: Software Bots disabled');
 				console.log('\n\n');
 
 				this.sandbox = true;
 
 			} else {
 
-				console.info('harvester.Watcher: SANDBOX mode inactive');
+				console.info('harvester.Watcher: Sandbox Mode disabled');
 				console.info('harvester.Watcher: Software Bots enabled');
 				console.log('\n\n');
 
