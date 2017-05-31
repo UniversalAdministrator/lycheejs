@@ -8,6 +8,7 @@ lychee.define('harvester.data.Git').tags({
 	try {
 
 		require('child_process');
+		require('path');
 
 		return true;
 
@@ -22,6 +23,7 @@ lychee.define('harvester.data.Git').tags({
 	const _ROOT          = lychee.ROOT.lychee;
 	const _Filesystem    = lychee.import('harvester.data.Filesystem');
 	const _child_process = require('child_process');
+	const _path          = require('path');
 
 
 
@@ -194,6 +196,53 @@ lychee.define('harvester.data.Git').tags({
 		 * CUSTOM API
 		 */
 
+		checkout: function(branch, path) {
+
+			branch = typeof branch === 'string' ? branch : null;
+			path   = typeof path === 'string'   ? path   : null;
+
+
+			if (branch !== null && path !== null) {
+
+				let filesystem = this.filesystem;
+				let result     = null;
+
+				try {
+
+					let cwd  = _ROOT;
+					let root = _ROOT + path;
+
+					let tmp = filesystem.root.split('/');
+					if (tmp.pop() === '.git') {
+						cwd = tmp.join('/');
+					}
+
+					let real = _path.relative(cwd, root);
+					if (real.substr(0, 2) !== '..') {
+
+						result = _child_process.execSync('git checkout --quiet "origin/' + branch + '" ./' + real, {
+							cwd: cwd
+						}).toString();
+
+					}
+
+				} catch (err) {
+
+					console.error(err.message);
+
+					result = null;
+
+				}
+
+				return result !== null;
+
+			}
+
+
+			return false;
+
+		},
+
 		diff: function(path) {
 
 			path = typeof path === 'string' ? path : null;
@@ -201,16 +250,25 @@ lychee.define('harvester.data.Git').tags({
 
 			if (path !== null) {
 
-				let result = null;
+				let filesystem = this.filesystem;
+				let result     = null;
 
 				try {
 
+					let root = _ROOT;
+					let tmp  = filesystem.root.split('/');
+					if (tmp.pop() === '.git') {
+						root = tmp.join('/');
+					}
+
 					result = _child_process.execSync('git diff HEAD .' + path, {
-						cwd: _ROOT
+						cwd: root
 					}).toString() || null;
 
 				} catch (err) {
+
 					result = null;
+
 				}
 
 				return result;
@@ -219,6 +277,43 @@ lychee.define('harvester.data.Git').tags({
 
 
 			return null;
+
+		},
+
+		fetch: function(branch) {
+
+			branch = typeof branch === 'string' ? branch : null;
+
+
+			if (branch !== null) {
+
+				let filesystem = this.filesystem;
+				let result     = null;
+
+				try {
+
+					let cwd = _ROOT;
+					let tmp = filesystem.root.split('/');
+					if (tmp.pop() === '.git') {
+						cwd = tmp.join('/');
+					}
+
+					result = _child_process.execSync('git fetch --quiet origin "' + branch + '"', {
+						cwd: cwd
+					}).toString();
+
+				} catch (err) {
+
+					result = null;
+
+				}
+
+				return result !== null;
+
+			}
+
+
+			return false;
 
 		},
 

@@ -4,10 +4,12 @@ lychee.define('harvester.mod.Harvester').requires([
 	'harvester.net.Client'
 ]).exports(function(lychee, global, attachments) {
 
-	const _Client = lychee.import('harvester.net.Client');
-	const _Git    = lychee.import('harvester.data.Git');
-	const _git    = new _Git();
-	let   _CLIENT = null;
+	const _Client   = lychee.import('harvester.net.Client');
+	const _Git      = lychee.import('harvester.data.Git');
+	const _git      = new _Git();
+	let   _CLIENT   = null;
+	const _TIMEOUTS = {};
+	let   _TIMEOUT  = null;
 
 
 
@@ -61,7 +63,7 @@ lychee.define('harvester.mod.Harvester').requires([
 					console.log('\n');
 					console.warn('+--------------------------------------------------------+');
 					console.warn('| No connection to harvester.artificial.engineering:4848 |');
-					console.warn('| Cannot synchronize data for AI training and knowledge  |');
+					console.warn('| Cannot synchronize the AI\'s api, knowledge or training |');
 					console.warn('+--------------------------------------------------------+');
 					console.log('\n');
 
@@ -75,12 +77,17 @@ lychee.define('harvester.mod.Harvester').requires([
 
 			if (id.indexOf('__') === -1 && pkg !== null) {
 
-				let diff = _git.diff(project.identifier);
-				if (diff === null) {
+				let timeout = _TIMEOUTS[id] || null;
+				if (timeout === null || Date.now() > timeout) {
 
-					let service = _CLIENT.getService('harvester');
-					if (service !== null) {
-						return true;
+					let diff = _git.diff(project.identifier);
+					if (diff === null) {
+
+						let service = _CLIENT.getService('harvester');
+						if (service !== null) {
+							return true;
+						}
+
 					}
 
 				}
@@ -99,11 +106,37 @@ lychee.define('harvester.mod.Harvester').requires([
 
 			if (id.indexOf('__') === -1 && pkg !== null) {
 
-				let report = _git.report(project.identifier);
+				let report = _git.report(id);
 				if (report.status === _Git.STATUS.update) {
-					console.info('Can update "' + project.identifier + '"');
-				} else if (report.status === _Git.STATUS.manual) {
-					console.warn('Cannot update "' + project.identifier + '" because of local changes.');
+
+					_TIMEOUTS[id] = Date.now() + 24 * 60 * 60 * 1000;
+
+
+					// XXX: This is necessary, because lychee projects
+					// are not shipped in their own repositories
+
+					let timeout = _TIMEOUT || null;
+					if (timeout === null || Date.now() > timeout) {
+
+						let result = _git.fetch(report.branch);
+						if (result === true) {
+							console.info('harvester.mod.Harvester: FETCH ("' + report.branch + '")');
+						}
+
+						_TIMEOUT = Date.now() + 24 * 60 * 60 * 1000;
+
+					}
+
+
+					if (report.branch === 'master' || report.branch === 'development') {
+
+						let result = _git.checkout(report.branch, id);
+						if (result === true) {
+							console.log('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
+						}
+
+					}
+
 				}
 
 			}
