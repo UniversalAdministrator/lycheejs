@@ -1,9 +1,27 @@
 
-lychee.define('harvester.data.Git').requires([
+lychee.define('harvester.data.Git').tags({
+	platform: 'node'
+}).requires([
 	'harvester.data.Filesystem'
-]).exports(function(lychee, global, attachments) {
+]).supports(function(lychee, global) {
 
-	const _Filesystem = lychee.import('harvester.data.Filesystem');
+	try {
+
+		require('child_process');
+
+		return true;
+
+	} catch (err) {
+	}
+
+
+	return false;
+
+}).exports(function(lychee, global, attachments) {
+
+	const _ROOT          = lychee.ROOT.lychee;
+	const _Filesystem    = lychee.import('harvester.data.Filesystem');
+	const _child_process = require('child_process');
 
 
 
@@ -53,6 +71,9 @@ lychee.define('harvester.data.Git').requires([
 
 		return remotes;
 
+	};
+
+	const _parse_tree = function() {
 	};
 
 	const _parse_log = function(content) {
@@ -186,6 +207,34 @@ lychee.define('harvester.data.Git').requires([
 
 		},
 
+		diff: function(path) {
+
+			path = typeof path === 'string' ? path : null;
+
+
+			if (path !== null) {
+
+				let result = null;
+
+				try {
+
+					result = _child_process.execSync('git diff .' + path, {
+						cwd: _ROOT
+					}).toString() || null;
+
+				} catch (err) {
+					result = null;
+				}
+
+				return result;
+
+			}
+
+
+			return null;
+
+		},
+
 		config: function() {
 
 			let config  = (this.filesystem.read('/config') || '').toString().trim();
@@ -198,7 +247,10 @@ lychee.define('harvester.data.Git').requires([
 
 		},
 
-		report: function() {
+		report: function(path) {
+
+			path = typeof path === 'string' ? path : null;
+
 
 			let head       = (this.filesystem.read('/HEAD')       || '').toString().trim();
 			let fetch_head = (this.filesystem.read('/FETCH_HEAD') || '').toString().trim();
@@ -227,45 +279,57 @@ lychee.define('harvester.data.Git').requires([
 			let log    = _get_log.call(this);
 			let status = Composite.STATUS.manual;
 
-			if (log.diff.length === 0) {
 
-				if (head === fetch_head) {
+			if (path !== null) {
 
-					status = Composite.STATUS.ignore;
+				let tree = _get_tree.call(this, path, log);
 
-				} else {
+				console.log(tree);
 
-					let check = log.development.find(function(other) {
-						return other.hash === head;
-					});
-
-					if (check !== undefined) {
-						status = Composite.STATUS.update;
-					} else {
-						status = Composite.STATUS.manual;
-					}
-
-				}
-
-
-				// XXX: Verify that user did not break their git history
-				if (fetch_head !== orig_head) {
-
-					let check = log.development.find(function(other) {
-						return other.hash === orig_head;
-					});
-
-					if (check !== undefined) {
-						status = Composite.STATUS.update;
-					} else {
-						status = Composite.STATUS.manual;
-					}
-
-				}
 
 			} else {
 
-				status = Composite.STATUS.manual;
+				if (log.diff.length === 0) {
+
+					if (head === fetch_head) {
+
+						status = Composite.STATUS.ignore;
+
+					} else {
+
+						let check = log.development.find(function(other) {
+							return other.hash === head;
+						});
+
+						if (check !== undefined) {
+							status = Composite.STATUS.update;
+						} else {
+							status = Composite.STATUS.manual;
+						}
+
+					}
+
+
+					// XXX: Verify that user did not break their git history
+					if (fetch_head !== orig_head) {
+
+						let check = log.development.find(function(other) {
+							return other.hash === orig_head;
+						});
+
+						if (check !== undefined) {
+							status = Composite.STATUS.update;
+						} else {
+							status = Composite.STATUS.manual;
+						}
+
+					}
+
+				} else {
+
+					status = Composite.STATUS.manual;
+
+				}
 
 			}
 
