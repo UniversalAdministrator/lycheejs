@@ -24,6 +24,7 @@ and `fixed`.
 
 - **Changed**: All helper scripts support `--autocomplete` syntax.
 - **Changed**: lychee.js Harvester synchronizes platform tags.
+- **Added**: lychee.js Harvester supports `git fetch` and `git checkout`.
 - **Added**: lychee.js Studio supports Font and Sprite generation.
 - **Added**: lychee.js Helper supports bash autocompletion.
 - **Added**: Integration of `nidium` platform.
