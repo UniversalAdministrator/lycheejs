@@ -73,9 +73,6 @@ lychee.define('harvester.data.Git').tags({
 
 	};
 
-	const _parse_tree = function() {
-	};
-
 	const _parse_log = function(content) {
 
 		return content.split('\n').map(function(line) {
@@ -110,7 +107,6 @@ lychee.define('harvester.data.Git').tags({
 		});
 
 	};
-
 
 	const _get_log = function() {
 
@@ -198,15 +194,6 @@ lychee.define('harvester.data.Git').tags({
 		 * CUSTOM API
 		 */
 
-		info: function(path) {
-
-			path = typeof path === 'string' ? path : null;
-
-
-			// TODO: Find path in tree and return hash for it
-
-		},
-
 		diff: function(path) {
 
 			path = typeof path === 'string' ? path : null;
@@ -218,7 +205,7 @@ lychee.define('harvester.data.Git').tags({
 
 				try {
 
-					result = _child_process.execSync('git diff .' + path, {
+					result = _child_process.execSync('git diff HEAD .' + path, {
 						cwd: _ROOT
 					}).toString() || null;
 
@@ -279,56 +266,54 @@ lychee.define('harvester.data.Git').tags({
 			let log    = _get_log.call(this);
 			let status = Composite.STATUS.manual;
 
+			if (log.diff.length === 0) {
 
-			if (path !== null) {
+				if (head === fetch_head) {
 
-				let tree = _get_tree.call(this, path, log);
-
-				console.log(tree);
-
-
-			} else {
-
-				if (log.diff.length === 0) {
-
-					if (head === fetch_head) {
-
-						status = Composite.STATUS.ignore;
-
-					} else {
-
-						let check = log.development.find(function(other) {
-							return other.hash === head;
-						});
-
-						if (check !== undefined) {
-							status = Composite.STATUS.update;
-						} else {
-							status = Composite.STATUS.manual;
-						}
-
-					}
-
-
-					// XXX: Verify that user did not break their git history
-					if (fetch_head !== orig_head) {
-
-						let check = log.development.find(function(other) {
-							return other.hash === orig_head;
-						});
-
-						if (check !== undefined) {
-							status = Composite.STATUS.update;
-						} else {
-							status = Composite.STATUS.manual;
-						}
-
-					}
+					status = Composite.STATUS.ignore;
 
 				} else {
 
-					status = Composite.STATUS.manual;
+					let check = log.development.find(function(other) {
+						return other.hash === head;
+					});
 
+					if (check !== undefined) {
+						status = Composite.STATUS.update;
+					} else {
+						status = Composite.STATUS.manual;
+					}
+
+				}
+
+
+				// XXX: Verify that user did not break their git history
+				if (fetch_head !== orig_head) {
+
+					let check = log.development.find(function(other) {
+						return other.hash === orig_head;
+					});
+
+					if (check !== undefined) {
+						status = Composite.STATUS.update;
+					} else {
+						status = Composite.STATUS.manual;
+					}
+
+				}
+
+			} else {
+
+				status = Composite.STATUS.manual;
+
+			}
+
+
+			if (path !== null) {
+
+				let diff = this.diff(path);
+				if (diff !== null) {
+					status = Composite.STATUS.manual;
 				}
 
 			}
