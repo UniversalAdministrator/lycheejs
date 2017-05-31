@@ -168,18 +168,27 @@ lychee.define('harvester.Main').requires([
 
 		this.bind('init', function() {
 
-			let watcher = this.watcher || null;
-			if (watcher !== null) {
+			let git = new _harvester.data.Git();
 
-				watcher.init(settings.sandbox);
-
-				this.__interval = _setInterval(function() {
-					watcher.update();
-				}.bind(this), 30000);
-
-			}
+			git.status();
 
 		}, this, true);
+
+
+		// this.bind('init', function() {
+
+		// 	let watcher = this.watcher || null;
+		// 	if (watcher !== null) {
+
+		// 		watcher.init(settings.sandbox);
+
+		// 		this.__interval = _setInterval(function() {
+		// 			watcher.update();
+		// 		}.bind(this), 30000);
+
+		// 	}
+
+		// }, this, true);
 
 	};
 

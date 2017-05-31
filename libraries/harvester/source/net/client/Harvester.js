@@ -1,8 +1,11 @@
 
-lychee.define('harvester.net.client.Harvester').includes([
+lychee.define('harvester.net.client.Harvester').requires([
+	'harvester.data.Git'
+]).includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Git     = lychee.import('harvester.data.Git');
 	const _Service = lychee.import('lychee.net.Service');
 	let   _ID      = null;
 
@@ -12,7 +15,7 @@ lychee.define('harvester.net.client.Harvester').includes([
 	 * HELPERS
 	 */
 
-	const _on_id = function(data) {
+	const _on_handshake = function(data) {
 
 		if (typeof data.id === 'string') {
 			_ID = data.id;
@@ -41,7 +44,7 @@ lychee.define('harvester.net.client.Harvester').includes([
 
 		_Service.call(this, 'harvester', client, _Service.TYPE.client);
 
-		this.bind('id', _on_id, this);
+		this.bind('handshake', _on_handshake, this);
 
 	};
 

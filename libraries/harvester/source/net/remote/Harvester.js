@@ -1,10 +1,12 @@
 
 lychee.define('harvester.net.remote.Harvester').requires([
-	'lychee.Storage'
+	'lychee.Storage',
+	'harvester.data.Git'
 ]).includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Git     = lychee.import('harvester.data.Git');
 	const _Service = lychee.import('lychee.net.Service');
 	const _Storage = lychee.import('lychee.Storage');
 	const _storage = new _Storage({
@@ -64,7 +66,7 @@ lychee.define('harvester.net.remote.Harvester').requires([
 					id: id
 				}, {
 					id:    this.id,
-					event: 'id'
+					event: 'handshake'
 				});
 
 			}
