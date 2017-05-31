@@ -47,12 +47,12 @@ lychee.define('harvester.data.Git').requires([
 	};
 
 
-	const _get_log = function(branch) {
+	const _get_log = function() {
 
 		let development = _parse_log((this.filesystem.read('/logs/refs/remotes/origin/development') || '').toString('utf8'));
 		let master      = _parse_log((this.filesystem.read('/logs/refs/remotes/origin/master')      || '').toString('utf8'));
-		let head        = _parse_log((this.filesystem.read('/logs/HEAD')                       || '').toString('utf8'));
-		let filtered    = head.filter(function(commit) {
+		let branch      = _parse_log((this.filesystem.read('/logs/HEAD')                            || '').toString('utf8'));
+		let diff        = branch.filter(function(commit) {
 
 			let is_master = master.find(function(other) {
 				return other.hash === commit.hash;
@@ -69,9 +69,13 @@ lychee.define('harvester.data.Git').requires([
 
 		});
 
-		console.log(filtered);
 
-		return filtered;
+		return {
+			master:      master,
+			development: development,
+			branch:      branch,
+			diff:        diff
+		};
 
 	};
 
@@ -89,6 +93,13 @@ lychee.define('harvester.data.Git').requires([
 		this.identifier = identifier;
 		this.filesystem = new _Filesystem(identifier + '/.git');
 
+	};
+
+
+	Composite.STATUS = {
+		ignore: 0,
+		update: 1,
+		manual: 2
 	};
 
 
@@ -131,11 +142,11 @@ lychee.define('harvester.data.Git').requires([
 
 		},
 
-		status: function() {
+		report: function() {
 
-			let head       = (this.filesystem.read('/HEAD')       || '').toString();
-			let fetch_head = (this.filesystem.read('/FETCH_HEAD') || '').toString();
-			let orig_head  = (this.filesystem.read('/ORIG_HEAD')  || '').toString();
+			let head       = (this.filesystem.read('/HEAD')       || '').toString().trim();
+			let fetch_head = (this.filesystem.read('/FETCH_HEAD') || '').toString().trim();
+			let orig_head  = (this.filesystem.read('/ORIG_HEAD')  || '').toString().trim();
 			let branch     = 'master';
 
 
@@ -145,19 +156,53 @@ lychee.define('harvester.data.Git').requires([
 					branch = head.substr(16).trim();
 				}
 
-				let ref = this.filesystem.read(head.substr(5).trim());
+				let ref = this.filesystem.read('/' + head.substr(5));
 				if (ref !== null) {
-					head = ref.toString();
+					head = ref.toString().trim();
+				}
+
+			}
+
+			if (fetch_head.includes('\t')) {
+				fetch_head = fetch_head.split('\t')[0];
+			}
+
+
+			let log    = _get_log.call(this);
+			let status = Composite.STATUS.manual;
+
+			if (log.length === 0) {
+
+				if (head === fetch_head) {
+
+					status = Composite.STATUS.ignore;
+
+				} else {
+
+					let check = log.development.find(function(other) {
+						return other.hash === head;
+					});
+
+					if (check !== undefined) {
+						status = Composite.STATUS.update;
+					} else {
+						status = Composite.STATUS.manual;
+					}
+
+				}
+
+
+				// XXX: User broke their git history
+				if (fetch_head !== orig_head) {
+					status = Composite.STATUS.manual;
 				}
 
 			}
 
 
-			let log = _get_log.call(this, branch);
-
-
 			return {
 				branch: branch,
+				status: status,
 				head: {
 					branch: head,
 					fetch:  fetch_head,

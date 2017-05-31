@@ -168,9 +168,10 @@ lychee.define('harvester.Main').requires([
 
 		this.bind('init', function() {
 
-			let git = new _harvester.data.Git();
+			let git    = new _harvester.data.Git();
+			let report = git.report();
 
-			git.status();
+			console.log(report.status);
 
 		}, this, true);
 
