@@ -22,16 +22,14 @@ const _print_autocomplete = function(target, project, flag) {
 		targets.push(platform + '/main');
 	});
 
-	let libraries = _fs.readdirSync(_ROOT + '/libraries').sort().filter(function(value) {
-		return _fs.existsSync(_ROOT + '/libraries/' + value + '/lychee.pkg');
-	}).map(function(value) {
-		return '/libraries/' + value;
-	});
-	let projects = _fs.readdirSync(_ROOT + '/projects').sort().filter(function(value) {
-		return _fs.existsSync(_ROOT + '/projects/' + value + '/lychee.pkg');
-	}).map(function(value) {
-		return '/projects/' + value;
-	});
+	let libraries = _fs.readdirSync(_ROOT + '/libraries')
+		.sort()
+		.map(val => '/libraries/' + val)
+		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
+	let projects  = _fs.readdirSync(_ROOT + '/projects')
+		.sort()
+		.map(val => '/projects/' + val)
+		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
 
 
 	let suggestions = [];
@@ -63,19 +61,15 @@ const _print_autocomplete = function(target, project, flag) {
 
 const _print_help = function() {
 
-	let targets = _fs.readdirSync(_ROOT + '/libraries/lychee/build').sort();
-
-	let libraries = _fs.readdirSync(_ROOT + '/libraries').sort().filter(function(value) {
-		return _fs.existsSync(_ROOT + '/libraries/' + value + '/lychee.pkg');
-	}).map(function(value) {
-		return '/libraries/' + value;
-	});
-
-	let projects = _fs.readdirSync(_ROOT + '/projects').sort().filter(function(value) {
-		return _fs.existsSync(_ROOT + '/projects/' + value + '/lychee.pkg');
-	}).map(function(value) {
-		return '/projects/' + value;
-	});
+	let targets   = _fs.readdirSync(_ROOT + '/libraries/lychee/build').sort();
+	let libraries = _fs.readdirSync(_ROOT + '/libraries')
+		.sort()
+		.map(val => '/libraries/' + val)
+		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
+	let projects  = _fs.readdirSync(_ROOT + '/projects')
+		.sort()
+		.map(val => '/projects/' + val)
+		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
 
 
 	console.log('                                                              ');

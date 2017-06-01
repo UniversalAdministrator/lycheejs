@@ -15,17 +15,14 @@ const _print_autocomplete = function(action, project, flag) {
 
 	let actions   = [ 'check', 'stage' ];
 	let flags     = [ '--debug' ];
-	let libraries = _fs.readdirSync(_ROOT + '/libraries').sort().filter(function(value) {
-		return _fs.existsSync(_ROOT + '/libraries/' + value + '/lychee.pkg');
-	}).map(function(value) {
-		return '/libraries/' + value;
-	});
-
-	let projects = _fs.readdirSync(_ROOT + '/projects').sort().filter(function(value) {
-		return _fs.existsSync(_ROOT + '/projects/' + value + '/lychee.pkg');
-	}).map(function(value) {
-		return '/projects/' + value;
-	});
+	let libraries = _fs.readdirSync(_ROOT + '/libraries')
+		.sort()
+		.map(val => '/libraries/' + val)
+		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
+	let projects  = _fs.readdirSync(_ROOT + '/projects')
+		.sort()
+		.map(val => '/projects/' + val)
+		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
 
 
 	let suggestions = [];
@@ -57,17 +54,14 @@ const _print_autocomplete = function(action, project, flag) {
 
 const _print_help = function() {
 
-	let libraries = _fs.readdirSync(_ROOT + '/libraries').sort().filter(function(value) {
-		return _fs.existsSync(_ROOT + '/libraries/' + value + '/lychee.pkg');
-	}).map(function(value) {
-		return '/libraries/' + value;
-	});
-
-	let projects = _fs.readdirSync(_ROOT + '/projects').sort().filter(function(value) {
-		return _fs.existsSync(_ROOT + '/projects/' + value + '/lychee.pkg');
-	}).map(function(value) {
-		return '/projects/' + value;
-	});
+	let libraries = _fs.readdirSync(_ROOT + '/libraries')
+		.sort()
+		.map(val => '/libraries/' + val)
+		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
+	let projects  = _fs.readdirSync(_ROOT + '/projects')
+		.sort()
+		.map(val => '/projects/' + val)
+		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
 
 
 	console.log('                                                    ');

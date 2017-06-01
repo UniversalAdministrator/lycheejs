@@ -15,11 +15,10 @@ const _print_autocomplete = function(action, profile, flag) {
 
 	let actions  = [ 'start', 'status', 'stop' ];
 	let flags    = [ '--debug', '--sandbox' ];
-	let profiles = _fs.readdirSync(_ROOT + '/libraries/harvester/profiles').filter(function(value) {
-		return value.endsWith('.json');
-	}).map(function(value) {
-		return '' + value.substr(0, value.indexOf('.json')) + '';
-	});
+	let profiles = _fs.readdirSync(_ROOT + '/libraries/harvester/profiles')
+		.sort()
+		.filter(val => val.endsWith('.json'))
+		.map(val => val.substr(0, val.indexOf('.json')));
 
 
 	let suggestions = [];
@@ -49,11 +48,10 @@ const _print_autocomplete = function(action, profile, flag) {
 
 const _print_help = function() {
 
-	let profiles = _fs.readdirSync(_ROOT + '/libraries/harvester/profiles').filter(function(value) {
-		return value.endsWith('.json');
-	}).map(function(value) {
-		return '' + value.substr(0, value.indexOf('.json')) + '';
-	});
+	let profiles = _fs.readdirSync(_ROOT + '/libraries/harvester/profiles')
+		.sort()
+		.filter(val => val.endsWith('.json'))
+		.map(val => val.substr(0, val.indexOf('.json')));
 
 
 	console.log('                                                            ');
