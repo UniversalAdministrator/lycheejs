@@ -44,6 +44,7 @@ and `fixed`.
 - Added: `lychee.data.tree` Stack implementation.
 - Fixed: `lychee.inject()` and `lychee.define()` supports proper mappings of packages.
 - Fixed: `lychee.ui.entity.Upload` supports file dialog correctly (Browser-Bug).
+- Fixed: `Font.prototype.measure()` improves cache usage and temporary usage.
 
 
 ## [2017-Q1] - 2017-03-28

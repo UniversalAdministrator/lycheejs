@@ -72,6 +72,30 @@ lychee.define('studio.ui.element.preview.Font').includes([
 			}
 
 
+			offset_y += font.lineheight;
+
+
+			let texture = font.texture;
+			if (texture !== null) {
+
+				renderer.drawBox(
+					0,
+					offset_y + 16,
+					texture.width,
+					offset_y + 16 + texture.height,
+					'#1f2726',
+					true
+				);
+
+				renderer.drawSprite(
+					0,
+					offset_y + 16,
+					texture
+				);
+
+			}
+
+
 			renderer.setBuffer(null);
 			this.__isDirty = false;
 

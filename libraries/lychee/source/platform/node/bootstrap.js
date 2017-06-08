@@ -854,42 +854,110 @@
 			text = typeof text === 'string' ? text : null;
 
 
-			let cache = _CHAR_CACHE[this.url] || null;
-			if (cache !== null) {
+			let buffer = this.__buffer;
+			if (buffer !== null) {
 
-				let tl = text.length;
-				if (tl === 1) {
+				// Cache Usage
+				if (this.__load === false) {
 
-					if (cache[text] !== undefined) {
-						return cache[text];
+					let cache = _CHAR_CACHE[this.url] || null;
+					if (cache !== null) {
+
+						let tl = text.length;
+						if (tl === 1) {
+
+							if (cache[text] !== undefined) {
+								return cache[text];
+							}
+
+						} else if (tl > 1) {
+
+							let data = cache[text] || null;
+							if (data === null) {
+
+								let width = 0;
+								let map   = buffer.map;
+
+								for (let t = 0; t < tl; t++) {
+
+									let m = this.charset.indexOf(text[t]);
+									if (m !== -1) {
+										width += map[m] + this.kerning;
+									}
+
+								}
+
+								if (width > 0) {
+
+									// TODO: Embedded Font ligatures will set x and y values based on settings.map
+									data = cache[text] = {
+										width:      width,
+										height:     this.lineheight,
+										realwidth:  width,
+										realheight: this.lineheight,
+										x:          0,
+										y:          0
+									};
+
+								}
+
+							}
+
+
+							return data;
+
+						}
+
+
+						return cache[''];
+
 					}
 
-				} else if (tl > 1) {
+				// Temporary Usage
+				} else {
 
-					let data = cache[text] || null;
-					if (data === null) {
+					let tl = text.length;
+					if (tl === 1) {
 
-						let check = cache[this.charset[0]] || null;
-						if (check === null) {
-							_parse_font_characters.call(this);
+						let m = this.charset.indexOf(text);
+						if (m !== -1) {
+
+							let offset  = this.spacing;
+							let spacing = this.spacing;
+							let map     = buffer.map;
+
+							for (let c = 0; c < m; c++) {
+								offset += map[c] + spacing * 2;
+							}
+
+							return {
+								width:      map[m] + spacing * 2,
+								height:     this.lineheight,
+								realwidth:  map[m],
+								realheight: this.lineheight,
+								x:          offset - spacing,
+								y:          0
+							};
+
 						}
 
+					} else if (tl > 1) {
 
 						let width = 0;
+						let map   = buffer.map;
 
 						for (let t = 0; t < tl; t++) {
-							let chr = this.measure(text[t]);
-							if (chr !== null) {
-								width += chr.realwidth + this.kerning;
-							}
-						}
 
+							let m = this.charset.indexOf(text[t]);
+							if (m !== -1) {
+								width += map[m] + this.kerning;
+							}
+
+						}
 
 						if (width > 0) {
 
-							// TODO: Embedded Font ligatures will set x and y values based on settings.map
-
-							data = cache[text] = {
+							return {
 								width:      width,
 								height:     this.lineheight,
 								realwidth:  width,
@@ -903,12 +971,16 @@
 					}
 
 
-					return data;
+					return {
+						width:      0,
+						height:     this.lineheight,
+						realwidth:  0,
+						realheight: this.lineheight,
+						x:          0,
+						y:          0
+					};
 
 				}
-
-
-				return cache[''];
 
 			}
 
