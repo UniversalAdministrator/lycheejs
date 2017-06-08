@@ -718,13 +718,13 @@ lychee.define('Renderer').tags({
 
 					let dim = font.measure(text);
 
-					x1 -= dim.realwidth / 2;
-					y1 -= (dim.realheight - font.baseline) / 2;
+					x1 = x1 - dim.realwidth / 2;
+					y1 = y1 - (dim.realheight - font.baseline) / 2;
 
 				}
 
 
-				y1 -= font.baseline / 2;
+				y1 = y1 - font.baseline / 2;
 
 
 				let margin  = 0;
@@ -752,7 +752,7 @@ lychee.define('Renderer').tags({
 							chr.height
 						);
 
-						margin += chr.realwidth + font.kerning;
+						margin = margin + chr.realwidth + font.kerning;
 
 					}
 

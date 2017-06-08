@@ -416,15 +416,8 @@ lychee.define('lychee.app.Layer').requires([
 
 			let entities = this.entities;
 			for (let en = 0, enl = entities.length; en < enl; en++) {
-
-				entities[en].render(
-					renderer,
-					ox,
-					oy
-				);
-
+				entities[en].render(renderer, ox, oy);
 			}
-
 
 			let effects = this.effects;
 			for (let ef = 0, efl = effects.length; ef < efl; ef++) {
@@ -439,19 +432,17 @@ lychee.define('lychee.app.Layer').requires([
 
 			if (lychee.debug === true) {
 
-				ox = position.x + offsetX;
-				oy = position.y + offsetY;
-
-
+				let bx      = position.x + offsetX;
+				let by      = position.y + offsetY;
 				let hwidth  = this.width  / 2;
 				let hheight = this.height / 2;
 
 
 				renderer.drawBox(
-					ox - hwidth,
-					oy - hheight,
-					ox + hwidth,
-					oy + hheight,
+					bx - hwidth,
+					by - hheight,
+					bx + hwidth,
+					by + hheight,
 					'#ffff00',
 					false,
 					1
