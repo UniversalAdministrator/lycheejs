@@ -74,52 +74,61 @@
 
 	const _load_asset = function(settings, callback, scope) {
 
-		let path = lychee.environment.resolve(settings.url);
-		let xhr  = new XMLHttpRequest();
+		settings = settings instanceof Object   ? settings : null;
+		callback = callback instanceof Function ? callback : null;
+		scope    = scope !== undefined          ? scope    : null;
 
 
-		if (path.substr(0, 13) === '/opt/lycheejs' && _protocol !== null) {
-			xhr.open('GET', _protocol + '://' + path, true);
-		} else {
-			xhr.open('GET', path, true);
+		if (settings !== null && callback !== null && scope !== null) {
+
+			let path = lychee.environment.resolve(settings.url);
+			let xhr  = new XMLHttpRequest();
+
+
+			if (path.substr(0, 13) === '/opt/lycheejs' && _protocol !== null) {
+				xhr.open('GET', _protocol + '://' + path, true);
+			} else {
+				xhr.open('GET', path, true);
+			}
+
+
+			if (settings.headers instanceof Object) {
+
+				for (let header in settings.headers) {
+					xhr.setRequestHeader(header, settings.headers[header]);
+				}
+
+			}
+
+
+			xhr.onload = function() {
+
+				try {
+					callback.call(scope, xhr.responseText || xhr.responseXML);
+				} catch (err) {
+					lychee.Debugger.report(lychee.environment, err, null);
+				} finally {
+					xhr = null;
+				}
+
+			};
+
+			xhr.onerror = xhr.ontimeout = function() {
+
+				try {
+					callback.call(scope, null);
+				} catch (err) {
+					lychee.Debugger.report(lychee.environment, err, null);
+				} finally {
+					xhr = null;
+				}
+
+			};
+
+
+			xhr.send(null);
+
 		}
-
-
-		if (settings.headers instanceof Object) {
-
-			for (let header in settings.headers) {
-				xhr.setRequestHeader(header, settings.headers[header]);
-			}
-
-		}
-
-
-		xhr.onload = function() {
-
-			try {
-				callback.call(scope, xhr.responseText || xhr.responseXML);
-			} catch (err) {
-				lychee.Debugger.report(lychee.environment, err, null);
-			} finally {
-				xhr = null;
-			}
-
-		};
-
-		xhr.onerror = xhr.ontimeout = function() {
-
-			try {
-				callback.call(scope, null);
-			} catch (err) {
-				lychee.Debugger.report(lychee.environment, err, null);
-			} finally {
-				xhr = null;
-			}
-
-		};
-
-
-		xhr.send(null);
 
 	};
 

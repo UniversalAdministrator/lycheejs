@@ -41,24 +41,33 @@
 
 	const _load_asset = function(settings, callback, scope) {
 
-		let path     = lychee.environment.resolve(settings.url);
-		let encoding = settings.encoding === 'binary' ? 'binary' : 'utf8';
+		settings = settings instanceof Object   ? settings : null;
+		callback = callback instanceof Function ? callback : null;
+		scope    = scope !== undefined          ? scope    : null;
 
 
-		_fs.readFile(path, encoding, function(error, buffer) {
+		if (settings !== null && callback !== null && scope !== null) {
 
-			let raw = null;
-			if (!error) {
-				raw = buffer;
-			}
+			let path     = lychee.environment.resolve(settings.url);
+			let encoding = settings.encoding === 'binary' ? 'binary' : 'utf8';
 
-			try {
-				callback.call(scope, raw);
-			} catch (err) {
-				lychee.Debugger.report(lychee.environment, err, null);
-			}
 
-		});
+			_fs.readFile(path, encoding, function(error, buffer) {
+
+				let raw = null;
+				if (!error) {
+					raw = buffer;
+				}
+
+				try {
+					callback.call(scope, raw);
+				} catch (err) {
+					lychee.Debugger.report(lychee.environment, err, null);
+				}
+
+			});
+
+		}
 
 	};
 
