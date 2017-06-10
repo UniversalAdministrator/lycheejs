@@ -89,6 +89,10 @@ article {
 	vertical-align: top;
 }
 
+article.warning {
+	width: 544px;
+}
+
 article a {
 	color: #32afe5;
 	text-decoration: none;
@@ -112,6 +116,18 @@ article p {
 	font-family: 'museo-sans-300';
 	font-size: 16px;
 	text-align: justify;
+}
+
+article q {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px 0.25em;
+	background: #1f2726;
+}
+
+article q::before,
+article q::after {
+	display: none;
 }
 
 article img {

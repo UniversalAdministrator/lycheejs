@@ -57,16 +57,39 @@ cd /opt/lycheejs;
 	 * HELPERS
 	 */
 
+	const $$ = function(name) {
+
+		let filtered = [];
+
+		if (name.startsWith('#')) {
+			filtered = Array.from(global.document.querySelectorAll(name)).map(v => $(v)).filter(v => v !== null);
+		} else {
+			filtered.push($(name));
+		}
+
+
+		return filtered;
+
+	};
+
 	const $ = function(name) {
 
 		let el = null;
 
-		if (name.startsWith('#')) {
-			el = global.document.querySelector(name);
-		} else {
-			let tmp = name.split(/\.|\[|\]/g).filter(v => v !== '');
-			el = global.document.createElement(tmp[0]);
-			tmp[1] && (el.className = tmp[1]);
+		if (name instanceof Element) {
+
+			el = name;
+
+		} else if (typeof name === 'string') {
+
+			if (name.startsWith('#')) {
+				el = global.document.querySelector(name);
+			} else {
+				let tmp = name.split(/\.|\[|\]/g).filter(v => v !== '');
+				el = global.document.createElement(tmp[0]);
+				tmp[1] && (el.className = tmp[1]);
+			}
+
 		}
 
 
@@ -79,6 +102,7 @@ cd /opt/lycheejs;
 			wrap.append   = a => ((a._el && el.appendChild(a._el)) || el.appendChild(a), wrap);
 			wrap.appendTo = b => ((b._el && b._el.appendChild(el)) || b.appendChild(el), wrap);
 			wrap.onclick  = c => (el.onclick = _ => (c(), false), wrap);
+			wrap.remove   = b => ((b._el && el.removeChild(b._el)) || el.removeChild(b), wrap);
 			wrap.set      = o => {
 				for (let i in o) (typeof wrap[i] === 'function' && wrap[i](o[i])) || el.setAttribute(i, o[i]);
 				return wrap;
@@ -184,11 +208,13 @@ cd /opt/lycheejs;
 		let host    = global.location.hostname || 'localhost';
 		let config1 = new Config('http://' + host + ':4848/api/library/index');
 		let config2 = new Config('http://' + host + ':4848/api/project/index');
+		let warning = true;
 
 		config1.onload = function(result) {
 
 			if (result === true && this.buffer instanceof Array) {
 				this.buffer.map(p => _render(p, /ranger|studio/g.test(p.identifier) ? 0b011 : 0b010)).forEach(a => a.appendTo(main));
+				warning = false;
 			}
 
 		};
@@ -197,12 +223,42 @@ cd /opt/lycheejs;
 
 			if (result === true && this.buffer instanceof Array) {
 				this.buffer.map(p => _render(p, 0b111)).forEach(a => a.appendTo(main));
+				warning = false;
 			}
 
 		};
 
 		config1.load();
 		config2.load();
+
+
+		setTimeout(_ => {
+
+			if (warning === true) {
+
+				$('article.warning').append(
+					$('label').set({
+						html: 'Warning'
+					})
+				).append(
+					$('p').set({
+						html: [
+							'The lychee.js Harvester is unreachable.',
+							'<br><br>',
+							'Please make sure that the lychee.js Harvester is booted correctly',
+							'(<a href="lycheejs://file=/README.md">README.md</a>) and that no ',
+							'Firewall or Browser Extensions blocks connections to or from it.',
+							'<br><br>',
+							'The lychee.js Harvester uses ports <q>4848</q> and <q>8080</q> as',
+							'management ports and ports <q>49152 to 65534</q> as dynamic ports',
+							'for project- or library-specific websocket servers.'
+						].join('\n')
+					})
+				).appendTo(main);
+
+			}
+
+		}, 2000);
 
 	}
 
