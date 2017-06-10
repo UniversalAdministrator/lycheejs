@@ -130,7 +130,14 @@
 							"vesicles": [
 								null,
 								null,
-								null,
+								{
+									"constructor": "game.app.entity.Vesicle",
+									"arguments": [
+										{
+											"team": "neutral"
+										}
+									]
+								},
 								{
 									"constructor": "game.app.entity.Vesicle",
 									"arguments": [
@@ -187,32 +194,157 @@
 						"constructor": "lychee.ui.entity.Label",
 						"arguments": [
 							{
-								"value": "Woohoo",
+								"value": "Touch to Navigate",
 								"position": {
 									"x": 0,
-									"y": -128
+									"y": -64
 								}
 							}
 						]
-					},
-					{
+					}, {
 						"constructor": "lychee.ui.entity.Label",
 						"arguments": [
 							{
-								"value": "Hooray",
+								"value": "",
 								"position": {
 									"x": 0,
-									"y": 128
+									"y": -40
 								}
+							}
+						]
+					}, {
+						"constructor": "lychee.ui.entity.Button",
+						"arguments": [
+							{
+								"width": 160,
+								"label": "DEPLOY TROOPS",
+								"position": {
+									"x": 0,
+									"y": 0
+								},
+								"visible": false
 							}
 						]
 					}
 				],
 				"map": {
-					"control": 0,
-					"timeout": 1
+					"headline": 0,
+					"subtitle": 1,
+					"confirm": 2
 				}
 			}
 		}
+	},
+	"campaigns": {
+		"immune": [
+			{
+				"label": "Battlefield 1: First Contact",
+				"vesicle": 7,
+				"data": {
+					"level": "battlefield_1",
+					"player": "immune"
+				}
+			},
+			{
+				"label": "Battlefield 2: Revenge of the Fallen",
+				"vesicle": 0,
+				"data": {
+					"level": "battlefield_2",
+					"player": "immune"
+				}
+			},
+			{
+				"label": "Battlefield 3: Neutral Conflict",
+				"vesicle": 1,
+				"data": {
+					"level": "battlefield_3",
+					"player": "immune"
+				}
+			},
+			{
+				"label": "Battlefield 4: Right in the Heart",
+				"vesicle": 2,
+				"data": {
+					"level": "battlefield_4",
+					"player": "immune"
+				}
+			},
+			{
+				"label": "Battlefield 5: Reproduction Issues",
+				"vesicle": 3,
+				"data": {
+					"level": "battlefield_5",
+					"player": "immune"
+				}
+			}
+		],
+		"virus": [
+			{
+				"label": "Battlefield 1: First Contact",
+				"vesicle": 3,
+				"data": {
+					"level": "battlefield_1",
+					"player": "virus"
+				}
+			},
+			{
+				"label": "Battlefield 2: Revenge of the Fallen",
+				"vesicle": 4,
+				"data": {
+					"level": "battlefield_2",
+					"player": "virus"
+				}
+			},
+			{
+				"label": "Battlefield 3: Neutral Conflict",
+				"vesicle": 5,
+				"data": {
+					"level": "battlefield_3",
+					"player": "virus"
+				}
+			},
+			{
+				"label": "Battlefield 4: Right in the Heart",
+				"vesicle": 6,
+				"data": {
+					"level": "battlefield_4",
+					"player": "virus"
+				}
+			},
+			{
+				"label": "Battlefield 5: Reproduction Issues",
+				"vesicle": 7,
+				"data": {
+					"level": "battlefield_5",
+					"player": "virus"
+				}
+			}
+		],
+		"neutral": [
+			{
+				"label": "Battlefield 3: Neutral Conflict",
+				"vesicle": 2,
+				"data": {
+					"level": "battlefield_3",
+					"player": "neutral"
+				}
+			},
+			{
+				"label": "Battlefield 4: Right in the Heart",
+				"vesicle": 3,
+				"data": {
+					"level": "battlefield_4",
+					"player": "neutral"
+				}
+			},
+			{
+				"label": "Battlefield 5: Reproduction Issues",
+				"vesicle": 4,
+				"data": {
+					"level": "battlefield_5",
+					"player": "neutral"
+				}
+			}
+		]
 	}
 }

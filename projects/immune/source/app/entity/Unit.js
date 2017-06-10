@@ -1,14 +1,16 @@
 
 lychee.define('game.app.entity.Unit').requires([
+	'lychee.effect.Color',
 	'lychee.effect.Position'
 ]).includes([
 	'lychee.app.Entity'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Color    = lychee.import('lychee.effect.Color');
 	const _Entity   = lychee.import('lychee.app.Entity');
 	const _Position = lychee.import('lychee.effect.Position');
 	let   _id       = 0;
-	const _COLORS   = {
+	const _PALETTE  = {
 		immune:  '#32afe5',
 		virus:   '#d0494b',
 		neutral: '#efefef'
@@ -29,6 +31,7 @@ lychee.define('game.app.entity.Unit').requires([
 		let settings = Object.assign({}, data);
 
 		this.id     = 'unit-' + _id++;
+		this.color  = _PALETTE.neutral;
 		this.team   = 'neutral';
 		this.damage = 0;
 		this.health = 100;
@@ -115,9 +118,8 @@ lychee.define('game.app.entity.Unit').requires([
 
 			let position = this.position;
 			let radius   = this.radius;
-			let team     = this.team;
 			let wobble   = this.__wobble;
-			let color    = _COLORS[team] || _COLORS.neutral;
+			let color    = this.color;
 
 
 			renderer.drawCircle(
@@ -332,7 +334,20 @@ lychee.define('game.app.entity.Unit').requires([
 
 			if (team !== null) {
 
+				if (team !== this.team) {
+
+					this.addEffect(new _Color({
+						type:     _Color.TYPE.easeout,
+						color:    _PALETTE[team],
+						delay:    0,
+						duration: 1000
+					}));
+
+				}
+
 				this.team = team;
+
+
 
 				return true;
 
