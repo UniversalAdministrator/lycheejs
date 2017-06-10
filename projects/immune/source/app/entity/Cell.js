@@ -257,6 +257,8 @@ lychee.define('game.app.entity.Cell').requires([
 					vesicle.position.x = Math.sin(theta * v) * radius;
 					vesicle.position.y = Math.cos(theta * v) * radius;
 
+					vesicle.update(clock, delta);
+
 				}
 
 			}

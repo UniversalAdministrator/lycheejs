@@ -1,11 +1,14 @@
 
-lychee.define('game.app.entity.Vesicle').includes([
+lychee.define('game.app.entity.Vesicle').requires([
+	'lychee.effect.Color'
+]).includes([
 	'lychee.app.Entity'
 ]).exports(function(lychee, global, attachments) {
 
-	const _Entity = lychee.import('lychee.app.Entity');
-	let   _id     = 0;
-	const _COLORS = {
+	const _Color   = lychee.import('lychee.effect.Color');
+	const _Entity  = lychee.import('lychee.app.Entity');
+	let   _id      = 0;
+	const _PALETTE = {
 		immune:  '#32afe5',
 		virus:   '#d0494b',
 		neutral: '#efefef'
@@ -23,6 +26,7 @@ lychee.define('game.app.entity.Vesicle').includes([
 
 
 		this.id     = 'vesicle-' + _id++;
+		this.color  = _PALETTE.neutral;
 		this.team   = 'neutral';
 		this.damage = 0;
 		this.health = 100;
@@ -32,10 +36,8 @@ lychee.define('game.app.entity.Vesicle').includes([
 
 
 		this.setHealth(settings.health);
-		this.setTeam(settings.team);
 
 		delete settings.health;
-		delete settings.team;
 
 
 		settings.collision = _Entity.COLLISION.A;
@@ -44,6 +46,15 @@ lychee.define('game.app.entity.Vesicle').includes([
 
 
 		_Entity.call(this, settings);
+
+
+
+		/*
+		 * INITIALIZATION
+		 */
+
+		this.setTeam(settings.team);
+
 
 		settings = null;
 
@@ -95,16 +106,16 @@ lychee.define('game.app.entity.Vesicle').includes([
 
 		render: function(renderer, offsetX, offsetY) {
 
+			let color    = this.color;
 			let position = this.position;
 			let radius   = this.radius;
-			let team     = this.team;
 
 
 			renderer.drawCircle(
 				position.x + offsetX,
 				position.y + offsetY,
 				radius + 2,
-				_COLORS.neutral,
+				_PALETTE.neutral,
 				true
 			);
 
@@ -112,18 +123,9 @@ lychee.define('game.app.entity.Vesicle').includes([
 				position.x + offsetX,
 				position.y + offsetY,
 				radius,
-				_COLORS[team],
+				color,
 				true
 			);
-
-
-
-			let tx = position.x + offsetX - 4;
-			let ty = position.y + offsetY + 2;
-
-			renderer.__ctx.font = '16px serif';
-			renderer.__ctx.fillStyle = '#000000';
-			renderer.__ctx.fillText(this.id.split('-')[1], tx, ty);
 
 		},
 
@@ -191,6 +193,19 @@ lychee.define('game.app.entity.Vesicle').includes([
 
 
 			if (team !== null) {
+
+				if (team !== this.team) {
+
+					console.log(_PALETTE[team] || _PALETTE.neutral, team);
+
+					this.addEffect(new _Color({
+						type:     _Color.TYPE.easeout,
+						color:    _PALETTE[team] || _PALETTE.neutral,
+						delay:    0,
+						duration: 1000
+					}));
+
+				}
 
 				this.team = team;
 

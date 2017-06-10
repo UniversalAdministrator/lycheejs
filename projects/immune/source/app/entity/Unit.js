@@ -50,12 +50,10 @@ lychee.define('game.app.entity.Unit').requires([
 		this.setDamage(settings.damage);
 		this.setHealth(settings.health);
 		this.setSpeed(settings.speed);
-		this.setTeam(settings.team);
 
 		delete settings.damage;
 		delete settings.health;
 		delete settings.speed;
-		delete settings.team;
 
 
 		settings.collision = _Entity.COLLISION.A;
@@ -63,6 +61,15 @@ lychee.define('game.app.entity.Unit').requires([
 
 
 		_Entity.call(this, settings);
+
+
+
+		/*
+		 * INITIALIZATION
+		 */
+
+		this.setTeam(settings.team);
+
 
 		settings = null;
 
@@ -116,10 +123,10 @@ lychee.define('game.app.entity.Unit').requires([
 
 		render: function(renderer, offsetX, offsetY) {
 
+			let color    = this.color;
 			let position = this.position;
 			let radius   = this.radius;
 			let wobble   = this.__wobble;
-			let color    = this.color;
 
 
 			renderer.drawCircle(
@@ -338,7 +345,7 @@ lychee.define('game.app.entity.Unit').requires([
 
 					this.addEffect(new _Color({
 						type:     _Color.TYPE.easeout,
-						color:    _PALETTE[team],
+						color:    _PALETTE[team] || _PALETTE.neutral,
 						delay:    0,
 						duration: 1000
 					}));
