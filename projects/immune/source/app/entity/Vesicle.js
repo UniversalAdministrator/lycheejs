@@ -196,8 +196,6 @@ lychee.define('game.app.entity.Vesicle').requires([
 
 				if (team !== this.team) {
 
-					console.log(_PALETTE[team] || _PALETTE.neutral, team);
-
 					this.addEffect(new _Color({
 						type:     _Color.TYPE.easeout,
 						color:    _PALETTE[team] || _PALETTE.neutral,

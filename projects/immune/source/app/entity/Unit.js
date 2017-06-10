@@ -251,6 +251,7 @@ lychee.define('game.app.entity.Unit').requires([
 					_SOUNDS.move.play();
 
 					this.addEffect(new _Position({
+						type:     _Position.TYPE.linear,
 						duration: time,
 						position: {
 							x: px,
