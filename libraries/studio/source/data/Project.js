@@ -230,9 +230,68 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 		 * ENTITY API
 		 */
 
+		deserialize: function(blob) {
+
+			if (blob.config !== undefined) {
+				this.config = lychee.deserialize(blob.config);
+			}
+
+			if (blob.icon !== undefined) {
+				this.icon = lychee.deserialize(blob.icon);
+			}
+
+			if (blob.harvester !== undefined) {
+				this.__harvester = lychee.deserialize(blob.harvester);
+			}
+
+			if (blob.settings instanceof Object) {
+
+				if (blob.settings.harvester !== undefined) {
+					this.harvester = blob.settings.harvester;
+				}
+
+				if (blob.settings.platforms instanceof Object) {
+
+					for (let p in blob.settings.platforms) {
+						this.platforms[p] = blob.settings.platforms[p];
+					}
+
+				}
+
+			}
+
+		},
+
 		serialize: function() {
 
-			// TODO: Implement serialize() and deserialize() API
+			let blob = {};
+
+			if (this.harvester !== true) {
+
+				if (blob.settings === undefined) {
+					blob.settings = {};
+				}
+
+				blob.settings.harvester = this.harvester;
+
+			}
+
+			let platforms = Object.values(this.platforms);
+			if (platforms.includes(false) === true) {
+				blob.settings.platforms = lychee.serialize(this.platforms);
+			}
+
+
+			if (this.config.buffer !== null)      blob.config    = lychee.serialize(this.config);
+			if (this.icon.buffer !== null)        blob.icon      = lychee.serialize(this.icon);
+			if (this.__harvester.buffer !== null) blob.harvester = lychee.serialize(this.__harvester);
+
+
+			return {
+				'constructor': 'studio.data.Project',
+				'arguments':   [ this.identifier ],
+				'blob':        Object.keys(blob).length > 0 ? blob : null
+			};
 
 		},
 

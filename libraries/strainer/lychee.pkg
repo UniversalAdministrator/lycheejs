@@ -1,6 +1,44 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"Template": [
+				"json"
+			],
+			"api": {
+				"Callback": [
+					"json"
+				],
+				"Composite": [
+					"json"
+				],
+				"Definition": [
+					"json"
+				],
+				"Module": [
+					"json"
+				],
+				"PARSER": [
+					"json"
+				]
+			},
+			"platform": {
+				"node": {
+					"plugin": {
+						"ESLINT": [
+							"json"
+						]
+					}
+				}
+			},
+			"plugin": {
+				"API": [
+					"json"
+				]
+			}
+		}
 	},
 	"build": {
 		"environments": {
@@ -76,13 +114,15 @@
 					"js"
 				],
 				"Composite": [
-					"js",
-					"json"
+					"js"
 				],
 				"Definition": [
 					"js"
 				],
 				"Module": [
+					"js"
+				],
+				"PARSER": [
 					"js",
 					"json"
 				]

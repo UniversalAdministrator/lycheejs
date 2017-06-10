@@ -469,6 +469,10 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 	const Module = {
 
+		/*
+		 * ENTITY API
+		 */
+
 		// deserialize: function(blob) {},
 
 		serialize: function() {
@@ -479,6 +483,12 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 			};
 
 		},
+
+
+
+		/*
+		 * CUSTOM API
+		 */
 
 		encode: function(data) {
 

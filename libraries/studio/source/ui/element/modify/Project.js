@@ -141,6 +141,8 @@ lychee.define('studio.ui.element.modify.Project').requires([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Element.prototype.serialize.call(this);

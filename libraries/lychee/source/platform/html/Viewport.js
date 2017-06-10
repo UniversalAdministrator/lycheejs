@@ -37,8 +37,8 @@ lychee.define('Viewport').tags({
 
 	let _focusactive   = true;
 	let _reshapeactive = false;
-	let _reshapewidth  = global.innerWidth;
-	let _reshapeheight = global.innerHeight;
+	let _reshapewidth  = global.innerWidth  | 0;
+	let _reshapeheight = global.innerHeight | 0;
 
 	const _reshape_viewport = function() {
 
@@ -87,8 +87,8 @@ lychee.define('Viewport').tags({
 				_process_reshape.call(_INSTANCES[i], global.innerWidth, global.innerHeight);
 			}
 
-			_reshapewidth  = global.innerWidth;
-			_reshapeheight = global.innerHeight;
+			_reshapewidth  = global.innerWidth  | 0;
+			_reshapeheight = global.innerHeight | 0;
 			_reshapeactive = false;
 
 		}, 500);
@@ -417,8 +417,8 @@ lychee.define('Viewport').tags({
 
 
 		this.fullscreen = false;
-		this.width      = global.innerWidth;
-		this.height     = global.innerHeight;
+		this.width      = global.innerWidth  | 0;
+		this.height     = global.innerHeight | 0;
 
 		this.__orientation = typeof global.orientation === 'number' ? global.orientation : 0;
 
@@ -441,7 +441,7 @@ lychee.define('Viewport').tags({
 			this.width  = 0;
 			this.height = 0;
 
-			_process_reshape.call(this, global.innerWidth, global.innerHeight);
+			_process_reshape.call(this, global.innerWidth | 0, global.innerHeight | 0);
 
 		}.bind(this), 100);
 

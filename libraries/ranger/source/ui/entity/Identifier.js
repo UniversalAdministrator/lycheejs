@@ -29,6 +29,8 @@ lychee.define('ranger.ui.entity.Identifier').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Label.prototype.serialize.call(this);

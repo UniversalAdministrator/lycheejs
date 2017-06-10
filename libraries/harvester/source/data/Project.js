@@ -24,11 +24,17 @@ lychee.define('harvester.data.Project').requires([
 		this.filesystem = new _Filesystem(identifier);
 		this.package    = new _Package(this.filesystem.read('/lychee.pkg'));
 		this.server     = null;
-		this.harvester  = this.filesystem.info('/harvester.js') !== null;
+		this.harvester  = false;
 
 
 		if (Object.keys(this.package.source).length === 0) {
 			console.error('harvester.data.Project: Invalid package at "' + identifier + '/lychee.pkg".');
+		}
+
+
+		let check = this.filesystem.info('/harvester.js');
+		if (check !== null) {
+			this.harvester = true;
 		}
 
 	};

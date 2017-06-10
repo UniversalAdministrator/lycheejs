@@ -80,6 +80,8 @@ lychee.define('harvester.net.server.File').requires([
 		 * MODULE API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			return {

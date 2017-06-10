@@ -25,27 +25,22 @@ lychee.define('fertilizer.Main').requires([
 
 
 	/*
-	 * FEATURE DETECTION
-	 */
-
-	let _DEFAULTS = {
-
-		project:    null,
-		identifier: null,
-		settings:   null
-
-	};
-
-
-
-	/*
 	 * IMPLEMENTATION
 	 */
 
 	let Composite = function(settings) {
 
-		this.settings = _lychee.assignunlink({}, _DEFAULTS, settings);
-		this.defaults = _lychee.assignunlink({}, this.settings);
+		this.settings = _lychee.assignunlink({
+			project:    null,
+			identifier: null,
+			settings:   null
+		}, settings);
+
+		this.defaults = _lychee.assignunlink({
+			project:    null,
+			identifier: null,
+			settings:   null
+		}, this.settings);
 
 
 		_Emitter.call(this);

@@ -24,7 +24,7 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 }).exports(function(lychee, global, attachments) {
 
-	const _CONFIG   = new Config(lychee.ROOT.lychee + '/.eslintrc.json');
+	const _CONFIG   = new Config('/.eslintrc.json');
 	let   _eslint   = null;
 	let   _escli    = null;
 	const _auto_fix = function(line, err) {

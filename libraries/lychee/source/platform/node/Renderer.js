@@ -306,6 +306,13 @@ lychee.define('Renderer').tags({
 
 		drawArc: function(x, y, start, end, radius, color, background, lineWidth) {
 
+			// XXX: No performant validation for start and end
+			// start = Number(start).toPrecision(5)
+			// end   = Number(end).toPrecision(5)
+
+			x          = x | 0;
+			y          = y | 0;
+			radius     = radius | 0;
 			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
@@ -321,11 +328,10 @@ lychee.define('Renderer').tags({
 
 			if (this.alpha < 0.5) return;
 
-			x1 = x1 | 0;
-			y1 = y1 | 0;
-			x2 = x2 | 0;
-			y2 = y2 | 0;
-
+			x1         = x1 | 0;
+			y1         = y1 | 0;
+			x2         = x2 | 0;
+			y2         = y2 | 0;
 			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
@@ -375,6 +381,8 @@ lychee.define('Renderer').tags({
 
 		drawBuffer: function(x1, y1, buffer, map) {
 
+			x1     = x1 | 0;
+			y1     = y1 | 0;
 			buffer = buffer instanceof _Buffer ? buffer : null;
 			map    = map instanceof Object     ? map    : null;
 
@@ -442,6 +450,9 @@ lychee.define('Renderer').tags({
 
 		drawCircle: function(x, y, radius, color, background, lineWidth) {
 
+			x          = x | 0;
+			y          = y | 0;
+			radius     = radius | 0;
 			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
@@ -454,6 +465,10 @@ lychee.define('Renderer').tags({
 
 		drawLine: function(x1, y1, x2, y2, color, lineWidth) {
 
+			x1        = x1 | 0;
+			y1        = y1 | 0;
+			x2        = x2 | 0;
+			y2        = y2 | 0;
 			color     = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			lineWidth = typeof lineWidth === 'number' ? lineWidth : 1;
 
@@ -465,6 +480,12 @@ lychee.define('Renderer').tags({
 
 		drawTriangle: function(x1, y1, x2, y2, x3, y3, color, background, lineWidth) {
 
+			x1         = x1 | 0;
+			y1         = y1 | 0;
+			x2         = x2 | 0;
+			y2         = y2 | 0;
+			x3         = x3 | 0;
+			y3         = y3 | 0;
 			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
@@ -506,6 +527,8 @@ lychee.define('Renderer').tags({
 				// }
 
 
+				// x1         = x1 | 0;
+				// y1         = y1 | 0;
 				// color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 				// background = background === true;
 				// lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
@@ -519,6 +542,8 @@ lychee.define('Renderer').tags({
 
 		drawSprite: function(x1, y1, texture, map) {
 
+			x1      = x1 | 0;
+			y1      = y1 | 0;
 			texture = texture instanceof Texture ? texture : null;
 			map     = map instanceof Object      ? map     : null;
 
@@ -538,6 +563,8 @@ lychee.define('Renderer').tags({
 
 		drawText: function(x1, y1, text, font, center) {
 
+			x1     = x1 | 0;
+			y1     = y1 | 0;
 			font   = font instanceof Font ? font : null;
 			center = center === true;
 
@@ -548,17 +575,13 @@ lychee.define('Renderer').tags({
 
 					let dim = font.measure(text);
 
-					x1 = x1 - dim.realwidth / 2;
-					y1 = y1 - (dim.realheight - font.baseline) / 2;
+					x1 = (x1 - dim.realwidth / 2) | 0;
+					y1 = (y1 - (dim.realheight - font.baseline) / 2) | 0;
 
 				}
 
 
-				y1 = y1 - font.baseline / 2;
-
-
-				x1 = x1 | 0;
-				y1 = y1 | 0;
+				y1 = (y1 - font.baseline / 2) | 0;
 
 
 				let ctx = this.__ctx;

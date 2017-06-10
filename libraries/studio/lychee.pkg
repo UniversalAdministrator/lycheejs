@@ -1,6 +1,83 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"data": {
+				"Project": [
+					"json"
+				]
+			},
+			"net": {
+				"Client": [
+					"json"
+				],
+				"Server": [
+					"json"
+				]
+			},
+			"platform": {
+				"html": {
+					"codec": {
+						"FONT": [
+							"json"
+						],
+						"SPRITE": [
+							"json"
+						]
+					}
+				},
+				"node": {
+					"codec": {
+						"FONT": [
+							"json"
+						],
+						"SPRITE": [
+							"json"
+						]
+					}
+				}
+			},
+			"state": {
+				"Asset": [
+					"json"
+				],
+				"Project": [
+					"json"
+				]
+			},
+			"ui": {
+				"element": {
+					"modify": {
+						"Font": [
+							"json"
+						],
+						"Project": [
+							"json"
+						],
+						"Sprite": [
+							"json"
+						]
+					},
+					"preview": {
+						"Font": [
+							"json"
+						],
+						"Sprite": [
+							"json"
+						]
+					}
+				},
+				"entity": {
+					"input": {
+						"Font": [
+							"json"
+						]
+					}
+				}
+			}
+		}
 	},
 	"build": {
 		"environments": {

@@ -1,6 +1,42 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"state": {
+				"Console": [
+					"json"
+				],
+				"Profile": [
+					"json"
+				],
+				"Welcome": [
+					"json"
+				]
+			},
+			"ui": {
+				"entity": {
+					"Console": [
+						"json"
+					],
+					"Identifier": [
+						"json"
+					],
+					"Status": [
+						"json"
+					]
+				},
+				"layer": {
+					"Control": [
+						"json"
+					],
+					"Web": [
+						"json"
+					]
+				}
+			}
+		}
 	},
 	"build": {
 		"environments": {

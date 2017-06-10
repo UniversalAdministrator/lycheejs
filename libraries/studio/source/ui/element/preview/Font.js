@@ -150,6 +150,8 @@ lychee.define('studio.ui.element.preview.Font').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Element.prototype.serialize.call(this);

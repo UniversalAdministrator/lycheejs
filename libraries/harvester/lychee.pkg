@@ -1,6 +1,117 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"Watcher": [
+				"json"
+			],
+			"data": {
+				"Package": [
+					"json"
+				],
+				"Project": [
+					"json"
+				],
+				"Server": [
+					"json"
+				]
+			},
+			"mod": {
+				"Beautifier": [
+					"json"
+				],
+				"Harvester": [
+					"json"
+				],
+				"Packager": [
+					"json"
+				]
+			},
+			"net": {
+				"Admin": [
+					"json"
+				],
+				"Client": [
+					"json"
+				],
+				"Remote": [
+					"json"
+				],
+				"Server": [
+					"json"
+				],
+				"client": {
+					"Console": [
+						"json"
+					],
+					"Harvester": [
+						"json"
+					],
+					"Library": [
+						"json"
+					],
+					"Profile": [
+						"json"
+					],
+					"Project": [
+						"json"
+					]
+				},
+				"remote": {
+					"Console": [
+						"json"
+					],
+					"Harvester": [
+						"json"
+					],
+					"Library": [
+						"json"
+					],
+					"Profile": [
+						"json"
+					],
+					"Project": [
+						"json"
+					],
+					"Server": [
+						"json"
+					]
+				},
+				"server": {
+					"File": [
+						"json"
+					],
+					"Redirect": [
+						"json"
+					]
+				}
+			},
+			"platform": {
+				"node": {
+					"data": {
+						"Filesystem": [
+							"json"
+						],
+						"Git": [
+							"json"
+						]
+					},
+					"mod": {
+						"Fertilizer": [
+							"json"
+						],
+						"Server": [
+							"json"
+						],
+						"Strainer": [
+							"json"
+						]
+					}
+				}
+			}
+		}
 	},
 	"build": {
 		"environments": {

@@ -74,7 +74,7 @@ lychee.define('ranger.ui.layer.Web').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Class = function(data) {
+	let Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 
@@ -102,11 +102,13 @@ lychee.define('ranger.ui.layer.Web').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
 		 */
+
+		// deserialize: function(blob) {},
 
 		serialize: function() {
 
@@ -171,7 +173,7 @@ lychee.define('ranger.ui.layer.Web').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

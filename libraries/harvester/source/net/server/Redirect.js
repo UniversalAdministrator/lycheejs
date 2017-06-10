@@ -11,6 +11,8 @@ lychee.define('harvester.net.server.Redirect').exports(function(lychee, global, 
 		 * MODULE API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			return {

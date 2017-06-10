@@ -14,26 +14,20 @@ lychee.define('strainer.Main').requires([
 
 
 	/*
-	 * FEATURE DETECTION
-	 */
-
-	let _DEFAULTS = {
-
-		action:  null,
-		project: null
-
-	};
-
-
-
-	/*
 	 * IMPLEMENTATION
 	 */
 
 	let Composite = function(settings) {
 
-		this.settings = _lychee.assignunlink({}, _DEFAULTS, settings);
-		this.defaults = _lychee.assignunlink({}, this.settings);
+		this.settings = _lychee.assignunlink({
+			action:  null,
+			project: null
+		}, settings);
+
+		this.defaults = _lychee.assignunlink({
+			action:  null,
+			project: null
+		}, this.settings);
 
 
 		_Emitter.call(this);

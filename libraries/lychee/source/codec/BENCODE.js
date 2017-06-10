@@ -368,6 +368,10 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 	const Module = {
 
+		/*
+		 * ENTITY API
+		 */
+
 		// deserialize: function(blob) {},
 
 		serialize: function() {
@@ -378,6 +382,12 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 			};
 
 		},
+
+
+
+		/*
+		 * CUSTOM API
+		 */
 
 		encode: function(data) {
 

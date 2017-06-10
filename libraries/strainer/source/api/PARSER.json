@@ -15,6 +15,70 @@
 		}
 	},
 	{
+		"name": "main.client",
+		"type": "lychee.net.Client",
+		"value": {
+			"constructor": "lychee.net.Client",
+			"arguments": []
+		}
+	},
+	{
+		"name": "main.input",
+		"type": "lychee.Input",
+		"value": {
+			"constructor": "lychee.Input",
+			"arguments": []
+		}
+	},
+	{
+		"name": "main.jukebox",
+		"type": "lychee.app.Jukebox",
+		"value": {
+			"constructor": "lychee.app.Jukebox",
+			"arguments": []
+		}
+	},
+	{
+		"name": "main.renderer",
+		"type": "lychee.Renderer",
+		"value": {
+			"constructor": "lychee.Renderer",
+			"arguments": []
+		}
+	},
+	{
+		"name": "main.server",
+		"type": "lychee.net.Server",
+		"value": {
+			"constructor": "lychee.net.Server",
+			"arguments": []
+		}
+	},
+	{
+		"name": "main.stash",
+		"type": "lychee.Stash",
+		"value": {
+			"constructor": "lychee.Stash",
+			"arguments": []
+		}
+	},
+	{
+		"name": "main.storage",
+		"type": "lychee.Storage",
+		"value": {
+			"constructor": "lychee.Storage",
+			"arguments": []
+		}
+	},
+	{
+		"name": "main.viewport",
+		"type": "lychee.Viewport",
+		"value": {
+			"constructor": "lychee.Viewport",
+			"arguments": []
+		}
+	},
+	{
 		"name": "_CONFIG",
 		"type": "Config",
 		"value": {
@@ -88,7 +152,7 @@
 	},
 	{
 		"name": "_validate_entity(entity)",
-		"type": "lychee.*.Entity",
+		"type": "lychee.app.Entity",
 		"value": {
 			"constructor": "lychee.app.Entity",
 			"arguments": []
@@ -96,7 +160,7 @@
 	},
 	{
 		"name": "entity",
-		"type": "lychee.*.Entity",
+		"type": "lychee.app.Entity",
 		"value": {
 			"constructor": "lychee.app.Entity",
 			"arguments": []
@@ -112,17 +176,17 @@
 	},
 	{
 		"name": "_JSON",
-		"type": "lychee.codec.*",
+		"type": "lychee.codec.JSON",
 		"value": {
 			"reference": "lychee.codec.JSON",
 			"arguments": []
 		}
 	},
 	{
-		"name": "main",
-		"type": "lychee.app.Main",
+		"name": "client",
+		"type": "lychee.net.Client",
 		"value": {
-			"constructor": "lychee.app.Main",
+			"constructor": "lychee.net.Client",
 			"arguments": []
 		}
 	},
@@ -175,14 +239,6 @@
 		}
 	},
 	{
-		"name": "client",
-		"type": "lychee.net.Client",
-		"value": {
-			"constructor": "lychee.net.Client",
-			"arguments": []
-		}
-	},
-	{
 		"name": "remote",
 		"type": "lychee.net.Remote",
 		"value": {
@@ -212,9 +268,29 @@
 		"value": "<unique identifier>"
 	},
 	{
-		"name": "this",
-		"type": "Object",
-		"value": "this"
+		"name": "width",
+		"type": "Number",
+		"value": 1337
+	},
+	{
+		"name": "height",
+		"type": "Number",
+		"value": 1337
+	},
+	{
+		"name": "depth",
+		"type": "Number",
+		"value": 1337
+	},
+	{
+		"name": "radius",
+		"type": "Number",
+		"value": 137
+	},
+	{
+		"name": "Math.pow",
+		"type": "Number",
+		"value": 13.37
 	},
 	{
 		"name": "Math.sqrt",

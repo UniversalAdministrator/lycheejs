@@ -1,6 +1,550 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"DIST": [
+				"json"
+			],
+			"ai": {
+				"Agent": [
+					"json"
+				],
+				"Genome": [
+					"json"
+				],
+				"Layer": [
+					"json"
+				],
+				"bnn": {
+					"Agent": [
+						"json"
+					],
+					"Brain": [
+						"json"
+					]
+				},
+				"enn": {
+					"Agent": [
+						"json"
+					],
+					"Brain": [
+						"json"
+					]
+				},
+				"neat": {
+					"Agent": [
+						"json"
+					],
+					"Brain": [
+						"json"
+					],
+					"Gene": [
+						"json"
+					],
+					"Genome": [
+						"json"
+					],
+					"Pool": [
+						"json"
+					]
+				}
+			},
+			"app": {
+				"Blueprint": [
+					"json"
+				],
+				"Element": [
+					"json"
+				],
+				"Entity": [
+					"json"
+				],
+				"Flow": [
+					"json"
+				],
+				"Jukebox": [
+					"json"
+				],
+				"Layer": [
+					"json"
+				],
+				"Loop": [
+					"json"
+				],
+				"Main": [
+					"json"
+				],
+				"Sprite": [
+					"json"
+				],
+				"State": [
+					"json"
+				],
+				"entity": {
+					"Label": [
+						"json"
+					],
+					"Text": [
+						"json"
+					]
+				},
+				"layer": {
+					"Table": [
+						"json"
+					]
+				},
+				"sprite": {
+					"Background": [
+						"json"
+					],
+					"Emblem": [
+						"json"
+					]
+				}
+			},
+			"codec": {
+				"BENCODE": [
+					"json"
+				],
+				"BITON": [
+					"json"
+				],
+				"JSON": [
+					"json"
+				]
+			},
+			"crypto": {
+				"CRC32": [
+					"json"
+				],
+				"MD5": [
+					"json"
+				],
+				"MURMUR": [
+					"json"
+				],
+				"SHA1": [
+					"json"
+				]
+			},
+			"data": {
+				"Tree": [
+					"json"
+				],
+				"tree": {
+					"Oct": [
+						"json"
+					],
+					"Quad": [
+						"json"
+					]
+				}
+			},
+			"effect": {
+				"Alpha": [
+					"json"
+				],
+				"Color": [
+					"json"
+				],
+				"Depth": [
+					"json"
+				],
+				"Event": [
+					"json"
+				],
+				"Height": [
+					"json"
+				],
+				"Music": [
+					"json"
+				],
+				"Offset": [
+					"json"
+				],
+				"Position": [
+					"json"
+				],
+				"Radius": [
+					"json"
+				],
+				"Shake": [
+					"json"
+				],
+				"Sound": [
+					"json"
+				],
+				"State": [
+					"json"
+				],
+				"Velocity": [
+					"json"
+				],
+				"Visible": [
+					"json"
+				],
+				"Width": [
+					"json"
+				]
+			},
+			"event": {
+				"Emitter": [
+					"json"
+				],
+				"Flow": [
+					"json"
+				],
+				"Queue": [
+					"json"
+				],
+				"Router": [
+					"json"
+				]
+			},
+			"math": {
+				"Matrix": [
+					"json"
+				],
+				"Mersenne": [
+					"json"
+				],
+				"Quaternion": [
+					"json"
+				],
+				"Vector3": [
+					"json"
+				],
+				"Vector4": [
+					"json"
+				]
+			},
+			"net": {
+				"Client": [
+					"json"
+				],
+				"Remote": [
+					"json"
+				],
+				"Service": [
+					"json"
+				],
+				"Tunnel": [
+					"json"
+				],
+				"client": {
+					"Chat": [
+						"json"
+					],
+					"Debugger": [
+						"json"
+					],
+					"Session": [
+						"json"
+					],
+					"Stash": [
+						"json"
+					],
+					"Storage": [
+						"json"
+					]
+				},
+				"protocol": {
+					"HTTP": [
+						"json"
+					],
+					"WS": [
+						"json"
+					]
+				},
+				"remote": {
+					"Chat": [
+						"json"
+					],
+					"Debugger": [
+						"json"
+					],
+					"Session": [
+						"json"
+					],
+					"Stash": [
+						"json"
+					],
+					"Storage": [
+						"json"
+					]
+				}
+			},
+			"platform": {
+				"html": {
+					"Input": [
+						"json"
+					],
+					"Renderer": [
+						"json"
+					],
+					"Stash": [
+						"json"
+					],
+					"Storage": [
+						"json"
+					],
+					"Viewport": [
+						"json"
+					],
+					"net": {
+						"Server": [
+							"json"
+						],
+						"socket": {
+							"HTTP": [
+								"json"
+							],
+							"WS": [
+								"json"
+							]
+						}
+					},
+					"ui": {
+						"entity": {
+							"Download": [
+								"json"
+							],
+							"Helper": [
+								"json"
+							],
+							"Upload": [
+								"json"
+							]
+						}
+					}
+				},
+				"html-nwjs": {
+					"Stash": [
+						"json"
+					],
+					"Storage": [
+						"json"
+					],
+					"net": {
+						"Server": [
+							"json"
+						],
+						"socket": {
+							"HTTP": [
+								"json"
+							],
+							"WS": [
+								"json"
+							]
+						}
+					},
+					"ui": {
+						"entity": {
+							"Download": [
+								"json"
+							],
+							"Helper": [
+								"json"
+							]
+						}
+					}
+				},
+				"node": {
+					"Input": [
+						"json"
+					],
+					"Renderer": [
+						"json"
+					],
+					"Stash": [
+						"json"
+					],
+					"Storage": [
+						"json"
+					],
+					"Viewport": [
+						"json"
+					],
+					"net": {
+						"Server": [
+							"json"
+						],
+						"socket": {
+							"HTTP": [
+								"json"
+							],
+							"WS": [
+								"json"
+							]
+						}
+					},
+					"ui": {
+						"entity": {
+							"Download": [
+								"json"
+							],
+							"Helper": [
+								"json"
+							],
+							"Upload": [
+								"json"
+							]
+						}
+					}
+				}
+			},
+			"policy": {
+				"Alpha": [
+					"json"
+				],
+				"Color": [
+					"json"
+				],
+				"Depth": [
+					"json"
+				],
+				"Height": [
+					"json"
+				],
+				"Music": [
+					"json"
+				],
+				"Offset": [
+					"json"
+				],
+				"Position": [
+					"json"
+				],
+				"Radius": [
+					"json"
+				],
+				"Shake": [
+					"json"
+				],
+				"Sound": [
+					"json"
+				],
+				"State": [
+					"json"
+				],
+				"Velocity": [
+					"json"
+				],
+				"Visible": [
+					"json"
+				],
+				"Width": [
+					"json"
+				]
+			},
+			"ui": {
+				"Blueprint": [
+					"json"
+				],
+				"Element": [
+					"json"
+				],
+				"Entity": [
+					"json"
+				],
+				"Layer": [
+					"json"
+				],
+				"Menu": [
+					"json"
+				],
+				"Notice": [
+					"json"
+				],
+				"Sprite": [
+					"json"
+				],
+				"State": [
+					"json"
+				],
+				"element": {
+					"Input": [
+						"json"
+					],
+					"Jukebox": [
+						"json"
+					],
+					"Network": [
+						"json"
+					],
+					"Search": [
+						"json"
+					],
+					"Stash": [
+						"json"
+					],
+					"Storage": [
+						"json"
+					],
+					"Viewport": [
+						"json"
+					]
+				},
+				"entity": {
+					"Button": [
+						"json"
+					],
+					"Input": [
+						"json"
+					],
+					"Joystick": [
+						"json"
+					],
+					"Label": [
+						"json"
+					],
+					"List": [
+						"json"
+					],
+					"Select": [
+						"json"
+					],
+					"Slider": [
+						"json"
+					],
+					"Switch": [
+						"json"
+					],
+					"Text": [
+						"json"
+					],
+					"Textarea": [
+						"json"
+					],
+					"Texture": [
+						"json"
+					]
+				},
+				"layer": {
+					"Table": [
+						"json"
+					]
+				},
+				"sprite": {
+					"Background": [
+						"json"
+					],
+					"Emblem": [
+						"json"
+					]
+				}
+			},
+			"verlet": {
+				"Constraint": [
+					"json"
+				],
+				"Entity": [
+					"json"
+				],
+				"Layer": [
+					"json"
+				]
+			}
+		}
 	},
 	"build": {
 		"environments": {

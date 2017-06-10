@@ -138,6 +138,8 @@ lychee.define('ranger.ui.layer.Control').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Layer.prototype.serialize.call(this);

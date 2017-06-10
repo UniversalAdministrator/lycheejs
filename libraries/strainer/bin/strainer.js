@@ -133,10 +133,6 @@ const _bootup = function(settings) {
 			let strainer = sandbox.strainer;
 
 
-			// Show less debug messages
-			lychee.debug = true;
-
-
 			// This allows using #MAIN in JSON files
 			sandbox.MAIN = new strainer.Main(settings);
 

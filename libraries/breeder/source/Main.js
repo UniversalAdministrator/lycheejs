@@ -14,27 +14,22 @@ lychee.define('breeder.Main').requires([
 
 
 	/*
-	 * FEATURE DETECTION
-	 */
-
-	let _DEFAULTS = {
-
-		action:  null,
-		project: null,
-		library: null
-
-	};
-
-
-
-	/*
 	 * IMPLEMENTATION
 	 */
 
 	let Composite = function(settings) {
 
-		this.settings = _lychee.assignunlink({}, _DEFAULTS, settings);
-		this.defaults = _lychee.assignunlink({}, this.settings);
+		this.settings = _lychee.assignunlink({
+			action:  null,
+			project: null,
+			library: null
+		}, settings);
+
+		this.defaults = _lychee.assignunlink({
+			action:  null,
+			project: null,
+			library: null
+		}, this.settings);
 
 
 		_Emitter.call(this);

@@ -72,12 +72,13 @@ lychee.define('harvester.data.Filesystem').tags({
 
 	let Composite = function(root) {
 
-		root = typeof root === 'string' ? root : null;
+		this.root = typeof root === 'string' ? root : null;
 
-		if (root !== null) {
-			this.root = _path.normalize(_ROOT + _path.normalize(root));
-		} else {
-			this.root = _ROOT;
+
+		this.__root = _ROOT;
+
+		if (this.root !== null) {
+			this.__root = _path.normalize(_ROOT + _path.normalize(this.root));
 		}
 
 	};
@@ -125,7 +126,7 @@ lychee.define('harvester.data.Filesystem').tags({
 
 
 			let asset    = null;
-			let resolved = _path.normalize(this.root.substr(process.cwd().length) + path);
+			let resolved = _path.normalize(this.__root.substr(process.cwd().length) + path);
 			if (callback !== null) {
 
 				asset = new lychee.Asset(resolved, null, true);
@@ -182,7 +183,7 @@ lychee.define('harvester.data.Filesystem').tags({
 			}
 
 
-			let resolved = _path.normalize(this.root + path);
+			let resolved = _path.normalize(this.__root + path);
 			if (callback !== null) {
 
 				_fs.readdir(resolved, function(err, data) {
@@ -225,7 +226,7 @@ lychee.define('harvester.data.Filesystem').tags({
 			}
 
 
-			let resolved = _path.normalize(this.root + path);
+			let resolved = _path.normalize(this.__root + path);
 			if (callback !== null) {
 
 				let data = null;
@@ -276,11 +277,11 @@ lychee.define('harvester.data.Filesystem').tags({
 			}
 
 
-			_create_directory(_path.dirname(this.root + path));
+			_create_directory(_path.dirname(this.__root + path));
 
 
 			let info     = this.info(_path.dirname(path));
-			let resolved = _path.normalize(this.root + path);
+			let resolved = _path.normalize(this.__root + path);
 			if (resolved !== null && info !== null && info.type === 'directory') {
 
 				if (callback !== null) {
@@ -329,7 +330,7 @@ lychee.define('harvester.data.Filesystem').tags({
 			if (path === null) return null;
 
 
-			let resolved = _path.normalize(this.root + path);
+			let resolved = _path.normalize(this.__root + path);
 			if (resolved !== null) {
 
 				let stat = null;
