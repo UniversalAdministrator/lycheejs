@@ -166,7 +166,7 @@
 							{
 								"team": "neutral",
 								"radius": 32,
-								"speed": 300,
+								"speed": 1000,
 								"position": {
 									"x": 0,
 									"y": 0
@@ -197,22 +197,24 @@
 								"value": "Welcome back, Commander.",
 								"position": {
 									"x": 0,
-									"y": -64
+									"y": -96
 								}
 							}
 						]
-					}, {
+					},
+					{
 						"constructor": "lychee.ui.entity.Label",
 						"arguments": [
 							{
 								"value": "Please select the Battlefield.",
 								"position": {
 									"x": 0,
-									"y": -40
+									"y": -64
 								}
 							}
 						]
-					}, {
+					},
+					{
 						"constructor": "lychee.ui.entity.Button",
 						"arguments": [
 							{
