@@ -100,20 +100,25 @@ lychee.define('strainer.Main').requires([
 
 			template.bind('complete', function() {
 
-				if (lychee.debug === true) {
+				if (template.errors.length === 0) {
 					console.info('strainer: SUCCESS ("' + project + '")');
-				}
+					this.destroy(0);
+				} else {
 
-				this.destroy(0);
+					template.errors.forEach(function(err) {
+						console.error('strainer: ' + err.header);
+						console.error('          ' + err.message);
+					});
+
+					console.error('strainer: FAILURE ("' + project + '")');
+					this.destroy(1);
+				}
 
 			}, this);
 
 			template.bind('error', function(event) {
 
-				if (lychee.debug === true) {
-					console.error('strainer: FAILURE ("' + project + '") at "' + event + '" template event');
-				}
-
+				console.error('strainer: FAILURE ("' + project + '") at "' + event + '" template event');
 				this.destroy(1);
 
 			}, this);

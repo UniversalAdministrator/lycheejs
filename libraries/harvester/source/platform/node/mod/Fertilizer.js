@@ -86,7 +86,7 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 			_ACTIVE = false;
 
-			if (error || stdout.indexOf('SUCCESS') === -1) {
+			if (error || stdout.indexOf('fertilizer: SUCCESS') === -1) {
 				console.error('harvester.mod.Fertilizer: FAILURE ("' + project + ' | ' + target + '")');
 			} else {
 				console.info('harvester.mod.Fertilizer: SUCCESS ("' + project + ' | ' + target + '")');

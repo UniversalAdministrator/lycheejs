@@ -91,8 +91,6 @@ lychee.define('strainer.plugin.API').requires([
 
 			if (api !== null) {
 				report = api.check(asset);
-			} else {
-				console.error('strainer.plugin.API: ("no-definition") ' + asset.url);
 			}
 
 
@@ -146,17 +144,16 @@ lychee.define('strainer.plugin.API').requires([
 
 					if (tmp === false) {
 
-						filtered.push(err);
-
+						let header = '("' + rule + '") ' + url;
 						if (method !== '') {
-							console.error('strainer.plugin.API: ("' + rule + '") ' + url + '#' + method);
-						} else {
-							console.error('strainer.plugin.API: ("' + rule + '") ' + url);
+							header += '#' + method;
 						}
 
-						if (message.length > 0) {
-							console.error('                     ' + message);
-						}
+						filtered.push({
+							error:   err,
+							header:  header,
+							message: message
+						});
 
 					}
 

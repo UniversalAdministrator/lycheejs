@@ -20,7 +20,6 @@ lychee.define('harvester.Watcher').requires([
 		Server:     lychee.import('harvester.mod.Server'),
 		Strainer:   lychee.import('harvester.mod.Strainer')
 	};
-	const _CACHE      = {};
 
 
 
@@ -156,9 +155,11 @@ lychee.define('harvester.Watcher').requires([
 		for (let lid in this.libraries) {
 
 			let library = this.libraries[lid];
+			let rebuild = false;
 
 			if (Packager !== null && Packager.can(library) === true) {
 				Packager.process(library);
+				rebuild = true;
 			}
 
 			if (Server !== null && Server.can(library) === true) {
@@ -166,13 +167,7 @@ lychee.define('harvester.Watcher').requires([
 			}
 
 
-			let info = library.filesystem.info('/lychee.pkg');
-			let time = _CACHE[library.identifier] || -1;
-
-			if (info !== null && info.mtime > time) {
-
-				_CACHE[library.identifier] = info.mtime;
-
+			if (rebuild === true) {
 
 				if (Strainer !== null && Strainer.can(library) === true) {
 					Strainer.process(library);
@@ -193,9 +188,11 @@ lychee.define('harvester.Watcher').requires([
 		for (let pid in this.projects) {
 
 			let project = this.projects[pid];
+			let rebuild = false;
 
 			if (Packager !== null && Packager.can(project) === true) {
 				Packager.process(project);
+				rebuild = true;
 			}
 
 			if (Server !== null && Server.can(project) === true) {
@@ -203,13 +200,7 @@ lychee.define('harvester.Watcher').requires([
 			}
 
 
-			let info = project.filesystem.info('/lychee.pkg');
-			let time = _CACHE[project.identifier] || -1;
-
-			if (info !== null && info.mtime > time) {
-
-				_CACHE[project.identifier] = info.mtime;
-
+			if (rebuild === true) {
 
 				if (Harvester !== null && Harvester.can(project) === true) {
 					Harvester.process(project);

@@ -93,6 +93,7 @@ lychee.define('strainer.Template').requires([
 		this.checks   = [];
 		this.codes    = [];
 		this.configs  = [];
+		this.errors   = [];
 		this.sandbox  = '';
 		this.settings = {};
 		this.stash    = new _Stash({
@@ -177,6 +178,7 @@ lychee.define('strainer.Template').requires([
 		this.bind('check-eslint', function(oncomplete) {
 
 			let eslint  = _plugin.ESLINT || null;
+			let errors  = this.errors;
 			let project = this.settings.project;
 
 			if (eslint !== null) {
@@ -191,10 +193,12 @@ lychee.define('strainer.Template').requires([
 
 						let result = _plugin.ESLINT.fix(asset, report);
 						if (result.length > 0) {
-							return result;
-						} else {
-							return [];
+							result.forEach(function(err) {
+								errors.push(err);
+							});
 						}
+
+						return result;
 
 					}
 
@@ -270,6 +274,7 @@ lychee.define('strainer.Template').requires([
 		this.bind('check-api', function(oncomplete) {
 
 			let api     = _plugin.API || null;
+			let errors  = this.errors;
 			let project = this.settings.project;
 
 			if (api !== null) {
@@ -281,12 +286,19 @@ lychee.define('strainer.Template').requires([
 
 					let url    = asset.url.replace(/source/, 'api').replace(/\.js$/, '.json');
 					let report = _plugin.API.check(asset);
-
 					if (report !== null) {
 
 						if (report.errors.length > 0) {
-							_plugin.API.fix(asset, report);
+
+							let result = _plugin.API.fix(asset, report);
+							if (result.length > 0) {
+								result.forEach(function(err) {
+									errors.push(err);
+								});
+							}
+
 						}
+
 
 						let config = new lychee.Asset(url, 'json', true);
 

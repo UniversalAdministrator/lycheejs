@@ -375,13 +375,11 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 					} else {
 
-						filtered.push(err);
-
-						console.error('strainer.plugin.ESLINT: ("' + rule + '") ' + url + '#L' + line + ':' + column);
-
-						if (message.length > 0) {
-							console.error('                        ' + message);
-						}
+						filtered.push({
+							error:   err,
+							header:  '("' + rule + '") ' + url + '#L' + line + ':' + column,
+							message: message
+						});
 
 					}
 

@@ -84,27 +84,26 @@ lychee.define('harvester.mod.Strainer').tags({
 
 			_ACTIVE = false;
 
-			if (error || stdout.indexOf('SUCCESS') === -1) {
+
+			let tmp = stderr.trim();
+			if (error || tmp.indexOf('(E)') !== -1) {
+
 				console.error('harvester.mod.Strainer: FAILURE ("' + project + ')');
-			} else {
 
-				let tmp = stderr.trim();
-				if (tmp.indexOf('(E)') === -1) {
-					console.info('harvester.mod.Strainer: SUCCESS ("' + project + ')');
-				} else {
+				let lines = tmp.split('\n');
 
-					let lines = tmp.split('\n');
+				for (let l = 0, ll = lines.length; l < ll; l++) {
 
-					for (let l = 0, ll = lines.length; l < ll; l++) {
+					let line = lines[l];
+					let tmp1 = line.substr(15, line.length - 29);
 
-						let line = lines[l];
-						let tmp1 = line.substr(15, line.length - 29);
-
-						console.warn(tmp1.trim());
-
-					}
+					console.warn(tmp1.trim());
 
 				}
+
+			} else {
+
+				console.info('harvester.mod.Strainer: SUCCESS ("' + project + ')');
 
 			}
 
