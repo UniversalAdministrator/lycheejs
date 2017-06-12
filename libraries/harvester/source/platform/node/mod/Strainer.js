@@ -87,7 +87,25 @@ lychee.define('harvester.mod.Strainer').tags({
 			if (error || stdout.indexOf('SUCCESS') === -1) {
 				console.error('harvester.mod.Strainer: FAILURE ("' + project + ')');
 			} else {
-				console.info('harvester.mod.Strainer: SUCCESS ("' + project + ')');
+
+				let tmp = stderr.trim();
+				if (tmp.indexOf('(E)') === -1) {
+					console.info('harvester.mod.Strainer: SUCCESS ("' + project + ')');
+				} else {
+
+					let lines = tmp.split('\n');
+
+					for (let l = 0, ll = lines.length; l < ll; l++) {
+
+						let line = lines[l];
+						let tmp1 = line.substr(15, line.length - 29);
+
+						console.warn(tmp1.trim());
+
+					}
+
+				}
+
 			}
 
 		});
