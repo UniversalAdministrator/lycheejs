@@ -14,6 +14,21 @@ lychee.define('lychee.ai.neat.Gene').exports(function(lychee, global, attachment
 
 	Composite.prototype = {
 
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			return {
+				'constructor': 'lychee.ai.neat.Gene',
+				'arguments':   []
+			};
+
+		}
+
 	};
 
 

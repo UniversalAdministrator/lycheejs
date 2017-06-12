@@ -40,6 +40,27 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 
 	Composite.prototype = {
 
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			return {
+				'constructor': 'lychee.ai.neat.Genome',
+				'arguments':   []
+			};
+
+		},
+
+
+
+		/*
+		 * CUSTOM API
+		 */
+
 		copyGenome: function() {
 
 			let clone = new Composite();

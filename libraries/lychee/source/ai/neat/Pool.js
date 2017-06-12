@@ -25,6 +25,22 @@ lychee.define('lychee.ai.neat.Pool').exports(function(lychee, global, attachment
 
 
 	Composite.prototype = {
+
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			return {
+				'constructor': 'lychee.ai.neat.Pool',
+				'arguments':   []
+			};
+
+		}
+
 	};
 
 
