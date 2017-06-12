@@ -48,10 +48,10 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 
 		// No data validation garbage allowed for effects
 
-		this.type     = lychee.enumof(Composite.TYPE, settings.type)   ? settings.type           : Composite.TYPE.easeout;
-		this.delay    = typeof settings.delay === 'number'             ? (settings.delay | 0)    : 0;
-		this.duration = typeof settings.duration === 'number'          ? (settings.duration | 0) : 250;
-		this.color    = /(#[AaBbCcDdEeFf0-9]{6})/.test(settings.color) ? settings.color          : '#000000';
+		this.type     = lychee.enumof(Composite.TYPE, settings.type)    ? settings.type           : Composite.TYPE.easeout;
+		this.delay    = typeof settings.delay === 'number'              ? (settings.delay | 0)    : 0;
+		this.duration = typeof settings.duration === 'number'           ? (settings.duration | 0) : 250;
+		this.color    = /(#[AaBbCcDdEeFf0-9]{6})/g.test(settings.color) ? settings.color          : '#000000';
 
 	};
 

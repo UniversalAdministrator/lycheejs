@@ -599,13 +599,13 @@ lychee.define('strainer.api.Composite').requires([
 			for (let p in result.properties) {
 
 				let property = result.properties[p];
-				if (property.type === 'undefined') {
+				if (property.type === 'undefined' && property.value === undefined) {
 
 					errors.push({
 						ruleId:       'no-property-value',
 						propertyName: p,
 						fileName:     null,
-						message:      'Unguessable property "' + p + '" ("' + property.value + '").'
+						message:      'Unguessable property "' + p + '".'
 					});
 
 				}

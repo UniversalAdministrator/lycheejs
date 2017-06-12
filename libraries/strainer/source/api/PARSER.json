@@ -39,6 +39,14 @@
 		}
 	},
 	{
+		"name": "main.loop",
+		"type": "lychee.app.Loop",
+		"value": {
+			"constructor": "lychee.app.Loop",
+			"arguments": []
+		}
+	},
+	{
 		"name": "main.renderer",
 		"type": "lychee.Renderer",
 		"value": {
@@ -131,16 +139,6 @@
 			"constructor": "lychee.ai.enn.Brain",
 			"arguments": []
 		}
-	},
-	{
-		"name": "/(#[AaBbCcDdEeFf0-9]{6})/g.test(color)",
-		"type": "String",
-		"value": "#d0494b"
-	},
-	{
-		"name": "color",
-		"type": "String",
-		"value": "#d0494b"
 	},
 	{
 		"name": "(lychee.interfaceof(_App_layer, layer) || lychee.interfaceof(_Ui_layer, layer))",

@@ -72,7 +72,7 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 
 				let tmp = str.split(/(.*)instanceof\s([A-Za-z_\.]+)([\s]+)(.*)\?/g);
 				if (tmp.length > 2) {
-					return tmp[2];
+					type = tmp[2];
 				}
 
 			} else if (str.startsWith('typeof') && str.includes('===') && str.includes('?') && str.includes(':')) {
@@ -102,50 +102,54 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 						tmp1 = tmp1.substr(0, tmp1.length - 1);
 					}
 
-					return _detect_type(tmp1.trim());
+					type = _detect_type(tmp1.trim());
 
 				}
 
+			} else if (str.includes('/g.test(')  && str.includes('?') && str.includes(':')) {
+
+				type = 'String';
+
 			} else if (str.endsWith('| 0') || str.endsWith('| 0;')) {
 
-				return 'Number';
+				type = 'Number';
 
 			} else if (str.includes('!== undefined') && str.includes('?') && str.includes(':')) {
 
-				return 'Object';
+				type = 'Object';
 
 			} else if (str.startsWith('lychee.interfaceof') || str.startsWith('_lychee.interfaceof')) {
 
 				let tmp = str.split(/lychee.interfaceof\(([A-Za-z_\.]+),(.*)\)/g);
 				if (tmp.length > 1) {
-					return tmp[1];
+					type = tmp[1];
 				}
 
 			} else if (str.startsWith('lychee.enumof') || str.startsWith('_lychee.enumof')) {
 
-				return 'Enum';
+				type = 'Enum';
 
 			} else if (str.startsWith('lychee.assignunlink') || str.startsWith('_lychee.assignunlink')) {
 
-				return 'Object';
+				type = 'Object';
 
 			} else if (str.startsWith('lychee.diff') || str.startsWith('_lychee.diff')) {
 
-				return 'Object';
+				type = 'Object';
 
 			} else if (str === 'this') {
 
-				return 'Object';
+				type = 'Object';
 
 			} else if (str.endsWith(' || null')) {
 
 				let tmp1 = str.substr(0, str.length - 8).trim();
 
-				return _detect_type(tmp1);
+				type = _detect_type(tmp1);
 
 			} else if (str === 'main') {
 
-				return 'lychee.app.Main';
+				type = 'lychee.app.Main';
 
 			}
 
@@ -275,7 +279,7 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 					tmp = tmp.substr(0, tmp.length - 1);
 				}
 
-				return _detect_value(tmp.trim());
+				value = _detect_value(tmp.trim());
 
 			} else if (str.startsWith('typeof') && str.includes('?') && str.includes(':')) {
 
@@ -284,7 +288,16 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 					tmp = tmp.substr(0, tmp.length - 1);
 				}
 
-				return _detect_value(tmp.trim());
+				value = _detect_value(tmp.trim());
+
+			} else if (str.includes('/g.test(')  && str.includes('?') && str.includes(':')) {
+
+				let tmp = str.split(':').pop();
+				if (tmp.endsWith(';')) {
+					tmp = tmp.substr(0, tmp.length - 1);
+				}
+
+				value = _detect_value(tmp.trim());
 
 			} else if (str.endsWith('| 0') || str.endsWith('| 0;')) {
 
@@ -292,7 +305,7 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 
 			} else if (str.includes('!== undefined') && str.includes('?') && str.includes(':')) {
 
-				return {};
+				value = {};
 
 			} else if (str.startsWith('lychee.interfaceof')) {
 
@@ -303,7 +316,7 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 						tmp = tmp.substr(0, tmp.length - 1);
 					}
 
-					return _detect_value(tmp.trim());
+					value = _detect_value(tmp.trim());
 
 				} else {
 
@@ -318,30 +331,30 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 
 				let tmp = str.split(/lychee\.enumof\(Composite\.([A-Z]+),(.*)\)/g);
 				if (tmp.length > 2) {
-					return 'Composite.' + tmp[1];
+					value = 'Composite.' + tmp[1];
 				}
 
 			} else if (str.startsWith('lychee.assignunlink')) {
 
-				return {};
+				value = {};
 
 			} else if (str.startsWith('lychee.diff')) {
 
-				return {};
+				value = {};
 
 			} else if (str === 'this') {
 
-				return 'this';
+				value = 'this';
 
 			} else if (str.endsWith(' || null')) {
 
 				let tmp1 = str.substr(0, str.length - 8).trim();
 
-				return _detect_value(tmp1);
+				value = _detect_value(tmp1);
 
 			} else if (str === 'main') {
 
-				return {
+				value = {
 					'constructor': 'lychee.app.Main',
 					'arguments': []
 				};
