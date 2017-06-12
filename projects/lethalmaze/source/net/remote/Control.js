@@ -235,6 +235,8 @@ lychee.define('game.net.remote.Control').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Session.prototype.serialize.call(this);

@@ -41,6 +41,8 @@ lychee.define('app.ui.layer.Overlay').requires([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Layer.prototype.serialize.call(this);

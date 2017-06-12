@@ -107,6 +107,8 @@ lychee.define('legacy.app.Main').tags({
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Main.prototype.serialize.call(this);

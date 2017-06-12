@@ -59,6 +59,8 @@ lychee.define('app.net.Client').requires([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Client.prototype.serialize.call(this);

@@ -68,6 +68,8 @@ lychee.define('game.ui.layer.Board').requires([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Layer.prototype.serialize.call(this);

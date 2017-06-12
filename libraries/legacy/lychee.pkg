@@ -1,6 +1,25 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"platform": {
+				"html": {
+					"Input": [
+						"json"
+					],
+					"Renderer": [
+						"json"
+					],
+					"app": {
+						"Main": [
+							"json"
+						],
+						"State": [
+							"json"
+						]
+					}
+				}
+			}
+		}
 	},
 	"build": {
 		"environments": {},

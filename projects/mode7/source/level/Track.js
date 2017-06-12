@@ -213,6 +213,8 @@ lychee.define('game.level.Track').exports(function(lychee, global, attachments) 
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			return {

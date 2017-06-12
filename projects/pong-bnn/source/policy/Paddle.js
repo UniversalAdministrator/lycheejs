@@ -16,8 +16,8 @@ lychee.define('game.policy.Paddle').exports(function(lychee, global, attachments
 			}
 		}, data);
 
-		this.entity = settings.entity || null;
-		this.limit  = settings.limit;
+		this.entity = settings.entity instanceof Object ? settings.entity : null;
+		this.limit  = settings.limit instanceof Object  ? settings.limit  : { x: Infinity, y: Infinity, z: Infinity };
 
 		settings = null;
 

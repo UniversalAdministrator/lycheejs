@@ -1,6 +1,37 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"app": {
+				"sprite": {
+					"Goal": [
+						"json"
+					],
+					"Plane": [
+						"json"
+					]
+				}
+			},
+			"effect": {
+				"Explosion": [
+					"json"
+				]
+			},
+			"state": {
+				"Game": [
+					"json"
+				]
+			},
+			"ui": {
+				"sprite": {
+					"Background": [
+						"json"
+					]
+				}
+			}
+		}
 	},
 	"build": {
 		"environments": {

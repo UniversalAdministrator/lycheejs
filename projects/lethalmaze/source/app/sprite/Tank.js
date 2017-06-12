@@ -29,7 +29,7 @@ lychee.define('game.app.sprite.Tank').requires([
 		let settings = Object.assign({}, data);
 
 
-		this.id        = _IDS[(_id++ % _IDS.length)];
+		this.id        = '' + _IDS[(_id++ % _IDS.length)];
 		this.direction = 'top';
 		this.ammo      = 16;
 		this.life      = 4;
@@ -79,6 +79,8 @@ lychee.define('game.app.sprite.Tank').requires([
 		/*
 		 * ENTITY API
 		 */
+
+		// deserialize: function(blob) {},
 
 		destroy: function() {
 

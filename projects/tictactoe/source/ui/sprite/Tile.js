@@ -19,8 +19,8 @@ lychee.define('game.ui.sprite.Tile').includes([
 		let settings = Object.assign({}, data);
 
 
-		this.x = settings.x;
-		this.y = settings.y;
+		this.x = typeof settings.x === 'number' ? settings.x : 0;
+		this.y = typeof settings.y === 'number' ? settings.y : 0;
 
 
 		settings.texture = _TEXTURE;
@@ -44,6 +44,8 @@ lychee.define('game.ui.sprite.Tile').includes([
 		/*
 		 * ENTITY API
 		 */
+
+		// deserialize: function(blob) {},
 
 		serialize: function() {
 

@@ -74,6 +74,12 @@ lychee.define('game.Main').requires([
 
 	Composite.prototype = {
 
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Main.prototype.serialize.call(this);

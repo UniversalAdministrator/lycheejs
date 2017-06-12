@@ -28,6 +28,8 @@ lychee.define('legacy.app.State').requires([
 
 }).exports(function(lychee, global, attachments) {
 
+	const _State = lychee.import('lychee.app.State');
+
 
 	// renderComponent(x1, y1, entity, map, values, {
 	//   template:   _TEMPLATE,
@@ -36,12 +38,36 @@ lychee.define('legacy.app.State').requires([
 	// })
 
 	let Composite = function(data) {
+
+		let settings = Object.assign({}, data);
+
 		// TODO: Implement state._element
 		// TODO: Inherit from lychee.app.State
+
+		_State.call(this, settings);
+
+		settings = null;
+
 	};
 
 
 	Composite.prototype = {
+
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			let data = _State.prototype.serialize.call(this);
+			data['constructor'] = 'legacy.app.Main';
+
+
+			return data;
+
+		}
 
 	};
 

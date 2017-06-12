@@ -53,6 +53,8 @@ lychee.define('app.ui.entity.Bubble').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Entity.prototype.serialize.call(this);

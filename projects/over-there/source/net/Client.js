@@ -128,6 +128,8 @@ lychee.define('app.net.Client').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Client.prototype.serialize.call(this);

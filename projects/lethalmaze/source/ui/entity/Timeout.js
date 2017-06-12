@@ -79,6 +79,8 @@ lychee.define('game.ui.entity.Timeout').requires([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Entity.prototype.serialize.call(this);

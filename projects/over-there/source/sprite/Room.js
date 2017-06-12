@@ -51,6 +51,8 @@ lychee.define('app.sprite.Room').requires([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Sprite.prototype.serialize.call(this);

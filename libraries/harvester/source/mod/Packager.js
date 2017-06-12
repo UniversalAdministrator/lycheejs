@@ -11,6 +11,70 @@ lychee.define('harvester.mod.Packager').requires([
 	 * HELPERS
 	 */
 
+	const _get_reasons = function(aobject, bobject, reasons, path) {
+
+		path = typeof path === 'string' ? path : '';
+
+
+		let akeys = Object.keys(aobject);
+		let bkeys = Object.keys(bobject);
+
+		if (akeys.length !== bkeys.length) {
+
+			for (let a = 0, al = akeys.length; a < al; a++) {
+
+				let aval = akeys[a];
+				let bval = bkeys.find(function(val) {
+					return val === aval;
+				});
+
+				if (bval === undefined) {
+					reasons.push(path + '/' + aval);
+				}
+
+			}
+
+			for (let b = 0, bl = bkeys.length; b < bl; b++) {
+
+				let bval = bkeys[b];
+				let aval = akeys.find(function(val) {
+					return val === bval;
+				});
+
+				if (aval === undefined) {
+					reasons.push(path + '/' + bval);
+				}
+
+			}
+
+		} else {
+
+			for (let a = 0, al = akeys.length; a < al; a++) {
+
+				let key = akeys[a];
+
+				if (bobject[key] !== undefined) {
+
+					if (aobject[key] !== null && bobject[key] !== null) {
+
+						if (aobject[key] instanceof Object && bobject[key] instanceof Object) {
+							_get_reasons(aobject[key], bobject[key], reasons, path + '/' + key);
+						} else if (typeof aobject[key] !== typeof bobject[key]) {
+							reasons.push(path + '/' + key);
+						}
+
+					}
+
+				} else {
+					reasons.push(path + '/' + key);
+				}
+
+			}
+
+		}
+
+	};
+
 	const _serialize = function(project) {
 
 		let json = {};
@@ -202,10 +266,17 @@ lychee.define('harvester.mod.Packager').requires([
 
 		process: function(project) {
 
+			let reasons = [];
+
 			if (project.package !== null) {
 
 				let data = _serialize(project);
 				let blob = JSON.stringify(data, null, '\t');
+
+
+				_get_reasons(data, project.package.json, reasons);
+
+
 				if (blob !== null) {
 					project.filesystem.write('/lychee.pkg', blob);
 					project.package = null;
@@ -213,6 +284,8 @@ lychee.define('harvester.mod.Packager').requires([
 				}
 
 			}
+
+			return reasons;
 
 		}
 

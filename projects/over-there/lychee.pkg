@@ -1,6 +1,55 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"net": {
+				"Client": [
+					"json"
+				],
+				"Server": [
+					"json"
+				]
+			},
+			"sprite": {
+				"Airlock": [
+					"json"
+				],
+				"Astronaut": [
+					"json"
+				],
+				"Background": [
+					"json"
+				],
+				"Emblem": [
+					"json"
+				],
+				"Midground": [
+					"json"
+				],
+				"Room": [
+					"json"
+				]
+			},
+			"state": {
+				"App": [
+					"json"
+				]
+			},
+			"ui": {
+				"entity": {
+					"Bubble": [
+						"json"
+					]
+				},
+				"layer": {
+					"Overlay": [
+						"json"
+					]
+				}
+			}
+		}
 	},
 	"build": {
 		"environments": {

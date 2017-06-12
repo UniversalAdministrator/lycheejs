@@ -1,6 +1,80 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"app": {
+				"sprite": {
+					"Bullet": [
+						"json"
+					],
+					"Item": [
+						"json"
+					],
+					"Portal": [
+						"json"
+					],
+					"Tank": [
+						"json"
+					],
+					"Terrain": [
+						"json"
+					],
+					"Wall": [
+						"json"
+					]
+				}
+			},
+			"data": {
+				"LEVEL": [
+					"json"
+				]
+			},
+			"effect": {
+				"Explosion": [
+					"json"
+				],
+				"Lightning": [
+					"json"
+				]
+			},
+			"net": {
+				"Client": [
+					"json"
+				],
+				"Server": [
+					"json"
+				],
+				"client": {
+					"Control": [
+						"json"
+					]
+				},
+				"remote": {
+					"Control": [
+						"json"
+					]
+				}
+			},
+			"state": {
+				"Game": [
+					"json"
+				]
+			},
+			"ui": {
+				"entity": {
+					"Timeout": [
+						"json"
+					]
+				},
+				"layer": {
+					"Control": [
+						"json"
+					]
+				}
+			}
+		}
 	},
 	"build": {
 		"environments": {

@@ -88,28 +88,13 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 		this.__start  = null;
 
 
-		// No data validation garbage allowed for effects
+		this.type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : Composite.TYPE.easeout;
+		this.delay    = typeof settings.delay === 'number'           ? (settings.delay | 0)    : 0;
+		this.duration = typeof settings.duration === 'number'        ? (settings.duration | 0) : 250;
 
-		let type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : null;
-		let delay    = typeof settings.delay === 'number'       ? (settings.delay | 0)    : null;
-		let duration = typeof settings.duration === 'number'    ? (settings.duration | 0) : null;
-		let position = settings.position instanceof Object      ? settings.position       : null;
-
-		if (type !== null) {
-			this.type = type;
-		}
-
-		if (delay !== null) {
-			this.delay = delay;
-		}
-
-		if (duration !== null) {
-			this.duration = duration;
-		}
-
-		if (position !== null) {
-			this.position.x = typeof position.x === 'number' ? (position.x | 0) : null;
-			this.position.y = typeof position.y === 'number' ? (position.y | 0) : null;
+		if (settings.position !== null) {
+			this.position.x = typeof settings.position.x === 'number' ? (settings.position.x | 0) : null;
+			this.position.y = typeof settings.position.y === 'number' ? (settings.position.y | 0) : null;
 		}
 
 	};

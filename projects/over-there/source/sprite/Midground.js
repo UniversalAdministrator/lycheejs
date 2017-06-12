@@ -41,6 +41,8 @@ lychee.define('app.sprite.Midground').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Sprite.prototype.serialize.call(this);

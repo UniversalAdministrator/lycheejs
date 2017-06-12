@@ -248,6 +248,8 @@ lychee.define('legacy.Renderer').tags({
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Renderer.prototype.serialize.call(this);

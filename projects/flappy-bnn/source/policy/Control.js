@@ -13,8 +13,8 @@ lychee.define('game.policy.Control').exports(function(lychee, global, attachment
 		}, data);
 
 
-		this.entity = settings.entity || null;
-		this.target = settings.target || null;
+		this.entity = settings.entity instanceof Object ? settings.entity : null;
+		this.target = settings.target instanceof Object ? settings.target : null;
 
 		settings = null;
 

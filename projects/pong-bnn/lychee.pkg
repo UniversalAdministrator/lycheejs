@@ -1,6 +1,45 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"ai": {
+				"Agent": [
+					"json"
+				]
+			},
+			"app": {
+				"sprite": {
+					"Ball": [
+						"json"
+					],
+					"Paddle": [
+						"json"
+					]
+				}
+			},
+			"policy": {
+				"Ball": [
+					"json"
+				],
+				"Paddle": [
+					"json"
+				]
+			},
+			"state": {
+				"Game": [
+					"json"
+				]
+			},
+			"ui": {
+				"sprite": {
+					"Background": [
+						"json"
+					]
+				}
+			}
+		}
 	},
 	"build": {
 		"environments": {

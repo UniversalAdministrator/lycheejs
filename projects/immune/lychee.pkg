@@ -1,6 +1,42 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"app": {
+				"entity": {
+					"Cell": [
+						"json"
+					],
+					"Unit": [
+						"json"
+					],
+					"Vesicle": [
+						"json"
+					],
+					"unit": {
+						"Globuline": [
+							"json"
+						],
+						"Leucocyte": [
+							"json"
+						],
+						"Virus": [
+							"json"
+						]
+					}
+				}
+			},
+			"state": {
+				"Game": [
+					"json"
+				],
+				"Menu": [
+					"json"
+				]
+			}
+		}
 	},
 	"build": {
 		"environments": {

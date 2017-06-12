@@ -1,6 +1,35 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"net": {
+				"Client": [
+					"json"
+				],
+				"Server": [
+					"json"
+				]
+			},
+			"state": {
+				"Chat": [
+					"json"
+				]
+			},
+			"ui": {
+				"entity": {
+					"Messages": [
+						"json"
+					]
+				},
+				"sprite": {
+					"Avatar": [
+						"json"
+					]
+				}
+			}
+		}
 	},
 	"build": {
 		"environments": {

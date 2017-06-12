@@ -155,11 +155,10 @@ lychee.define('harvester.Watcher').requires([
 		for (let lid in this.libraries) {
 
 			let library = this.libraries[lid];
-			let rebuild = false;
+			let reasons = [];
 
 			if (Packager !== null && Packager.can(library) === true) {
-				Packager.process(library);
-				rebuild = true;
+				reasons = Packager.process(library);
 			}
 
 			if (Server !== null && Server.can(library) === true) {
@@ -167,17 +166,25 @@ lychee.define('harvester.Watcher').requires([
 			}
 
 
-			if (rebuild === true) {
+			if (reasons.length > 0) {
 
-				if (Strainer !== null && Strainer.can(library) === true) {
-					Strainer.process(library);
-				}
+				let changed_api = reasons.find(function(path) {
+					return path.startsWith('/api/files');
+				}) || null;
 
-				if (Harvester !== null && Harvester.can(library) === true) {
+				let changed_source = reasons.find(function(path) {
+					return path.startsWith('/source/files');
+				}) || null;
+
+				if (changed_api !== null && Harvester !== null && Harvester.can(library) === true) {
 					Harvester.process(library);
 				}
 
-				if (Fertilizer !== null && Fertilizer.can(library) === true) {
+				if (changed_source !== null && Strainer !== null && Strainer.can(library) === true) {
+					Strainer.process(library);
+				}
+
+				if (changed_source !== null && Fertilizer !== null && Fertilizer.can(library) === true) {
 					Fertilizer.process(library);
 				}
 
@@ -188,11 +195,10 @@ lychee.define('harvester.Watcher').requires([
 		for (let pid in this.projects) {
 
 			let project = this.projects[pid];
-			let rebuild = false;
+			let reasons = [];
 
 			if (Packager !== null && Packager.can(project) === true) {
-				Packager.process(project);
-				rebuild = true;
+				reasons = Packager.process(project);
 			}
 
 			if (Server !== null && Server.can(project) === true) {
@@ -200,17 +206,25 @@ lychee.define('harvester.Watcher').requires([
 			}
 
 
-			if (rebuild === true) {
+			if (reasons.length > 0) {
 
-				if (Harvester !== null && Harvester.can(project) === true) {
+				let changed_api = reasons.find(function(path) {
+					return path.startsWith('/api/files');
+				}) || null;
+
+				let changed_source = reasons.find(function(path) {
+					return path.startsWith('/source/files');
+				}) || null;
+
+				if (changed_api !== null && Harvester !== null && Harvester.can(project) === true) {
 					Harvester.process(project);
 				}
 
-				if (Strainer !== null && Strainer.can(project) === true) {
+				if (changed_source !== null && Strainer !== null && Strainer.can(project) === true) {
 					Strainer.process(project);
 				}
 
-				if (Fertilizer !== null && Fertilizer.can(project) === true) {
+				if (changed_source !== null && Fertilizer !== null && Fertilizer.can(project) === true) {
 					Fertilizer.process(project);
 				}
 
@@ -301,6 +315,10 @@ lychee.define('harvester.Watcher').requires([
 					_mod.Server.process(library);
 				}
 
+				if (_mod.Strainer !== null && _mod.Strainer.can(library) === true) {
+					_mod.Strainer.process(library);
+				}
+
 			}
 
 			for (let pid in this.projects) {
@@ -317,6 +335,10 @@ lychee.define('harvester.Watcher').requires([
 
 				if (_mod.Server !== null && _mod.Server.can(project) === true) {
 					_mod.Server.process(project);
+				}
+
+				if (_mod.Strainer !== null && _mod.Strainer.can(project) === true) {
+					_mod.Strainer.process(project);
 				}
 
 			}

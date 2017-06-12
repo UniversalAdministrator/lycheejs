@@ -1,6 +1,33 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Main": [
+				"json"
+			],
+			"net": {
+				"Client": [
+					"json"
+				],
+				"Server": [
+					"json"
+				],
+				"client": {
+					"Ping": [
+						"json"
+					]
+				},
+				"remote": {
+					"Ping": [
+						"json"
+					]
+				}
+			},
+			"state": {
+				"Welcome": [
+					"json"
+				]
+			}
+		}
 	},
 	"build": {
 		"environments": {

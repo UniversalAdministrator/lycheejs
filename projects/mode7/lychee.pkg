@@ -1,6 +1,36 @@
 {
 	"api": {
-		"files": {}
+		"files": {
+			"Camera": [
+				"json"
+			],
+			"Compositor": [
+				"json"
+			],
+			"Main": [
+				"json"
+			],
+			"Renderer": [
+				"json"
+			],
+			"app": {
+				"entity": {
+					"Background": [
+						"json"
+					]
+				}
+			},
+			"level": {
+				"Track": [
+					"json"
+				]
+			},
+			"state": {
+				"Game": [
+					"json"
+				]
+			}
+		}
 	},
 	"build": {
 		"environments": {

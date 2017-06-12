@@ -41,6 +41,8 @@ lychee.define('game.app.sprite.Terrain').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Sprite.prototype.serialize.call(this);

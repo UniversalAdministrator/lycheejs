@@ -25,30 +25,23 @@ lychee.define('game.effect.Explosion').exports(function(lychee, global, attachme
 		this.__sound  = true;
 
 
-		// No data validation garbage allowed for effects
+		this.delay    = typeof settings.delay === 'number'    ? (settings.delay    | 0) : 0;
+		this.duration = typeof settings.duration === 'number' ? (settings.duration | 0) : 250;
 
-		let delay    = typeof settings.delay === 'number'    ? (settings.delay | 0)    : null;
-		let duration = typeof settings.duration === 'number' ? (settings.duration | 0) : null;
-		let position = settings.position instanceof Object   ? settings.position       : null;
-
-		if (delay !== null) {
-			this.delay = delay;
-		}
-
-		if (duration !== null) {
-			this.duration = duration;
-		}
-
-		if (position !== null) {
-			this.position.x = typeof position.x === 'number' ? (position.x | 0) : null;
-			this.position.y = typeof position.y === 'number' ? (position.y | 0) : null;
-			this.position.z = typeof position.z === 'number' ? (position.z | 0) : null;
+		if (settings.position instanceof Object) {
+			this.position.x = typeof settings.position.x === 'number' ? (settings.position.x | 0) : null;
+			this.position.y = typeof settings.position.y === 'number' ? (settings.position.y | 0) : null;
+			this.position.z = typeof settings.position.z === 'number' ? (settings.position.z | 0) : null;
 		}
 
 	};
 
 
 	Composite.prototype = {
+
+		/*
+		 * ENTITY API
+		 */
 
 		// deserialize: function(blob) {},
 

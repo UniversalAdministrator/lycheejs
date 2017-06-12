@@ -48,6 +48,8 @@ lychee.define('game.app.sprite.Plane').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Sprite.prototype.serialize.call(this);

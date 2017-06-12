@@ -35,6 +35,8 @@ lychee.define('game.app.entity.unit.Leucocyte').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Unit.prototype.serialize.call(this);

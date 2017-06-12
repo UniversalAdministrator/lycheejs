@@ -27,6 +27,8 @@ lychee.define('game.Camera').exports(function(lychee, global, attachments) {
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			return {

@@ -49,6 +49,8 @@ lychee.define('app.net.Server').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Server.prototype.serialize.call(this);

@@ -38,6 +38,8 @@ lychee.define('game.ui.sprite.Background').includes([
 		 * ENTITY API
 		 */
 
+		// deserialize: function(blob) {},
+
 		serialize: function() {
 
 			let data = _Background.prototype.serialize.call(this);
