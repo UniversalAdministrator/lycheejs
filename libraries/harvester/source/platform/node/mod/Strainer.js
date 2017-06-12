@@ -8,7 +8,6 @@ lychee.define('harvester.mod.Strainer').tags({
 		try {
 
 			global.require('child_process');
-			global.require('fs');
 
 			return true;
 
@@ -24,8 +23,35 @@ lychee.define('harvester.mod.Strainer').tags({
 }).exports(function(lychee, global, attachments) {
 
 	const _child_process = global.require('child_process');
-	const _fs            = global.require('fs');
-	const _CACHE         = {};
+	const _setInterval   = global.setInterval;
+	let   _ACTIVE        = false;
+	const _QUEUE         = [];
+
+
+
+	/*
+	 * FEATURE DETECTION
+	 */
+
+	(function() {
+
+		_setInterval(function() {
+
+			if (_ACTIVE === false) {
+
+				let tmp = _QUEUE.splice(0, 1);
+				if (tmp.length === 1) {
+
+					_ACTIVE = true;
+					_strain(tmp[0].project);
+
+				}
+
+			}
+
+		}, 1000);
+
+	})();
 
 
 
@@ -33,33 +59,38 @@ lychee.define('harvester.mod.Strainer').tags({
 	 * HELPERS
 	 */
 
-	const _read_cache = function(project) {
+	const _is_queued = function(id) {
 
-		let buffer = project.filesystem.read('/api/index.json');
-		if (buffer !== null) {
+		let entry = _QUEUE.find(function(entry) {
+			return entry.project === id;
+		}) || null;
 
-			let data = null;
-
-			try {
-				data = JSON.parse(buffer.toString('utf8'));
-			} catch (err) {
-			}
-
-
-			if (data !== null) {
-				return data;
-			}
-
+		if (entry !== null) {
+			return true;
 		}
 
-
-		return [];
+		return false;
 
 	};
 
-	const _save_cache = function(project) {
+	const _strain = function(project) {
 
-		// TODO: Save cache to /api/index.json
+		_child_process.execFile(lychee.ROOT.lychee + '/libraries/strainer/bin/strainer.sh', [
+			'check',
+			project
+		], {
+			cwd: lychee.ROOT.lychee
+		}, function(error, stdout, stderr) {
+
+			_ACTIVE = false;
+
+			if (error || stdout.indexOf('SUCCESS') === -1) {
+				console.error('harvester.mod.Strainer: FAILURE ("' + project + ')');
+			} else {
+				console.info('harvester.mod.Strainer: SUCCESS ("' + project + ')');
+			}
+
+		});
 
 	};
 
@@ -94,30 +125,42 @@ lychee.define('harvester.mod.Strainer').tags({
 
 		can: function(project) {
 
-			if (project.identifier.indexOf('__') === -1 && project.package !== null && project.filesystem !== null) {
+			let id  = project.identifier;
+			let fs  = project.filesystem;
+			let pkg = project.package;
 
-				let cache = _CACHE[project.identifier] || null;
-				if (cache === null) {
-					cache = _CACHE[project.identifier] = _read_cache(project);
+			if (id.indexOf('__') === -1 && pkg !== null && fs !== null) {
+
+				let buffer = fs.read('/api/strainer.pkg');
+				let data   = [];
+
+				try {
+					data = JSON.parse(buffer.toString('utf8'));
+				} catch (err) {
+					data = [];
 				}
 
 
-				let result = false;
+				let needs_check = false;
 
-				for (let c = 0, cl = cache.length; c < cl; c++) {
+				if (data.length > 0) {
 
-					let entry = cache[c];
-					let mtime = entry.header.mtime;
-					let info  = project.filesystem.info(entry.path);
+					for (let d = 0, dl = data.length; d < dl; d++) {
 
-					if (info !== null && info.mtime > mtime) {
-						result = true;
-						break;
+						if (data[d] < Date.now()) {
+							needs_check = true;
+							break;
+						}
+
 					}
 
+				} else {
+
+					needs_check = true;
+
 				}
 
-				return result;
+				return needs_check;
 
 			}
 
@@ -128,7 +171,21 @@ lychee.define('harvester.mod.Strainer').tags({
 
 		process: function(project) {
 
-			// XXX: Implement Me
+			let id  = project.identifier;
+			let fs  = project.filesystem;
+			let pkg = project.package;
+
+			if (fs !== null && pkg !== null) {
+
+				if (_is_queued(id) === false) {
+
+					_QUEUE.push({
+						project: id
+					});
+
+				}
+
+			}
 
 		}
 

@@ -359,6 +359,65 @@ lychee.define('strainer.Template').requires([
 
 		}, this);
 
+		this.bind('write-pkg', function(oncomplete) {
+
+			let project = this.settings.project;
+			let stash   = this.stash;
+
+
+			if (project !== null && stash !== null) {
+
+				console.log('strainer: WRITE-PKG ' + project);
+
+
+				let configs = this.configs.filter(function(config) {
+					return config !== null;
+				});
+
+
+				if (configs.length > 0) {
+
+					let index = stash.read(project + '/api/strainer.pkg');
+
+					index.onload = function(result) {
+
+						if (result === false) {
+							this.buffer = {};
+						}
+
+
+						let buffer = this.buffer;
+						if (buffer !== null) {
+
+							configs.forEach(function(config) {
+								buffer[config.url] = Date.now();
+							});
+
+						}
+
+						stash.write(index.url, index);
+						stash.sync();
+
+						oncomplete(true);
+
+					};
+
+					index.load();
+
+				} else {
+
+					oncomplete(true);
+
+				}
+
+			} else {
+
+				oncomplete(false);
+
+			}
+
+		}, this);
+
 		this.bind('stage-api', function(oncomplete) {
 			// TODO: git add (stage) configs
 			oncomplete(true);

@@ -79,6 +79,7 @@ lychee.define('strainer.Main').requires([
 
 				template.then('write-eslint');
 				template.then('write-api');
+				template.then('write-pkg');
 
 			} else if (action === 'stage') {
 
@@ -89,6 +90,7 @@ lychee.define('strainer.Main').requires([
 
 				template.then('write-eslint');
 				template.then('write-api');
+				template.then('write-pkg');
 
 				template.then('stage-eslint');
 				template.then('stage-api');

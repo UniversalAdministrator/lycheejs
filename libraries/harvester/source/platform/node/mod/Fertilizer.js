@@ -27,7 +27,6 @@ lychee.define('harvester.mod.Fertilizer').tags({
 	let   _ACTIVE        = false;
 	const _CACHE         = {};
 	const _QUEUE         = [];
-	const _ROOT          = lychee.ROOT.lychee + '/libraries/fertilizer';
 
 
 
@@ -78,11 +77,11 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 	const _fertilize = function(project, target) {
 
-		_child_process.execFile(_ROOT + '/bin/fertilizer.sh', [
+		_child_process.execFile(lychee.ROOT.lychee + '/libraries/fertilizer/bin/fertilizer.sh', [
 			target,
 			project
 		], {
-			cwd: _ROOT
+			cwd: lychee.ROOT.lychee
 		}, function(error, stdout, stderr) {
 
 			_ACTIVE = false;
@@ -161,9 +160,10 @@ lychee.define('harvester.mod.Fertilizer').tags({
 		process: function(project) {
 
 			let id  = project.identifier;
+			let fs  = project.filesystem;
 			let pkg = project.package;
 
-			if (project.filesystem !== null && pkg !== null) {
+			if (fs !== null && pkg !== null) {
 
 				let build = pkg.json.build || null;
 				if (build !== null) {
