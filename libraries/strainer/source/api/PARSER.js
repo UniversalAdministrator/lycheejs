@@ -44,8 +44,6 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 			type = 'String';
 		} else if (str.startsWith('"') && str.endsWith('"')) {
 			type = 'String';
-		} else if (str.startsWith('\'\' +') || str.startsWith('"" +')) {
-			type = 'String';
 		} else if (str.startsWith('\'') || str.startsWith('"')) {
 			type = 'String';
 		} else if (str.includes('toString')) {
@@ -54,18 +52,10 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 			type = 'Number';
 		} else if (str === 'Infinity') {
 			type = 'Number';
-		} else if (str.startsWith('(') && str.endsWith(')')) {
-
-			if (str.includes(' + ') && (str.includes('\'') || str.includes('"'))) {
-				type = 'String';
-			} else if (str.includes(' * ') || str.includes(' / ') || str.includes(' + ') || str.includes(' - ')) {
-				type = 'Number';
-			}
-
-		} else if (str.includes(' * ')) {
-
+		} else if (str.includes(' + ') && (str.includes('\'') || str.includes('"'))) {
+			type = 'String';
+		} else if (str.includes(' * ') || str.includes(' / ') || str.includes(' + ') || str.includes(' - ')) {
 			type = 'Number';
-
 		} else {
 
 			if (str.includes('instanceof') && str.includes('?') && str.includes(':')) {
@@ -258,18 +248,10 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 			value = _parse_value(str);
 		} else if (str === 'Infinity') {
 			value = Infinity;
-		} else if (str.startsWith('(') && str.endsWith(')')) {
-
-			if (str.includes(' + ') && (str.includes('\'') || str.includes('"'))) {
-				value = "<string>";
-			} else if (str.includes(' * ') || str.includes(' / ') || str.includes(' + ') || str.includes(' - ')) {
-				value = 1337;
-			}
-
-		} else if (str.includes(' * ')) {
-
+		} else if (str.includes(' + ') && (str.includes('\'') || str.includes('"'))) {
+			value = "<string>";
+		} else if (str.includes(' * ') || str.includes(' / ') || str.includes(' + ') || str.includes(' - ')) {
 			value = 1337;
-
 		} else {
 
 			if (str.includes('instanceof') && str.includes('?') && str.includes(':')) {

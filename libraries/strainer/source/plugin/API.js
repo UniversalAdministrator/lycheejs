@@ -148,7 +148,11 @@ lychee.define('strainer.plugin.API').requires([
 
 						filtered.push(err);
 
-						console.error('strainer.plugin.API: ("' + rule + '") ' + url + '#' + method);
+						if (method !== '') {
+							console.error('strainer.plugin.API: ("' + rule + '") ' + url + '#' + method);
+						} else {
+							console.error('strainer.plugin.API: ("' + rule + '") ' + url);
+						}
 
 						if (message.length > 0) {
 							console.error('                     ' + message);
