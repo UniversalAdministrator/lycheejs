@@ -74,11 +74,25 @@ lychee.define('harvester.data.Filesystem').tags({
 
 		this.root = typeof root === 'string' ? root : null;
 
-
 		this.__root = _ROOT;
 
+
 		if (this.root !== null) {
-			this.__root = _path.normalize(_ROOT + _path.normalize(this.root));
+
+			let tmp1 = _path.normalize(this.root);
+			let tmp2 = _ROOT;
+			if (tmp1.startsWith('/')) {
+				tmp2 = _ROOT + tmp1;
+			} else if (tmp1.startsWith('./')) {
+				tmp2 = _ROOT + tmp1.substr(1);
+			}
+
+			if (tmp2.endsWith('/')) {
+				tmp2 = tmp2.substr(0, tmp2.length - 1);
+			}
+
+			this.__root = tmp2;
+
 		}
 
 	};
@@ -122,6 +136,8 @@ lychee.define('harvester.data.Filesystem').tags({
 					return null;
 				}
 
+			} else if (path.charAt(0) !== '/') {
+				path = '/' + path;
 			}
 
 
@@ -180,6 +196,8 @@ lychee.define('harvester.data.Filesystem').tags({
 					return [];
 				}
 
+			} else if (path.charAt(0) !== '/') {
+				path = '/' + path;
 			}
 
 
@@ -223,6 +241,8 @@ lychee.define('harvester.data.Filesystem').tags({
 					return null;
 				}
 
+			} else if (path.charAt(0) !== '/') {
+				path = '/' + path;
 			}
 
 
@@ -265,6 +285,8 @@ lychee.define('harvester.data.Filesystem').tags({
 					return false;
 				}
 
+			} else if (path.charAt(0) !== '/') {
+				path = '/' + path;
 			}
 
 
@@ -327,7 +349,11 @@ lychee.define('harvester.data.Filesystem').tags({
 			path = typeof path === 'string' ? path : null;
 
 
-			if (path === null) return null;
+			if (path === null) {
+				return null;
+			} else if (path.charAt(0) !== '/') {
+				path = '/' + path;
+			}
 
 
 			let resolved = _path.normalize(this.__root + path);

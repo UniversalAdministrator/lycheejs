@@ -20,6 +20,7 @@ lychee.define('harvester.Watcher').requires([
 		Server:     lychee.import('harvester.mod.Server'),
 		Strainer:   lychee.import('harvester.mod.Strainer')
 	};
+	const _CACHE      = {};
 
 
 
@@ -143,7 +144,6 @@ lychee.define('harvester.Watcher').requires([
 
 			Harvester  = null;
 			Fertilizer = null;
-			Strainer   = null;
 
 		} else {
 
@@ -165,16 +165,27 @@ lychee.define('harvester.Watcher').requires([
 				Server.process(library);
 			}
 
-			if (Harvester !== null && Harvester.can(library) === true) {
-				Harvester.process(library);
-			}
 
-			if (Strainer !== null && Strainer.can(library) === true) {
-				Strainer.process(library);
-			}
+			let info = library.filesystem.info('/lychee.pkg');
+			let time = _CACHE[library.identifier] || -1;
 
-			if (Fertilizer !== null && Fertilizer.can(library) === true) {
-				Fertilizer.process(library);
+			if (info !== null && info.mtime > time) {
+
+				_CACHE[library.identifier] = info.mtime;
+
+
+				if (Strainer !== null && Strainer.can(library) === true) {
+					Strainer.process(library);
+				}
+
+				if (Harvester !== null && Harvester.can(library) === true) {
+					Harvester.process(library);
+				}
+
+				if (Fertilizer !== null && Fertilizer.can(library) === true) {
+					Fertilizer.process(library);
+				}
+
 			}
 
 		}
@@ -191,16 +202,27 @@ lychee.define('harvester.Watcher').requires([
 				Server.process(project);
 			}
 
-			if (Harvester !== null && Harvester.can(project) === true) {
-				Harvester.process(project);
-			}
 
-			if (Strainer !== null && Strainer.can(project) === true) {
-				Strainer.process(project);
-			}
+			let info = project.filesystem.info('/lychee.pkg');
+			let time = _CACHE[project.identifier] || -1;
 
-			if (Fertilizer !== null && Fertilizer.can(project) === true) {
-				Fertilizer.process(project);
+			if (info !== null && info.mtime > time) {
+
+				_CACHE[project.identifier] = info.mtime;
+
+
+				if (Harvester !== null && Harvester.can(project) === true) {
+					Harvester.process(project);
+				}
+
+				if (Strainer !== null && Strainer.can(project) === true) {
+					Strainer.process(project);
+				}
+
+				if (Fertilizer !== null && Fertilizer.can(project) === true) {
+					Fertilizer.process(project);
+				}
+
 			}
 
 		}

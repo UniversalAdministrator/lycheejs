@@ -1,9 +1,7 @@
 
 lychee.define('harvester.mod.Fertilizer').tags({
 	platform: 'node'
-}).requires([
-	'harvester.data.Filesystem'
-]).supports(function(lychee, global) {
+}).supports(function(lychee, global) {
 
 	if (typeof global.require === 'function') {
 
@@ -26,11 +24,10 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 	const _child_process = global.require('child_process');
 	const _setInterval   = global.setInterval;
-	const _Filesystem    = lychee.import('harvester.data.Filesystem');
 	let   _ACTIVE        = false;
 	const _CACHE         = {};
 	const _QUEUE         = [];
-	const _ROOT          = new _Filesystem().root;
+	const _ROOT          = lychee.ROOT.lychee + '/libraries/fertilizer';
 
 
 
