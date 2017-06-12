@@ -33,14 +33,7 @@ lychee.define('lychee.policy.Color').exports(function(lychee, global, attachment
 
 	let Composite = function(settings) {
 
-		this.entity = null;
-
-
-		// No data validation garbage allowed for policies
-
-		if (settings.entity instanceof Object) {
-			this.entity = settings.entity;
-		}
+		this.entity = settings.entity instanceof Object ? settings.entity : null;
 
 	};
 

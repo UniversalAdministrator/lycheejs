@@ -7,17 +7,8 @@ lychee.define('lychee.policy.State').exports(function(lychee, global, attachment
 
 	let Composite = function(settings) {
 
-		this.entity = null;
-		this.limit  = [ 'default', 'active' ];
-
-
-		if (settings.entity instanceof Object) {
-			this.entity = settings.entity;
-		}
-
-		if (settings.limit instanceof Array) {
-			this.limit = settings.limit;
-		}
+		this.entity = settings.entity instanceof Object ? settings.entity : null;
+		this.limit  = settings.limit instanceof Array   ? settings.limit  : [ 'default', 'active' ];
 
 	};
 

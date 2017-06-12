@@ -7,14 +7,8 @@ lychee.define('lychee.policy.Height').exports(function(lychee, global, attachmen
 
 	let Composite = function(settings) {
 
-		this.entity = null;
+		this.entity = settings.entity instanceof Object  ? settings.entity      : null;
 		this.limit  = typeof settings.limit === 'number' ? (settings.limit | 0) : Infinity;
-
-		// No data validation garbage allowed for policies
-
-		if (settings.entity instanceof Object) {
-			this.entity = settings.entity;
-		}
 
 	};
 
