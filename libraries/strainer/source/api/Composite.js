@@ -145,6 +145,8 @@ lychee.define('strainer.api.Composite').requires([
 					let tmp = line.trim();
 					if (tmp.startsWith('Composite.') && tmp.endsWith('= {')) {
 						return tmp.split('.').slice(1).join('.');
+					} else if (tmp.startsWith('Composite.') && tmp.includes('=')) {
+						return tmp.split('.').slice(1).join('.');
 					}
 
 					return tmp;
@@ -163,12 +165,18 @@ lychee.define('strainer.api.Composite').requires([
 
 				}).map(function(body) {
 
-					let enam = _PARSER.enum(body);
+					let enam = _PARSER.enum(body.trim());
 					if (enam.name !== undefined) {
 
-						enums[enam.name] = {
-							values: enam.values
-						};
+						if (enam.values !== undefined) {
+							enums[enam.name] = {
+								values: enam.values
+							};
+						} else if (enam.value !== undefined) {
+							enums[enam.name] = {
+								value: enam.value
+							};
+						}
 
 					}
 

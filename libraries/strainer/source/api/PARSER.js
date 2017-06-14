@@ -474,51 +474,76 @@ lychee.define('strainer.api.PARSER').requires([
 
 		enum: function(code) {
 
-			let enam = {
-				name:   undefined,
-				values: []
-			};
-
+			let enam  = { name: undefined };
 			let lines = code.split('\n');
 			let first = lines[0].trim();
 
 			if (first.includes('=')) {
 				enam.name = first.substr(0, first.indexOf('=')).trim();
-				lines.shift();
 			}
 
-			lines.filter(function(line) {
-				return line.includes(':');
-			}).map(function(line) {
-				return line.trim();
-			}).map(function(line) {
 
-				let i1 = line.indexOf(':');
-				let i2 = line.indexOf(',', i1);
-				if (i2 === -1) {
-					i2 = line.length;
-				}
+			// XXX: Multi-Line Enum
+			if (first.endsWith('{')) {
 
-				return {
-					name: line.substr(0, i1).trim(),
-					value: Module.detect(line.substr(i1 + 2, i2 - i1 - 2).trim())
-				};
+				enam.values = [];
+				lines.shift();
 
-			}).forEach(function(val) {
 
-				if (val.value.type !== 'undefined') {
+				lines.filter(function(line) {
+					return line.includes(':');
+				}).map(function(line) {
+					return line.trim();
+				}).map(function(line) {
 
-					enam.values.push(val);
+					let i1 = line.indexOf(':');
+					let i2 = line.indexOf(',', i1);
 
-				} else {
+					if (i2 === -1) i2 = line.length;
 
-					if (lychee.debug === true) {
-						console.warn('strainer.api.PARSER: No valid enum value "' + enam.value.chunk + '" for "' + enam.name + '".');
+					let key = line.substr(0, i1).trim();
+					let val = line.substr(i1 + 2, i2 - i1 - 2).trim();
+
+					if (key.startsWith('\'')) key = key.substr(1);
+					if (key.endsWith('\''))   key = key.substr(0, key.length - 1);
+
+
+					return {
+						name:  key,
+						value: Module.detect(val)
+					};
+
+				}).forEach(function(val) {
+
+					if (val.value.type !== 'undefined') {
+
+						enam.values.push(val);
+
+					} else {
+
+						if (lychee.debug === true) {
+							console.warn('strainer.api.PARSER: No valid enum value "' + enam.value.chunk + '" for "' + enam.name + '".');
+						}
+
 					}
 
-				}
+				});
 
-			});
+
+			// XXX: Single-Line Enum
+			} else {
+
+				let tmp = lines.join(' ').trim();
+				let i1  = tmp.indexOf('=');
+				let i2  = tmp.indexOf(';', i1);
+
+				if (i2 === -1) i2 = tmp.length;
+
+				let val = tmp.substr(i1 + 2, i2 - i1 - 2).trim();
+
+				enam.value = Module.detect(val);
+
+			}
 
 
 			return enam;
