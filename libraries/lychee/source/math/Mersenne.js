@@ -11,10 +11,11 @@ lychee.define('lychee.math.Mersenne').exports(function(lychee, global, attachmen
 	 * HELPERS
 	 */
 
-	const _initialize = function(seed) {
+	const _initialize = function() {
 
 		let index   = 1;
 		let N       = this.N;
+		let seed    = this.seed;
 		let twister = this.twister;
 
 
@@ -99,9 +100,9 @@ lychee.define('lychee.math.Mersenne').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(seed) {
+	let Composite = function(data) {
 
-		seed = typeof seed === 'number' ? (seed | 0) : ((Math.random() * Number.MAX_SAFE_INTEGER) | 0);
+		let settings = Object.assign({}, data);
 
 
 		this.N = 624;
@@ -109,13 +110,14 @@ lychee.define('lychee.math.Mersenne').exports(function(lychee, global, attachmen
 
 		this.twister = new Array(this.N);
 		this.index   = this.N + 1;
+		this.seed    = (Math.random() * Number.MAX_SAFE_INTEGER) | 0;
 
-		this.__seed  = seed;
 
+		this.setSeed(settings.seed);
 
-		_initialize.call(this, seed);
+		_initialize.call(this);
 
-		seed = null;
+		settings = null;
 
 	};
 
@@ -130,9 +132,15 @@ lychee.define('lychee.math.Mersenne').exports(function(lychee, global, attachmen
 
 		serialize: function() {
 
+			let settings = {};
+
+
+			if (this.seed !== 0) settings.seed = this.seed;
+
+
 			return {
 				'constructor': 'lychee.math.Mersenne',
-				'arguments':   [ this.__seed ],
+				'arguments':   [ settings ],
 				'blob':        null
 			};
 
@@ -147,6 +155,25 @@ lychee.define('lychee.math.Mersenne').exports(function(lychee, global, attachmen
 		random: function() {
 
 			return (_random_int32.call(this) * (1.0 / 4294967296.0));
+
+		},
+
+		setSeed: function(seed) {
+
+			seed = typeof seed === 'number' ? (seed | 0) : null;
+
+
+			if (seed !== null) {
+
+				this.seed = seed;
+				_initialize.call(this);
+
+				return true;
+
+			}
+
+
+			return false;
 
 		}
 

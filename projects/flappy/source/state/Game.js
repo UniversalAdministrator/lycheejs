@@ -10,12 +10,12 @@ lychee.define('game.state.Game').requires([
 	'lychee.app.State'
 ]).exports(function(lychee, global, attachments) {
 
-	const _Explosion  = lychee.import('game.effect.Explosion');
-	const _Goal       = lychee.import('game.app.sprite.Goal');
-	const _Mersenne   = lychee.import('lychee.math.Mersenne');
-	const _Plane      = lychee.import('game.app.sprite.Plane');
-	const _State      = lychee.import('lychee.app.State');
-	const _BLOB       = attachments["json"].buffer;
+	const _Explosion = lychee.import('game.effect.Explosion');
+	const _Goal      = lychee.import('game.app.sprite.Goal');
+	const _Mersenne  = lychee.import('lychee.math.Mersenne');
+	const _Plane     = lychee.import('game.app.sprite.Plane');
+	const _State     = lychee.import('lychee.app.State');
+	const _BLOB      = attachments["json"].buffer;
 
 
 
@@ -68,7 +68,9 @@ lychee.define('game.state.Game').requires([
 		stats.score     = 0;
 
 
-		this.twister = new _Mersenne(1337);
+		this.twister = new _Mersenne({
+			seed: 1337
+		});
 
 
 		_reset_goals.call(this, true);
@@ -151,7 +153,9 @@ lychee.define('game.state.Game').requires([
 		_State.call(this, main);
 
 
-		this.twister = new _Mersenne(1337);
+		this.twister = new _Mersenne({
+			seed: 1337
+		});
 
 
 		this.__cache = {

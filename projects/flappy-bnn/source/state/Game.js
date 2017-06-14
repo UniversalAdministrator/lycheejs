@@ -66,7 +66,9 @@ lychee.define('game.state.Game').requires([
 		stats.score     = 0;
 
 
-		this.twister = new _Mersenne(1337);
+		this.twister = new _Mersenne({
+			seed: 1337
+		});
 
 
 		_reset_agents.call(this, true);
@@ -167,7 +169,9 @@ lychee.define('game.state.Game').requires([
 		_State.call(this, main);
 
 
-		this.twister = new _Mersenne(1337);
+		this.twister = new _Mersenne({
+			seed: 1337
+		});
 
 
 		this.__cache = {

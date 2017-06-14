@@ -1,7 +1,10 @@
 
-lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachments) {
+lychee.define('strainer.api.PARSER').requires([
+	'lychee.crypto.MURMUR'
+]).exports(function(lychee, global, attachments) {
 
 	const _DICTIONARY = attachments["json"].buffer;
+	const _MURMUR     = lychee.import('lychee.crypto.MURMUR');
 
 
 
@@ -21,6 +24,8 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 		} else if (str === 'true' || str === 'false') {
 			type = 'Boolean';
 		} else if (str.includes('===') && !str.includes('?')) {
+			type = 'Boolean';
+		} else if (str.includes('&&') && !str.includes('?')) {
 			type = 'Boolean';
 		} else if (str === '[]' || str.startsWith('[') || str.startsWith('Array.from')) {
 			type = 'Array';
@@ -137,6 +142,12 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 
 				type = _detect_type(tmp1);
 
+
+				// XXX: Assume Object || null
+				if (type === 'undefined') {
+					type = 'Object';
+				}
+
 			} else if (str === 'main') {
 
 				type = 'lychee.app.Main';
@@ -195,6 +206,8 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 		} else if (str === 'true' || str === 'false') {
 			value = str === 'true';
 		} else if (str.includes('===') && !str.includes('?')) {
+			value = true;
+		} else if (str.includes('&&') && !str.includes('?')) {
 			value = true;
 		} else if (str === '[]' || str.startsWith('[')) {
 
@@ -334,6 +347,11 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 
 				value = _detect_value(tmp1);
 
+				// XXX: Assume Object || null
+				if (value === undefined) {
+					value = {};
+				}
+
 			} else if (str === 'main') {
 
 				value = {
@@ -389,12 +407,9 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 				str = str.substr(0, str.length - 1);
 			}
 
-			if (str.endsWith(' || null')) {
-				str = str.substr(0, str.length - 8).trim();
-			}
-
 
 			let val = {
+				chunk: str,
 				type:  _detect_type(str),
 				value: _detect_value(str)
 			};
@@ -442,7 +457,6 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 
 					}
 
-
 				} else {
 
 					if (lychee.debug === true) {
@@ -458,10 +472,219 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 
 		},
 
-		trace: function(name, code) {
+		enum: function(code) {
 
-			return code.split('\n').filter(function(line) {
+			let enam = {
+				name:   undefined,
+				values: []
+			};
+
+			let lines = code.split('\n');
+			let first = lines[0].trim();
+
+			if (first.includes('=')) {
+				enam.name = first.substr(0, first.indexOf('=')).trim();
+				lines.shift();
+			}
+
+			lines.filter(function(line) {
+				return line.includes(':');
+			}).map(function(line) {
+				return line.trim();
+			}).map(function(line) {
+
+				let i1 = line.indexOf(':');
+				let i2 = line.indexOf(',', i1);
+				if (i2 === -1) {
+					i2 = line.length;
+				}
+
+				return {
+					name: line.substr(0, i1).trim(),
+					value: Module.detect(line.substr(i1 + 2, i2 - i1 - 2).trim())
+				};
+
+			}).forEach(function(val) {
+
+				if (val.value.type !== 'undefined') {
+
+					enam.values.push(val);
+
+				} else {
+
+					if (lychee.debug === true) {
+						console.warn('strainer.api.PARSER: No valid enum value "' + enam.value.chunk + '" for "' + enam.name + '".');
+					}
+
+				}
+
+			});
+
+
+			return enam;
+
+		},
+
+		hash: function(code) {
+
+			let hash = new _MURMUR();
+
+			hash.update(code);
+
+			return hash.digest().toString('hex');
+
+		},
+
+		parameters: function(code) {
+
+			let parameters = [];
+			let lines      = code.split('\n');
+			let first      = lines[0].trim();
+			let last       = lines[lines.length - 1].trim();
+
+			if (first.startsWith('function(') && first.endsWith(') {')) {
+
+				lines.shift();
+
+				let tmp1 = first.split(/function\((.*)\)/g);
+				if (tmp1.length > 1) {
+
+					let tmp2 = tmp1[1].trim();
+					if (tmp2.length > 0) {
+
+						tmp2.split(',').forEach(function(val) {
+
+							parameters.push({
+								name:  val.trim(),
+								type:  'undefined',
+								value: undefined
+							});
+
+						});
+
+					}
+
+				}
+
+			}
+
+			if (last.endsWith('}')) {
+				lines.pop();
+			}
+
+
+			lines.map(function(line) {
+				return line.trim();
+			}).filter(function(line) {
+
+				if (
+					line === ''
+					|| line.startsWith('//')
+					|| line.startsWith('/*')
+					|| line.startsWith('*/')
+					|| line.startsWith('*')
+				) {
+					return false;
+				}
+
+				return true;
+
+			}).forEach(function(line) {
+
+				parameters.forEach(function(param) {
+
+					if (line.startsWith(param.name) && line.includes('=')) {
+
+						let tmp = line.substr(line.indexOf('=') + 1).trim();
+						let val = Module.detect(tmp);
+						if (val.type !== 'undefined') {
+
+							if (param.type === val.type) {
+
+								if (param.value === undefined) {
+									param.value = val.value;
+								}
+
+							} else if (param.type === 'undefined') {
+
+								param.type  = val.type;
+								param.value = val.value;
+
+							}
+
+						}
+
+					}
+
+				});
+
+			});
+
+
+			return parameters;
+
+		},
+
+		settings: function(code) {
+
+			let settings = {};
+			let lines    = code.split('\n');
+			let first    = lines[0].trim();
+			let last     = lines[lines.length - 1].trim();
+
+			if (first.startsWith('function(') && first.endsWith(') {')) {
+				lines.shift();
+			}
+
+			if (last.endsWith('}')) {
+				lines.pop();
+			}
+
+
+			lines.map(function(line) {
+				return line.trim();
+			}).filter(function(line) {
+
+				if (
+					line === ''
+					|| line.startsWith('//')
+					|| line.startsWith('/*')
+					|| line.startsWith('*/')
+					|| line.startsWith('*')
+				) {
+					return false;
+				}
+
+				return true;
+
+			}).forEach(function(line) {
+
+				if (line.startsWith('this.set') && line.includes('settings.')) {
+
+					let tmp = line.split(/\(settings\.([A-Za-z]+)\);/g);
+					if (tmp.pop() === '') {
+						settings[tmp[1]] = tmp[0].split('.').pop();
+					}
+
+				}
+
+			});
+
+
+			return settings;
+
+		},
+
+		mutations: function(name, code) {
+
+			let mutations = [];
+			let lines     = code.split('\n');
+
+
+			lines.filter(function(line) {
 				return line.includes(name + ' = ');
+			}).map(function(line) {
+				return line.trim();
 			}).map(function(line) {
 
 				let i1 = line.indexOf('=');
@@ -473,15 +696,120 @@ lychee.define('strainer.api.PARSER').exports(function(lychee, global, attachment
 				return line.substr(i1 + 2, i2 - i1 - 2);
 
 			}).map(function(chunk) {
+				return Module.detect(chunk);
+			}).filter(function(val) {
 
-				return {
-					type:  _detect_type(chunk),
-					value: _detect_value(chunk)
-				};
+				if (val.type === 'undefined' && val.chunk.startsWith('_') === false) {
+					return false;
+				}
 
-			}).filter(function(value) {
-				return value.type !== 'undefined';
+				return true;
+
+			}).forEach(function(val) {
+				mutations.push(val);
 			});
+
+
+			return mutations;
+
+		},
+
+		values: function(code) {
+
+			let candidates = [];
+			let values     = [];
+			let lines      = code.split('\n');
+
+
+			lines.filter(function(line) {
+				return line.includes('return ');
+			}).map(function(line) {
+				return line.trim();
+			}).map(function(line) {
+
+				let i1 = line.indexOf('return ');
+				let i2 = line.indexOf(';', i1);
+				if (i2 === -1) {
+					i2 = line.length;
+				}
+
+				return line.substr(i1 + 7, i2 - i1 - 7);
+
+			}).map(function(chunk) {
+				return Module.detect(chunk);
+			}).forEach(function(val) {
+
+				let name  = val.chunk;
+				let type  = val.type;
+				let value = val.value;
+
+				if (type === 'undefined' && /^([A-Za-z0-9]+)$/g.test(name)) {
+
+					let mutations = Module.mutations(name, code);
+					if (mutations.length > 0) {
+
+						mutations.forEach(function(mutation) {
+
+							candidates.push({
+								type:  mutation.type,
+								value: mutation.value
+							});
+
+						});
+
+					} else {
+
+						if (lychee.debug === true) {
+							console.warn('strainer.api.PARSER: No traceable mutations for "' + name + '".');
+						}
+
+					}
+
+				} else if (type !== 'undefined') {
+
+					candidates.push({
+						type:  type,
+						value: value
+					});
+
+				} else {
+
+					if (lychee.debug === true) {
+						console.warn('strainer.api.PARSER: No traceable values for "' + name + '".');
+					}
+
+				}
+
+			});
+
+
+			candidates.forEach(function(val) {
+
+				let found = values.find(function(other) {
+
+					let otype = other.type;
+					if (otype === val.type) {
+
+						if (otype === 'Array' || otype === 'Object') {
+							return lychee.diff(other.value, val.value) === false;
+						} else {
+							return other.value === val.value;
+						}
+
+					}
+
+					return false;
+
+				}) || null;
+
+				if (found === null) {
+					values.push(val);
+				}
+
+			});
+
+
+			return values;
 
 		}
 
