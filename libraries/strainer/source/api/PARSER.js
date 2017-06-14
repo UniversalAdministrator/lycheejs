@@ -113,17 +113,6 @@ lychee.define('strainer.api.PARSER').requires([
 
 				type = 'Object';
 
-			} else if (str.startsWith('lychee.interfaceof') || str.startsWith('_lychee.interfaceof')) {
-
-				let tmp = str.split(/lychee.interfaceof\(([A-Za-z_\.]+),(.*)\)/g);
-				if (tmp.length > 1) {
-					type = tmp[1];
-				}
-
-			} else if (str.startsWith('lychee.enumof') || str.startsWith('_lychee.enumof')) {
-
-				type = 'Enum';
-
 			} else if (str.startsWith('lychee.assignunlink') || str.startsWith('_lychee.assignunlink')) {
 
 				type = 'Object';
@@ -131,6 +120,21 @@ lychee.define('strainer.api.PARSER').requires([
 			} else if (str.startsWith('lychee.diff') || str.startsWith('_lychee.diff')) {
 
 				type = 'Object';
+
+			} else if (str.startsWith('lychee.enumof') || str.startsWith('_lychee.enumof')) {
+
+				type = 'Enum';
+
+			} else if (str.startsWith('lychee.import') || str.startsWith('_lychee.import')) {
+
+				type = 'lychee.Definition';
+
+			} else if (str.startsWith('lychee.interfaceof') || str.startsWith('_lychee.interfaceof')) {
+
+				let tmp = str.split(/lychee.interfaceof\(([A-Za-z_\.]+),(.*)\)/g);
+				if (tmp.length > 1) {
+					type = tmp[1];
+				}
 
 			} else if (str === 'this') {
 
@@ -302,7 +306,35 @@ lychee.define('strainer.api.PARSER').requires([
 
 				value = {};
 
-			} else if (str.startsWith('lychee.interfaceof')) {
+
+			} else if (str.startsWith('lychee.assignunlink') || str.startsWith('_lychee.assignunlink')) {
+
+				value = {};
+
+			} else if (str.startsWith('lychee.diff') || str.startsWith('_lychee.diff')) {
+
+				value = {};
+
+			} else if (str.startsWith('lychee.enumof') || str.startsWith('_lychee.enumof')) {
+
+				let tmp = str.split(/lychee\.enumof\(Composite\.([A-Z]+),(.*)\)/g);
+				if (tmp.length > 2) {
+					value = 'Composite.' + tmp[1];
+				}
+
+			} else if (str.startsWith('lychee.import') || str.startsWith('_lychee.import')) {
+
+				let tmp = str.split(/lychee\.import\(\'([A-Za-z\.]+)\'\)/g);
+				if (tmp.length > 2) {
+
+					value = {
+						'reference': tmp[1],
+						'arguments': []
+					};
+
+				}
+
+			} else if (str.startsWith('lychee.interfaceof') || str.startsWith('_lychee.interfaceof')) {
 
 				if (str.indexOf(':') !== -1) {
 
@@ -321,21 +353,6 @@ lychee.define('strainer.api.PARSER').requires([
 					}
 
 				}
-
-			} else if (str.startsWith('lychee.enumof')) {
-
-				let tmp = str.split(/lychee\.enumof\(Composite\.([A-Z]+),(.*)\)/g);
-				if (tmp.length > 2) {
-					value = 'Composite.' + tmp[1];
-				}
-
-			} else if (str.startsWith('lychee.assignunlink')) {
-
-				value = {};
-
-			} else if (str.startsWith('lychee.diff')) {
-
-				value = {};
 
 			} else if (str === 'this') {
 
@@ -764,18 +781,19 @@ lychee.define('strainer.api.PARSER').requires([
 				return Module.detect(chunk);
 			}).forEach(function(val) {
 
-				let name  = val.chunk;
+				let chunk = val.chunk;
 				let type  = val.type;
 				let value = val.value;
 
-				if (type === 'undefined' && /^([A-Za-z0-9]+)$/g.test(name)) {
+				if (type === 'undefined' && /^([A-Za-z0-9]+)$/g.test(chunk)) {
 
-					let mutations = Module.mutations(name, code);
+					let mutations = Module.mutations(chunk, code);
 					if (mutations.length > 0) {
 
 						mutations.forEach(function(mutation) {
 
 							candidates.push({
+								chunk: mutation.chunk,
 								type:  mutation.type,
 								value: mutation.value
 							});
@@ -785,7 +803,7 @@ lychee.define('strainer.api.PARSER').requires([
 					} else {
 
 						if (lychee.debug === true) {
-							console.warn('strainer.api.PARSER: No traceable mutations for "' + name + '".');
+							console.warn('strainer.api.PARSER: No traceable mutations for "' + chunk + '".');
 						}
 
 					}
@@ -793,6 +811,7 @@ lychee.define('strainer.api.PARSER').requires([
 				} else if (type !== 'undefined') {
 
 					candidates.push({
+						chunk: chunk,
 						type:  type,
 						value: value
 					});
@@ -800,7 +819,7 @@ lychee.define('strainer.api.PARSER').requires([
 				} else {
 
 					if (lychee.debug === true) {
-						console.warn('strainer.api.PARSER: No traceable values for "' + name + '".');
+						console.warn('strainer.api.PARSER: No traceable values for "' + chunk + '".');
 					}
 
 				}

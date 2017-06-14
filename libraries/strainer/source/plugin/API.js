@@ -98,6 +98,7 @@ lychee.define('strainer.plugin.API').requires([
 
 				return {
 					header: header.result,
+					memory: report.memory,
 					errors: report.errors,
 					result: report.result
 				};
@@ -106,6 +107,7 @@ lychee.define('strainer.plugin.API').requires([
 
 				return {
 					header: null,
+					memory: report.memory,
 					errors: report.errors,
 					result: report.result
 				};

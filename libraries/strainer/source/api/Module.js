@@ -45,6 +45,78 @@ lychee.define('strainer.api.Module').requires([
 	 * HELPERS
 	 */
 
+	const _get_memory = function(from, to, stream) {
+
+		let i1 = stream.indexOf(from);
+		let i2 = stream.indexOf(to, i1);
+
+		if (i1 !== -1 && i2 !== -1) {
+			return stream.substr(i1 + from.length, i2 - i1 - from.length + to.length);
+		}
+
+		return 'undefined';
+
+	};
+
+	const _parse_memory = function(memory, stream, errors) {
+
+		let i1 = stream.indexOf('.exports(function(lychee, global, attachments) {');
+		let i2 = stream.indexOf('\n\tconst Module =');
+
+		if (i1 !== -1 && i2 !== -1) {
+
+			let body = stream.substr(i1 + 48, i2 - i1 - 48).trim();
+			if (body.length > 0) {
+
+				body.split('\n')
+					.map(function(line) {
+						return line.trim();
+					}).filter(function(line) {
+						return line.startsWith('const ');
+					}).forEach(function(line) {
+
+						let tmp = line.substr(6).trim();
+						let i1  = tmp.indexOf('=');
+						if (i1 !== -1) {
+
+							let key   = tmp.substr(0, i1).trim();
+							let chunk = tmp.substr(i1 + 1).trim();
+
+							if (key !== '' && chunk !== '') {
+
+								if (chunk.startsWith('function(')) {
+
+									chunk = _get_memory('const ' + key + ' = ', '\n\t};', stream).trim();
+
+									if (chunk.endsWith(';')) {
+										chunk = chunk.substr(0, chunk.length - 1);
+									}
+
+									memory[key] = {
+										body:       chunk,
+										hash:       _PARSER.hash(chunk),
+										parameters: _PARSER.parameters(chunk),
+										values:     _PARSER.values(chunk)
+									};
+
+								} else {
+
+									memory[key] = _PARSER.detect(chunk);
+
+								}
+
+							}
+
+						}
+
+					});
+
+			}
+
+		}
+
+	};
+
 	const _parse_methods = function(methods, stream, errors) {
 
 		let i1 = stream.indexOf('\n\tconst Module = {');
@@ -178,6 +250,7 @@ lychee.define('strainer.api.Module').requires([
 
 			let stream = asset.buffer.toString('utf8');
 			let errors = [];
+			let memory = {};
 			let result = {
 				constructor: {},
 				settings:    {},
@@ -188,6 +261,7 @@ lychee.define('strainer.api.Module').requires([
 			};
 
 
+			_parse_memory(memory, stream, errors);
 			_parse_methods(result.methods, stream, errors);
 
 
@@ -216,6 +290,7 @@ lychee.define('strainer.api.Module').requires([
 
 			return {
 				errors: errors,
+				memory: memory,
 				result: result
 			};
 
