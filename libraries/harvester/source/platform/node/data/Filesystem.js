@@ -70,12 +70,20 @@ lychee.define('harvester.data.Filesystem').tags({
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(root) {
+	let Composite = function(data) {
 
-		this.root = typeof root === 'string' ? root : null;
+		let settings = Object.assign({}, data);
+
+
+		this.root = typeof settings.root === 'string' ? settings.root : null;
 
 		this.__root = _ROOT;
 
+
+
+		/*
+		 * INITIALIZATION
+		 */
 
 		if (this.root !== null) {
 
@@ -94,6 +102,8 @@ lychee.define('harvester.data.Filesystem').tags({
 			this.__root = tmp2;
 
 		}
+
+		settings = null;
 
 	};
 

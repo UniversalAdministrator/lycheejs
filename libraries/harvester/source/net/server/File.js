@@ -36,7 +36,9 @@ lychee.define('harvester.net.server.File').requires([
 
 	const _PUBLIC_PROJECT = {
 		identifier: '/libraries/harvester/public',
-		filesystem: new _Filesystem('/libraries/harvester/public')
+		filesystem: new _Filesystem({
+			root: '/libraries/harvester/public'
+		})
 	};
 
 

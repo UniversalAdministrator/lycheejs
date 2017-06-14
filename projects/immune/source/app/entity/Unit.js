@@ -31,7 +31,7 @@ lychee.define('game.app.entity.Unit').requires([
 		let settings = Object.assign({}, data);
 
 		this.id     = 'unit-' + _id++;
-		this.color  = _PALETTE.neutral;
+		this.color  = '#efefef';
 		this.team   = 'neutral';
 		this.damage = 0;
 		this.health = 100;
@@ -47,10 +47,12 @@ lychee.define('game.app.entity.Unit').requires([
 		};
 
 
+		this.setColor(settings.color);
 		this.setDamage(settings.damage);
 		this.setHealth(settings.health);
 		this.setSpeed(settings.speed);
 
+		delete settings.color;
 		delete settings.damage;
 		delete settings.health;
 		delete settings.speed;
@@ -84,6 +86,10 @@ lychee.define('game.app.entity.Unit').requires([
 
 		deserialize: function(blob) {
 
+			if (typeof blob.color === 'string' && /(#[AaBbCcDdEeFf0-9]{6})/g.test(blob.color)) {
+				this.color = blob.color;
+			}
+
 			if (typeof blob.attacker === 'string') {
 				this.__attacker = blob.attacker;
 			}
@@ -109,8 +115,9 @@ lychee.define('game.app.entity.Unit').requires([
 			if (this.team !== 'neutral') settings.team   = this.team;
 
 
-			if (this.__attacker !== null) blob.attacker = this.__attacker;
-			if (this.__health !== 100)    blob.health   = this.__health;
+			if (this.color !== _PALETTE.neutral) blob.color    = this.color;
+			if (this.__attacker !== null)        blob.attacker = this.__attacker;
+			if (this.__health !== 100)           blob.health   = this.__health;
 
 
 			data['arguments'][0] = settings;
@@ -277,6 +284,24 @@ lychee.define('game.app.entity.Unit').requires([
 			this.removeEffects();
 
 			return true;
+
+		},
+
+		setColor: function(color) {
+
+			color = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : null;
+
+
+			if (color !== null) {
+
+				this.color = color;
+
+				return true;
+
+			}
+
+
+			return false;
 
 		},
 

@@ -26,7 +26,7 @@ lychee.define('game.app.entity.Vesicle').requires([
 
 
 		this.id     = 'vesicle-' + _id++;
-		this.color  = _PALETTE.neutral;
+		this.color  = '#efefef';
 		this.team   = 'neutral';
 		this.damage = 0;
 		this.health = 100;
@@ -35,8 +35,10 @@ lychee.define('game.app.entity.Vesicle').requires([
 		this.__health   = this.health;
 
 
+		this.setColor(settings.color);
 		this.setHealth(settings.health);
 
+		delete settings.color;
 		delete settings.health;
 
 
@@ -69,6 +71,10 @@ lychee.define('game.app.entity.Vesicle').requires([
 
 		deserialize: function(blob) {
 
+			if (typeof blob.color === 'string' && /(#[AaBbCcDdEeFf0-9]{6})/g.test(blob.color)) {
+				this.color = blob.color;
+			}
+
 			if (typeof blob.attacker === 'string') {
 				this.__attacker = blob.attacker;
 			}
@@ -92,8 +98,9 @@ lychee.define('game.app.entity.Vesicle').requires([
 			if (this.health !== 100)     settings.health = this.health;
 
 
-			if (this.__attacker !== null) blob.attacker = this.__attacker;
-			if (this.__health !== 100)    blob.health   = this.__health;
+			if (this.color !== _PALETTE.neutral) blob.color    = this.color;
+			if (this.__attacker !== null)        blob.attacker = this.__attacker;
+			if (this.__health !== 100)           blob.health   = this.__health;
 
 
 			data['arguments'][0] = settings;
@@ -160,6 +167,24 @@ lychee.define('game.app.entity.Vesicle').requires([
 					return true;
 
 				}
+
+			}
+
+
+			return false;
+
+		},
+
+		setColor: function(color) {
+
+			color = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : null;
+
+
+			if (color !== null) {
+
+				this.color = color;
+
+				return true;
 
 			}
 

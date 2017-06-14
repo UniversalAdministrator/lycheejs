@@ -15,20 +15,24 @@ lychee.define('harvester.data.Project').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(identifier) {
+	let Composite = function(data) {
 
-		identifier = typeof identifier === 'string' ? identifier : null;
+		let settings = Object.assign({}, data);
 
 
-		this.identifier = identifier;
-		this.filesystem = new _Filesystem(identifier);
-		this.package    = new _Package(this.filesystem.read('/lychee.pkg'));
+		this.identifier = typeof settings.identifier === 'string' ? settings.identifier : '/projects/boilerplate';
+		this.filesystem = new _Filesystem({
+			root: this.identifier
+		});
+		this.package    = new _Package({
+			buffer: this.filesystem.read('/lychee.pkg')
+		});
 		this.server     = null;
 		this.harvester  = false;
 
 
 		if (Object.keys(this.package.source).length === 0) {
-			console.error('harvester.data.Project: Invalid package at "' + identifier + '/lychee.pkg".');
+			console.error('harvester.data.Project: Invalid package at "' + this.identifier + '/lychee.pkg".');
 		}
 
 
@@ -36,6 +40,9 @@ lychee.define('harvester.data.Project').requires([
 		if (check !== null) {
 			this.harvester = true;
 		}
+
+
+		settings = null;
 
 	};
 

@@ -148,7 +148,7 @@ lychee.define('app.ui.sprite.Avatar').includes([
 
 		setValue: function(value) {
 
-			value = /(#[AaBbCcDdEeFf0-9]{6})/.test(value) ? value : null;
+			value = /(#[AaBbCcDdEeFf0-9]{6})/g.test(value) ? value : null;
 
 
 			if (value !== null) {

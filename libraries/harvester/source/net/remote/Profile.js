@@ -9,7 +9,9 @@ lychee.define('harvester.net.remote.Profile').requires([
 	const _Filesystem = lychee.import('harvester.data.Filesystem');
 	const _Service    = lychee.import('lychee.net.Service');
 	const _CACHE      = {};
-	const _FILESYSTEM = new _Filesystem('/libraries/harvester/profiles');
+	const _FILESYSTEM = new _Filesystem({
+		root: '/libraries/harvester/profiles'
+	});
 	const _JSON       = lychee.import('lychee.codec.JSON');
 
 

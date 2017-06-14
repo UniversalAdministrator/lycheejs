@@ -204,11 +204,13 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(identifier) {
+	let Composite = function(data) {
 
-		this.identifier  = identifier;
-		this.config      = new Config(identifier + '/lychee.pkg');
-		this.icon        = new Texture(identifier + '/icon.png');
+		let settings = Object.assign({}, data);
+
+		this.identifier  = typeof settings.identifier === 'string' ? settings.identifier : '/projects/boilerplate';
+		this.config      = new Config(this.identifier + '/lychee.pkg');
+		this.icon        = new Texture(this.identifier + '/icon.png');
 		this.harvester   = true;
 		this.platforms   = {
 			'html':         true,
@@ -218,9 +220,12 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 			'node-sdl':     true
 		};
 
-		this.__harvester = new Stuff(identifier + '/harvester.js', true);
+		this.__harvester = new Stuff(this.identifier + '/harvester.js', true);
 		this.__build     = null;
 		this.__packages  = [];
+
+
+		settings = null;
 
 	};
 

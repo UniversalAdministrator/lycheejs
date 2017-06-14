@@ -115,7 +115,10 @@ lychee.define('harvester.data.Package').exports(function(lychee, global, attachm
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(buffer) {
+	let Composite = function(data) {
+
+		let settings = Object.assign({}, data);
+
 
 		this.buffer = null;
 
@@ -125,7 +128,9 @@ lychee.define('harvester.data.Package').exports(function(lychee, global, attachm
 		this.json   = {};
 
 
-		this.setBuffer(buffer);
+		this.setBuffer(settings.buffer);
+
+		settings = null;
 
 	};
 

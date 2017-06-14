@@ -61,7 +61,9 @@ lychee.define('studio.state.Project').includes([
 
 		if (cache === null) {
 
-			cache = _CACHE[value] = new _Project(value);
+			cache = _CACHE[value] = new _Project({
+				identifier: value
+			});
 
 			cache.onload = function() {
 

@@ -280,7 +280,9 @@ lychee.define('harvester.mod.Packager').requires([
 				if (blob !== null) {
 					project.filesystem.write('/lychee.pkg', blob);
 					project.package = null;
-					project.package = new _Package(new Buffer(blob, 'utf8'));
+					project.package = new _Package({
+						buffer: new Buffer(blob, 'utf8')
+					});
 				}
 
 			}

@@ -173,12 +173,12 @@ lychee.define('game.level.Track').exports(function(lychee, global, attachments) 
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(id) {
+	let Composite = function(data) {
 
-		id = typeof id === 'string' ? id : 'circuit';
+		let settings = Object.assign({}, data);
 
 
-		this.id         = id;
+		this.id         = typeof settings.id === 'string' ? settings.id : 'circuit';
 		this.length     = 0;
 
 		this.__palette  = [];
@@ -189,7 +189,9 @@ lychee.define('game.level.Track').exports(function(lychee, global, attachments) 
 		this.__type     = 'stadium';
 
 
-		_parse_track.call(this, (_TRACKS[id] || _TRACKS.circuit).buffer);
+		_parse_track.call(this, (_TRACKS[this.id] || _TRACKS.circuit).buffer);
+
+		settings = null;
 
 	};
 
@@ -217,9 +219,15 @@ lychee.define('game.level.Track').exports(function(lychee, global, attachments) 
 
 		serialize: function() {
 
+			let settings = {};
+
+
+			if (this.id !== 'circuit') settings.id = this.id;
+
+
 			return {
 				'constructor': 'game.level.Track',
-				'arguments':   [ this.id ]
+				'arguments':   [ settings ]
 			};
 
 		},

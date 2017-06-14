@@ -148,13 +148,18 @@ lychee.define('harvester.data.Git').tags({
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(identifier) {
+	let Composite = function(data) {
 
-		identifier = typeof identifier === 'string' ? identifier : '';
+		let settings = Object.assign({}, data);
 
 
-		this.identifier = identifier;
-		this.filesystem = new _Filesystem(identifier + '/.git');
+		this.identifier = typeof settings.identifier === 'string' ? settings.identifier : '';
+		this.filesystem = new _Filesystem({
+			root: this.identifier + '/.git'
+		});
+
+
+		settings = null;
 
 	};
 

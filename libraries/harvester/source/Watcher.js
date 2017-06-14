@@ -72,7 +72,9 @@ lychee.define('harvester.Watcher').requires([
 					console.log('harvester.Watcher: Add Library "' + identifier + '"');
 				}
 
-				this.libraries[identifier] = new _Project(identifier);
+				this.libraries[identifier] = new _Project({
+					identifier: identifier
+				});
 
 			}
 
@@ -122,7 +124,9 @@ lychee.define('harvester.Watcher').requires([
 					console.log('harvester.Watcher: Add Project "' + identifier + '"');
 				}
 
-				this.projects[identifier] = new _Project(identifier);
+				this.projects[identifier] = new _Project({
+					identifier: identifier
+				});
 
 			}
 

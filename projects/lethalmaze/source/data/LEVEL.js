@@ -18,7 +18,7 @@ lychee.define('game.data.LEVEL').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Module = {
+	const Module = {
 
 		// deserialize: function(blob) {},
 

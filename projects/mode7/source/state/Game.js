@@ -115,7 +115,9 @@ lychee.define('game.state.Game').requires([
 			_State.prototype.enter.call(this, oncomplete);
 
 
-			this.__track = new _Track(data.track);
+			this.__track = new _Track({
+				id: data.track
+			});
 
 
 			if (this.__track.length === 0) {
