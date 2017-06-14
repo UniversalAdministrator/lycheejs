@@ -22,6 +22,7 @@ and `fixed`.
 
 ## [2017-Q2] - UNRELEASED
 
+- **Changed**: lychee.js Strainer supports mutations, traces and dynamic memory lookups.
 - **Changed**: All helper scripts support `--autocomplete` syntax.
 - **Changed**: lychee.js Harvester synchronizes platform tags.
 - **Added**: lychee.js Harvester supports `git fetch` and `git checkout`.
