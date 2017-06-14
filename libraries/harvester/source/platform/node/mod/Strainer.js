@@ -88,7 +88,7 @@ lychee.define('harvester.mod.Strainer').tags({
 			let tmp = stderr.trim();
 			if (error || tmp.indexOf('(E)') !== -1) {
 
-				console.error('harvester.mod.Strainer: FAILURE ("' + project + ')');
+				console.error('harvester.mod.Strainer: FAILURE ("' + project + '")');
 
 				let lines = tmp.split('\n');
 
@@ -103,7 +103,7 @@ lychee.define('harvester.mod.Strainer').tags({
 
 			} else {
 
-				console.info('harvester.mod.Strainer: SUCCESS ("' + project + ')');
+				console.info('harvester.mod.Strainer: SUCCESS ("' + project + '")');
 
 			}
 
