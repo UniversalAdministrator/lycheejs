@@ -70,6 +70,9 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 
 		play: function(track) {
 
+			track = (track instanceof Music || track instanceof Sound) ? track : null;
+
+
 			let volume = this.volume;
 
 
@@ -249,10 +252,12 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 
 		setMusic: function(music) {
 
-			if (music === true || music === false) {
+			music = typeof music === 'boolean' ? music : null;
+
+
+			if (music !== null) {
 
 				this.music = music;
-
 
 				return true;
 
@@ -265,10 +270,12 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 
 		setSound: function(sound) {
 
-			if (sound === true || sound === false) {
+			sound = typeof sound === 'boolean' ? sound : null;
+
+
+			if (sound !== null) {
 
 				this.sound = sound;
-
 
 				return true;
 
@@ -293,7 +300,6 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 				if (music !== null) {
 					music.setVolume(this.volume);
 				}
-
 
 				let sounds = this.__sounds;
 				for (let s = 0, sl = sounds.length; s < sl; s++) {

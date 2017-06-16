@@ -367,7 +367,10 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 		setHarvester: function(harvester) {
 
-			if (harvester === true || harvester === false) {
+			harvester = typeof harvester === 'boolean' ? harvester : null;
+
+
+			if (harvester !== null) {
 
 				this.harvester = harvester;
 

@@ -311,6 +311,9 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
+
 			_reset_game.call(this);
 
 
@@ -324,6 +327,9 @@ lychee.define('game.state.Game').requires([
 		},
 
 		leave: function(oncomplete) {
+
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
 
 			if (oncomplete !== null) {
 				oncomplete(true);

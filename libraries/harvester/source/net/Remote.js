@@ -88,6 +88,9 @@ lychee.define('harvester.net.Remote').requires([
 
 		send: function(data, headers) {
 
+			// XXX: data can be Object, Buffer or String
+
+			data    = data !== undefined        ? data    : null;
 			headers = headers instanceof Object ? headers : {};
 
 

@@ -298,13 +298,19 @@ lychee.define('game.app.sprite.Tank').requires([
 
 		setDirection: function(direction) {
 
-			let result = this.setState(this.id + '-' + direction);
-			if (result === true) {
-
-				this.direction = direction;
+			direction = typeof direction === 'string' ? direction : null;
 
 
-				return true;
+			if (direction !== null) {
+
+				let result = this.setState(this.id + '-' + direction);
+				if (result === true) {
+
+					this.direction = direction;
+
+					return true;
+
+				}
 
 			}
 

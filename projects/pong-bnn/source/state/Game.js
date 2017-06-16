@@ -302,6 +302,9 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
+
 			let stats = this.__statistics || null;
 			if (stats !== null) {
 
@@ -320,6 +323,9 @@ lychee.define('game.state.Game').requires([
 		},
 
 		leave: function(oncomplete) {
+
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
 
 			return _State.prototype.leave.call(this, oncomplete);
 

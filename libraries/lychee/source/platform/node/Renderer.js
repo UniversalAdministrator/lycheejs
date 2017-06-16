@@ -316,7 +316,13 @@ lychee.define('Renderer').tags({
 		},
 
 		createBuffer: function(width, height) {
+
+			width  = typeof width === 'number'  ? width  : 1;
+			height = typeof height === 'number' ? height : 1;
+
+
 			return new _Buffer(width, height);
+
 		},
 
 		setBuffer: function(buffer) {
@@ -343,16 +349,14 @@ lychee.define('Renderer').tags({
 
 		drawArc: function(x, y, start, end, radius, color, background, lineWidth) {
 
-			// XXX: No performant validation for start and end
-			// start = Number(start).toPrecision(5)
-			// end   = Number(end).toPrecision(5)
-
 			x          = x | 0;
 			y          = y | 0;
 			radius     = radius | 0;
-			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
+			start      = typeof start === 'number'              ? start     : 0;
+			end        = typeof end === 'number'                ? end       : 2;
+			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color     : '#000000';
 			background = background === true;
-			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
+			lineWidth  = typeof lineWidth === 'number'          ? lineWidth : 1;
 
 
 			// TODO: Implement arc-drawing ASCII art algorithm
@@ -554,6 +558,11 @@ lychee.define('Renderer').tags({
 		// points, x1, y1, [ ... x(a), y(a) ... ], [ color, background, lineWidth ]
 		drawPolygon: function(points, x1, y1) {
 
+			points = typeof points === 'number' ? points : 0;
+			x1     = x1 | 0;
+			y1     = y1 | 0;
+
+
 			// TODO: Implement polygon-drawing ASCII art algorithm
 			// let l = arguments.length;
 
@@ -626,7 +635,8 @@ lychee.define('Renderer').tags({
 
 			x1     = x1 | 0;
 			y1     = y1 | 0;
-			font   = font instanceof Font ? font : null;
+			text   = typeof text === 'string' ? text : null;
+			font   = font instanceof Font     ? font : null;
 			center = center === true;
 
 

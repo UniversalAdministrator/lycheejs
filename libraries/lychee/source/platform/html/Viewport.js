@@ -509,25 +509,32 @@ lychee.define('Viewport').tags({
 
 		setFullscreen: function(fullscreen) {
 
-			if (fullscreen === true && this.fullscreen === false) {
+			fullscreen = typeof fullscreen === 'boolean' ? fullscreen : null;
 
-				if (_enterFullscreen !== null) {
 
-					_enterFullscreen();
-					this.fullscreen = true;
+			if (fullscreen !== null) {
 
-					return true;
+				if (fullscreen === true && this.fullscreen === false) {
 
-				}
+					if (_enterFullscreen !== null) {
 
-			} else if (fullscreen === false && this.fullscreen === true) {
+						_enterFullscreen();
+						this.fullscreen = true;
 
-				if (_leaveFullscreen !== null) {
+						return true;
 
-					_leaveFullscreen();
-					this.fullscreen = false;
+					}
 
-					return true;
+				} else if (fullscreen === false && this.fullscreen === true) {
+
+					if (_leaveFullscreen !== null) {
+
+						_leaveFullscreen();
+						this.fullscreen = false;
+
+						return true;
+
+					}
 
 				}
 

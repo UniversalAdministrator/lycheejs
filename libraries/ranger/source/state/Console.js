@@ -130,6 +130,10 @@ lychee.define('ranger.state.Console').requires([
 
 		enter: function(oncomplete, data) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+			data       = data instanceof Object         ? data       : null;
+
+
 			let status = this.query('ui > console > status');
 			if (status !== null) {
 				status.setVisible(true);
@@ -148,11 +152,14 @@ lychee.define('ranger.state.Console').requires([
 			}
 
 
-			return _State.prototype.enter.call(this, oncomplete, data);
+			return _State.prototype.enter.call(this, oncomplete);
 
 		},
 
 		leave: function(oncomplete) {
+
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
 
 			let client = this.client;
 			if (client !== null) {

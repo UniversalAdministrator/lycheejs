@@ -81,25 +81,38 @@ lychee.define('game.Compositor').exports(function(lychee, global, attachments) {
 
 		project: function(target, point, x, y, z, depth) {
 
-			let cameraX = (point.x || 0) - x;
-			let cameraY = (point.y || 0) - y;
-			let cameraZ = (point.z || 0) - z;
+			target = target instanceof Object ? target : null;
+			point  = point instanceof Object  ? point  : null;
+			x      = x | 0;
+			y      = y | 0;
+			z      = z | 0;
+			depth  = depth | 0;
+
+
+			let cx = (point.x || 0) - x;
+			let cy = (point.y || 0) - y;
+			let cz = (point.z || 0) - z;
 
 			let hwidth  = this.__width  / 2;
 			let hheight = this.__height / 2;
-			let scale = depth / cameraZ;
+			let scale   = depth / cz;
+
+			if (target !== null) {
+
+				// x, y, depth, road width
+				target.x = Math.round(hwidth  + scale * cx * hwidth);
+				target.y = Math.round(hheight - scale * cy * hheight);
+				target.z = cz;
+				//                           road width (!)
+				//                            \/\/\/\/\/\/
+				target.w = Math.round(scale * 1.5 * hwidth * hwidth);
+
+				return true;
+
+			}
 
 
-			// x, y, depth, road width
-			target.x = Math.round(hwidth + scale * cameraX *  hwidth);
-			target.y = Math.round(hheight - scale * cameraY * hheight);
-			target.z = cameraZ;
-			//                           road width (!)
-			//                            \/\/\/\/\/\/
-			target.w = Math.round(scale * 1.5 * hwidth * hwidth);
-
-
-			return true;
+			return false;
 
 		}
 

@@ -209,34 +209,38 @@ lychee.define('game.ui.entity.Timeout').requires([
 
 		setVisible: function(visible) {
 
-			if (visible === true) {
-
-				this.addEffect(new _Alpha({
-					type:     _Alpha.TYPE.easeout,
-					alpha:    1.0,
-					duration: 500
-				}));
-
-				this.addEffect(new _Visible({
-					delay:   500,
-					visible: true
-				}));
+			visible = typeof visible === 'boolean' ? visible : null;
 
 
-				return true;
+			if (visible !== null) {
 
-			} else if (visible === false) {
+				if (visible === true) {
 
-				this.addEffect(new _Alpha({
-					type:     _Alpha.TYPE.easeout,
-					alpha:    0.0,
-					duration: 500
-				}));
+					this.addEffect(new _Alpha({
+						type:     _Alpha.TYPE.easeout,
+						alpha:    1.0,
+						duration: 500
+					}));
 
-				this.addEffect(new _Visible({
-					delay:   500,
-					visible: false
-				}));
+					this.addEffect(new _Visible({
+						delay:   500,
+						visible: true
+					}));
+
+				} else if (visible === false) {
+
+					this.addEffect(new _Alpha({
+						type:     _Alpha.TYPE.easeout,
+						alpha:    0.0,
+						duration: 500
+					}));
+
+					this.addEffect(new _Visible({
+						delay:   500,
+						visible: false
+					}));
+
+				}
 
 
 				return true;

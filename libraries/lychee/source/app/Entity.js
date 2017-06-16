@@ -248,7 +248,10 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 		isAtPosition: function(position) {
 
-			if (position instanceof Object) {
+			position = position instanceof Object ? position : null;
+
+
+			if (position !== null) {
 
 				if (typeof position.x === 'number' && typeof position.y === 'number') {
 

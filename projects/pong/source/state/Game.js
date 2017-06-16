@@ -238,6 +238,9 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
+
 			let stats = this.__statistics || null;
 			if (stats !== null) {
 
@@ -286,6 +289,9 @@ lychee.define('game.state.Game').requires([
 		},
 
 		leave: function(oncomplete) {
+
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
 
 			this.input.unbind('touch', _on_touch, this);
 

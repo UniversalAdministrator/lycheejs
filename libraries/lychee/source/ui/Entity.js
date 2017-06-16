@@ -145,7 +145,10 @@ lychee.define('lychee.ui.Entity').includes([
 
 		isAtPosition: function(position) {
 
-			if (position instanceof Object) {
+			position = position instanceof Object ? position : null;
+
+
+			if (position !== null) {
 
 				if (typeof position.x === 'number' && typeof position.y === 'number') {
 
@@ -185,6 +188,9 @@ lychee.define('lychee.ui.Entity').includes([
 		},
 
 		collidesWith: function(entity) {
+
+			entity = lychee.interfaceof(lychee.ui.Entity, entity) ? entity : null;
+
 
 			return false;
 
@@ -275,7 +281,10 @@ lychee.define('lychee.ui.Entity').includes([
 
 		setPosition: function(position) {
 
-			if (position instanceof Object) {
+			position = position instanceof Object ? position : null;
+
+
+			if (position !== null) {
 
 				this.position.x = typeof position.x === 'number' ? position.x : this.position.x;
 				this.position.y = typeof position.y === 'number' ? position.y : this.position.y;
@@ -361,7 +370,10 @@ lychee.define('lychee.ui.Entity').includes([
 
 		setVisible: function(visible) {
 
-			if (visible === true || visible === false) {
+			visible = typeof visible === 'boolean' ? visible : null;
+
+
+			if (visible !== null) {
 
 				this.visible = visible;
 

@@ -20,6 +20,26 @@ lychee.define('lychee.app.Element').requires([
 	 * HELPERS
 	 */
 
+	const _validate_entity = function(entity) {
+
+		if (entity instanceof Object) {
+
+			if (
+				typeof entity.update === 'function'
+				&& typeof entity.render === 'function'
+				&& typeof entity.shape === 'number'
+				&& typeof entity.isAtPosition === 'function'
+			) {
+				return true;
+			}
+
+		}
+
+
+		return false;
+
+	};
+
 	const _on_relayout = function() {
 
 		let content = this.__content;
@@ -251,13 +271,25 @@ lychee.define('lychee.app.Element').requires([
 
 		addEntity: function(entity) {
 
-			let result = _Layer.prototype.addEntity.call(this, entity);
-			if (result === true) {
-				this.__content.push(entity);
-				this.__content.push(null);
+			entity = _validate_entity(entity) === true ? entity : null;
+
+
+			if (entity !== null) {
+
+				let result = _Layer.prototype.addEntity.call(this, entity);
+				if (result === true) {
+
+					this.__content.push(entity);
+					this.__content.push(null);
+
+					return true;
+
+				}
+
 			}
 
-			return result;
+
+			return false;
 
 		},
 
@@ -307,50 +339,69 @@ lychee.define('lychee.app.Element').requires([
 
 		setEntity: function(id, entity) {
 
-			let result = _Layer.prototype.setEntity.call(this, id, entity);
-			if (result === true) {
-
-				let label = new lychee.app.entity.Label({
-					value: id.charAt(0).toUpperCase() + id.substr(1)
-				});
+			id     = typeof id === 'string'            ? id     : null;
+			entity = _validate_entity(entity) === true ? entity : null;
 
 
-				this.entities.push(label);
+			if (id !== null && entity !== null) {
 
+				let result = _Layer.prototype.setEntity.call(this, id, entity);
+				if (result === true) {
 
-				let index = this.__content.length - 1;
-				if (this.__content[index] === null) {
-					this.__content[index] = label;
+					let label = new lychee.app.entity.Label({
+						value: id.charAt(0).toUpperCase() + id.substr(1)
+					});
+
+					this.entities.push(label);
+
+					let index = this.__content.length - 1;
+					if (this.__content[index] === null) {
+						this.__content[index] = label;
+					}
+
+					return true;
+
 				}
 
 			}
 
-			return result;
+
+			return false;
 
 		},
 
 		removeEntity: function(entity) {
 
-			let result = _Layer.prototype.removeEntity.call(this, entity);
-			if (result === true) {
+			entity = _validate_entity(entity) === true ? entity : null;
 
-				let index = this.__content.indexOf(entity);
-				if (index !== -1) {
 
-					let label = this.__content[index + 1];
-					let tmp   = this.entities.indexOf(label);
-					if (tmp !== -1) {
-						this.entities.splice(tmp, 1);
+			if (entity !== null) {
+
+				let result = _Layer.prototype.removeEntity.call(this, entity);
+				if (result === true) {
+
+					let index = this.__content.indexOf(entity);
+					if (index !== -1) {
+
+						let label = this.__content[index + 1];
+						let tmp   = this.entities.indexOf(label);
+						if (tmp !== -1) {
+							this.entities.splice(tmp, 1);
+						}
+
+
+						this.__content.splice(index, 2);
+
 					}
 
-
-					this.__content.splice(index, 2);
+					return true;
 
 				}
 
 			}
 
-			return result;
+
+			return false;
 
 		},
 
@@ -375,6 +426,16 @@ lychee.define('lychee.app.Element').requires([
 		},
 
 		setOptions: function(options) {
+
+			options = options instanceof Array ? options : null;
+
+
+			if (options !== null) {
+
+				// XXX: Implemented by inheriting Composites
+
+			}
+
 
 			return false;
 

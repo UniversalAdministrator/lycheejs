@@ -149,7 +149,31 @@
 		}
 	},
 	{
+		"name": "_validate_agent(agent)",
+		"type": "lychee.ai.Agent",
+		"value": {
+			"constructor": "lychee.ai.Agent",
+			"arguments": []
+		}
+	},
+	{
+		"name": "agent",
+		"type": "lychee.ai.Agent",
+		"value": {
+			"constructor": "lychee.ai.Agent",
+			"arguments": []
+		}
+	},
+	{
 		"name": "_validate_entity(entity)",
+		"type": "lychee.app.Entity",
+		"value": {
+			"constructor": "lychee.app.Entity",
+			"arguments": []
+		}
+	},
+	{
+		"name": "_validate_entity(parent)",
 		"type": "lychee.app.Entity",
 		"value": {
 			"constructor": "lychee.app.Entity",
@@ -169,6 +193,22 @@
 		"type": "Enum",
 		"value": {
 			"reference": "lychee.app.Entity.SHAPE",
+			"arguments": []
+		}
+	},
+	{
+		"name": "_validate_layer(layer)",
+		"type": "lychee.app.Layer",
+		"value": {
+			"constructor": "lychee.app.Layer",
+			"arguments": []
+		}
+	},
+	{
+		"name": "layer",
+		"type": "lychee.app.Layer",
+		"value": {
+			"constructor": "lychee.app.Layer",
 			"arguments": []
 		}
 	},

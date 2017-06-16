@@ -253,6 +253,9 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
+
 			this.__player   = 'x';
 			this.__scores.x = 0;
 			this.__scores.o = 0;
@@ -279,6 +282,9 @@ lychee.define('game.state.Game').requires([
 		},
 
 		leave: function(oncomplete) {
+
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
 
 			this.jukebox.stop(_MUSIC);
 

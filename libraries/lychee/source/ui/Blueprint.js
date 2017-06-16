@@ -945,7 +945,10 @@ lychee.define('lychee.ui.Blueprint').requires([
 
 		setVisible: function(visible) {
 
-			if (visible === true || visible === false) {
+			visible = typeof visible === 'boolean' ? visible : null;
+
+
+			if (visible !== null) {
 
 				let fade = false;
 				if (this.visible === false && visible === true) {

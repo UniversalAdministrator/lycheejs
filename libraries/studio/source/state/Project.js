@@ -224,6 +224,10 @@ lychee.define('studio.state.Project').includes([
 
 		enter: function(oncomplete, data) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+			data       = data instanceof Object         ? data       : null;
+
+
 			let api = this.api;
 			if (api !== null) {
 
@@ -240,7 +244,7 @@ lychee.define('studio.state.Project').includes([
 			}
 
 
-			return _State.prototype.enter.call(this, oncomplete, data);
+			return _State.prototype.enter.call(this, oncomplete);
 
 		}
 

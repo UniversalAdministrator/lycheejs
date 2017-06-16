@@ -555,7 +555,10 @@ lychee.define('lychee.ui.Layer').requires([
 
 		isAtPosition: function(position) {
 
-			if (position instanceof Object) {
+			position = position instanceof Object ? position : null;
+
+
+			if (position !== null) {
 
 				if (typeof position.x === 'number' && typeof position.y === 'number') {
 
@@ -596,12 +599,12 @@ lychee.define('lychee.ui.Layer').requires([
 
 		setAlpha: function(alpha) {
 
-			alpha = (typeof alpha === 'number' && alpha >= 0 && alpha <= 1) ? alpha : null;
+			alpha = typeof alpha === 'number' ? alpha : null;
 
 
 			if (alpha !== null) {
 
-				this.alpha = alpha;
+				this.alpha = Math.min(Math.max(alpha, 0), 1);
 
 				return true;
 
@@ -874,7 +877,10 @@ lychee.define('lychee.ui.Layer').requires([
 
 		setGrid: function(grid) {
 
-			if (grid instanceof Object) {
+			grid = grid instanceof Object ? grid : null;
+
+
+			if (grid !== null) {
 
 				this.grid.width  = typeof grid.width === 'number'  ? grid.width  : this.grid.width;
 				this.grid.height = typeof grid.height === 'number' ? grid.height : this.grid.height;
@@ -891,7 +897,10 @@ lychee.define('lychee.ui.Layer').requires([
 
 		setOffset: function(offset) {
 
-			if (offset instanceof Object) {
+			offset = offset instanceof Object ? offset : null;
+
+
+			if (offset !== null) {
 
 				this.offset.x = typeof offset.x === 'number' ? offset.x : this.offset.x;
 				this.offset.y = typeof offset.y === 'number' ? offset.y : this.offset.y;
@@ -913,7 +922,10 @@ lychee.define('lychee.ui.Layer').requires([
 
 		setPosition: function(position) {
 
-			if (position instanceof Object) {
+			position = position instanceof Object ? position : null;
+
+
+			if (position !== null) {
 
 				this.position.x = typeof position.x === 'number' ? position.x : this.position.x;
 				this.position.y = typeof position.y === 'number' ? position.y : this.position.y;
@@ -948,7 +960,10 @@ lychee.define('lychee.ui.Layer').requires([
 
 		setRelayout: function(relayout) {
 
-			if (relayout === true || relayout === false) {
+			relayout = typeof relayout === 'boolean' ? relayout : null;
+
+
+			if (relayout !== null) {
 
 				this.__relayout = relayout;
 
@@ -963,7 +978,10 @@ lychee.define('lychee.ui.Layer').requires([
 
 		setVisible: function(visible) {
 
-			if (visible === true || visible === false) {
+			visible = typeof visible === 'boolean' ? visible : null;
+
+
+			if (visible !== null) {
 
 				this.visible = visible;
 

@@ -82,66 +82,71 @@ lychee.define('fertilizer.data.Shell').tags({
 
 		exec: function(command, callback, scope) {
 
+			command  = typeof command === 'string'  ? command  : null;
 			callback = callback instanceof Function ? callback : null;
 			scope    = scope !== undefined          ? scope    : this;
 
 
-			let that = this;
-			let args = command.split(' ').slice(1);
-			let cmd  = command.split(' ')[0];
-			let file = _ROOT + (cmd.charAt(0) !== '/' ? '/' : '') + cmd;
-			let ext  = file.split('.').pop();
-			let path = file.split('/').slice(0, -1).join('/');
-			if (path.split('/').pop() === 'bin') {
-				path = path.split('/').slice(0, -1).join('/');
-			}
+			if (command !== null) {
+
+				let that = this;
+				let args = command.split(' ').slice(1);
+				let cmd  = command.split(' ')[0];
+				let file = _ROOT + (cmd.charAt(0) !== '/' ? '/' : '') + cmd;
+				let ext  = file.split('.').pop();
+				let path = file.split('/').slice(0, -1).join('/');
+				if (path.split('/').pop() === 'bin') {
+					path = path.split('/').slice(0, -1).join('/');
+				}
 
 
-			if (ext === 'js') {
+				if (ext === 'js') {
 
-				args.reverse();
-				args.push(file);
-				args.push('env:node');
-				args.reverse();
+					args.reverse();
+					args.push(file);
+					args.push('env:node');
+					args.reverse();
 
-				file = _ROOT + '/bin/helper.sh';
-
-			}
-
-
-			if (callback !== null) {
-
-				try {
-
-					_child_process.execFile(file, args, {
-						cwd: path
-					}, function(error, stdout, stderr) {
-
-						that.__stack.push({
-							args:   args,
-							file:   file,
-							path:   path,
-							stdout: stdout.toString(),
-							stderr: stderr.toString()
-						});
-
-
-						if (error) {
-							callback.call(scope, false);
-						} else {
-							callback.call(scope, true);
-						}
-
-					});
-
-				} catch (err) {
-
-					callback.call(scope, false);
+					file = _ROOT + '/bin/helper.sh';
 
 				}
 
 
-				return true;
+				if (callback !== null) {
+
+					try {
+
+						_child_process.execFile(file, args, {
+							cwd: path
+						}, function(error, stdout, stderr) {
+
+							that.__stack.push({
+								args:   args,
+								file:   file,
+								path:   path,
+								stdout: stdout.toString(),
+								stderr: stderr.toString()
+							});
+
+
+							if (error) {
+								callback.call(scope, false);
+							} else {
+								callback.call(scope, true);
+							}
+
+						});
+
+					} catch (err) {
+
+						callback.call(scope, false);
+
+					}
+
+
+					return true;
+
+				}
 
 			}
 

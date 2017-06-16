@@ -204,6 +204,10 @@ lychee.define('ranger.state.Welcome').requires([
 
 		enter: function(oncomplete, data) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+			data       = data instanceof Object         ? data       : null;
+
+
 			let dialog = this.query('ui > welcome > dialog');
 			let status = this.query('ui > welcome > status');
 
@@ -230,6 +234,9 @@ lychee.define('ranger.state.Welcome').requires([
 		},
 
 		leave: function(oncomplete) {
+
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
 
 			let client = this.client;
 			if (client !== null) {

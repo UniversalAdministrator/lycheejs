@@ -158,7 +158,7 @@ lychee.define('lychee.verlet.Entity').requires([
 
 		setPosition: function(position) {
 
-			position = position instanceof _Vector3 ? position : new _Vector3(position);
+			position = position instanceof _Vector3 ? position : null;
 
 
 			if (position !== null) {

@@ -210,7 +210,19 @@ lychee.define('Viewport').tags({
 		 */
 
 		setFullscreen: function(fullscreen) {
+
+			fullscreen = typeof fullscreen === 'boolean' ? fullscreen : null;
+
+
+			if (fullscreen !== null) {
+
+				// XXX: No fullscreen support
+
+			}
+
+
 			return false;
+
 		}
 
 	};

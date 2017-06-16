@@ -69,7 +69,10 @@ lychee.define('game.net.client.Control').includes([
 
 		control: function(data) {
 
-			if (data instanceof Object) {
+			data = data instanceof Object ? data : null;
+
+
+			if (data !== null) {
 
 				this.tunnel.send({
 					tid:       data.tid,

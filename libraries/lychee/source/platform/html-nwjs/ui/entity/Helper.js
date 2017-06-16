@@ -320,10 +320,10 @@ lychee.define('lychee.ui.entity.Helper').tags({
 
 		setValue: function(value) {
 
-			value = _is_value(value) === true ? value : null;
+			value = typeof value === 'string' ? value : null;
 
 
-			if (value !== null) {
+			if (value !== null && _is_value(value) === true) {
 
 				this.value    = value;
 				this.__action = value.split('=')[0] || null;

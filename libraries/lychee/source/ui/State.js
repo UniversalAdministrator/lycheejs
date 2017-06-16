@@ -463,7 +463,8 @@ lychee.define('lychee.ui.State').requires([
 
 		enter: function(oncomplete, data) {
 
-			data = typeof data === 'string' ? data : 'settings';
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+			data       = typeof data === 'string'       ? data       : 'settings';
 
 
 			let id_layer = data.toLowerCase();
@@ -507,6 +508,9 @@ lychee.define('lychee.ui.State').requires([
 		},
 
 		leave: function(oncomplete) {
+
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
 
 			_on_fade.call(this, null);
 

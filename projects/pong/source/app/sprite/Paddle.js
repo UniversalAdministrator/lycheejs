@@ -57,32 +57,39 @@ lychee.define('game.app.sprite.Paddle').includes([
 
 		moveTo: function(position) {
 
-			let my_y = this.position.y;
-			let to_y = position.y || null;
-			if (to_y !== null && my_y !== to_y) {
-
-				let velocity = this.velocity;
+			position = position instanceof Object ? position : null;
 
 
-				if (to_y > my_y - 10 && to_y < my_y + 10) {
+			if (position !== null) {
 
-					velocity.y = 0;
-					position.y = my_y;
+				let my_y = this.position.y;
+				let to_y = position.y || null;
+				if (to_y !== null && my_y !== to_y) {
 
-				} else {
+					let velocity = this.velocity;
 
-					if (to_y > my_y - 10) {
-						velocity.y = 256;
+
+					if (to_y > my_y - 10 && to_y < my_y + 10) {
+
+						velocity.y = 0;
+						position.y = my_y;
+
+					} else {
+
+						if (to_y > my_y - 10) {
+							velocity.y = 256;
+						}
+
+						if (to_y < my_y + 10) {
+							velocity.y = -256;
+						}
+
 					}
 
-					if (to_y < my_y + 10) {
-						velocity.y = -256;
-					}
+
+					return true;
 
 				}
-
-
-				return true;
 
 			}
 

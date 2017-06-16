@@ -734,7 +734,10 @@ lychee.define('Input').tags({
 
 		setKey: function(key) {
 
-			if (key === true || key === false) {
+			key = typeof key === 'boolean' ? key : null;
+
+
+			if (key !== null) {
 
 				this.key = key;
 
@@ -749,7 +752,10 @@ lychee.define('Input').tags({
 
 		setKeyModifier: function(keymodifier) {
 
-			if (keymodifier === true || keymodifier === false) {
+			keymodifier = typeof keymodifier === 'boolean' ? keymodifier : null;
+
+
+			if (keymodifier !== null) {
 
 				this.keymodifier = keymodifier;
 
@@ -764,7 +770,10 @@ lychee.define('Input').tags({
 
 		setTouch: function(touch) {
 
-			if (touch === true || touch === false) {
+			touch = typeof touch === 'boolean' ? touch : null;
+
+
+			if (touch !== null) {
 
 				this.touch = touch;
 
@@ -779,7 +788,10 @@ lychee.define('Input').tags({
 
 		setScroll: function(scroll) {
 
-			if (scroll === true || scroll === false) {
+			scroll = typeof scroll === 'boolean' ? scroll : null;
+
+
+			if (scroll !== null) {
 
 				this.scroll = scroll;
 
@@ -794,7 +806,10 @@ lychee.define('Input').tags({
 
 		setSwipe: function(swipe) {
 
-			if (swipe === true || swipe === false) {
+			swipe = typeof swipe === 'boolean' ? swipe : null;
+
+
+			if (swipe !== null) {
 
 				this.swipe = swipe;
 

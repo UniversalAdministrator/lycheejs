@@ -317,6 +317,10 @@ lychee.define('studio.state.Asset').includes([
 
 		enter: function(oncomplete, data) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+			data       = data instanceof Object         ? data       : null;
+
+
 			let project = this.main.project;
 			let select  = this.query('ui > asset > select');
 
@@ -348,7 +352,7 @@ lychee.define('studio.state.Asset').includes([
 			}
 
 
-			return _State.prototype.enter.call(this, oncomplete, data);
+			return _State.prototype.enter.call(this, oncomplete);
 
 		}
 

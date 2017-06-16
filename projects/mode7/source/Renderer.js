@@ -122,7 +122,12 @@ lychee.define('game.Renderer').includes([
 
 		renderEntity: function(entity, offsetX, offsetY) {
 
-			if (typeof entity.render === 'function') {
+			entity  = entity instanceof Object ? entity : null;
+			offsetX = offsetX | 0;
+			offsetY = offsetY | 0;
+
+
+			if (entity !== null && typeof entity.render === 'function') {
 
 				entity.render(
 					this,

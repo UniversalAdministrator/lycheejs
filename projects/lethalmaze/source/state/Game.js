@@ -839,6 +839,9 @@ lychee.define('game.state.Game').requires([
 
 		leave: function(oncomplete) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
+
 			this.query('game > terrain').setEntities([]);
 			this.query('game > objects').setEntities([]);
 

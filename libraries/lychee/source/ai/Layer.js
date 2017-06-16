@@ -551,7 +551,10 @@ lychee.define('lychee.ai.Layer').requires([
 
 		setPosition: function(position) {
 
-			if (position instanceof Object) {
+			position = position instanceof Object ? position : null;
+
+
+			if (position !== null) {
 
 				this.position.x = typeof position.x === 'number' ? position.x : this.position.x;
 				this.position.y = typeof position.y === 'number' ? position.y : this.position.y;

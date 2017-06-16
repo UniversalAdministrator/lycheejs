@@ -139,6 +139,10 @@ lychee.define('ranger.state.Profile').requires([
 
 		enter: function(oncomplete, data) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+			data       = data instanceof Object         ? data       : null;
+
+
 			let client = this.client;
 			if (client !== null) {
 
@@ -156,6 +160,9 @@ lychee.define('ranger.state.Profile').requires([
 		},
 
 		leave: function(oncomplete) {
+
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
 
 			let client = this.client;
 			if (client !== null) {

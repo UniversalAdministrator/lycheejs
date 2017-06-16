@@ -525,30 +525,37 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 		setState: function(id) {
 
-			let result = _Entity.prototype.setState.call(this, id);
-			if (result === true) {
-
-				let cursor = this.__cursor;
-				let pulse  = this.__pulse;
+			id = typeof id === 'string' ? id : null;
 
 
-				if (id === 'active') {
+			if (id !== null) {
 
-					cursor.start  = null;
-					cursor.active = true;
+				let result = _Entity.prototype.setState.call(this, id);
+				if (result === true) {
 
-					pulse.alpha   = 1.0;
-					pulse.start   = null;
-					pulse.active  = true;
+					let cursor = this.__cursor;
+					let pulse  = this.__pulse;
 
-				} else {
 
-					cursor.active = false;
+					if (id === 'active') {
+
+						cursor.start  = null;
+						cursor.active = true;
+
+						pulse.alpha   = 1.0;
+						pulse.start   = null;
+						pulse.active  = true;
+
+					} else {
+
+						cursor.active = false;
+
+					}
+
+
+					return true;
 
 				}
-
-
-				return true;
 
 			}
 
@@ -584,35 +591,37 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 		setValue: function(value) {
 
-			let type = this.type;
+			value = (typeof value === 'string' || typeof value === 'number') ? value : null;
 
 
-			// 0: Text
-			if (type === Composite.TYPE.text && typeof value === 'string') {
+			if (value !== null) {
 
-				if (this.value !== value && value.length >= this.min && value.length <= this.max) {
+				let type = this.type;
+				if (type === Composite.TYPE.text && typeof value === 'string') {
 
-					this.value = value;
+					if (this.value !== value && value.length >= this.min && value.length <= this.max) {
 
-					this.__value   = value + '';
-					this.__isDirty = true;
+						this.value = value;
 
-					return true;
+						this.__value   = value + '';
+						this.__isDirty = true;
 
-				}
+						return true;
 
+					}
 
-			// 1. Number
-			} else if (type === Composite.TYPE.number && typeof value === 'number' && !isNaN(value)) {
+				} else if (type === Composite.TYPE.number && typeof value === 'number' && !isNaN(value)) {
 
-				if (this.value !== value && value >= this.min && value <= this.max) {
+					if (this.value !== value && value >= this.min && value <= this.max) {
 
-					this.value = value;
+						this.value = value;
 
-					this.__value   = value + '';
-					this.__isDirty = true;
+						this.__value   = value + '';
+						this.__isDirty = true;
 
-					return true;
+						return true;
+
+					}
 
 				}
 

@@ -112,53 +112,68 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete, data) {
 
-			this.__track = new _Track({
-				id: data.track
-			});
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+			data       = data instanceof Object         ? data       : null;
 
 
-			if (this.__track.length === 0) {
-				this.leave();
-				return;
-			}
+			if (data !== null) {
+
+				this.__track = new _Track({
+					id: data.track
+				});
 
 
-			let wait   = 3; // in seconds
-			let renderer = this.renderer;
-			if (renderer !== null) {
+				if (this.__track.length === 0) {
 
-				let camera = this.camera;
-				// let width  = renderer.width;
-				let height = renderer.height;
+					this.leave();
 
-
-				camera.position.y = camera.offset + wait * 10 * height;
-
-
-				let start = null;
-
-				let handle = this.loop.setInterval(1000 / 60, function(clock, delta, step) {
-
-					if (start === null) start = clock;
-
-
-					let t = (clock - start) / (wait * 1000);
-					let y = camera.offset + (1 - (Math.pow(t - 1, 3) + 1)) * wait * 10 * height;
-					if (y < camera.offset) {
-
-						camera.position.y = camera.offset;
-						this.__autopilot  = true;
-						this.__offset     = camera.offset;
-
-						this.loop.removeInterval(handle);
-
-					} else {
-
-						camera.position.y = y;
-
+					if (oncomplete !== null) {
+						oncomplete(false);
 					}
 
-				}, this);
+					return false;
+
+				}
+
+
+				let wait   = 3; // in seconds
+				let renderer = this.renderer;
+				if (renderer !== null) {
+
+					let camera = this.camera;
+					// let width  = renderer.width;
+					let height = renderer.height;
+
+
+					camera.position.y = camera.offset + wait * 10 * height;
+
+
+					let start = null;
+
+					let handle = this.loop.setInterval(1000 / 60, function(clock, delta, step) {
+
+						if (start === null) start = clock;
+
+
+						let t = (clock - start) / (wait * 1000);
+						let y = camera.offset + (1 - (Math.pow(t - 1, 3) + 1)) * wait * 10 * height;
+						if (y < camera.offset) {
+
+							camera.position.y = camera.offset;
+							this.__autopilot  = true;
+							this.__offset     = camera.offset;
+
+							this.loop.removeInterval(handle);
+
+						} else {
+
+							camera.position.y = y;
+
+						}
+
+					}, this);
+
+				}
 
 			}
 
@@ -168,6 +183,9 @@ lychee.define('game.state.Game').requires([
 		},
 
 		leave: function(oncomplete) {
+
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
 
 			this.__autopilot = false;
 			this.__track     = null;

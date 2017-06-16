@@ -283,6 +283,7 @@ lychee.define('harvester.data.Filesystem').tags({
 		write: function(path, data, callback, scope) {
 
 			path     = typeof path === 'string'     ? path     : null;
+			data     = data !== undefined           ? data     : null;
 			callback = callback instanceof Function ? callback : null;
 			scope    = scope !== undefined          ? scope    : this;
 

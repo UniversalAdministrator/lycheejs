@@ -386,45 +386,52 @@ lychee.define('legacy.Renderer').tags({
 
 		renderComponent: function(x1, y1, entity, map, values) {
 
+			x1     = x1 | 0;
+			y1     = y1 | 0;
+			entity = entity instanceof Object ? entity : null;
 			map    = map instanceof Object    ? map    : {};
 			values = values instanceof Object ? values : null;
 
 
-			let element = null;
-			let index   = _CACHE.entities.indexOf(entity);
+			if (entity !== null) {
 
-			if (index !== -1) {
+				let element = null;
+				let index   = _CACHE.entities.indexOf(entity);
 
-				element = _CACHE.elements[index] || null;
+				if (index !== -1) {
 
-			} else {
+					element = _CACHE.elements[index] || null;
 
-				element = _render_element.call(this, entity, map);
+				} else {
 
-				_CACHE.elements.push(element);
-				_CACHE.entities.push(entity);
+					element = _render_element.call(this, entity, map);
 
-			}
+					_CACHE.elements.push(element);
+					_CACHE.entities.push(entity);
 
-
-			if (element !== null) {
-
-				if (values !== null && element._dynamic === true) {
-					element.innerHTML = element._template.replaceObject(values);
 				}
 
 
-				let tx = x1 + entity.position.x - entity.width  / 2;
-				let ty = y1 + entity.position.y - entity.height / 2;
+				if (element !== null) {
 
-				element.style.width     = entity.width  + 'px';
-				element.style.height    = entity.height + 'px';
-				element.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
-
-				element._garbage = false;
+					if (values !== null && element._dynamic === true) {
+						element.innerHTML = element._template.replaceObject(values);
+					}
 
 
-				return true;
+					let tx = x1 + entity.position.x - entity.width  / 2;
+					let ty = y1 + entity.position.y - entity.height / 2;
+
+					element.style.width     = entity.width  + 'px';
+					element.style.height    = entity.height + 'px';
+					element.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
+
+					element._garbage = false;
+
+
+					return true;
+
+				}
 
 			}
 

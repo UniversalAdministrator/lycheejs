@@ -358,25 +358,32 @@ lychee.define('lychee.ui.entity.List').includes([
 
 		setState: function(id) {
 
-			let result = _Entity.prototype.setState.call(this, id);
-			if (result === true) {
-
-				let cursor = this.__cursor;
+			id = typeof id === 'string' ? id : null;
 
 
-				if (id === 'active') {
+			if (id !== null) {
 
-					cursor.start  = null;
-					cursor.active = true;
+				let result = _Entity.prototype.setState.call(this, id);
+				if (result === true) {
 
-				} else {
+					let cursor = this.__cursor;
 
-					cursor.active = false;
+
+					if (id === 'active') {
+
+						cursor.start  = null;
+						cursor.active = true;
+
+					} else {
+
+						cursor.active = false;
+
+					}
+
+
+					return true;
 
 				}
-
-
-				return true;
 
 			}
 

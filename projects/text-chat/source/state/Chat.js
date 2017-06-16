@@ -329,6 +329,9 @@ lychee.define('app.state.Chat').requires([
 
 		enter: function(oncomplete) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
+
 			let service = this.client.getService('chat');
 			if (service !== null) {
 
@@ -347,6 +350,9 @@ lychee.define('app.state.Chat').requires([
 		},
 
 		leave: function(oncomplete) {
+
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
 
 			let service = this.client.getService('chat');
 			if (service !== null) {

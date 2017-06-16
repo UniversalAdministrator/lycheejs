@@ -377,30 +377,37 @@ lychee.define('lychee.ui.entity.Joystick').includes([
 
 		setState: function(id) {
 
-			let result = _Entity.prototype.setState.call(this, id);
-			if (result === true) {
-
-				let cursor = this.__cursor;
-				let pulse  = this.__pulse;
+			id = typeof id === 'string' ? id : null;
 
 
-				if (id === 'active') {
+			if (id !== null) {
 
-					cursor.start  = null;
-					cursor.active = true;
+				let result = _Entity.prototype.setState.call(this, id);
+				if (result === true) {
 
-					pulse.alpha   = 1.0;
-					pulse.start   = null;
-					pulse.active  = true;
+					let cursor = this.__cursor;
+					let pulse  = this.__pulse;
 
-				} else {
 
-					cursor.active = false;
+					if (id === 'active') {
+
+						cursor.start  = null;
+						cursor.active = true;
+
+						pulse.alpha   = 1.0;
+						pulse.start   = null;
+						pulse.active  = true;
+
+					} else {
+
+						cursor.active = false;
+
+					}
+
+
+					return true;
 
 				}
-
-
-				return true;
 
 			}
 
@@ -411,7 +418,10 @@ lychee.define('lychee.ui.entity.Joystick').includes([
 
 		setValue: function(value) {
 
-			if (value instanceof Object) {
+			value = value instanceof Object ? value : null;
+
+
+			if (value !== null) {
 
 				this.value.x = typeof value.x === 'number' ? value.x : this.value.x;
 				this.value.y = typeof value.y === 'number' ? value.y : this.value.y;
