@@ -374,11 +374,15 @@ lychee.define('lychee.app.Loop').includes([
 			this.__state = 1;
 			this.__start = Date.now();
 
+			return true;
+
 		},
 
 		stop: function() {
 
 			this.__state = 0;
+
+			return true;
 
 		},
 
@@ -387,6 +391,8 @@ lychee.define('lychee.app.Loop').includes([
 			this.__state = 0;
 			this.__pause = Date.now() - this.__start;
 
+			return true;
+
 		},
 
 		resume: function() {
@@ -394,6 +400,8 @@ lychee.define('lychee.app.Loop').includes([
 			this.__state = 1;
 			this.__start = Date.now() - this.__pause;
 			this.__pause = 0;
+
+			return true;
 
 		},
 

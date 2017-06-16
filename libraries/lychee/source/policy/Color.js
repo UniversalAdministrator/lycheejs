@@ -100,7 +100,12 @@ lychee.define('lychee.policy.Color').exports(function(lychee, global, attachment
 					(values[1] * 256) | 0
 				);
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

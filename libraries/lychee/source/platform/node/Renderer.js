@@ -130,6 +130,8 @@ lychee.define('Renderer').tags({
 
 		destroy: function() {
 
+			return true;
+
 		},
 
 
@@ -174,10 +176,17 @@ lychee.define('Renderer').tags({
 			if (alpha !== null) {
 
 				if (alpha >= 0 && alpha <= 1) {
+
 					this.alpha = alpha;
+
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		},
 
@@ -187,8 +196,15 @@ lychee.define('Renderer').tags({
 
 
 			if (color !== null) {
+
 				this.background = color;
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -198,8 +214,15 @@ lychee.define('Renderer').tags({
 
 
 			if (id !== null) {
+
 				this.id = id;
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -219,6 +242,9 @@ lychee.define('Renderer').tags({
 			this.__ctx = this.__buffer.__ctx;
 			this.offset.x = 0;
 
+
+			return true;
+
 		},
 
 		setHeight: function(height) {
@@ -236,6 +262,9 @@ lychee.define('Renderer').tags({
 			this.__buffer.resize(this.width, this.height);
 			this.__ctx = this.__buffer.__ctx;
 			this.offset.y = 0;
+
+
+			return true;
 
 		},
 
@@ -262,6 +291,9 @@ lychee.define('Renderer').tags({
 
 			}
 
+
+			return true;
+
 		},
 
 		flush: function() {
@@ -279,6 +311,8 @@ lychee.define('Renderer').tags({
 				_process.stdout.write(ctx[y].join('') + '\n');
 			}
 
+			return true;
+
 		},
 
 		createBuffer: function(width, height) {
@@ -295,6 +329,9 @@ lychee.define('Renderer').tags({
 			} else {
 				this.__ctx = this.__buffer.__ctx;
 			}
+
+
+			return true;
 
 		},
 
@@ -321,6 +358,9 @@ lychee.define('Renderer').tags({
 			// TODO: Implement arc-drawing ASCII art algorithm
 			// let ctx = this.__ctx;
 			// let pi2 = Math.PI * 2;
+
+
+			return false;
 
 		},
 
@@ -376,6 +416,9 @@ lychee.define('Renderer').tags({
 			for (y = y1 + 1; y < y2; y++) {
 				_draw_ctx.call(ctx, x, y, '|');
 			}
+
+
+			return true;
 
 		},
 
@@ -446,6 +489,9 @@ lychee.define('Renderer').tags({
 
 			}
 
+
+			return true;
+
 		},
 
 		drawCircle: function(x, y, radius, color, background, lineWidth) {
@@ -461,6 +507,9 @@ lychee.define('Renderer').tags({
 			// TODO: Implement circle-drawing ASCII art algorithm
 			// let ctx = this.__ctx;
 
+
+			return true;
+
 		},
 
 		drawLine: function(x1, y1, x2, y2, color, lineWidth) {
@@ -475,6 +524,9 @@ lychee.define('Renderer').tags({
 
 			// TODO: Implement line-drawing ASCII art algorithm
 			// let ctx = this.__ctx;
+
+
+			return false;
 
 		},
 
@@ -493,6 +545,9 @@ lychee.define('Renderer').tags({
 
 			// TODO: Implement triangle-drawing ASCII art algorithm
 			// let ctx = this.__ctx;
+
+
+			return false;
 
 		},
 
@@ -538,6 +593,9 @@ lychee.define('Renderer').tags({
 
 			// }
 
+
+			return false;
+
 		},
 
 		drawSprite: function(x1, y1, texture, map) {
@@ -558,6 +616,9 @@ lychee.define('Renderer').tags({
 				// }
 
 			}
+
+
+			return false;
 
 		},
 
@@ -605,9 +666,15 @@ lychee.define('Renderer').tags({
 
 					}
 
+
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		}
 

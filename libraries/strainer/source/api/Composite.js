@@ -343,6 +343,18 @@ lychee.define('strainer.api.Composite').requires([
 
 				if (values.length === 0) {
 
+					if (/^(render|update)$/g.test(mid) === false) {
+
+						errors.push({
+							ruleId:     'no-return-value',
+							methodName: mid,
+							fileName:   null,
+							message:    'Invalid return value for method "' + mid + '()".'
+						});
+
+					}
+
+
 					method.values.push({
 						type:  'undefined',
 						value: undefined

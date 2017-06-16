@@ -74,7 +74,12 @@ lychee.define('lychee.policy.Alpha').exports(function(lychee, global, attachment
 
 				entity.alpha = (values[0] * (hl * 2)) - hl;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

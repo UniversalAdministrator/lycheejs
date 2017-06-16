@@ -89,7 +89,12 @@ lychee.define('lychee.policy.Shake').exports(function(lychee, global, attachment
 				entity.shake.y = (values[1] * (hly * 2)) - hly;
 				entity.shake.z = (values[2] * (hlz * 2)) - hlz;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

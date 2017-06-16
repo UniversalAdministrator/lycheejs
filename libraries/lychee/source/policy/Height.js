@@ -74,7 +74,12 @@ lychee.define('lychee.policy.Height').exports(function(lychee, global, attachmen
 
 				entity.height = (values[0] * (hl * 2)) - hl;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

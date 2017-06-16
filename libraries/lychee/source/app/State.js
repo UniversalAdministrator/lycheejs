@@ -504,6 +504,9 @@ lychee.define('lychee.app.State').requires([
 				oncomplete(true);
 			}
 
+
+			return true;
+
 		},
 
 		leave: function(oncomplete) {
@@ -543,6 +546,9 @@ lychee.define('lychee.app.State').requires([
 			if (oncomplete !== null) {
 				oncomplete(true);
 			}
+
+
+			return true;
 
 		},
 

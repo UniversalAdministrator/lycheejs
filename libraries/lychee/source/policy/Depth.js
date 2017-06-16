@@ -74,7 +74,12 @@ lychee.define('lychee.policy.Depth').exports(function(lychee, global, attachment
 
 				entity.depth = (values[0] * (hl * 2)) - hl;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

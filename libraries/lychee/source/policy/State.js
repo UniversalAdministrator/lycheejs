@@ -75,12 +75,19 @@ lychee.define('lychee.policy.State').exports(function(lychee, global, attachment
 				if (index >= 0) {
 
 					if (typeof entity.setState === 'function') {
+
 						entity.setState(limit[index]);
+
+						return true;
+
 					}
 
 				}
 
 			}
+
+
+			return false;
 
 		}
 

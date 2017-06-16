@@ -76,7 +76,12 @@ lychee.define('lychee.policy.Sound').exports(function(lychee, global, attachment
 					sound.stop();
 				}
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

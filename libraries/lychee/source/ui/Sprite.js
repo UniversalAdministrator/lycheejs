@@ -8,6 +8,42 @@ lychee.define('lychee.ui.Sprite').includes([
 
 
 	/*
+	 * HELPERS
+	 */
+
+	const _start_animation = function(settings) {
+
+		let duration = typeof settings.duration === 'number' ? settings.duration : 1000;
+		let frame    = typeof settings.frame === 'number'    ? settings.frame    : 0;
+		let frames   = typeof settings.frames === 'number'   ? settings.frames   : 25;
+		let loop     = settings.loop === true;
+
+
+		let animation = this.__animation;
+
+		animation.start    = null;
+		animation.active   = true;
+		animation.duration = duration;
+		animation.frames   = frames;
+		animation.loop     = loop;
+
+		this.frame = frame;
+
+	};
+
+	const _stop_animation = function() {
+
+		let animation = this.__animation;
+
+		animation.active = false;
+
+		this.frame = 0;
+
+	};
+
+
+
+	/*
 	 * IMPLEMENTATION
 	 */
 
@@ -32,7 +68,6 @@ lychee.define('lychee.ui.Sprite').includes([
 		};
 
 
-		this.setAnimation(settings.animation);
 		this.setTexture(settings.texture);
 		this.setMap(settings.map);
 
@@ -60,6 +95,10 @@ lychee.define('lychee.ui.Sprite').includes([
 				this.setTexture(texture);
 			}
 
+			if (blob.animation instanceof Object) {
+				_start_animation.call(this, blob.animation);
+			}
+
 		},
 
 		serialize: function() {
@@ -70,17 +109,6 @@ lychee.define('lychee.ui.Sprite').includes([
 			let settings = data['arguments'][0];
 			let blob     = (data['blob'] || {});
 
-
-			if (this.__animation.active === true) {
-
-				settings.animation = {};
-
-				if (this.__animation.duration !== 1000) settings.animation.duration = this.__animation.duration;
-				if (this.frame !== 0)                   settings.animation.frame    = this.frame;
-				if (this.__animation.frames !== 25)     settings.animation.frames   = this.__animation.frames;
-				if (this.__animation.loop !== false)    settings.animation.loop     = this.__animation.loop;
-
-			}
 
 			if (Object.keys(this.__map).length > 0) {
 
@@ -116,6 +144,17 @@ lychee.define('lychee.ui.Sprite').includes([
 
 			}
 
+
+			if (this.__animation.active === true) {
+
+				blob.animation = {};
+
+				if (this.__animation.duration !== 1000) blob.animation.duration = this.__animation.duration;
+				if (this.frame !== 0)                   blob.animation.frame    = this.frame;
+				if (this.__animation.frames !== 25)     blob.animation.frames   = this.__animation.frames;
+				if (this.__animation.loop !== false)    blob.animation.loop     = this.__animation.loop;
+
+			}
 
 			if (this.texture !== null) blob.texture = lychee.serialize(this.texture);
 
@@ -194,8 +233,6 @@ lychee.define('lychee.ui.Sprite').includes([
 
 
 			let animation = this.__animation;
-
-			// 1. Animation (Interpolation)
 			if (animation.active === true) {
 
 				if (animation.start !== null) {
@@ -227,45 +264,6 @@ lychee.define('lychee.ui.Sprite').includes([
 		/*
 		 * CUSTOM API
 		 */
-
-		setAnimation: function(settings) {
-
-			settings = settings instanceof Object ? settings : null;
-
-
-			if (settings !== null) {
-
-				let duration = typeof settings.duration === 'number' ? settings.duration : 1000;
-				let frame    = typeof settings.frame === 'number'    ? settings.frame    : 0;
-				let frames   = typeof settings.frames === 'number'   ? settings.frames   : 25;
-				let loop     = settings.loop === true;
-
-
-				let animation = this.__animation;
-
-				animation.start    = null;
-				animation.active   = true;
-				animation.duration = duration;
-				animation.frames   = frames;
-				animation.loop     = loop;
-
-				this.frame = frame;
-
-				return true;
-
-			}
-
-
-			return false;
-
-		},
-
-		clearAnimation: function() {
-
-			this.__animation.active = false;
-			this.frame = 0;
-
-		},
 
 		setMap: function(map) {
 
@@ -331,11 +329,11 @@ lychee.define('lychee.ui.Sprite').includes([
 						let statemap = this.states[this.state] || null;
 						if (statemap !== null) {
 
-							this.clearAnimation();
+							_stop_animation.call(this);
 
 							if (statemap.animation === true) {
 
-								this.setAnimation({
+								_start_animation.call(this, {
 									duration: statemap.duration || 1000,
 									frame:    0,
 									frames:   map.length,

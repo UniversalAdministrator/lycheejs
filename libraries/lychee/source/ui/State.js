@@ -501,6 +501,9 @@ lychee.define('lychee.ui.State').requires([
 				_State.prototype.enter.call(this, oncomplete);
 			}, this);
 
+
+			return true;
+
 		},
 
 		leave: function(oncomplete) {
@@ -524,6 +527,9 @@ lychee.define('lychee.ui.State').requires([
 			this.loop.setTimeout(400, function() {
 				_State.prototype.leave.call(this, oncomplete);
 			}, this);
+
+
+			return true;
 
 		},
 

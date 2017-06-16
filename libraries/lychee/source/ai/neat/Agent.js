@@ -114,8 +114,10 @@ lychee.define('lychee.ai.neat.Agent').includes([
 
 				return zw0_agent;
 
-
 			}
+
+
+			return null;
 
 		},
 
@@ -157,6 +159,9 @@ lychee.define('lychee.ai.neat.Agent').includes([
 				// TODO: Find a disabled gene and enable it
 			}
 
+
+			return false;
+
 		},
 
 		reward: function(diff, training) {
@@ -168,8 +173,15 @@ lychee.define('lychee.ai.neat.Agent').includes([
 			this.fitness += diff;
 
 			if (training !== null) {
+
 				// XXX: No Reinforcement Learning
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -182,8 +194,15 @@ lychee.define('lychee.ai.neat.Agent').includes([
 			this.fitness -= diff;
 
 			if (training !== null) {
+
 				// XXX: No Reinforcement Learning
+
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

@@ -549,7 +549,13 @@ lychee.define('lychee.net.socket.WS').tags({
 
 				}
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -571,14 +577,20 @@ lychee.define('lychee.net.socket.WS').tags({
 					// let enc   = binary === true ? 'binary' : 'utf8';
 
 					if (chunk !== null) {
+
 						// XXX: nwjs has global scope problems
 						// XXX: Internal Buffer is not our global.Buffer interface
 						connection.write(_Buffer.from(chunk));
+
+						return true;
 					}
 
 				}
 
 			}
+
+
+			return false;
 
 		},
 

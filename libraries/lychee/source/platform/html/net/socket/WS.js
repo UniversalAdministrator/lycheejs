@@ -212,7 +212,13 @@ lychee.define('lychee.net.socket.WS').tags({
 
 				}
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -259,11 +265,17 @@ lychee.define('lychee.net.socket.WS').tags({
 
 						}
 
+
+						return true;
+
 					}
 
 				}
 
 			}
+
+
+			return false;
 
 		},
 

@@ -233,9 +233,14 @@ lychee.define('lychee.net.client.Debugger').includes([
 						event: 'error'
 					});
 
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		},
 
@@ -263,7 +268,6 @@ lychee.define('lychee.net.client.Debugger').includes([
 					event: 'define'
 				});
 
-
 				return true;
 
 			}
@@ -290,7 +294,6 @@ lychee.define('lychee.net.client.Debugger').includes([
 					event: 'execute'
 				});
 
-
 				return true;
 
 			}
@@ -316,7 +319,12 @@ lychee.define('lychee.net.client.Debugger').includes([
 					event: 'expose'
 				});
 
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -336,7 +344,12 @@ lychee.define('lychee.net.client.Debugger').includes([
 					event: 'snapshot'
 				});
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

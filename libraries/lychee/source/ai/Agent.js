@@ -162,7 +162,12 @@ lychee.define('lychee.ai.Agent').exports(function(lychee, global, attachments) {
 				this.trainings.push(training);
 				_train_brain.call(this);
 
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -181,7 +186,12 @@ lychee.define('lychee.ai.Agent').exports(function(lychee, global, attachments) {
 				this.trainings.push(training);
 				_train_brain.call(this);
 
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 

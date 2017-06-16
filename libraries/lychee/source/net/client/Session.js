@@ -148,7 +148,6 @@ lychee.define('lychee.net.client.Session').includes([
 						console.log('lychee.net.client.Session: Joining session "' + this.sid + '"');
 					}
 
-
 					this.tunnel.send({
 						autoadmin: this.autoadmin,
 						autolock:  this.autolock,
@@ -160,6 +159,8 @@ lychee.define('lychee.net.client.Session').includes([
 						id:    this.id,
 						event: 'join'
 					});
+
+					return true;
 
 				}
 
@@ -180,9 +181,14 @@ lychee.define('lychee.net.client.Session').includes([
 						event: 'start'
 					});
 
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		},
 
@@ -199,9 +205,14 @@ lychee.define('lychee.net.client.Session').includes([
 						event: 'stop'
 					});
 
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		},
 
@@ -215,7 +226,6 @@ lychee.define('lychee.net.client.Session').includes([
 						console.log('lychee.net.client.Session: Leaving session "' + this.sid + '"');
 					}
 
-
 					this.tunnel.send({
 						sid:   this.sid
 					}, {
@@ -223,9 +233,14 @@ lychee.define('lychee.net.client.Session').includes([
 						event: 'leave'
 					});
 
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		},
 

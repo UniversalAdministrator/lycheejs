@@ -346,9 +346,14 @@ lychee.define('lychee.net.Service').requires([
 						event: 'success'
 					});
 
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		},
 
@@ -371,9 +376,14 @@ lychee.define('lychee.net.Service').requires([
 						event: 'error'
 					});
 
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		},
 

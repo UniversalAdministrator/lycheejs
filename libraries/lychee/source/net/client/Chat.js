@@ -92,9 +92,14 @@ lychee.define('lychee.net.client.Chat').includes([
 						event: 'sync'
 					});
 
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		},
 
@@ -120,11 +125,16 @@ lychee.define('lychee.net.client.Chat').includes([
 							event: 'message'
 						});
 
+						return true;
+
 					}
 
 				}
 
 			}
+
+
+			return false;
 
 		},
 

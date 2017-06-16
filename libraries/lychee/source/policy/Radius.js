@@ -74,7 +74,12 @@ lychee.define('lychee.policy.Radius').exports(function(lychee, global, attachmen
 
 				entity.radius = (values[0] * (hl * 2)) - hl;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

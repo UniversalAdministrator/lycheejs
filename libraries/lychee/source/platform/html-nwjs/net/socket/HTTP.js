@@ -209,7 +209,13 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 				}
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -231,14 +237,21 @@ lychee.define('lychee.net.socket.HTTP').tags({
 					let enc   = binary === true ? 'binary' : 'utf8';
 
 					if (chunk !== null) {
+
 						// XXX: nwjs has global scope problems
 						// XXX: Internal Buffer is not our global.Buffer interface
 						connection.write(chunk.toString(enc), enc);
+
+						return true;
+
 					}
 
 				}
 
 			}
+
+
+			return false;
 
 		},
 

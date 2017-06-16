@@ -500,6 +500,9 @@ lychee.define('lychee.app.Main').requires([
 
 			flow.init();
 
+
+			return true;
+
 		},
 
 		destroy: function() {
@@ -545,6 +548,9 @@ lychee.define('lychee.app.Main').requires([
 				this.viewport.destroy();
 				this.viewport = null;
 			}
+
+
+			return true;
 
 		},
 

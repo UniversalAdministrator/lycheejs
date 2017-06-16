@@ -327,8 +327,15 @@ lychee.define('lychee.ai.neat.Brain').exports(function(lychee, global, attachmen
 
 
 			if (inputs !== null && outputs !== null) {
+
 				// TODO: Backpropagation
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 

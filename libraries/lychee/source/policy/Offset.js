@@ -85,7 +85,12 @@ lychee.define('lychee.policy.Offset').exports(function(lychee, global, attachmen
 				entity.offset.x = (values[0] * (hlx * 2)) - hlx;
 				entity.offset.y = (values[1] * (hly * 2)) - hly;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

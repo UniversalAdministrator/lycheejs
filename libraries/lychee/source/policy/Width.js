@@ -74,7 +74,12 @@ lychee.define('lychee.policy.Width').exports(function(lychee, global, attachment
 
 				entity.width = (values[0] * (hl * 2)) - hl;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

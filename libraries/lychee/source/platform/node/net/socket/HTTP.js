@@ -199,7 +199,13 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 				}
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -221,12 +227,18 @@ lychee.define('lychee.net.socket.HTTP').tags({
 					let enc   = binary === true ? 'binary' : 'utf8';
 
 					if (chunk !== null) {
+
 						connection.write(chunk, enc);
+
+						return true;
 					}
 
 				}
 
 			}
+
+
+			return false;
 
 		},
 

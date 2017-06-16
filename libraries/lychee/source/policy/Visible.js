@@ -75,7 +75,12 @@ lychee.define('lychee.policy.Visible').exports(function(lychee, global, attachme
 					entity.visible = false;
 				}
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

@@ -88,7 +88,12 @@ lychee.define('lychee.policy.Velocity').exports(function(lychee, global, attachm
 				entity.velocity.y = (values[1] * (hy * 2)) - hy;
 				entity.velocity.z = (values[2] * (hz * 2)) - hz;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

@@ -132,6 +132,9 @@ lychee.define('Renderer').tags({
 				canvas.parentNode.removeChild(canvas);
 			}
 
+
+			return true;
+
 		},
 
 
@@ -176,10 +179,17 @@ lychee.define('Renderer').tags({
 			if (alpha !== null) {
 
 				if (alpha >= 0 && alpha <= 1) {
+
 					this.alpha = alpha;
+
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		},
 
@@ -189,9 +199,16 @@ lychee.define('Renderer').tags({
 
 
 			if (color !== null) {
+
 				this.background = color;
 				this.__canvas.style.backgroundColor = color;
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -201,9 +218,16 @@ lychee.define('Renderer').tags({
 
 
 			if (id !== null) {
+
 				this.id = id;
 				this.__canvas.id = id;
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -223,6 +247,9 @@ lychee.define('Renderer').tags({
 			this.__canvas.style.width = this.width + 'px';
 			this.offset.x             = this.__canvas.getBoundingClientRect().left;
 
+
+			return true;
+
 		},
 
 		setHeight: function(height) {
@@ -240,6 +267,9 @@ lychee.define('Renderer').tags({
 			this.__canvas.height       = this.height;
 			this.__canvas.style.height = this.height + 'px';
 			this.offset.y              = this.__canvas.getBoundingClientRect().top;
+
+
+			return true;
 
 		},
 
@@ -267,9 +297,14 @@ lychee.define('Renderer').tags({
 
 			}
 
+
+			return true;
+
 		},
 
 		flush: function() {
+
+			return true;
 
 		},
 
@@ -287,6 +322,9 @@ lychee.define('Renderer').tags({
 			} else {
 				this.__ctx = this.__canvas.getContext('2d');
 			}
+
+
+			return true;
 
 		},
 
@@ -335,6 +373,9 @@ lychee.define('Renderer').tags({
 
 			ctx.closePath();
 
+
+			return true;
+
 		},
 
 		drawBox: function(x1, y1, x2, y2, color, background, lineWidth) {
@@ -361,6 +402,9 @@ lychee.define('Renderer').tags({
 				ctx.fillStyle   = color;
 				ctx.fillRect(x1, y1, x2 - x1, y2 - y1);
 			}
+
+
+			return true;
 
 		},
 
@@ -464,6 +508,9 @@ lychee.define('Renderer').tags({
 
 			}
 
+
+			return true;
+
 		},
 
 		drawCircle: function(x, y, radius, color, background, lineWidth) {
@@ -502,6 +549,9 @@ lychee.define('Renderer').tags({
 
 			ctx.closePath();
 
+
+			return true;
+
 		},
 
 		drawLine: function(x1, y1, x2, y2, color, lineWidth) {
@@ -527,6 +577,9 @@ lychee.define('Renderer').tags({
 			ctx.stroke();
 
 			ctx.closePath();
+
+
+			return true;
 
 		},
 
@@ -563,6 +616,9 @@ lychee.define('Renderer').tags({
 			}
 
 			ctx.closePath();
+
+
+			return true;
 
 		},
 
@@ -630,7 +686,13 @@ lychee.define('Renderer').tags({
 
 				ctx.closePath();
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -732,7 +794,13 @@ lychee.define('Renderer').tags({
 
 				}
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -788,9 +856,15 @@ lychee.define('Renderer').tags({
 
 					}
 
+
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		}
 
