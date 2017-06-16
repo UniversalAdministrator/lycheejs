@@ -741,11 +741,14 @@ lychee.define('strainer.api.PARSER').requires([
 				return Module.detect(chunk);
 			}).filter(function(val) {
 
-				if (val.type === 'undefined' && val.chunk.startsWith('_') === false) {
-					return false;
+				let chunk = val.chunk;
+				let type  = val.type;
+
+				if (type !== 'undefined' || chunk.startsWith('_') || chunk.startsWith('this.')) {
+					return true;
 				}
 
-				return true;
+				return false;
 
 			}).forEach(function(val) {
 				mutations.push(val);
@@ -808,7 +811,7 @@ lychee.define('strainer.api.PARSER').requires([
 
 					}
 
-				} else if (type !== 'undefined') {
+				} else if (type !== 'undefined' || chunk.startsWith('_') || chunk.startsWith('this.')) {
 
 					candidates.push({
 						chunk: chunk,

@@ -169,6 +169,9 @@ lychee.define('app.ui.layer.Overlay').requires([
 
 			}
 
+
+			return true;
+
 		}
 
 	};

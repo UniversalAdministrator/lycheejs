@@ -170,6 +170,8 @@ lychee.define('strainer.Main').requires([
 
 			this.trigger('load');
 
+			return true;
+
 		},
 
 		destroy: function(code) {
@@ -178,6 +180,8 @@ lychee.define('strainer.Main').requires([
 
 
 			this.trigger('destroy', [ code ]);
+
+			return true;
 
 		}
 

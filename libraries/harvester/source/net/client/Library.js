@@ -64,17 +64,24 @@ lychee.define('harvester.net.client.Library').includes([
 		 * CUSTOM API
 		 */
 
-		sync: function(data) {
+		sync: function() {
 
 			let tunnel = this.tunnel;
 			if (tunnel !== null) {
 
-				tunnel.send({}, {
+				let result = tunnel.send({}, {
 					id:     this.id,
 					method: 'index'
 				});
 
+				if (result === true) {
+					return true;
+				}
+
 			}
+
+
+			return false;
 
 		}
 

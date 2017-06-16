@@ -152,22 +152,29 @@ lychee.define('harvester.net.remote.Profile').requires([
 		 * CUSTOM API
 		 */
 
-		index: function(data) {
+		index: function() {
 
 			let tunnel = this.tunnel;
 			if (tunnel !== null) {
 
-				tunnel.send(Object.values(_CACHE).map(_serialize), {
+				let result = tunnel.send(Object.values(_CACHE).map(_serialize), {
 					id:    this.id,
 					event: 'sync'
 				});
 
+				if (result === true) {
+					return true;
+				}
+
 			}
+
+
+			return false;
 
 		},
 
 		sync: function() {
-			this.index();
+			return this.index();
 		}
 
 	};

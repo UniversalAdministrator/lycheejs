@@ -158,15 +158,27 @@ lychee.define('game.app.entity.Background').includes([
 
 		setOrigin: function(origin) {
 
-			this.origin.bgx = origin.bgx;
-			this.origin.bgy = origin.bgy;
-			this.origin.fgx = origin.fgx;
-			this.origin.fgy = origin.fgy;
+			origin = origin instanceof Object ? origin : null;
 
-			this.origin.bgx %= 1024;
-			this.origin.fgx %= 1024;
 
-			this.__isDirty = true;
+			if (origin !== null) {
+
+				this.origin.bgx = typeof origin.bgx === 'number' ? origin.bgx : this.origin.bgx;
+				this.origin.bgy = typeof origin.bgy === 'number' ? origin.bgy : this.origin.bgy;
+				this.origin.fgx = typeof origin.fgx === 'number' ? origin.fgx : this.origin.fgx;
+				this.origin.fgy = typeof origin.fgy === 'number' ? origin.fgy : this.origin.fgy;
+
+				this.origin.bgx %= 1024;
+				this.origin.fgx %= 1024;
+
+				this.__isDirty = true;
+
+				return true;
+
+			}
+
+
+			return false;
 
 		}
 

@@ -66,7 +66,7 @@ lychee.define('game.state.Game').requires(
 			// TODO: data is level identifier
 
 
-			_State.prototype.enter.call(this, oncomplete);
+			return _State.prototype.enter.call(this, oncomplete);
 
 		},
 
@@ -75,7 +75,7 @@ lychee.define('game.state.Game').requires(
 			oncomplete = oncomplete instanceof Function ? oncomplete : null;
 
 
-			_State.prototype.leave.call(this, oncomplete);
+			return _State.prototype.leave.call(this, oncomplete);
 
 		}
 

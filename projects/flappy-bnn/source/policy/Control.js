@@ -86,12 +86,19 @@ lychee.define('game.policy.Control').exports(function(lychee, global, attachment
 				if (val > 0.5) {
 
 					if (typeof entity.flap === 'function') {
+
 						entity.flap();
+
+						return true;
+
 					}
 
 				}
 
 			}
+
+
+			return false;
 
 		}
 

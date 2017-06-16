@@ -200,9 +200,15 @@ lychee.define('harvester.mod.Strainer').tags({
 						project: id
 					});
 
+
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		}
 

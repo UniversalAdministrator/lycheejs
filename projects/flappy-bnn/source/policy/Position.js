@@ -86,7 +86,12 @@ lychee.define('game.policy.Position').exports(function(lychee, global, attachmen
 
 				entity.position.y = (values[0] * (hly * 2)) - hly;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

@@ -135,7 +135,7 @@ lychee.define('harvester.net.remote.Harvester').requires([
 		 * CUSTOM API
 		 */
 
-		index: function(data) {
+		index: function() {
 
 			let main   = global.MAIN || null;
 			let tunnel = this.tunnel;
@@ -146,17 +146,24 @@ lychee.define('harvester.net.remote.Harvester').requires([
 					return true;
 				});
 
-				tunnel.send(harvesters, {
+				let result = tunnel.send(harvesters, {
 					id:    this.id,
 					event: 'sync'
 				});
 
+				if (result === true) {
+					return true;
+				}
+
 			}
+
+
+			return false;
 
 		},
 
 		sync: function() {
-			this.index();
+			return this.index();
 		}
 
 	};

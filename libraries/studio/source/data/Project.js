@@ -344,6 +344,9 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 			}
 
+
+			return true;
+
 		},
 
 		getAssets: function() {

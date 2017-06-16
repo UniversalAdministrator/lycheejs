@@ -280,6 +280,9 @@ lychee.define('game.state.Game').requires([
 				oncomplete(true);
 			}
 
+
+			return true;
+
 		},
 
 		leave: function(oncomplete) {
@@ -293,6 +296,9 @@ lychee.define('game.state.Game').requires([
 			if (oncomplete !== null) {
 				oncomplete(true);
 			}
+
+
+			return true;
 
 		},
 

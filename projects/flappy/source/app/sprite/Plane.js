@@ -75,7 +75,13 @@ lychee.define('game.app.sprite.Plane').includes([
 				this.__canflap  = false;
 				this.__timeout  = null;
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 

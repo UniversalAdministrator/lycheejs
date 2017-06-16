@@ -189,11 +189,17 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 						});
 
+
+						return true;
+
 					}
 
 				}
 
 			}
+
+
+			return false;
 
 		}
 

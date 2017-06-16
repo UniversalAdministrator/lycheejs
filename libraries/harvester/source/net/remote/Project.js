@@ -153,24 +153,28 @@ lychee.define('harvester.net.remote.Project').requires([
 		 * CUSTOM API
 		 */
 
-		index: function(data) {
+		index: function() {
 
 			let main   = global.MAIN || null;
 			let tunnel = this.tunnel;
 
 			if (main !== null && tunnel !== null) {
 
-				tunnel.send(Object.values(main._projects).map(_serialize), {
+				let result = tunnel.send(Object.values(main._projects).map(_serialize), {
 					id:    this.id,
 					event: 'sync'
 				});
+
+				if (result === true) {
+					return true;
+				}
 
 			}
 
 		},
 
 		sync: function() {
-			this.index();
+			return this.index();
 		}
 
 	};

@@ -329,9 +329,6 @@ lychee.define('app.state.Chat').requires([
 
 		enter: function(oncomplete) {
 
-			_State.prototype.enter.call(this, oncomplete);
-
-
 			let service = this.client.getService('chat');
 			if (service !== null) {
 
@@ -344,6 +341,9 @@ lychee.define('app.state.Chat').requires([
 
 			}
 
+
+			return _State.prototype.enter.call(this, oncomplete);
+
 		},
 
 		leave: function(oncomplete) {
@@ -354,7 +354,7 @@ lychee.define('app.state.Chat').requires([
 			}
 
 
-			_State.prototype.leave.call(this, oncomplete);
+			return _State.prototype.leave.call(this, oncomplete);
 
 		}
 

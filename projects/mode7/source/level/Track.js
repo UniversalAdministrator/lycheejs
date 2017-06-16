@@ -13,6 +13,84 @@ lychee.define('game.level.Track').exports(function(lychee, global, attachments) 
 	 * HELPERS
 	 */
 
+	const _add_route = function(length, curve, element, fromY, toY) {
+
+		fromY = fromY || 0;
+		toY   = toY   || 0;
+
+		let c = 0;
+		if (curve !== 0) {
+			c = ((curve / 90) * 100 / length) | 0;
+		}
+
+
+		let callback = null;
+		if (element !== null) {
+			callback = Composite.ELEMENTS[element] || null;
+		}
+
+
+		let curviness = 0;
+		let lastY     = fromY;
+		let currentY  = 0;
+
+		for (let s = 0; s < length; s++) {
+
+			let rotation = this.__rotation + (curve / length);
+
+			if (callback !== null) {
+				currentY = callback.call(this, (s + 1) / length, fromY, toY) | 0;
+			}
+
+
+			_add_route_segment.call(
+				this,
+				curviness,
+				rotation,
+				lastY,
+				currentY
+			);
+
+			curviness += c;
+			lastY = currentY;
+
+			this.__rotation = rotation;
+
+		}
+
+	};
+
+	const _add_route_segment = function(curviness, rotation, lastY, currentY) {
+
+		curviness = typeof curviness === 'number' ? curviness : 0;
+		rotation  = typeof rotation === 'number'  ? rotation  : 0;
+		lastY     = typeof lastY === 'number'     ? lastY     : 0;
+		currentY  = typeof currentY === 'number'  ? currentY  : lastY;
+
+
+		let z       = this.length;
+		let palette = this.__palette[((z / 3) | 0) % this.__palette.length];
+
+
+		this.__segments.push({
+			index:     z         | 0,
+			rotation:  rotation  | 0,
+			curviness: curviness | 0,
+			from: {
+				y: lastY,
+				z: z * 200
+			},
+			to: {
+				y: currentY,
+				z: (z + 1) * 200
+			},
+			palette: palette
+		});
+
+		this.length++;
+
+	};
+
 	const _parse_track = function(data) {
 
 		for (let p = 0, pl = data.palette.length; p < pl; p++) {
@@ -45,27 +123,27 @@ lychee.define('game.level.Track').exports(function(lychee, global, attachments) 
 			switch (type) {
 
 				case "straight":
-					this.addRoute(length,   0, element, lastaltitude, altitude);
+					_add_route.call(this, length,   0, element, lastaltitude, altitude);
 					lastaltitude = altitude;
 					break;
 
 				case "left-45":
-					this.addRoute(length, -45, element, lastaltitude, altitude);
+					_add_route.call(this, length, -45, element, lastaltitude, altitude);
 					lastaltitude = altitude;
 					break;
 
 				case "left-90":
-					this.addRoute(length, -90, element, lastaltitude, altitude);
+					_add_route.call(this, length, -90, element, lastaltitude, altitude);
 					lastaltitude = altitude;
 					break;
 
 				case "right-45":
-					this.addRoute(length,  45, element, lastaltitude, altitude);
+					_add_route.call(this, length,  45, element, lastaltitude, altitude);
 					lastaltitude = altitude;
 					break;
 
 				case "right-90":
-					this.addRoute(length,  90, element, lastaltitude, altitude);
+					_add_route.call(this, length,  90, element, lastaltitude, altitude);
 					lastaltitude = altitude;
 					break;
 
@@ -324,84 +402,10 @@ lychee.define('game.level.Track').exports(function(lychee, global, attachments) 
 
 		},
 
-		addRoute: function(length, curve, element, fromY, toY) {
-
-			fromY = fromY || 0;
-			toY   = toY || 0;
-
-			let c = 0;
-			if (curve !== 0) {
-				c = ((curve / 90) * 100 / length) | 0;
-			}
-
-
-			let callback = null;
-			if (element !== null) {
-				callback = Composite.ELEMENTS[element] || null;
-			}
-
-
-			let curviness = 0;
-			let lastY     = fromY;
-			let currentY  = 0;
-
-			for (let s = 0; s < length; s++) {
-
-				let rotation = this.__rotation + (curve / length);
-
-				if (callback !== null) {
-					currentY = callback.call(this, (s + 1) / length, fromY, toY) | 0;
-				}
-
-
-				this.addRouteSegment(
-					curviness,
-					rotation,
-					lastY,
-					currentY
-				);
-
-				curviness += c;
-				lastY = currentY;
-
-				this.__rotation = rotation;
-
-			}
-
-		},
-
-		addRouteSegment: function(curviness, rotation, lastY, currentY) {
-
-			curviness = typeof curviness === 'number' ? curviness : 0;
-			rotation  = typeof rotation === 'number'  ? rotation  : 0;
-			lastY     = typeof lastY === 'number'     ? lastY     : 0;
-			currentY  = typeof currentY === 'number'  ? currentY  : lastY;
-
-
-			let z       = this.length;
-			let palette = this.__palette[((z / 3) | 0) % this.__palette.length];
-
-
-			this.__segments.push({
-				index:     z         | 0,
-				rotation:  rotation  | 0,
-				curviness: curviness | 0,
-				from: {
-					y: lastY,
-					z: z * 200
-				},
-				to: {
-					y: currentY,
-					z: (z + 1) * 200
-				},
-				palette: palette
-			});
-
-			this.length++;
-
-		},
-
 		getSegment: function(position) {
+
+			position = typeof position === 'number' ? position : 0;
+
 
 			let length  = this.__segments.length;
 			let z       = ((position / 200) | 0) % (length | 0);

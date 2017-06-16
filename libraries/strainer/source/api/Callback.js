@@ -11,13 +11,16 @@ lychee.define('strainer.api.Callback').requires([
 	 * HELPERS
 	 */
 
-	const _get_memory = function(from, to, stream) {
+	const _find_memory = function(key, stream) {
 
-		let i1 = stream.indexOf(from);
-		let i2 = stream.indexOf(to, i1);
+		let str1 = 'const ' + key + ' = ';
+		let str2 = '\n\t};';
+
+		let i1 = stream.indexOf(str1);
+		let i2 = stream.indexOf(str2, i1);
 
 		if (i1 !== -1 && i2 !== -1) {
-			return stream.substr(i1 + from.length, i2 - i1 - from.length + to.length);
+			return stream.substr(i1 + str1.length, i2 - i1 - str1.length + str2.length).trim();
 		}
 
 		return 'undefined';
@@ -52,7 +55,7 @@ lychee.define('strainer.api.Callback').requires([
 
 								if (chunk.startsWith('function(')) {
 
-									chunk = _get_memory('const ' + key + ' = ', '\n\t};', stream).trim();
+									chunk = _find_memory(key, stream);
 
 									if (chunk.endsWith(';')) {
 										chunk = chunk.substr(0, chunk.length - 1);

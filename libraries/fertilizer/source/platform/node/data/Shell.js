@@ -140,7 +140,13 @@ lychee.define('fertilizer.data.Shell').tags({
 
 				}
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -187,6 +193,9 @@ lychee.define('fertilizer.data.Shell').tags({
 				console.log('');
 
 			});
+
+
+			return true;
 
 		}
 

@@ -64,23 +64,33 @@ lychee.define('harvester.net.client.Profile').includes([
 		 * CUSTOM API
 		 */
 
-		sync: function(data) {
+		sync: function() {
 
 			let tunnel = this.tunnel;
 			if (tunnel !== null) {
 
-				tunnel.send({}, {
+				let result = tunnel.send({}, {
 					id:     this.id,
 					method: 'index'
 				});
 
+				if (result === true) {
+					return true;
+				}
+
 			}
+
+
+			return false;
 
 		},
 
 		save: function(data) {
 
-			if (data instanceof Object) {
+			data = data instanceof Object ? data : null;
+
+
+			if (data !== null) {
 
 				let profile = {
 					identifier: typeof data.identifier === 'string' ? data.identifier : null,
@@ -93,14 +103,21 @@ lychee.define('harvester.net.client.Profile').includes([
 				let tunnel = this.tunnel;
 				if (tunnel !== null && profile.identifier !== null && profile.host !== null && profile.port !== null) {
 
-					tunnel.send(profile, {
+					let result = tunnel.send(profile, {
 						id:    this.id,
 						event: 'save'
 					});
 
+					if (result === true) {
+						return true;
+					}
+
 				}
 
 			}
+
+
+			return false;
 
 		}
 

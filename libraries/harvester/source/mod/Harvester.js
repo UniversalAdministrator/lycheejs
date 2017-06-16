@@ -136,10 +136,16 @@ lychee.define('harvester.mod.Harvester').requires([
 
 							let result = _git.checkout(report.branch, id);
 							if (result === true) {
+
 								console.info('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
+
 							} else {
+
 								console.error('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
+
 							}
+
+							return result;
 
 						}
 
@@ -148,6 +154,9 @@ lychee.define('harvester.mod.Harvester').requires([
 				}
 
 			}
+
+
+			return false;
 
 		}
 

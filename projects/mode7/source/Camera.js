@@ -54,7 +54,12 @@ lychee.define('game.Camera').exports(function(lychee, global, attachments) {
 
 				this.offset = (width / height) * this.__ratio * height + 16;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

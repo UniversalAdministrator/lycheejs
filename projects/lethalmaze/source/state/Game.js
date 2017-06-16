@@ -681,10 +681,8 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete, data) {
 
-			data = data instanceof Object ? data : { level: 'intro' };
-
-
-			_State.prototype.enter.call(this, oncomplete);
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+			data       = data instanceof Object         ? data       : { level: 'intro' };
 
 
 			let level = _LEVEL.decode(_LEVELS[data.level] || null) || null;
@@ -829,6 +827,14 @@ lychee.define('game.state.Game').requires([
 				jukebox.play(_MUSIC);
 			}
 
+
+			if (oncomplete !== null) {
+				oncomplete(true);
+			}
+
+
+			return true;
+
 		},
 
 		leave: function(oncomplete) {
@@ -885,7 +891,7 @@ lychee.define('game.state.Game').requires([
 			}
 
 
-			_State.prototype.leave.call(this, oncomplete);
+			return _State.prototype.leave.call(this, oncomplete);
 
 		}
 

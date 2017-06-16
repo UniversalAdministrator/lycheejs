@@ -21,7 +21,7 @@ lychee.define('ranger.state.Welcome').requires([
 	 * HELPERS
 	 */
 
-	let _on_sync = function(projects) {
+	const _on_sync = function(projects) {
 
 		let dialog = this.query('ui > welcome > dialog');
 		let status = this.query('ui > welcome > status');
@@ -225,7 +225,7 @@ lychee.define('ranger.state.Welcome').requires([
 			}
 
 
-			_State.prototype.enter.call(this, oncomplete, data);
+			return _State.prototype.enter.call(this, oncomplete, data);
 
 		},
 
@@ -242,7 +242,7 @@ lychee.define('ranger.state.Welcome').requires([
 			}
 
 
-			_State.prototype.leave.call(this, oncomplete);
+			return _State.prototype.leave.call(this, oncomplete);
 
 		}
 

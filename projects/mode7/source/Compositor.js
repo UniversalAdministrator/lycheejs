@@ -56,12 +56,27 @@ lychee.define('game.Compositor').exports(function(lychee, global, attachments) {
 				this.__width  = renderer.width;
 				this.__height = renderer.height;
 
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
 		getPoint: function(index) {
-			return this.__points[index];
+
+			index = typeof index === 'number' ? index : null;
+
+
+			if (index !== null) {
+				return this.__points[index] || null;
+			}
+
+
+			return null;
+
 		},
 
 		project: function(target, point, x, y, z, depth) {
@@ -82,6 +97,9 @@ lychee.define('game.Compositor').exports(function(lychee, global, attachments) {
 			//                           road width (!)
 			//                            \/\/\/\/\/\/
 			target.w = Math.round(scale * 1.5 * hwidth * hwidth);
+
+
+			return true;
 
 		}
 

@@ -77,12 +77,19 @@ lychee.define('harvester.net.client.Harvester').includes([
 
 			if (main !== null && tunnel !== null) {
 
-				tunnel.send(_serialize(main), {
+				let result = tunnel.send(_serialize(main), {
 					id:    this.id,
 					event: 'connect'
 				});
 
+				if (result === true) {
+					return true;
+				}
+
 			}
+
+
+			return false;
 
 		},
 
@@ -93,14 +100,21 @@ lychee.define('harvester.net.client.Harvester').includes([
 
 			if (main !== null && tunnel !== null) {
 
-				tunnel.send({
+				let result = tunnel.send({
 					id: _ID
 				}, {
 					id:    this.id,
 					event: 'disconnect'
 				});
 
+				if (result === true) {
+					return true;
+				}
+
 			}
+
+
+			return false;
 
 		}
 

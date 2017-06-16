@@ -93,7 +93,12 @@ lychee.define('game.policy.Paddle').exports(function(lychee, global, attachments
 					z: (values[2] * (hz * 2)) - hz
 				});
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

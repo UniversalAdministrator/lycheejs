@@ -112,9 +112,6 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete, data) {
 
-			_State.prototype.enter.call(this, oncomplete);
-
-
 			this.__track = new _Track({
 				id: data.track
 			});
@@ -165,6 +162,9 @@ lychee.define('game.state.Game').requires([
 
 			}
 
+
+			return _State.prototype.enter.call(this, oncomplete);
+
 		},
 
 		leave: function(oncomplete) {
@@ -173,15 +173,35 @@ lychee.define('game.state.Game').requires([
 			this.__track     = null;
 
 
-			_State.prototype.leave.call(this, oncomplete);
+			return _State.prototype.leave.call(this, oncomplete);
+
+		},
+
+		render: function(clock, delta) {
+
+			let renderer = this.renderer;
+			if (renderer !== null) {
+
+				renderer.clear();
+
+				let bgx = renderer.width / 2;
+				let bgy = this.__background.height / 2;
+				renderer.renderEntity(this.__background, bgx, bgy);
+
+				renderer.renderEntity(this.__track,      0, 0);
+
+				this.__logo.render(renderer, 0, 0);
+
+				renderer.flush();
+
+			}
 
 		},
 
 		update: function(clock, delta) {
 
-			let camera = this.camera;
-			let position = camera.position;
-
+			let camera     = this.camera;
+			let position   = camera.position;
 			let background = this.__background;
 			let origin     = this.__origin;
 			let track      = this.__track;
@@ -219,27 +239,6 @@ lychee.define('game.state.Game').requires([
 
 
 			background.setOrigin(origin);
-
-		},
-
-		render: function(clock, delta) {
-
-			let renderer = this.renderer;
-			if (renderer !== null) {
-
-				renderer.clear();
-
-				let bgx = renderer.width / 2;
-				let bgy = this.__background.height / 2;
-				renderer.renderEntity(this.__background, bgx, bgy);
-
-				renderer.renderEntity(this.__track,      0, 0);
-
-				this.__logo.render(renderer, 0, 0);
-
-				renderer.flush();
-
-			}
 
 		}
 

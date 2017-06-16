@@ -315,13 +315,13 @@ lychee.define('game.state.Game').requires([
 			_reset_game.call(this, null);
 
 
-			_State.prototype.enter.call(this, oncomplete);
+			return _State.prototype.enter.call(this, oncomplete);
 
 		},
 
 		leave: function(oncomplete) {
 
-			_State.prototype.leave.call(this, oncomplete);
+			return _State.prototype.leave.call(this, oncomplete);
 
 		},
 

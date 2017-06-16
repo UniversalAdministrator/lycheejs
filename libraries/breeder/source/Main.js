@@ -142,6 +142,8 @@ lychee.define('breeder.Main').requires([
 
 			this.trigger('load');
 
+			return true;
+
 		},
 
 		destroy: function(code) {
@@ -150,6 +152,8 @@ lychee.define('breeder.Main').requires([
 
 
 			this.trigger('destroy', [ code ]);
+
+			return true;
 
 		}
 

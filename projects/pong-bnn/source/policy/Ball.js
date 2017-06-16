@@ -78,7 +78,11 @@ lychee.define('game.policy.Ball').exports(function(lychee, global, attachments) 
 		},
 
 		control: function(values) {
+
 			// XXX: Do nothing
+
+			return false;
+
 		}
 
 	};

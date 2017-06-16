@@ -132,7 +132,12 @@ lychee.define('game.Renderer').includes([
 					this.compositor
 				);
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

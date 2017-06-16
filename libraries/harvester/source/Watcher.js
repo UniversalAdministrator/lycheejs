@@ -347,6 +347,9 @@ lychee.define('harvester.Watcher').requires([
 
 			}
 
+
+			return true;
+
 		},
 
 		update: function() {

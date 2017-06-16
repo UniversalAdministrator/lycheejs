@@ -240,7 +240,7 @@ lychee.define('studio.state.Project').includes([
 			}
 
 
-			_State.prototype.enter.call(this, oncomplete, data);
+			return _State.prototype.enter.call(this, oncomplete, data);
 
 		}
 

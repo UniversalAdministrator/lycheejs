@@ -86,6 +86,8 @@ lychee.define('game.app.sprite.Tank').requires([
 
 			_id--;
 
+			return true;
+
 		},
 
 		serialize: function() {

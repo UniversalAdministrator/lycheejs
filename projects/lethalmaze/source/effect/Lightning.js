@@ -92,7 +92,7 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 		this.delay    = typeof settings.delay === 'number'           ? (settings.delay | 0)    : 0;
 		this.duration = typeof settings.duration === 'number'        ? (settings.duration | 0) : 250;
 
-		if (settings.position !== null) {
+		if (settings.position instanceof Object) {
 			this.position.x = typeof settings.position.x === 'number' ? (settings.position.x | 0) : null;
 			this.position.y = typeof settings.position.y === 'number' ? (settings.position.y | 0) : null;
 		}

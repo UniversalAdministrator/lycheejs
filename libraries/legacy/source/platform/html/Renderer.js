@@ -240,6 +240,8 @@ lychee.define('legacy.Renderer').tags({
 				foreground.parentNode.removeChild(foreground);
 			}
 
+			return true;
+
 		},
 
 
@@ -272,9 +274,16 @@ lychee.define('legacy.Renderer').tags({
 
 
 			if (color !== null) {
+
 				this.background = color;
 				this.__background.style.backgroundColor = color;
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -289,6 +298,9 @@ lychee.define('legacy.Renderer').tags({
 			this.__foreground.style.width = this.width + 'px';
 			this.__background.style.width = this.width + 'px';
 
+
+			return true;
+
 		},
 
 		setHeight: function(height) {
@@ -302,7 +314,16 @@ lychee.define('legacy.Renderer').tags({
 			this.__foreground.style.height = this.height + 'px';
 			this.__background.style.height = this.height + 'px';
 
+
+			return true;
+
 		},
+
+
+
+		/*
+		 * BUFFER INTEGRATION
+		 */
 
 		clear: function(buffer) {
 
@@ -326,6 +347,9 @@ lychee.define('legacy.Renderer').tags({
 
 			}
 
+
+			return true;
+
 		},
 
 		flush: function() {
@@ -348,6 +372,9 @@ lychee.define('legacy.Renderer').tags({
 				}
 
 			}
+
+
+			return true;
 
 		},
 
@@ -396,7 +423,13 @@ lychee.define('legacy.Renderer').tags({
 
 				element._garbage = false;
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 

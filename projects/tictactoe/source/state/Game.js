@@ -253,9 +253,6 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete) {
 
-			_State.prototype.enter.call(this, oncomplete);
-
-
 			this.__player   = 'x';
 			this.__scores.x = 0;
 			this.__scores.o = 0;
@@ -276,6 +273,9 @@ lychee.define('game.state.Game').requires([
 				score.setValue('0 : 0');
 			}
 
+
+			return _State.prototype.enter.call(this, oncomplete);
+
 		},
 
 		leave: function(oncomplete) {
@@ -283,7 +283,7 @@ lychee.define('game.state.Game').requires([
 			this.jukebox.stop(_MUSIC);
 
 
-			_State.prototype.leave.call(this, oncomplete);
+			return _State.prototype.leave.call(this, oncomplete);
 
 		}
 

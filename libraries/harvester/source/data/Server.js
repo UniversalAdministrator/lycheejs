@@ -67,6 +67,9 @@ lychee.define('harvester.data.Server').exports(function(lychee, global, attachme
 			this.host = null;
 			this.port = null;
 
+
+			return true;
+
 		}
 
 	};

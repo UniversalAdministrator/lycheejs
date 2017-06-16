@@ -246,6 +246,8 @@ lychee.define('harvester.Main').requires([
 			this.trigger('load');
 			this.trigger('init');
 
+			return true;
+
 		},
 
 		destroy: function() {
@@ -281,6 +283,8 @@ lychee.define('harvester.Main').requires([
 
 
 			this.trigger('destroy');
+
+			return true;
 
 		},
 

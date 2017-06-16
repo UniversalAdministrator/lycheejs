@@ -148,7 +148,7 @@ lychee.define('ranger.state.Console').requires([
 			}
 
 
-			_State.prototype.enter.call(this, oncomplete, data);
+			return _State.prototype.enter.call(this, oncomplete, data);
 
 		},
 
@@ -165,7 +165,7 @@ lychee.define('ranger.state.Console').requires([
 			}
 
 
-			_State.prototype.leave.call(this, oncomplete);
+			return _State.prototype.leave.call(this, oncomplete);
 
 		}
 

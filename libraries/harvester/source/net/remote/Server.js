@@ -129,85 +129,113 @@ lychee.define('harvester.net.remote.Server').includes([
 
 		index: function(data) {
 
-			let host   = data['@host'] || null;
-			let main   = global.MAIN   || null;
-			let tunnel = this.tunnel;
+			data = data instanceof Object ? data : null;
 
-			if (host !== null) {
 
-				if (host.endsWith(':4848')) {
-					host = host.substr(0, host.length - 5);
+			if (data !== null) {
+
+				let host   = data['@host'] || null;
+				let main   = global.MAIN   || null;
+				let tunnel = this.tunnel;
+
+				if (host !== null) {
+
+					if (host.endsWith(':4848')) {
+						host = host.substr(0, host.length - 5);
+					}
+
+				}
+
+				if (main !== null && tunnel !== null) {
+
+					let all       = [];
+					let projects  = Object.values(main._projects);
+					let libraries = Object.values(main._libraries);
+
+					for (let p = 0, pl = projects.length; p < pl; p++) {
+						all.push(projects[p]);
+					}
+
+					for (let l = 0, ll = libraries.length; l < ll; l++) {
+						all.push(libraries[l]);
+					}
+
+
+					all.forEach(function(project) {
+						project.host = project.host !== 'localhost' ? project.host : host;
+					});
+
+
+					let result = tunnel.send(all.map(_serialize), {
+						id:    this.id,
+						event: 'sync'
+					});
+
+					if (result === true) {
+						return true;
+					}
+
 				}
 
 			}
 
-			if (main !== null && tunnel !== null) {
 
-				let all       = [];
-				let projects  = Object.values(main._projects);
-				let libraries = Object.values(main._libraries);
-
-				for (let p = 0, pl = projects.length; p < pl; p++) {
-					all.push(projects[p]);
-				}
-
-				for (let l = 0, ll = libraries.length; l < ll; l++) {
-					all.push(libraries[l]);
-				}
-
-
-				all.forEach(function(project) {
-					project.host = project.host !== 'localhost' ? project.host : host;
-				});
-
-
-				tunnel.send(all.map(_serialize), {
-					id:    this.id,
-					event: 'sync'
-				});
-
-			}
+			return false;
 
 		},
 
 		connect: function(data) {
 
-			let host       = data['@host']   || null;
-			let identifier = data.identifier || null;
-			let main       = global.MAIN     || null;
-			let tunnel     = this.tunnel;
+			data = data instanceof Object ? data : null;
 
-			if (host !== null) {
 
-				if (host.endsWith(':4848')) {
-					host = host.substr(0, host.length - 5);
+			if (data !== null) {
+
+				let host       = data['@host']   || null;
+				let identifier = data.identifier || null;
+				let main       = global.MAIN     || null;
+				let tunnel     = this.tunnel;
+
+				if (host !== null) {
+
+					if (host.endsWith(':4848')) {
+						host = host.substr(0, host.length - 5);
+					}
+
 				}
 
-			}
+				if (identifier !== null && main !== null && tunnel !== null) {
 
-			if (identifier !== null && main !== null && tunnel !== null) {
+					let project = _serialize(main._libraries[identifier] || main._projects[identifier]);
+					if (project !== null) {
 
-				let project = _serialize(main._libraries[identifier] || main._projects[identifier]);
-				if (project !== null) {
+						project.host = project.host !== 'localhost' ? project.host : host;
 
-					project.host = project.host !== 'localhost' ? project.host : host;
+						let result = tunnel.send(project, {
+							id:    this.id,
+							event: 'connect'
+						});
 
-					tunnel.send(project, {
-						id:    this.id,
-						event: 'connect'
-					});
+						if (result === true) {
+							return result;
+						}
+
+					} else {
+
+						this.reject('No Server ("' + identifier + '")');
+
+					}
 
 				} else {
 
-					this.reject('No Server ("' + identifier + '")');
+					this.reject('No Identifier');
 
 				}
 
-			} else {
-
-				this.reject('No Identifier');
-
 			}
+
+
+			return false;
 
 		}
 

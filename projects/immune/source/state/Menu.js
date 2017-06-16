@@ -262,7 +262,7 @@ lychee.define('game.state.Menu').requires([
 			}
 
 
-			_State.prototype.enter.call(this, oncomplete);
+			return _State.prototype.enter.call(this, oncomplete);
 
 		},
 
@@ -277,7 +277,7 @@ lychee.define('game.state.Menu').requires([
 			}
 
 
-			_State.prototype.leave.call(this, oncomplete);
+			return _State.prototype.leave.call(this, oncomplete);
 
 		}
 

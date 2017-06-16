@@ -351,27 +351,21 @@ lychee.define('app.state.App').requires([
 
 		},
 
-		render: function(clock, delta) {
-
-			_State.prototype.render.call(this, clock, delta);
-
-		},
-
 		enter: function(oncomplete, data) {
-
-			_State.prototype.enter.call(this, oncomplete, data);
 
 			this.jukebox.play(_MUSIC);
 
-			oncomplete(true);
+
+			return _State.prototype.enter.call(this, oncomplete, data);
 
 		},
 
 		leave: function(oncomplete) {
 
-			_State.prototype.leave.call(this, oncomplete);
-
 			this.jukebox.stop(_MUSIC);
+
+
+			return _State.prototype.leave.call(this, oncomplete);
 
 		}
 

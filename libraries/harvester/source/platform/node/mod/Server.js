@@ -366,9 +366,15 @@ lychee.define('harvester.mod.Server').tags({
 
 					}, this);
 
+
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		}
 
