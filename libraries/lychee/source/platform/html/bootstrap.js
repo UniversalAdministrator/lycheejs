@@ -151,6 +151,96 @@
 	let    _std_out = '';
 	let    _std_err = '';
 
+	const _INDENT         = '    ';
+	const _args_to_string = function(args) {
+
+		let output = [];
+
+		for (let a = 0, al = args.length; a < al; a++) {
+
+			let value = args[a];
+			let o     = 0;
+
+			if (value instanceof Object) {
+
+				let tmp = [];
+
+				try {
+
+					let cache = [];
+
+					tmp = JSON.stringify(value, function(key, value) {
+
+						if (value instanceof Object) {
+
+							if (cache.indexOf(value) === -1) {
+								cache.push(value);
+								return value;
+							} else {
+								return undefined;
+							}
+
+						} else {
+							return value;
+						}
+
+					}, _INDENT).split('\n');
+
+				} catch (err) {
+				}
+
+				if (tmp.length > 1) {
+
+					for (let t = 0, tl = tmp.length; t < tl; t++) {
+						output.push(tmp[t]);
+					}
+
+					o = output.length - 1;
+
+				} else {
+
+					let chunk = output[o];
+					if (chunk === undefined) {
+						output[o] = tmp[0].trim();
+					} else {
+						output[o] = (chunk + ' ' + tmp[0]).trim();
+					}
+
+				}
+
+			} else if (typeof value === 'string' && value.includes('\n')) {
+
+				let tmp = value.split('\n');
+
+				for (let t = 0, tl = tmp.length; t < tl; t++) {
+					output.push(tmp[t]);
+				}
+
+				o = output.length - 1;
+
+			} else {
+
+				let chunk = output[o];
+				if (chunk === undefined) {
+					output[o] = ('' + value).replace(/\t/g, _INDENT).trim();
+				} else {
+					output[o] = (chunk + (' ' + value).replace(/\t/g, _INDENT)).trim();
+				}
+
+			}
+
+		}
+
+
+		let ol = output.length;
+		if (ol > 1) {
+			return output.join('\n');
+		} else {
+			return output[0];
+		}
+
+	};
+
 
 	console.clear = function() {
 		_clear.call(console);
@@ -164,7 +254,8 @@
 			args.push(arguments[a]);
 		}
 
-		_std_out += args.join('\t') + '\n';
+		_std_out += _args_to_string(args) + '\n';
+
 		_log.apply(console, args);
 
 	};
@@ -177,7 +268,8 @@
 			args.push(arguments[a]);
 		}
 
-		_std_out += args.join('\t') + '\n';
+		_std_out += _args_to_string(args) + '\n';
+
 		_info.apply(console, args);
 
 	};
@@ -190,7 +282,8 @@
 			args.push(arguments[a]);
 		}
 
-		_std_out += args.join('\t') + '\n';
+		_std_out += _args_to_string(args) + '\n';
+
 		_warn.apply(console, args);
 
 	};
@@ -203,7 +296,8 @@
 			args.push(arguments[a]);
 		}
 
-		_std_err += args.join('\t') + '\n';
+		_std_err += _args_to_string(args) + '\n';
+
 		_error.apply(console, args);
 
 	};

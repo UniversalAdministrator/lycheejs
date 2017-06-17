@@ -84,6 +84,9 @@
 	const _WHITESPACE     = new Array(512).fill(' ').join('');
 	const _args_to_string = function(args, offset) {
 
+		offset = typeof offset === 'number' ? offset : null;
+
+
 		let output  = [];
 		let columns = process.stdout.columns;
 
@@ -166,29 +169,43 @@
 		let ol = output.length;
 		if (ol > 1) {
 
-			for (let o = 0; o < ol; o++) {
+			if (offset !== null) {
 
-				let line = output[o];
-				let maxl = (o === 0 || o === ol - 1) ? (columns - offset) : columns;
-				if (line.length > maxl) {
-					output[o] = line.substr(0, maxl);
-				} else {
-					output[o] = line + _WHITESPACE.substr(0, maxl - line.length);
+				for (let o = 0; o < ol; o++) {
+
+					let line = output[o];
+					let maxl = (o === 0 || o === ol - 1) ? (columns - offset) : columns;
+					if (line.length > maxl) {
+						output[o] = line.substr(0, maxl);
+					} else {
+						output[o] = line + _WHITESPACE.substr(0, maxl - line.length);
+					}
+
 				}
 
 			}
+
 
 			return output.join('\n');
 
 		} else {
 
-			let line = output[0];
-			let maxl = columns - offset * 2;
-			if (line.length > maxl) {
-				return line.substr(0, maxl);
-			} else {
-				return line + _WHITESPACE.substr(0, maxl - line.length);
+			if (offset !== null) {
+
+				let line = output[0];
+				let maxl = columns - offset * 2;
+				if (line.length > maxl) {
+					line = line.substr(0, maxl);
+				} else {
+					line = line + _WHITESPACE.substr(0, maxl - line.length);
+				}
+
+				return line;
+
 			}
+
+
+			return output[0];
 
 		}
 
@@ -215,7 +232,7 @@
 			args.push(arguments[a]);
 		}
 
-		_std_out += _args_to_string(args, 1) + '\n';
+		_std_out += _args_to_string(args) + '\n';
 
 		process.stdout.write('\u001b[49m\u001b[97m ' + _args_to_string(args, 1) + ' \u001b[39m\u001b[49m\u001b[0m\n');
 
@@ -229,7 +246,7 @@
 			args.push(arguments[a]);
 		}
 
-		_std_out += _args_to_string(args, 1) + '\n';
+		_std_out += _args_to_string(args) + '\n';
 
 		process.stdout.write('\u001b[42m\u001b[97m ' + _args_to_string(args, 1) + ' \u001b[39m\u001b[49m\u001b[0m\n');
 
@@ -243,7 +260,7 @@
 			args.push(arguments[a]);
 		}
 
-		_std_out += _args_to_string(args, 1) + '\n';
+		_std_out += _args_to_string(args) + '\n';
 
 		process.stdout.write('\u001b[43m\u001b[97m ' + _args_to_string(args, 1) + ' \u001b[39m\u001b[49m\u001b[0m\n');
 
@@ -257,7 +274,7 @@
 			args.push(arguments[a]);
 		}
 
-		_std_err += _args_to_string(args, 1) + '\n';
+		_std_err += _args_to_string(args) + '\n';
 
 		process.stderr.write('\u001b[41m\u001b[97m ' + _args_to_string(args, 1) + ' \u001b[39m\u001b[49m\u001b[0m\n');
 
