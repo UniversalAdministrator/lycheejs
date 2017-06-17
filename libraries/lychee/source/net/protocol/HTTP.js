@@ -321,9 +321,12 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(type) {
+	let Composite = function(data) {
 
-		this.type = lychee.enumof(Composite.TYPE, type) ? type : null;
+		let settings = Object.assign({}, data);
+
+
+		this.type = lychee.enumof(Composite.TYPE, settings.type) ? settings.type : null;
 
 		this.__buffer   = new Buffer(0);
 		this.__isClosed = false;
@@ -336,6 +339,8 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 			}
 
 		}
+
+		settings = null;
 
 	};
 

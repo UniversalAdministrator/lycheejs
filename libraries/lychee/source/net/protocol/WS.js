@@ -415,9 +415,12 @@ lychee.define('lychee.net.protocol.WS').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(type) {
+	let Composite = function(data) {
 
-		this.type = lychee.enumof(Composite.TYPE, type) ? type : null;
+		let settings = Object.assign({}, data);
+
+
+		this.type = lychee.enumof(Composite.TYPE, settings.type) ? settings.type : null;
 
 		this.__buffer   = new Buffer(0);
 		this.__fragment = { operator: 0x00, payload: new Buffer(0) };
@@ -431,6 +434,8 @@ lychee.define('lychee.net.protocol.WS').requires([
 			}
 
 		}
+
+		settings = null;
 
 	};
 
