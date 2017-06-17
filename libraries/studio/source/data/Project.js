@@ -351,17 +351,37 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 		getAssets: function() {
 
-			return _package_files(this.config.buffer).filter(function(val) {
-				return val.substr(-3) !== '.js';
-			});
+			let filtered = [];
+			let files    = _package_files(this.config.buffer);
+
+			for (let f = 0, fl = files.length; f < fl; f++) {
+
+				let file = files[f];
+				if (file.substr(-3) !== '.js') {
+					filtered.push(file);
+				}
+
+			}
+
+			return filtered;
 
 		},
 
 		getEntities: function() {
 
-			return _package_files(this.config.buffer).filter(function(val) {
-				return val.substr(-3) === '.js';
-			});
+			let filtered = [];
+			let files    = _package_files(this.config.buffer);
+
+			for (let f = 0, fl = files.length; f < fl; f++) {
+
+				let file = files[f];
+				if (file.substr(-3) === '.js') {
+					filtered.push(file);
+				}
+
+			}
+
+			return filtered;
 
 		},
 

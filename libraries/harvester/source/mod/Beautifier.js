@@ -133,7 +133,12 @@ lychee.define('harvester.mod.Beautifier').requires([
 
 				}
 
+				return true;
+
 			}
+
+
+			return false;
 
 		}
 
