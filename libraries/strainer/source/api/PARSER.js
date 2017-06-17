@@ -513,6 +513,9 @@ lychee.define('strainer.api.PARSER').requires([
 
 		enum: function(code) {
 
+			code = typeof code === 'string' ? code : '';
+
+
 			let enam  = { name: undefined };
 			let lines = code.split('\n');
 			let first = lines[0].trim();
@@ -591,6 +594,9 @@ lychee.define('strainer.api.PARSER').requires([
 
 		hash: function(code) {
 
+			code = typeof code === 'string' ? code : '';
+
+
 			let hash = new _MURMUR();
 
 			hash.update(code);
@@ -600,6 +606,9 @@ lychee.define('strainer.api.PARSER').requires([
 		},
 
 		parameters: function(code) {
+
+			code = typeof code === 'string' ? code : '';
+
 
 			let parameters = [];
 			let lines      = code.split('\n');
@@ -691,6 +700,9 @@ lychee.define('strainer.api.PARSER').requires([
 
 		settings: function(code) {
 
+			code = typeof code === 'string' ? code : '';
+
+
 			let settings = {};
 			let lines    = code.split('\n');
 			let first    = lines[0].trim();
@@ -740,6 +752,10 @@ lychee.define('strainer.api.PARSER').requires([
 		},
 
 		mutations: function(name, code) {
+
+			name = typeof name === 'string' ? name : 'undefined_variable';
+			code = typeof code === 'string' ? code : '';
+
 
 			let mutations = [];
 			let lines     = code.split('\n');
@@ -807,6 +823,9 @@ lychee.define('strainer.api.PARSER').requires([
 		},
 
 		values: function(code) {
+
+			code = typeof code === 'string' ? code : '';
+
 
 			let candidates = [];
 			let values     = [];

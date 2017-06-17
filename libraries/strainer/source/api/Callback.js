@@ -11,6 +11,16 @@ lychee.define('strainer.api.Callback').requires([
 	 * HELPERS
 	 */
 
+	const _validate_asset = function(asset) {
+
+		if (asset instanceof Object && typeof asset.serialize === 'function') {
+			return true;
+		}
+
+		return false;
+
+	};
+
 	const _find_memory = function(key, stream) {
 
 		let str1 = 'const ' + key + ' = ';
@@ -128,7 +138,9 @@ lychee.define('strainer.api.Callback').requires([
 
 		check: function(asset) {
 
-			let stream = asset.buffer.toString('utf8');
+			asset = _validate_asset(asset) === true ? asset : null;
+
+
 			let errors = [];
 			let memory = {};
 			let result = {
@@ -140,9 +152,14 @@ lychee.define('strainer.api.Callback').requires([
 				methods:     {}
 			};
 
+			if (asset !== null) {
 
-			_parse_memory(memory, stream, errors);
-			_parse_constructor(result.constructor, stream, errors);
+				let stream = asset.buffer.toString('utf8');
+
+				_parse_memory(memory, stream, errors);
+				_parse_constructor(result.constructor, stream, errors);
+
+			}
 
 
 			return {

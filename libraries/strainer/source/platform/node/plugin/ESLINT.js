@@ -278,6 +278,22 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 
 	/*
+	 * HELPERS
+	 */
+
+	const _validate_asset = function(asset) {
+
+		if (asset instanceof Object && typeof asset.serialize === 'function') {
+			return true;
+		}
+
+		return false;
+
+	};
+
+
+
+	/*
 	 * IMPLEMENTATION
 	 */
 
@@ -296,15 +312,22 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 		check: function(asset) {
 
-			if (_escli !== null && _eslint !== null) {
-
-				let url    = asset.url;
-				let config = _escli.getConfigForFile(lychee.ROOT.lychee + url);
-				let source = asset.buffer.toString('utf8');
-				let report = _eslint.linter.verify(source, config);
+			asset = _validate_asset(asset) === true ? asset : null;
 
 
-				return report;
+			if (asset !== null) {
+
+				if (_escli !== null && _eslint !== null) {
+
+					let url    = asset.url;
+					let config = _escli.getConfigForFile(lychee.ROOT.lychee + url);
+					let source = asset.buffer.toString('utf8');
+					let report = _eslint.linter.verify(source, config);
+
+
+					return report;
+
+				}
 
 			}
 

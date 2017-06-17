@@ -37,6 +37,22 @@ lychee.define('strainer.plugin.API').requires([
 
 
 	/*
+	 * HELPERS
+	 */
+
+	const _validate_asset = function(asset) {
+
+		if (asset instanceof Object && typeof asset.serialize === 'function') {
+			return true;
+		}
+
+		return false;
+
+	};
+
+
+
+	/*
 	 * IMPLEMENTATION
 	 */
 
@@ -55,62 +71,69 @@ lychee.define('strainer.plugin.API').requires([
 
 		check: function(asset) {
 
-			let header = null;
-			let report = null;
-			let api    = null;
-			let stream = asset.buffer.toString('utf8');
+			asset = _validate_asset(asset) === true ? asset : null;
 
 
-			let is_definition = stream.trim().startsWith('lychee.define(');
-			let is_callback   = stream.lastIndexOf('return Callback;')  > 0;
-			let is_composite  = stream.lastIndexOf('return Composite;') > 0;
-			let is_module     = stream.lastIndexOf('return Module;')    > 0;
+			if (asset !== null) {
+
+				let header = null;
+				let report = null;
+				let api    = null;
+				let stream = asset.buffer.toString('utf8');
 
 
-			// XXX: Well, yeah. Above algorithm will crash itself
-			if (asset.url === '/libraries/strainer/source/plugin/API.js') {
-				is_callback  = false;
-				is_composite = false;
-				is_module    = true;
-			}
+				let is_definition = stream.trim().startsWith('lychee.define(');
+				let is_callback   = stream.lastIndexOf('return Callback;')  > 0;
+				let is_composite  = stream.lastIndexOf('return Composite;') > 0;
+				let is_module     = stream.lastIndexOf('return Module;')    > 0;
 
 
-			if (is_callback === true) {
-				api = _api['Callback'] || null;
-			} else if (is_composite === true) {
-				api = _api['Composite'] || null;
-			} else if (is_module === true) {
-				api = _api['Module'] || null;
-			}
+				// XXX: Well, yeah. Above algorithm will crash itself
+				if (asset.url === '/libraries/strainer/source/plugin/API.js') {
+					is_callback  = false;
+					is_composite = false;
+					is_module    = true;
+				}
 
 
-			if (is_definition === true) {
-				header = _api['Definition'].check(asset);
-			}
+				if (is_callback === true) {
+					api = _api['Callback'] || null;
+				} else if (is_composite === true) {
+					api = _api['Composite'] || null;
+				} else if (is_module === true) {
+					api = _api['Module'] || null;
+				}
 
 
-			if (api !== null) {
-				report = api.check(asset);
-			}
+				if (is_definition === true) {
+					header = _api['Definition'].check(asset);
+				}
 
 
-			if (header !== null && report !== null) {
+				if (api !== null) {
+					report = api.check(asset);
+				}
 
-				return {
-					header: header.result,
-					memory: report.memory,
-					errors: report.errors,
-					result: report.result
-				};
 
-			} else if (report !== null) {
+				if (header !== null && report !== null) {
 
-				return {
-					header: null,
-					memory: report.memory,
-					errors: report.errors,
-					result: report.result
-				};
+					return {
+						header: header.result,
+						memory: report.memory,
+						errors: report.errors,
+						result: report.result
+					};
+
+				} else if (report !== null) {
+
+					return {
+						header: null,
+						memory: report.memory,
+						errors: report.errors,
+						result: report.result
+					};
+
+				}
 
 			}
 
@@ -121,12 +144,13 @@ lychee.define('strainer.plugin.API').requires([
 
 		fix: function(asset, report) {
 
-			report = report instanceof Object ? report : null;
+			asset  = _validate_asset(asset) === true ? asset  : null;
+			report = report instanceof Object        ? report : null;
 
 
 			let filtered = [];
 
-			if (report !== null) {
+			if (asset !== null && report !== null) {
 
 				let url = asset.url;
 

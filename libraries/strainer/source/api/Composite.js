@@ -45,6 +45,16 @@ lychee.define('strainer.api.Composite').requires([
 	 * HELPERS
 	 */
 
+	const _validate_asset = function(asset) {
+
+		if (asset instanceof Object && typeof asset.serialize === 'function') {
+			return true;
+		}
+
+		return false;
+
+	};
+
 	const _find_memory = function(key, stream) {
 
 		let str1 = 'const ' + key + ' = ';
@@ -438,7 +448,9 @@ lychee.define('strainer.api.Composite').requires([
 
 		check: function(asset) {
 
-			let stream = asset.buffer.toString('utf8');
+			asset = _validate_asset(asset) === true ? asset : null;
+
+
 			let errors = [];
 			let memory = {};
 			let result = {
@@ -450,95 +462,100 @@ lychee.define('strainer.api.Composite').requires([
 				methods:     {}
 			};
 
+			if (asset !== null) {
 
-			_parse_memory(memory, stream, errors);
-			_parse_constructor(result.constructor, stream, errors);
-			_parse_settings(result.settings, stream, errors);
-			_parse_properties(result.properties, stream, errors);
-			_parse_enums(result.enums, stream, errors);
-			_parse_methods(result.methods, stream, errors);
+				let stream = asset.buffer.toString('utf8');
+
+				_parse_memory(memory, stream, errors);
+				_parse_constructor(result.constructor, stream, errors);
+				_parse_settings(result.settings, stream, errors);
+				_parse_properties(result.properties, stream, errors);
+				_parse_enums(result.enums, stream, errors);
+				_parse_methods(result.methods, stream, errors);
 
 
-			if (result.constructor.parameters.length === 1) {
+				if (result.constructor.parameters.length === 1) {
 
-				let check = result.constructor.parameters[0];
-				if (check.name === 'data' || check.name === 'settings') {
+					let check = result.constructor.parameters[0];
+					if (check.name === 'data' || check.name === 'settings') {
 
-					check.type = 'Object';
+						check.type = 'Object';
 
-				} else if (/^(main|client|remote|server)$/g.test(check.name) === false) {
+					} else if (/^(main|client|remote|server)$/g.test(check.name) === false) {
 
-					errors.push({
-						ruleId:     'no-composite',
-						methodName: 'constructor',
-						fileName:   null,
-						message:    'Composite has no "settings" object.'
-					});
+						errors.push({
+							ruleId:     'no-composite',
+							methodName: 'constructor',
+							fileName:   null,
+							message:    'Composite has no "settings" object.'
+						});
+
+					}
 
 				}
 
-			}
 
+				for (let p in result.properties) {
 
-			for (let p in result.properties) {
+					let property = result.properties[p];
+					if (property.type === 'undefined') {
 
-				let property = result.properties[p];
-				if (property.type === 'undefined') {
+						let method = result.methods['set' + p.charAt(0).toUpperCase() + p.substr(1)] || null;
+						if (method !== null) {
 
-					let method = result.methods['set' + p.charAt(0).toUpperCase() + p.substr(1)] || null;
-					if (method !== null) {
+							let found = method.parameters.find(function(val) {
+								return p === val.name;
+							});
 
-						let found = method.parameters.find(function(val) {
-							return p === val.name;
-						});
+							if (found !== undefined && found.type !== 'undefined') {
+								property.type = found.type;
+							}
 
-						if (found !== undefined && found.type !== 'undefined') {
-							property.type = found.type;
 						}
 
 					}
 
 				}
 
-			}
+
+				for (let p in result.properties) {
+
+					let property = result.properties[p];
+					if (property.type === 'undefined' && property.value === undefined) {
+
+						errors.push({
+							ruleId:       'no-property-value',
+							propertyName: p,
+							fileName:     null,
+							message:      'Unguessable property "' + p + '".'
+						});
+
+					}
+
+				}
 
 
-			for (let p in result.properties) {
-
-				let property = result.properties[p];
-				if (property.type === 'undefined' && property.value === undefined) {
+				if (result.methods['serialize'] === undefined) {
 
 					errors.push({
-						ruleId:       'no-property-value',
-						propertyName: p,
-						fileName:     null,
-						message:      'Unguessable property "' + p + '".'
+						ruleId:     'no-serialize',
+						methodName: 'serialize',
+						fileName:   null,
+						message:    'No "serialize()" method.'
 					});
 
 				}
 
-			}
+				if (result.methods['deserialize'] === undefined) {
 
+					errors.push({
+						ruleId:     'no-deserialize',
+						methodName: 'deserialize',
+						fileName:   null,
+						message:    'No "deserialize()" method.'
+					});
 
-			if (result.methods['serialize'] === undefined) {
-
-				errors.push({
-					ruleId:     'no-serialize',
-					methodName: 'serialize',
-					fileName:   null,
-					message:    'No "serialize()" method.'
-				});
-
-			}
-
-			if (result.methods['deserialize'] === undefined) {
-
-				errors.push({
-					ruleId:     'no-deserialize',
-					methodName: 'deserialize',
-					fileName:   null,
-					message:    'No "deserialize()" method.'
-				});
+				}
 
 			}
 

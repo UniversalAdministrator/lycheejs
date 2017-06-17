@@ -45,6 +45,16 @@ lychee.define('strainer.api.Module').requires([
 	 * HELPERS
 	 */
 
+	const _validate_asset = function(asset) {
+
+		if (asset instanceof Object && typeof asset.serialize === 'function') {
+			return true;
+		}
+
+		return false;
+
+	};
+
 	const _find_memory = function(key, stream) {
 
 		let str1 = 'const ' + key + ' = ';
@@ -286,7 +296,9 @@ lychee.define('strainer.api.Module').requires([
 
 		check: function(asset) {
 
-			let stream = asset.buffer.toString('utf8');
+			asset = _validate_asset(asset) === true ? asset : null;
+
+
 			let errors = [];
 			let memory = {};
 			let result = {
@@ -298,30 +310,35 @@ lychee.define('strainer.api.Module').requires([
 				methods:     {}
 			};
 
+			if (asset !== null) {
 
-			_parse_memory(memory, stream, errors);
-			_parse_methods(result.methods, stream, errors);
+				let stream = asset.buffer.toString('utf8');
+
+				_parse_memory(memory, stream, errors);
+				_parse_methods(result.methods, stream, errors);
 
 
-			if (result.methods['serialize'] === undefined) {
+				if (result.methods['serialize'] === undefined) {
 
-				errors.push({
-					ruleId:     'no-serialize',
-					methodName: 'serialize',
-					fileName:   null,
-					message:    'No "serialize()" method.'
-				});
+					errors.push({
+						ruleId:     'no-serialize',
+						methodName: 'serialize',
+						fileName:   null,
+						message:    'No "serialize()" method.'
+					});
 
-			}
+				}
 
-			if (result.methods['deserialize'] === undefined) {
+				if (result.methods['deserialize'] === undefined) {
 
-				errors.push({
-					ruleId:     'no-deserialize',
-					methodName: 'deserialize',
-					fileName:   null,
-					message:    'No "deserialize()" method.'
-				});
+					errors.push({
+						ruleId:     'no-deserialize',
+						methodName: 'deserialize',
+						fileName:   null,
+						message:    'No "deserialize()" method.'
+					});
+
+				}
 
 			}
 
