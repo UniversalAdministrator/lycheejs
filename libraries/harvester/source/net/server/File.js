@@ -101,6 +101,10 @@ lychee.define('harvester.net.server.File').requires([
 
 		receive: function(payload, headers) {
 
+			payload = payload instanceof Buffer ? payload : null;
+			headers = headers instanceof Object ? headers : {};
+
+
 			let identifier = null;
 			let info       = null;
 			let path       = null;

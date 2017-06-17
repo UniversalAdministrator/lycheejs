@@ -1,9 +1,9 @@
 
 lychee.define('harvester.mod.Beautifier').requires([
-	'harvester.data.Package'
+	'harvester.data.Project'
 ]).exports(function(lychee, global, attachments) {
 
-	const _Package = lychee.import('harvester.data.Package');
+	const _Project = lychee.import('harvester.data.Package');
 
 
 
@@ -104,11 +104,18 @@ lychee.define('harvester.mod.Beautifier').requires([
 
 		can: function(project) {
 
-			if (project.identifier.indexOf('__') === -1 && project.package !== null && project.filesystem !== null) {
+			project = project instanceof _Project ? project : null;
 
-				let files = _get_files(project);
-				if (files.length > 0) {
-					return true;
+
+			if (project !== null) {
+
+				if (project.identifier.indexOf('__') === -1 && project.package !== null && project.filesystem !== null) {
+
+					let files = _get_files(project);
+					if (files.length > 0) {
+						return true;
+					}
+
 				}
 
 			}
@@ -120,20 +127,27 @@ lychee.define('harvester.mod.Beautifier').requires([
 
 		process: function(project) {
 
-			if (project.package !== null) {
+			project = project instanceof _Project ? project : null;
 
-				let files = _get_files(project);
-				if (files.length > 0) {
 
-					files.filter(function(path) {
-						return path.split('.').pop() === 'json';
-					}).forEach(function(path) {
-						_beautify_json(project, path);
-					});
+			if (project !== null) {
+
+				if (project.package !== null) {
+
+					let files = _get_files(project);
+					if (files.length > 0) {
+
+						files.filter(function(path) {
+							return path.split('.').pop() === 'json';
+						}).forEach(function(path) {
+							_beautify_json(project, path);
+						});
+
+					}
+
+					return true;
 
 				}
-
-				return true;
 
 			}
 

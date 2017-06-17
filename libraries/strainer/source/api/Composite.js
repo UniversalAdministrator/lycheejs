@@ -341,16 +341,16 @@ lychee.define('strainer.api.Composite').requires([
 
 			for (let mid in methods) {
 
-				let method     = methods[mid];
-				let parameters = method.parameters;
-				let values     = method.values;
+				let method = methods[mid];
+				let params = method.parameters;
+				let values = method.values;
 
 				// TODO: Remove this
 				if (stream.includes('lychee.math.')) continue;
 
-				if (parameters.length > 0) {
+				if (params.length > 0) {
 
-					let found = parameters.filter(function(other) {
+					let found = params.filter(function(other) {
 						return other.type === 'undefined' && other.value === undefined;
 					}).map(function(other) {
 						return other.name;

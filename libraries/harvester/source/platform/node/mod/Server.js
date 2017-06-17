@@ -28,6 +28,7 @@ lychee.define('harvester.mod.Server').tags({
 
 	const _child_process = global.require('child_process');
 	const _net           = global.require('net');
+	const _Project       = lychee.import('harvester.data.Project');
 	const _Server        = lychee.import('harvester.data.Server');
 	const _BINARY        = process.execPath;
 	const _MIN_PORT      = 49152;
@@ -322,11 +323,18 @@ lychee.define('harvester.mod.Server').tags({
 
 		can: function(project) {
 
-			if (project.identifier.indexOf('__') === -1 && project.server === null) {
+			project = project instanceof _Project ? project : null;
 
-				let info = project.filesystem.info('/harvester.js');
-				if (info !== null && info.type === 'file') {
-					return true;
+
+			if (project !== null) {
+
+				if (project.identifier.indexOf('__') === -1 && project.server === null) {
+
+					let info = project.filesystem.info('/harvester.js');
+					if (info !== null && info.type === 'file') {
+						return true;
+					}
+
 				}
 
 			}
@@ -338,36 +346,43 @@ lychee.define('harvester.mod.Server').tags({
 
 		process: function(project) {
 
-			if (project.server === null) {
+			project = project instanceof _Project ? project : null;
 
-				let info = project.filesystem.info('/harvester.js');
-				if (info !== null && info.type === 'file') {
 
-					_scan_port(function(port) {
+			if (project !== null) {
 
-						if (port >= _MIN_PORT && port <= _MAX_PORT) {
+				if (project.server === null) {
 
-							let server = _serve(project.identifier, null, port);
-							if (server !== null) {
+					let info = project.filesystem.info('/harvester.js');
+					if (info !== null && info.type === 'file') {
 
-								project.setServer(new _Server({
-									process: server,
-									host:    null,
-									port:    port
-								}));
+						_scan_port(function(port) {
 
-							} else {
+							if (port >= _MIN_PORT && port <= _MAX_PORT) {
 
-								console.error('harvester.mod.Server: FAILURE ("' + project.identifier + ' | null:' + port + '") (chmod +x missing?)');
+								let server = _serve(project.identifier, null, port);
+								if (server !== null) {
+
+									project.setServer(new _Server({
+										process: server,
+										host:    null,
+										port:    port
+									}));
+
+								} else {
+
+									console.error('harvester.mod.Server: FAILURE ("' + project.identifier + ' | null:' + port + '") (chmod +x missing?)');
+
+								}
 
 							}
 
-						}
-
-					}, this);
+						}, this);
 
 
-					return true;
+						return true;
+
+					}
 
 				}
 

@@ -196,7 +196,34 @@ lychee.define('strainer.api.Module').requires([
 			for (let mid in methods) {
 
 				let method = methods[mid];
+				let params = method.parameters;
 				let values = method.values;
+
+
+				if (params.length > 0) {
+
+					let found = params.filter(function(other) {
+						return other.type === 'undefined' && other.value === undefined;
+					}).map(function(other) {
+						return other.name;
+					});
+
+					if (found.length > 0) {
+
+						if (/^(control|render|update|deserialize|serialize)$/g.test(mid) === false) {
+
+							errors.push({
+								ruleId:     'no-parameter-value',
+								methodName: mid,
+								fileName:   null,
+								message:    'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".'
+							});
+
+						}
+
+					}
+
+				}
 
 				if (values.length === 0) {
 

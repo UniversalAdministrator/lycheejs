@@ -1,7 +1,9 @@
 
 lychee.define('harvester.mod.Fertilizer').tags({
 	platform: 'node'
-}).supports(function(lychee, global) {
+}).requires([
+	'harvester.data.Project'
+]).supports(function(lychee, global) {
 
 	if (typeof global.require === 'function') {
 
@@ -24,6 +26,7 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 	const _child_process = global.require('child_process');
 	const _setInterval   = global.setInterval;
+	const _Project       = lychee.import('harvester.data.Project');
 	let   _ACTIVE        = false;
 	const _CACHE         = {};
 	const _QUEUE         = [];
@@ -127,23 +130,30 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 		can: function(project) {
 
-			let id  = project.identifier;
-			let pkg = project.package;
+			project = project instanceof _Project ? project : null;
 
-			if (id.indexOf('__') === -1 && pkg !== null) {
 
-				let build = pkg.json.build || null;
-				if (build !== null) {
+			if (project !== null) {
 
-					let environments = build.environments || null;
-					if (environments !== null) {
+				let id  = project.identifier;
+				let pkg = project.package;
 
-						let targets = Object.keys(environments).filter(function(target) {
-							return _is_cached(id, target, pkg) === false;
-						});
+				if (id.indexOf('__') === -1 && pkg !== null) {
 
-						if (targets.length > 0) {
-							return true;
+					let build = pkg.json.build || null;
+					if (build !== null) {
+
+						let environments = build.environments || null;
+						if (environments !== null) {
+
+							let targets = Object.keys(environments).filter(function(target) {
+								return _is_cached(id, target, pkg) === false;
+							});
+
+							if (targets.length > 0) {
+								return true;
+							}
+
 						}
 
 					}
@@ -159,38 +169,45 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 		process: function(project) {
 
-			let id  = project.identifier;
-			let fs  = project.filesystem;
-			let pkg = project.package;
+			project = project instanceof _Project ? project : null;
 
-			if (fs !== null && pkg !== null) {
 
-				let build = pkg.json.build || null;
-				if (build !== null) {
+			if (project !== null) {
 
-					let environments = build.environments || null;
-					if (environments !== null) {
+				let id  = project.identifier;
+				let fs  = project.filesystem;
+				let pkg = project.package;
 
-						Object.keys(environments).filter(function(target) {
-							return _is_cached(id, target, pkg) === false;
-						}).forEach(function(target) {
+				if (fs !== null && pkg !== null) {
 
-							let cache = _CACHE[id] || null;
-							if (cache === null) {
-								cache = _CACHE[id] = {};
-							}
+					let build = pkg.json.build || null;
+					if (build !== null) {
 
-							cache[target] = pkg;
+						let environments = build.environments || null;
+						if (environments !== null) {
 
-							_QUEUE.push({
-								project: id,
-								target:  target
+							Object.keys(environments).filter(function(target) {
+								return _is_cached(id, target, pkg) === false;
+							}).forEach(function(target) {
+
+								let cache = _CACHE[id] || null;
+								if (cache === null) {
+									cache = _CACHE[id] = {};
+								}
+
+								cache[target] = pkg;
+
+								_QUEUE.push({
+									project: id,
+									target:  target
+								});
+
 							});
 
-						});
 
+							return true;
 
-						return true;
+						}
 
 					}
 

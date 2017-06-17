@@ -1,7 +1,9 @@
 
 lychee.define('harvester.mod.Strainer').tags({
 	platform: 'node'
-}).supports(function(lychee, global) {
+}).requires([
+	'harvester.data.Project'
+]).supports(function(lychee, global) {
 
 	if (typeof global.require === 'function') {
 
@@ -24,6 +26,7 @@ lychee.define('harvester.mod.Strainer').tags({
 
 	const _child_process = global.require('child_process');
 	const _setInterval   = global.setInterval;
+	const _Project       = lychee.import('harvester.data.Project');
 	let   _ACTIVE        = false;
 	const _QUEUE         = [];
 
@@ -142,42 +145,49 @@ lychee.define('harvester.mod.Strainer').tags({
 
 		can: function(project) {
 
-			let id  = project.identifier;
-			let fs  = project.filesystem;
-			let pkg = project.package;
-
-			if (id.indexOf('__') === -1 && pkg !== null && fs !== null) {
-
-				let buffer = fs.read('/api/strainer.pkg');
-				let data   = [];
-
-				try {
-					data = JSON.parse(buffer.toString('utf8'));
-				} catch (err) {
-					data = [];
-				}
+			project = project instanceof _Project ? project : null;
 
 
-				let needs_check = false;
+			if (project !== null) {
 
-				if (data.length > 0) {
+				let id  = project.identifier;
+				let fs  = project.filesystem;
+				let pkg = project.package;
 
-					for (let d = 0, dl = data.length; d < dl; d++) {
+				if (id.indexOf('__') === -1 && pkg !== null && fs !== null) {
 
-						if (data[d] < Date.now()) {
-							needs_check = true;
-							break;
+					let buffer = fs.read('/api/strainer.pkg');
+					let data   = [];
+
+					try {
+						data = JSON.parse(buffer.toString('utf8'));
+					} catch (err) {
+						data = [];
+					}
+
+
+					let needs_check = false;
+
+					if (data.length > 0) {
+
+						for (let d = 0, dl = data.length; d < dl; d++) {
+
+							if (data[d] < Date.now()) {
+								needs_check = true;
+								break;
+							}
+
 						}
+
+					} else {
+
+						needs_check = true;
 
 					}
 
-				} else {
-
-					needs_check = true;
+					return needs_check;
 
 				}
-
-				return needs_check;
 
 			}
 
@@ -188,20 +198,27 @@ lychee.define('harvester.mod.Strainer').tags({
 
 		process: function(project) {
 
-			let id  = project.identifier;
-			let fs  = project.filesystem;
-			let pkg = project.package;
-
-			if (fs !== null && pkg !== null) {
-
-				if (_is_queued(id) === false) {
-
-					_QUEUE.push({
-						project: id
-					});
+			project = project instanceof _Project ? project : null;
 
 
-					return true;
+			if (project !== null) {
+
+				let id  = project.identifier;
+				let fs  = project.filesystem;
+				let pkg = project.package;
+
+				if (fs !== null && pkg !== null) {
+
+					if (_is_queued(id) === false) {
+
+						_QUEUE.push({
+							project: id
+						});
+
+
+						return true;
+
+					}
 
 				}
 

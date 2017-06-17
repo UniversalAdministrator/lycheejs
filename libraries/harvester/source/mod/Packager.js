@@ -1,9 +1,11 @@
 
 lychee.define('harvester.mod.Packager').requires([
-	'harvester.data.Package'
+	'harvester.data.Package',
+	'harvester.data.Project'
 ]).exports(function(lychee, global, attachments) {
 
 	const _Package = lychee.import('harvester.data.Package');
+	const _Project = lychee.import('harvester.data.Project');
 
 
 
@@ -249,12 +251,19 @@ lychee.define('harvester.mod.Packager').requires([
 
 		can: function(project) {
 
-			if (project.identifier.indexOf('__') === -1 && project.package !== null && project.filesystem !== null) {
+			project = project instanceof _Project ? project : null;
 
-				let diff_a = JSON.stringify(project.package.json);
-				let diff_b = JSON.stringify(_serialize(project));
-				if (diff_a !== diff_b) {
-					return true;
+
+			if (project !== null) {
+
+				if (project.identifier.indexOf('__') === -1 && project.package !== null && project.filesystem !== null) {
+
+					let diff_a = JSON.stringify(project.package.json);
+					let diff_b = JSON.stringify(_serialize(project));
+					if (diff_a !== diff_b) {
+						return true;
+					}
+
 				}
 
 			}
@@ -266,24 +275,31 @@ lychee.define('harvester.mod.Packager').requires([
 
 		process: function(project) {
 
+			project = project instanceof _Project ? project : null;
+
+
 			let reasons = [];
 
-			if (project.package !== null) {
+			if (project !== null) {
 
-				let data = _serialize(project);
-				let blob = JSON.stringify(data, null, '\t');
+				if (project.package !== null) {
+
+					let data = _serialize(project);
+					let blob = JSON.stringify(data, null, '\t');
 
 
-				_get_reasons(data, project.package.json, reasons);
+					_get_reasons(data, project.package.json, reasons);
 
 
-				if (blob !== null) {
+					if (blob !== null) {
 
-					project.filesystem.write('/lychee.pkg', blob);
-					project.package = null;
-					project.package = new _Package({
-						buffer: new Buffer(blob, 'utf8')
-					});
+						project.filesystem.write('/lychee.pkg', blob);
+						project.package = null;
+						project.package = new _Package({
+							buffer: new Buffer(blob, 'utf8')
+						});
+
+					}
 
 				}
 
