@@ -553,6 +553,38 @@ lychee.define('lychee.ui.Layer').requires([
 		 * CUSTOM API
 		 */
 
+		query: function(query) {
+
+			query = typeof query === 'string' ? query : null;
+
+
+			if (query !== null) {
+
+				let tmp    = query.split(' > ');
+				let entity = this.getEntity(tmp[0].trim());
+				if (entity !== null) {
+
+					for (let t = 1, tl = tmp.length; t < tl; t++) {
+
+						entity = entity.getEntity(tmp[t].trim());
+
+						if (entity === null) {
+							break;
+						}
+
+					}
+
+				}
+
+				return entity;
+
+			}
+
+
+			return null;
+
+		},
+
 		isAtPosition: function(position) {
 
 			position = position instanceof Object ? position : null;

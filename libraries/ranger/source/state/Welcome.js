@@ -89,7 +89,7 @@ lychee.define('ranger.state.Welcome').requires([
 
 			if (value.length > 0) {
 
-				let table = this.query('ui > welcome > status > 0');
+				let table = this.query('ui > welcome > status > 1');
 				if (table !== null) {
 					table.setValue(value);
 				}
@@ -178,7 +178,7 @@ lychee.define('ranger.state.Welcome').requires([
 						element.height = self.height;
 						element.trigger('relayout');
 
-						let entity = element.getEntity('0');
+						let entity = element.getEntity('1');
 						if (entity !== null && element !== null) {
 							entity.width  = element.width  - 32;
 							entity.height = element.height - 96;
@@ -205,7 +205,7 @@ lychee.define('ranger.state.Welcome').requires([
 		enter: function(oncomplete, data) {
 
 			oncomplete = oncomplete instanceof Function ? oncomplete : null;
-			data       = data instanceof Object         ? data       : null;
+			data       = typeof data === 'string'       ? data       : null;
 
 
 			let dialog = this.query('ui > welcome > dialog');

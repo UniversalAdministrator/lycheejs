@@ -18,18 +18,17 @@ lychee.define('ranger.state.Console').requires([
 
 	const _on_sync = function(data) {
 
-		let blob  = data.blob || {};
-		let value = [{
-			stdout: blob.stdout || '',
-			stderr: blob.stderr || ''
-		}];
+		let blob = data.blob || null;
+		if (blob !== null) {
 
+			let stdout = this.query('ui > console > stdout');
+			if (stdout !== null) {
+				stdout.setValue(blob.stdout || '');
+			}
 
-		if (value.length > 0) {
-
-			let table = this.query('ui > console > status > 0');
-			if (table !== null) {
-				table.setValue(value);
+			let stderr = this.query('ui > console > stderr');
+			if (stderr !== null) {
+				stderr.setValue(blob.stderr || '');
 			}
 
 
@@ -73,42 +72,26 @@ lychee.define('ranger.state.Console').requires([
 			if (viewport !== null) {
 
 				let blueprint = this.query('ui > console');
-				let element   = this.query('ui > console > status');
+				let stdout    = this.query('ui > console > stdout');
+				let stderr    = this.query('ui > console > stderr');
 
-				if (blueprint !== null && element !== null) {
-
-					viewport.relay('reshape', element);
+				if (blueprint !== null) {
 
 					blueprint.bind('#relayout', function(blueprint) {
 
-						element.width  = blueprint.width - 64;
-						element.height = blueprint.height;
-
-						let entity = element.getEntity('0');
-						if (entity !== null) {
-
-							entity.width  = element.width  - 32;
-							entity.height = element.height - 96;
-
-							let left  = entity.getEntity('0');
-							let right = entity.getEntity('1');
-							if (left !== null && right !== null) {
-
-								left.width   = entity.width / 2 - 4;
-								left.height  = entity.height - 96;
-								left.trigger('relayout');
-
-								right.width  = entity.width / 2 - 4;
-								right.height = entity.height - 96;
-								right.trigger('relayout');
-
-							}
-
-							entity.trigger('relayout');
-
+						if (stdout !== null) {
+							stdout.width      = blueprint.width;
+							stdout.height     = blueprint.height / 2;
+							stdout.position.y = -1 / 2 * stdout.height;
+							stdout.trigger('relayout');
 						}
 
-						element.trigger('relayout');
+						if (stderr !== null) {
+							stderr.width      = blueprint.width;
+							stderr.height     = blueprint.height / 2;
+							stderr.position.y = 1 / 2 * stderr.height;
+							stderr.trigger('relayout');
+						}
 
 					}, this);
 
@@ -131,13 +114,7 @@ lychee.define('ranger.state.Console').requires([
 		enter: function(oncomplete, data) {
 
 			oncomplete = oncomplete instanceof Function ? oncomplete : null;
-			data       = data instanceof Object         ? data       : null;
-
-
-			let status = this.query('ui > console > status');
-			if (status !== null) {
-				status.setVisible(true);
-			}
+			data       = typeof data === 'string'       ? data       : null;
 
 
 			let client = this.client;
@@ -152,7 +129,7 @@ lychee.define('ranger.state.Console').requires([
 			}
 
 
-			return _State.prototype.enter.call(this, oncomplete);
+			return _State.prototype.enter.call(this, oncomplete, data);
 
 		},
 

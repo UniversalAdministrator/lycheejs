@@ -18,56 +18,38 @@
 						"blob": {
 							"entities": [
 								{
-									"constructor": "lychee.ui.Element",
+									"constructor": "ranger.ui.entity.Console",
 									"arguments": [
 										{
-											"label": "CONSOLE",
+											"label": "STDOUT",
 											"options": [],
-											"width": 640,
+											"width": 320,
 											"height": 480,
 											"position": {
-												"x": 0,
+												"x": -320,
 												"y": 0
 											}
 										}
-									],
-									"blob": {
-										"entities": [
-											{
-												"constructor": "lychee.ui.layer.Table",
-												"arguments": [
-													{
-														"width": 608,
-														"height": 384,
-														"position": {
-															"x": 0,
-															"y": 32
-														}
-													}
-												],
-												"blob": {
-													"model": {
-														"stdout": {
-															"constructor": "ranger.ui.entity.Console",
-															"arguments": [
-																{}
-															]
-														},
-														"stderr": {
-															"constructor": "ranger.ui.entity.Console",
-															"arguments": [
-																{}
-															]
-														}
-													}
-												}
+									]
+								}, {
+									"constructor": "ranger.ui.entity.Console",
+									"arguments": [
+										{
+											"label": "STDERR",
+											"options": [],
+											"width": 320,
+											"height": 480,
+											"position": {
+												"x": 320,
+												"y": 0
 											}
-										]
-									}
+										}
+									]
 								}
 							],
 							"map": {
-								"status": 0
+								"stdout": 0,
+								"stderr": 1
 							}
 						}
 					}

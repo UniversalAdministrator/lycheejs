@@ -5,30 +5,42 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 	 * HELPERS
 	 */
 
-	const _CHARS_DANGEROUS = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-	const _CHARS_ESCAPABLE = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-	const _CHARS_META      = {
+	const _CHARS_SEARCH = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+	const _CHARS_META   = {
+		'\r': '',    // FUCK YOU, Microsoft!
 		'\b': '\\b',
 		'\t': '\\t',
 		'\n': '\\n',
 		'\f': '\\f',
-		'\r': '',    // FUCK YOU, Microsoft!
 		'"':  '\\"',
 		'\\': '\\\\'
+	};
+
+	const _desanitize_string = function(san) {
+
+		let str = san;
+
+		// str = str.replace(/\\b/g, '\b');
+		// str = str.replace(/\\f/g, '\f');
+		str = str.replace(/\\t/g, '\t');
+		str = str.replace(/\\n/g, '\n');
+		str = str.replace(/\\\\/g, '\\');
+
+		return str;
+
 	};
 
 	const _sanitize_string = function(str) {
 
 		let san = str;
 
+		if (_CHARS_SEARCH.test(san)) {
 
-		if (_CHARS_ESCAPABLE.test(san)) {
+			san = san.replace(_CHARS_SEARCH, function(char) {
 
-			san = san.replace(_CHARS_ESCAPABLE, function(char) {
-
-				let val = _CHARS_META[char];
-				if (typeof val === 'string') {
-					return val;
+				let meta = _CHARS_META[char];
+				if (meta !== undefined) {
+					return meta;
 				} else {
 					return '\\u' + (char.charCodeAt(0).toString(16)).slice(-4);
 				}
@@ -109,7 +121,13 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 		},
 
 		seek: function(bytes) {
-			return this.__buffer.substr(this.__index, bytes);
+
+			if (bytes > 0) {
+				return this.__buffer.substr(this.__index, bytes);
+			} else {
+				return this.__buffer.substr(this.__index + bytes, Math.abs(bytes));
+			}
+
 		},
 
 		write: function(buffer) {
@@ -293,7 +311,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 				stream.read(1);
 
-				size = stream.search([ '\\', '"' ]);
+				size = stream.search([ '"' ]);
 
 				if (size > 0) {
 					value = stream.read(size);
@@ -305,50 +323,22 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 				check = stream.read(1);
 
 
-				while (check === '\\') {
+				let unichar = stream.seek(-2);
 
-					value[value.length - 1] = check;
+				while (check === '"' && unichar.charAt(0) === '\\') {
 
-					let special = stream.seek(1);
-					if (special === 'b') {
-
-						stream.read(1);
-						value += '\b';
-
-					} else if (special === 't') {
-
-						stream.read(1);
-						value += '\t';
-
-					} else if (special === 'n') {
-
-						stream.read(1);
-						value += '\n';
-
-					} else if (special === 'f') {
-
-						stream.read(1);
-						value += '\f';
-
-					} else if (special === '"') {
-
-						stream.read(1);
-						value += '"';
-
-					} else if (special === '\\') {
-
-						stream.read(1);
-						value += '\\';
-
+					if (value.charAt(value.length - 1) === '\\') {
+						value = value.substr(0, value.length - 1) + check;
 					}
 
-
-					size   = stream.search([ '\\', '"' ]);
-					value += stream.read(size);
-					check  = stream.read(1);
+					size    = stream.search([ '"' ]);
+					value  += stream.read(size);
+					check   = stream.read(1);
+					unichar = stream.seek(-2);
 
 				}
 
+				value = _desanitize_string(value);
 
 			// []: Array
 			} else if (seek === '[') {

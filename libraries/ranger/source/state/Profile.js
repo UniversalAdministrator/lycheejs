@@ -54,6 +54,8 @@ lychee.define('ranger.state.Profile').requires([
 
 				}
 
+				layer.trigger('relayout');
+
 			}
 
 		}
@@ -140,7 +142,7 @@ lychee.define('ranger.state.Profile').requires([
 		enter: function(oncomplete, data) {
 
 			oncomplete = oncomplete instanceof Function ? oncomplete : null;
-			data       = data instanceof Object         ? data       : null;
+			data       = typeof data === 'string'       ? data       : null;
 
 
 			let client = this.client;

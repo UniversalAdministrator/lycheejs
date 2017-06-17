@@ -34,12 +34,18 @@ lychee.define('ranger.ui.entity.Console').includes([
 			let x1     = 0;
 			let x2     = buffer.width;
 			let y1     = 0;
-			// let y2     = buffer.height;
 			let lh     = font.lineheight;
 			let ll     = lines.length;
 			if (ll > 0) {
 
-				for (let l = 0; l < ll; l++) {
+				let start  = 0;
+				let offset = 0;
+				let height = ll * lh;
+				if (height > buffer.height) {
+					start = ll - Math.floor(buffer.height / lh);
+				}
+
+				for (let l = start; l < ll; l++) {
 
 					let line = lines[l];
 					let type = line.substr(0, 3);
@@ -48,9 +54,9 @@ lychee.define('ranger.ui.entity.Console').includes([
 
 						renderer.drawBox(
 							x1,
-							y1 + lh * l,
+							y1 + offset,
 							x2,
-							y1 + lh * l + lh,
+							y1 + offset + lh,
 							'#4e9a06',
 							true
 						);
@@ -59,10 +65,21 @@ lychee.define('ranger.ui.entity.Console').includes([
 
 						renderer.drawBox(
 							x1,
-							y1 + lh * l,
+							y1 + offset,
 							x2,
-							y1 + lh * l + lh,
+							y1 + offset + lh,
 							'#c4a000',
+							true
+						);
+
+					} else if (type === '(E)') {
+
+						renderer.drawBox(
+							x1,
+							y1 + offset,
+							x2,
+							y1 + offset + lh,
+							'#cc0000',
 							true
 						);
 
@@ -71,11 +88,13 @@ lychee.define('ranger.ui.entity.Console').includes([
 
 					renderer.drawText(
 						x1,
-						y1 + lh * l,
+						y1 + offset,
 						line,
 						font,
 						false
 					);
+
+					offset = offset + lh;
 
 				}
 
