@@ -70,7 +70,7 @@ lychee.define('strainer.api.PARSER').requires([
 			type = 'Number';
 		} else if (str === 'Infinity') {
 			type = 'Number';
-		} else if (str.includes(' + ') && (str.includes('\'') || str.includes('"'))) {
+		} else if (str.includes(' + ') && (str.includes('\'') || str.includes('"') || str.includes('\.substr(') || str.includes('trim()'))) {
 			type = 'String';
 		} else if (str.includes(' * ') || str.includes(' / ') || str.includes(' + ') || str.includes(' - ')) {
 			type = 'Number';
@@ -278,7 +278,7 @@ lychee.define('strainer.api.PARSER').requires([
 			value = _parse_value(str);
 		} else if (str === 'Infinity') {
 			value = Infinity;
-		} else if (str.includes(' + ') && (str.includes('\'') || str.includes('"'))) {
+		} else if (str.includes(' + ') && (str.includes('\'') || str.includes('"') || str.includes('\.substr(') || str.includes('trim()'))) {
 			value = "<string>";
 		} else if (str.includes(' * ') || str.includes(' / ') || str.includes(' + ') || str.includes(' - ')) {
 			value = 1337;
