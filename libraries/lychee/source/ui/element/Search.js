@@ -173,6 +173,24 @@ lychee.define('lychee.ui.element.Search').requires([
 
 			return false;
 
+		},
+
+		setValue: function(value) {
+
+			value = typeof value === 'string' ? value : null;
+
+
+			if (value !== null) {
+
+				this.value = value;
+
+				return true;
+
+			}
+
+
+			return false;
+
 		}
 
 	};

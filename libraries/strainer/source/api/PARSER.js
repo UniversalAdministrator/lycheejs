@@ -32,6 +32,8 @@ lychee.define('strainer.api.PARSER').requires([
 
 		if (str === 'undefined') {
 			type = 'undefined';
+		} else if (str === '-Infinity' || str === 'Infinity') {
+			type = 'Number';
 		} else if (str === 'null') {
 			type = 'null';
 		} else if (str === 'true' || str === 'false') {
@@ -78,7 +80,7 @@ lychee.define('strainer.api.PARSER').requires([
 
 			if (str.includes('instanceof') && str.includes('?') && str.includes(':')) {
 
-				let tmp = str.split(/(.*)instanceof\s([A-Za-z_\.]+)([\s]+)(.*)\?/g);
+				let tmp = str.split(/(.*)instanceof\s([A-Za-z0-9_\.]+)([\s]+)\?(.*)/g);
 				if (tmp.length > 2) {
 					type = tmp[2];
 				}
@@ -218,6 +220,8 @@ lychee.define('strainer.api.PARSER').requires([
 
 		if (str === 'undefined') {
 			value = undefined;
+		} else if (str === '-Infinity' || str === 'Infinity') {
+			value = 'Infinity';
 		} else if (str === 'null') {
 			value = null;
 		} else if (str === 'true' || str === 'false') {
@@ -628,6 +632,7 @@ lychee.define('strainer.api.PARSER').requires([
 						tmp2.split(',').forEach(function(val) {
 
 							parameters.push({
+								chunk: null,
 								name:  val.trim(),
 								type:  'undefined',
 								value: undefined
@@ -670,16 +675,19 @@ lychee.define('strainer.api.PARSER').requires([
 
 						let tmp = line.substr(line.indexOf('=') + 1).trim();
 						let val = Module.detect(tmp);
+
 						if (val.type !== 'undefined') {
 
 							if (param.type === val.type) {
 
 								if (param.value === undefined) {
+									param.chunk = val.chunk;
 									param.value = val.value;
 								}
 
 							} else if (param.type === 'undefined') {
 
+								param.chunk = val.chunk;
 								param.type  = val.type;
 								param.value = val.value;
 

@@ -1,7 +1,10 @@
 
-lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments) {
+lychee.define('lychee.math.Matrix').requires([
+	'lychee.math.Vector3'
+]).exports(function(lychee, global, attachments) {
 
-	const _Array = typeof Float32Array !== 'undefined' ? Float32Array : Array;
+	const _Array   = typeof Float32Array !== 'undefined' ? Float32Array : Array;
+	const _Vector3 = lychee.import('lychee.math.Vector3');
 
 
 
@@ -73,15 +76,21 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		copy: function(matrix) {
 
-			let d = this.data;
+			matrix = matrix instanceof Composite ? matrix : null;
 
 
-			matrix.set(
-			    d[0],  d[1],  d[2],  d[3],
-			    d[4],  d[5],  d[6],  d[7],
-			    d[8],  d[9],  d[10], d[11],
-				d[12], d[13], d[14], d[15]
-			);
+			if (matrix !== null) {
+
+				let d = this.data;
+
+				matrix.set(
+				    d[0],  d[1],  d[2],  d[3],
+				    d[4],  d[5],  d[6],  d[7],
+				    d[8],  d[9],  d[10], d[11],
+					d[12], d[13], d[14], d[15]
+				);
+
+			}
 
 
 			return this;
@@ -89,6 +98,24 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 		},
 
 		set: function(a0, a1, a2, a3, b0, b1, b2, b3, c0, c1, c2, c3, d0, d1, d2, d3) {
+
+			a0 = typeof a0 === 'number' ? a0 : 0;
+			a1 = typeof a1 === 'number' ? a1 : 0;
+			a2 = typeof a2 === 'number' ? a2 : 0;
+			a3 = typeof a3 === 'number' ? a3 : 0;
+			b0 = typeof b0 === 'number' ? b0 : 0;
+			b1 = typeof b1 === 'number' ? b1 : 0;
+			b2 = typeof b2 === 'number' ? b2 : 0;
+			b3 = typeof b3 === 'number' ? b3 : 0;
+			c0 = typeof c0 === 'number' ? c0 : 0;
+			c1 = typeof c1 === 'number' ? c1 : 0;
+			c2 = typeof c2 === 'number' ? c2 : 0;
+			c3 = typeof c3 === 'number' ? c3 : 0;
+			d0 = typeof d0 === 'number' ? d0 : 0;
+			d1 = typeof d1 === 'number' ? d1 : 0;
+			d2 = typeof d2 === 'number' ? d2 : 0;
+			d3 = typeof d3 === 'number' ? d3 : 0;
+
 
 			let d = this.data;
 
@@ -135,15 +162,15 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		invert: function(matrix) {
 
+			matrix = matrix instanceof Composite ? matrix : null;
+
+
 			let d;
 
-			// Invert this matrix
-			if (matrix === undefined) {
-				d = this.data;
-
-			// Invert other matrix, but target is this matrix
-			} else {
+			if (matrix !== null) {
 				d = matrix.data;
+			} else {
+				d = this.data;
 			}
 
 
@@ -225,16 +252,23 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		translate: function(vector) {
 
-			let x = vector.x;
-			let y = vector.y;
-			let z = vector.z;
-			let d = this.data;
+			vector = vector instanceof _Vector3 ? vector : null;
 
 
-			d[12] =  d[0] * x +  d[4] * y +  d[8] * z + d[12];
-			d[13] =  d[1] * x +  d[5] * y +  d[9] * z + d[13];
-			d[14] =  d[2] * x +  d[6] * y + d[10] * z + d[14];
-			d[15] =  d[3] * x +  d[7] * y + d[11] * z + d[15];
+			if (vector !== null) {
+
+				let x = vector.x;
+				let y = vector.y;
+				let z = vector.z;
+				let d = this.data;
+
+
+				d[12] =  d[0] * x +  d[4] * y +  d[8] * z + d[12];
+				d[13] =  d[1] * x +  d[5] * y +  d[9] * z + d[13];
+				d[14] =  d[2] * x +  d[6] * y + d[10] * z + d[14];
+				d[15] =  d[3] * x +  d[7] * y + d[11] * z + d[15];
+
+			}
 
 
 			return this;
@@ -243,28 +277,35 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		rotateX: function(radian) {
 
-			let d   = this.data;
-			let sin = Math.sin(radian);
-			let cos = Math.cos(radian);
-
-			let a10 =  d[4];
-			let a11 =  d[5];
-			let a12 =  d[6];
-			let a13 =  d[7];
-			let a20 =  d[8];
-			let a21 =  d[9];
-			let a22 = d[10];
-			let a23 = d[11];
+			radian = typeof radian === 'number' ? radian : null;
 
 
-			 d[4] = a10 * cos + a20 * sin;
-			 d[5] = a11 * cos + a21 * sin;
-			 d[6] = a12 * cos + a22 * sin;
-			 d[7] = a13 * cos + a23 * sin;
-			 d[8] = a20 * cos - a10 * sin;
-			 d[9] = a21 * cos - a11 * sin;
-			d[10] = a22 * cos - a12 * sin;
-			d[11] = a23 * cos - a13 * sin;
+			if (radian !== null) {
+
+				let d   = this.data;
+				let sin = Math.sin(radian);
+				let cos = Math.cos(radian);
+
+				let a10 =  d[4];
+				let a11 =  d[5];
+				let a12 =  d[6];
+				let a13 =  d[7];
+				let a20 =  d[8];
+				let a21 =  d[9];
+				let a22 = d[10];
+				let a23 = d[11];
+
+
+				d[4]  = a10 * cos + a20 * sin;
+				d[5]  = a11 * cos + a21 * sin;
+				d[6]  = a12 * cos + a22 * sin;
+				d[7]  = a13 * cos + a23 * sin;
+				d[8]  = a20 * cos - a10 * sin;
+				d[9]  = a21 * cos - a11 * sin;
+				d[10] = a22 * cos - a12 * sin;
+				d[11] = a23 * cos - a13 * sin;
+
+			}
 
 
 			return this;
@@ -273,28 +314,35 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		rotateY: function(radian) {
 
-			let d   = this.data;
-			let sin = Math.sin(radian);
-			let cos = Math.cos(radian);
-
-			let a00 =  d[0];
-			let a01 =  d[1];
-			let a02 =  d[2];
-			let a03 =  d[3];
-			let a20 =  d[8];
-			let a21 =  d[9];
-			let a22 = d[10];
-			let a23 = d[11];
+			radian = typeof radian === 'number' ? radian : null;
 
 
-			 d[0] = a00 * cos - a20 * sin;
-			 d[1] = a01 * cos - a21 * sin;
-			 d[2] = a02 * cos - a22 * sin;
-			 d[3] = a03 * cos - a23 * sin;
-			 d[8] = a00 * sin + a20 * cos;
-			 d[9] = a01 * sin + a21 * cos;
-			d[10] = a02 * sin + a22 * cos;
-			d[11] = a03 * sin + a23 * cos;
+			if (radian !== null) {
+
+				let d   = this.data;
+				let sin = Math.sin(radian);
+				let cos = Math.cos(radian);
+
+				let a00 =  d[0];
+				let a01 =  d[1];
+				let a02 =  d[2];
+				let a03 =  d[3];
+				let a20 =  d[8];
+				let a21 =  d[9];
+				let a22 = d[10];
+				let a23 = d[11];
+
+
+				d[0]  = a00 * cos - a20 * sin;
+				d[1]  = a01 * cos - a21 * sin;
+				d[2]  = a02 * cos - a22 * sin;
+				d[3]  = a03 * cos - a23 * sin;
+				d[8]  = a00 * sin + a20 * cos;
+				d[9]  = a01 * sin + a21 * cos;
+				d[10] = a02 * sin + a22 * cos;
+				d[11] = a03 * sin + a23 * cos;
+
+			}
 
 
 			return this;
@@ -303,28 +351,35 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		rotateZ: function(radian) {
 
-			let d   = this.data;
-			let sin = Math.sin(radian);
-			let cos = Math.cos(radian);
-
-			let a00 = d[0];
-			let a01 = d[1];
-			let a02 = d[2];
-			let a03 = d[3];
-			let a10 = d[4];
-			let a11 = d[5];
-			let a12 = d[6];
-			let a13 = d[7];
+			radian = typeof radian === 'number' ? radian : null;
 
 
-			d[0] = a00 * cos + a10 * sin;
-			d[1] = a01 * cos + a11 * sin;
-			d[2] = a02 * cos + a12 * sin;
-			d[3] = a03 * cos + a13 * sin;
-			d[4] = a10 * cos - a00 * sin;
-			d[5] = a11 * cos - a01 * sin;
-			d[6] = a12 * cos - a02 * sin;
-			d[7] = a13 * cos - a03 * sin;
+			if (radian !== null) {
+
+				let d   = this.data;
+				let sin = Math.sin(radian);
+				let cos = Math.cos(radian);
+
+				let a00 = d[0];
+				let a01 = d[1];
+				let a02 = d[2];
+				let a03 = d[3];
+				let a10 = d[4];
+				let a11 = d[5];
+				let a12 = d[6];
+				let a13 = d[7];
+
+
+				d[0] = a00 * cos + a10 * sin;
+				d[1] = a01 * cos + a11 * sin;
+				d[2] = a02 * cos + a12 * sin;
+				d[3] = a03 * cos + a13 * sin;
+				d[4] = a10 * cos - a00 * sin;
+				d[5] = a11 * cos - a01 * sin;
+				d[6] = a12 * cos - a02 * sin;
+				d[7] = a13 * cos - a03 * sin;
+
+			}
 
 
 			return this;
@@ -333,73 +388,81 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		rotateAxis: function(vector, radian) {
 
-			let x = vector.x;
-			let y = vector.y;
-			let z = vector.z;
+			vector = vector instanceof _Vector3 ? vector : null;
+			radian = typeof radian === 'number' ? radian : null;
 
-			if (x === 1 && y === 0 && z === 0) {
 
-				return this.rotateX(radian);
+			if (vector !== null && radian !== null) {
 
-			} else if (x === 0 && y === 1 && z === 0) {
+				let x = vector.x;
+				let y = vector.y;
+				let z = vector.z;
 
-				return this.rotateY(radian);
+				if (x === 1 && y === 0 && z === 0) {
 
-			} else if (x === 0 && y === 0 && z === 1) {
+					return this.rotateX(radian);
 
-				return this.rotateZ(radian);
+				} else if (x === 0 && y === 1 && z === 0) {
+
+					return this.rotateY(radian);
+
+				} else if (x === 0 && y === 0 && z === 1) {
+
+					return this.rotateZ(radian);
+				}
+
+
+				let length = Math.sqrt(x * x + y * y + z * z);
+				if (Math.abs(length) < Composite.PRECISION) {
+					return;
+				}
+
+
+				let sin = Math.sin(radian);
+				let cos = Math.cos(radian);
+				let t   = 1 - cos;
+
+
+				x *= (1 / length);
+				y *= (1 / length);
+				z *= (1 / length);
+
+
+				let d = this.data;
+
+				let a00 = d[0], a01 = d[1], a02 =  d[2], a03 =  d[3];
+				let a10 = d[4], a11 = d[5], a12 =  d[6], a13 =  d[7];
+				let a20 = d[8], a21 = d[9], a22 = d[10], a23 = d[11];
+
+
+				// Rotation Matrix
+				let r00 = x * x * t + cos;
+				let r01 = y * x * t + z * sin;
+				let r02 = z * x * t - y * sin;
+
+				let r10 = x * y * t - z * sin;
+				let r11 = y * y * t + cos;
+				let r12 = z * y * t + x * sin;
+
+				let r20 = x * z * t + y * sin;
+				let r21 = y * z * t - x * sin;
+				let r22 = z * z * t + cos;
+
+
+				d[0]  = a00 * r00 + a10 * r01 + a20 * r02;
+				d[1]  = a01 * r00 + a11 * r01 + a21 * r02;
+				d[2]  = a02 * r00 + a12 * r01 + a22 * r02;
+				d[3]  = a03 * r00 + a13 * r01 + a23 * r02;
+				d[4]  = a00 * r10 + a10 * r11 + a20 * r12;
+				d[5]  = a01 * r10 + a11 * r11 + a21 * r12;
+				d[6]  = a02 * r10 + a12 * r11 + a22 * r12;
+				d[7]  = a03 * r10 + a13 * r11 + a23 * r12;
+				d[8]  = a00 * r20 + a10 * r21 + a20 * r22;
+				d[9]  = a01 * r20 + a11 * r21 + a21 * r22;
+				d[10] = a02 * r20 + a12 * r21 + a22 * r22;
+				d[11] = a03 * r20 + a13 * r21 + a23 * r22;
+
 			}
-
-
-			let length = Math.sqrt(x * x + y * y + z * z);
-			if (Math.abs(length) < Composite.PRECISION) {
-				return;
-			}
-
-
-			let sin = Math.sin(radian);
-			let cos = Math.cos(radian);
-			let t   = 1 - cos;
-
-
-			x *= (1 / length);
-			y *= (1 / length);
-			z *= (1 / length);
-
-
-			let d = this.data;
-
-			let a00 = d[0], a01 = d[1], a02 =  d[2], a03 =  d[3];
-			let a10 = d[4], a11 = d[5], a12 =  d[6], a13 =  d[7];
-			let a20 = d[8], a21 = d[9], a22 = d[10], a23 = d[11];
-
-
-			// Rotation Matrix
-			let r00 = x * x * t + cos;
-			let r01 = y * x * t + z * sin;
-			let r02 = z * x * t - y * sin;
-
-			let r10 = x * y * t - z * sin;
-			let r11 = y * y * t + cos;
-			let r12 = z * y * t + x * sin;
-
-			let r20 = x * z * t + y * sin;
-			let r21 = y * z * t - x * sin;
-			let r22 = z * z * t + cos;
-
-
-			 d[0] = a00 * r00 + a10 * r01 + a20 * r02;
-			 d[1] = a01 * r00 + a11 * r01 + a21 * r02;
-			 d[2] = a02 * r00 + a12 * r01 + a22 * r02;
-			 d[3] = a03 * r00 + a13 * r01 + a23 * r02;
-			 d[4] = a00 * r10 + a10 * r11 + a20 * r12;
-			 d[5] = a01 * r10 + a11 * r11 + a21 * r12;
-			 d[6] = a02 * r10 + a12 * r11 + a22 * r12;
-			 d[7] = a03 * r10 + a13 * r11 + a23 * r12;
-			 d[8] = a00 * r20 + a10 * r21 + a20 * r22;
-			 d[9] = a01 * r20 + a11 * r21 + a21 * r22;
-			d[10] = a02 * r20 + a12 * r21 + a22 * r22;
-			d[11] = a03 * r20 + a13 * r21 + a23 * r22;
 
 
 			return this;
@@ -408,16 +471,23 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		scale: function(vector) {
 
-			let d = this.data;
-			let x = vector.x;
-			let y = vector.y;
-			let z = vector.z;
+			vector = vector instanceof _Vector3 ? vector : null;
 
 
-			d[0] *= x; d[4] *= y;  d[8] *= z;
-			d[1] *= x; d[5] *= y;  d[9] *= z;
-			d[2] *= x; d[6] *= y; d[10] *= z;
-			d[3] *= x; d[7] *= y; d[11] *= z;
+			if (vector !== null) {
+
+				let d = this.data;
+				let x = vector.x;
+				let y = vector.y;
+				let z = vector.z;
+
+
+				d[0] *= x; d[4] *= y;  d[8] *= z;
+				d[1] *= x; d[5] *= y;  d[9] *= z;
+				d[2] *= x; d[6] *= y; d[10] *= z;
+				d[3] *= x; d[7] *= y; d[11] *= z;
+
+			}
 
 
 			return this;
@@ -426,28 +496,47 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		frustum: function(left, right, bottom, top, near, far) {
 
-			let d  = this.data;
-			let rl = 1 / (right - left);
-			let tb = 1 / (top - bottom);
-			let nf = 1 / (near - far);
+			left   = typeof left === 'number'   ? left   : null;
+			right  = typeof right === 'number'  ? right  : null;
+			bottom = typeof bottom === 'number' ? bottom : null;
+			top    = typeof top === 'number'    ? top    : null;
+			near   = typeof near === 'number'   ? near   : null;
+			far    = typeof far === 'number'    ? far    : null;
 
 
-			 d[0] = (near * 2) * rl;
-			 d[1] = 0;
-			 d[2] = 0;
-			 d[3] = 0;
-			 d[4] = 0;
-			 d[5] = (near * 2) * tb;
-			 d[6] = 0;
-			 d[7] = 0;
-			 d[8] = (right + left) * rl;
-			 d[9] = (top + bottom) * tb;
-			d[10] = (far + near) * nf;
-			d[11] = -1;
-			d[12] = 0;
-			d[13] = 0;
-			d[14] = (far * near * 2) * nf;
-			d[15] = 0;
+			if (
+				left !== null
+				&& right !== null
+				&& bottom !== null
+				&& top !== null
+				&& near !== null
+				&& far !== null
+			) {
+
+				let d  = this.data;
+				let rl = 1 / (right - left);
+				let tb = 1 / (top - bottom);
+				let nf = 1 / (near - far);
+
+
+				d[0]  = (near * 2) * rl;
+				d[1]  = 0;
+				d[2]  = 0;
+				d[3]  = 0;
+				d[4]  = 0;
+				d[5]  = (near * 2) * tb;
+				d[6]  = 0;
+				d[7]  = 0;
+				d[8]  = (right + left) * rl;
+				d[9]  = (top + bottom) * tb;
+				d[10] = (far + near) * nf;
+				d[11] = -1;
+				d[12] = 0;
+				d[13] = 0;
+				d[14] = (far * near * 2) * nf;
+				d[15] = 0;
+
+			}
 
 
 			return this;
@@ -456,27 +545,42 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		perspective: function(fovy, aspect, near, far) {
 
-			let d  = this.data;
-			let f  = 1.0 / Math.tan(fovy / 2);
-			let nf = 1 / (near - far);
+			fovy   = typeof fovy === 'number'   ? fovy   : null;
+			aspect = typeof aspect === 'number' ? aspect : null;
+			near   = typeof near === 'number'   ? near   : null;
+			far    = typeof far === 'number'    ? far    : null;
 
 
-			 d[0] = f / aspect;
-			 d[1] = 0;
-			 d[2] = 0;
-			 d[3] = 0;
-			 d[4] = 0;
-			 d[5] = f;
-			 d[6] = 0;
-			 d[7] = 0;
-			 d[8] = 0;
-			 d[9] = 0;
-			d[10] = (far + near) * nf;
-			d[11] = -1;
-			d[12] = 0;
-			d[13] = 0;
-			d[14] = (2 * far * near) * nf;
-			d[15] = 0;
+			if (
+				fovy !== null
+				&& aspect !== null
+				&& near !== null
+				&& far !== null
+			) {
+
+				let d  = this.data;
+				let f  = 1.0 / Math.tan(fovy / 2);
+				let nf = 1 / (near - far);
+
+
+				d[0]  = f / aspect;
+				d[1]  = 0;
+				d[2]  = 0;
+				d[3]  = 0;
+				d[4]  = 0;
+				d[5]  = f;
+				d[6]  = 0;
+				d[7]  = 0;
+				d[8]  = 0;
+				d[9]  = 0;
+				d[10] = (far + near) * nf;
+				d[11] = -1;
+				d[12] = 0;
+				d[13] = 0;
+				d[14] = (2 * far * near) * nf;
+				d[15] = 0;
+
+			}
 
 
 			return this;
@@ -485,114 +589,142 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		ortho: function(left, right, bottom, top, near, far) {
 
-			let d  = this.data;
-			let lr = 1 / (left - right);
-			let bt = 1 / (bottom - top);
-			let nf = 1 / (near - far);
+			left   = typeof left === 'number'   ? left   : null;
+			right  = typeof right === 'number'  ? right  : null;
+			bottom = typeof bottom === 'number' ? bottom : null;
+			top    = typeof top === 'number'    ? top    : null;
+			near   = typeof near === 'number'   ? near   : null;
+			far    = typeof far === 'number'    ? far    : null;
 
 
-			 d[0] = -2 * lr;
-			 d[1] = 0;
-			 d[2] = 0;
-			 d[3] = 0;
-			 d[4] = 0;
-			 d[5] = -2 * bt;
-			 d[6] = 0;
-			 d[7] = 0;
-			 d[8] = 0;
-			 d[9] = 0;
-			d[10] = 2 * nf;
-			d[11] = 0;
-			d[12] = (left + right) * lr;
-			d[13] = (top + bottom) * bt;
-			d[14] = (far + near) * nf;
-			d[15] = 1;
+			if (
+				left !== null
+				&& right !== null
+				&& bottom !== null
+				&& top !== null
+				&& near !== null
+				&& far !== null
+			) {
+
+				let d  = this.data;
+				let lr = 1 / (left - right);
+				let bt = 1 / (bottom - top);
+				let nf = 1 / (near - far);
+
+
+				d[0]  = -2 * lr;
+				d[1]  = 0;
+				d[2]  = 0;
+				d[3]  = 0;
+				d[4]  = 0;
+				d[5]  = -2 * bt;
+				d[6]  = 0;
+				d[7]  = 0;
+				d[8]  = 0;
+				d[9]  = 0;
+				d[10] = 2 * nf;
+				d[11] = 0;
+				d[12] = (left + right) * lr;
+				d[13] = (top + bottom) * bt;
+				d[14] = (far + near) * nf;
+				d[15] = 1;
+
+			}
 
 
 			return this;
 
 		},
 
-		lookAt: function(eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz) {
+		lookAt: function(eye, center, up) {
 
-			let len;
+			eye    = eye instanceof _Vector3    ? eye    : null;
+			center = center instanceof _Vector3 ? center : null;
+			up     = up instanceof _Vector3     ? up     : null;
 
 
-			let z0 = eyex - centerx;
-			let z1 = eyey - centery;
-			let z2 = eyez - centerz;
+			if (eye !== null && center !== null && up !== null) {
 
-			if (Math.abs(z0) < Composite.PRECISION && Math.abs(z1) < Composite.PRECISION && Math.abs(z2) < Composite.PRECISION) {
-				return;
+				let len;
+
+
+				let z0 = eye.x - center.x;
+				let z1 = eye.y - center.y;
+				let z2 = eye.z - center.z;
+
+				if (Math.abs(z0) < Composite.PRECISION && Math.abs(z1) < Composite.PRECISION && Math.abs(z2) < Composite.PRECISION) {
+					return this;
+				}
+
+
+				len = 1 / Math.sqrt(z0 * z0 + z1 * z1 + z2 * z2);
+				z0 *= len;
+				z1 *= len;
+				z2 *= len;
+
+
+				let x0 = up.y * z2 - up.z * z1;
+				let x1 = up.z * z0 - up.x * z2;
+				let x2 = up.x * z1 - up.y * z0;
+
+				len = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);
+				if (len === 0) {
+
+					x0 = 0;
+					x1 = 0;
+					x2 = 0;
+
+				} else {
+
+					len = 1 / len;
+					x0 *= len;
+					x1 *= len;
+					x2 *= len;
+
+				}
+
+
+				let y0 = z1 * x2 - z2 * x1;
+				let y1 = z2 * x0 - z0 * x2;
+				let y2 = z0 * x1 - z1 * x0;
+
+				len = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);
+				if (len === 0) {
+
+					y0 = 0;
+					y1 = 0;
+					y2 = 0;
+
+				} else {
+
+					len = 1 / len;
+					y0 *= len;
+					y1 *= len;
+					y2 *= len;
+
+				}
+
+
+				let d = this.data;
+
+				d[0]  = x0;
+				d[1]  = y0;
+				d[2]  = z0;
+				d[3]  = 0;
+				d[4]  = x1;
+				d[5]  = y1;
+				d[6]  = z1;
+				d[7]  = 0;
+				d[8]  = x2;
+				d[9]  = y2;
+				d[10] = z2;
+				d[11] = 0;
+				d[12] = -(x0 * eye.x + x1 * eye.y + x2 * eye.z);
+				d[13] = -(y0 * eye.x + y1 * eye.y + y2 * eye.z);
+				d[14] = -(z0 * eye.x + z1 * eye.y + z2 * eye.z);
+				d[15] = 1;
+
 			}
-
-
-			len = 1 / Math.sqrt(z0 * z0 + z1 * z1 + z2 * z2);
-			z0 *= len;
-			z1 *= len;
-			z2 *= len;
-
-
-			let x0 = upy * z2 - upz * z1;
-			let x1 = upz * z0 - upx * z2;
-			let x2 = upx * z1 - upy * z0;
-
-			len = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);
-			if (len === 0) {
-
-				x0 = 0;
-				x1 = 0;
-				x2 = 0;
-
-			} else {
-
-				len = 1 / len;
-				x0 *= len;
-				x1 *= len;
-				x2 *= len;
-
-			}
-
-
-			let y0 = z1 * x2 - z2 * x1;
-			let y1 = z2 * x0 - z0 * x2;
-			let y2 = z0 * x1 - z1 * x0;
-
-			len = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);
-			if (len === 0) {
-
-				y0 = 0;
-				y1 = 0;
-				y2 = 0;
-
-			} else {
-
-				len = 1 / len;
-				y0 *= len;
-				y1 *= len;
-				y2 *= len;
-
-			}
-
-
-			let d = this.data;
-
-			 d[0] = x0;
-			 d[1] = y0;
-			 d[2] = z0;
-			 d[3] = 0;
-			 d[4] = x1;
-			 d[5] = y1;
-			 d[6] = z1;
-			 d[7] = 0;
-			 d[8] = x2;
-			 d[9] = y2;
-			d[10] = z2;
-			d[11] = 0;
-			d[12] = -(x0 * eyex + x1 * eyey + x2 * eyez);
-			d[13] = -(y0 * eyex + y1 * eyey + y2 * eyez);
-			d[14] = -(z0 * eyex + z1 * eyey + z2 * eyez);
-			d[15] = 1;
 
 
 			return this;
