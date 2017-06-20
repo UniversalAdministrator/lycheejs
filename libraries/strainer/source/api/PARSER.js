@@ -852,12 +852,9 @@ lychee.define('strainer.api.PARSER').requires([
 				) {
 
 					if (
-
 						(line.includes('(function') && line.endsWith('{'))
 						|| (line.includes(', function') && line.endsWith('{'))
 						|| line.endsWith('=> {')
-						|| line.endsWith('({')
-						|| line.endsWith(', {')
 					) {
 
 						if (
@@ -887,12 +884,17 @@ lychee.define('strainer.api.PARSER').requires([
 							&& !line.includes('({')
 							&& !line.endsWith(') {')
 						) {
-							nest_level--;
+
+							if (nest_level > 0) {
+								nest_level--;
+							}
+
 						}
 
 					}
 
 				}
+
 
 				if (nest_level === 0 && line.includes('return ')) {
 					return true;
@@ -903,15 +905,18 @@ lychee.define('strainer.api.PARSER').requires([
 
 			}).map(function(line) {
 
-				line = line.trim();
+				let chunk = line.trim();
 
-				let i1 = line.indexOf('return ');
-				let i2 = line.indexOf(';', i1);
-				if (i2 === -1) {
-					i2 = line.length;
+				let i1 = chunk.indexOf('return ');
+				let i2 = chunk.indexOf(';', i1);
+				if (i2 !== -1) {
+					return chunk.substr(i1 + 7, i2 - i1 - 7).trim();
 				}
 
-				return line.substr(i1 + 7, i2 - i1 - 7);
+				chunk = line.substr(i1 + 7) + ' ' + _get_chunk(line, ';', code);
+				chunk = chunk.substr(0, chunk.length - 1);
+
+				return chunk.trim();
 
 			}).map(function(chunk) {
 				return Module.detect(chunk);
