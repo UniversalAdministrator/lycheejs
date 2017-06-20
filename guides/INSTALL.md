@@ -38,6 +38,29 @@ sudo bash -c "$(curl -fsSL https://lychee.js.org/install.sh)";
 ```
 
 
+**1.5) (Recommended) eslint Installation**
+
+The lychee.js Engine heavily relies on [eslint](https://github.com/eslint)
+for both static and dynamic code analysis, as eslint helps
+to ease up the parsing part in the lychee.js Strainer as
+it can rely on an easy-to-parse codestyle.
+
+If `eslint` is not installed, most of the AI-related code
+learning features and autofix functionalities will be
+deactivated and/or probably throw an endless list of errors.
+
+Therefore it is recommended to install eslint on your system
+globally and to link it into the lychee.js folder.
+
+```bash
+# Install eslint
+sudo npm install -g eslint;
+
+cd /opt/lycheejs;
+npm link eslint;
+```
+
+
 **2) Bootup**
 
 The `lycheejs-harvester` integrates all projects with the
