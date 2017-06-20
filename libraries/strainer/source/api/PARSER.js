@@ -200,7 +200,7 @@ lychee.define('strainer.api.PARSER').requires([
 	const _parse_value = function(str) {
 
 		let val = undefined;
-		if (/^(this|global)$/g.test(str) === false) {
+		if (/(this|global)/g.test(str) === false) {
 
 			try {
 				val = eval('(' + str + ')');
