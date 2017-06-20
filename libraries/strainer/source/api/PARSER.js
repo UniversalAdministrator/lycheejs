@@ -146,7 +146,7 @@ lychee.define('strainer.api.PARSER').requires([
 
 			} else if (str.startsWith('lychee.interfaceof') || str.startsWith('_lychee.interfaceof')) {
 
-				let tmp = str.split(/lychee.interfaceof\(([A-Za-z_\.]+),(.*)\)/g);
+				let tmp = str.split(/lychee.interfaceof\(([A-Za-z0-9_\.]+),(.*)\)/g);
 				if (tmp.length > 1) {
 					type = tmp[1];
 				}
@@ -341,7 +341,7 @@ lychee.define('strainer.api.PARSER').requires([
 
 			} else if (str.startsWith('lychee.import') || str.startsWith('_lychee.import')) {
 
-				let tmp = str.split(/lychee\.import\(\'([A-Za-z\.]+)\'\)/g);
+				let tmp = str.split(/lychee\.import\(\'([A-Za-z0-9_\.]+)\'\)/g);
 				if (tmp.length > 2) {
 
 					value = {

@@ -142,7 +142,7 @@
 	},
 	{
 		"name": "(lychee.interfaceof(_App_layer, layer) || lychee.interfaceof(_Ui_layer, layer))",
-		"type": "lychee.*.Layer",
+		"type": "lychee.app.Layer",
 		"value": {
 			"constructor": "lychee.app.Layer",
 			"arguments": []
@@ -161,6 +161,22 @@
 		"type": "lychee.ai.Agent",
 		"value": {
 			"constructor": "lychee.ai.Agent",
+			"arguments": []
+		}
+	},
+	{
+		"name": "_validate_effect(effect)",
+		"type": "lychee.effect.Alpha",
+		"value": {
+			"constructor": "lychee.effect.Alpha",
+			"arguments": []
+		}
+	},
+	{
+		"name": "effect",
+		"type": "lychee.effect.Alpha",
+		"value": {
+			"constructor": "lychee.effect.Alpha",
 			"arguments": []
 		}
 	},

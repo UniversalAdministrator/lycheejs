@@ -5,6 +5,24 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 	 * HELPERS
 	 */
 
+	const _validate_effect = function(effect) {
+
+		if (effect instanceof Object) {
+
+			if (
+				typeof effect.update === 'function'
+				&& typeof effect.render === 'function'
+			) {
+				return true;
+			}
+
+		}
+
+
+		return false;
+
+	};
+
 	const _sphere_sphere = function(a, b) {
 
 		let dx  = Math.sqrt(Math.pow(b.position.x - a.position.x, 2));
@@ -313,7 +331,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 		collidesWith: function(entity) {
 
-			entity = lychee.interfaceof(lychee.app.Entity, entity) ? entity : null;
+			entity = lychee.interfaceof(Composite, entity) ? entity : null;
 
 
 			if (entity !== null) {
@@ -392,7 +410,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 		addEffect: function(effect) {
 
-			effect = effect instanceof Object && typeof effect.update === 'function' ? effect : null;
+			effect = _validate_effect(effect) ? effect : null;
 
 
 			if (effect !== null) {
@@ -415,7 +433,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 		removeEffect: function(effect) {
 
-			effect = effect instanceof Object && typeof effect.update === 'function' ? effect : null;
+			effect = _validate_effect(effect) ? effect : null;
 
 
 			if (effect !== null) {

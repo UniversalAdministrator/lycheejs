@@ -3,7 +3,6 @@ lychee.define('lychee.math.Matrix').requires([
 	'lychee.math.Vector3'
 ]).exports(function(lychee, global, attachments) {
 
-	const _Array   = typeof Float32Array !== 'undefined' ? Float32Array : Array;
 	const _Vector3 = lychee.import('lychee.math.Vector3');
 
 
@@ -14,7 +13,7 @@ lychee.define('lychee.math.Matrix').requires([
 
 	let Composite = function(data) {
 
-		this.data = new _Array(16);
+		this.data = new Float32Array(16);
 
 
 		if (data instanceof Array) {
@@ -30,7 +29,7 @@ lychee.define('lychee.math.Matrix').requires([
 	};
 
 
-	Composite.IDENTITY = new _Array([
+	Composite.IDENTITY = new Float32Array([
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,

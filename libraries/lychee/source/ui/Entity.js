@@ -8,6 +8,30 @@ lychee.define('lychee.ui.Entity').includes([
 
 
 	/*
+	 * HELPERS
+	 */
+
+	const _validate_effect = function(effect) {
+
+		if (effect instanceof Object) {
+
+			if (
+				typeof effect.update === 'function'
+				&& typeof effect.render === 'function'
+			) {
+				return true;
+			}
+
+		}
+
+
+		return false;
+
+	};
+
+
+
+	/*
 	 * IMPLEMENTATION
 	 */
 
@@ -216,7 +240,7 @@ lychee.define('lychee.ui.Entity').includes([
 
 		addEffect: function(effect) {
 
-			effect = effect instanceof Object && typeof effect.update === 'function' ? effect : null;
+			effect = _validate_effect(effect) ? effect : null;
 
 
 			if (effect !== null) {
@@ -239,7 +263,7 @@ lychee.define('lychee.ui.Entity').includes([
 
 		removeEffect: function(effect) {
 
-			effect = effect instanceof Object && typeof effect.update === 'function' ? effect : null;
+			effect = _validate_effect(effect) ? effect : null;
 
 
 			if (effect !== null) {
