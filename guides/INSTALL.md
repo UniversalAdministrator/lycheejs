@@ -9,7 +9,7 @@ Dev Ops, Security, Deployments and Virtualization - please consult the
 [lychee.js Guide](https://github.com/Artificial-Engineering/lycheejs-guide.git).
 
 
-**1) Installation**
+### 1) Installation
 
 The Net Installer automatically installs the lychee.js Engine
 on any UNIX-compatible machine (arm, x86 or amd64). The only
@@ -61,7 +61,7 @@ npm link eslint;
 ```
 
 
-**2) Bootup**
+### 2) Bootup
 
 The `lycheejs-harvester` integrates all projects with the
 Software Bots. Start the `development` profile and open
@@ -75,7 +75,7 @@ lycheejs-harvester start development;
 ```
 
 
-**3) Integration**
+### 3) Integration
 
 <img src="./asset/quickstart-collaborators.png" align="right" width="340px">
 
@@ -102,4 +102,40 @@ Notes:
 
 - You need to add @humansneednotapply to each of your lychee.js Projects' repositories.
 - You do **not** need to add @humansneednotapply to your lychee.js Fork.
+
+
+### 4) IDE Integration
+
+The lychee.js Strainer also allows usage in quickfix
+mode, which in return can easily be integrated into any
+IDE linting plugin.
+
+The `lycheejs-strainer-quickfix` command will show errors
+every time it could not understand your code, its meaning
+or its relations to other files and definitions.
+
+```bash
+cd /opt/lycheejs;
+
+# Example Quickfix Usage
+lycheejs-strainer-quickfix /projects/boilerplate/source/Main.js;
+```
+
+The output format of the `lycheejs-strainer-quickfix` command is
+`/path/to/file.js:line:column: Error Message. [error-rule-id]`
+where each line represents a new error.
+
+
+**VIM / ALE**:
+
+An integration for VIM's [ALE](https://github.com/w0rp/ALE) plugin
+is available. Copy the [strainer.vim](../bin/linter/ale/strainer.vim)
+file to `~/.vim/ale_linters/javascript/strainer.vim` and add the
+following lines to your `.vimrc`:
+
+```vim
+if filereadable("lychee.store") || filereadable("lychee.pkg")
+	let g:ale_linters = { 'javascript': [ 'strainer' ] }
+endif
+```
 
