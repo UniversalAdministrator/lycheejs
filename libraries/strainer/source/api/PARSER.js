@@ -596,6 +596,140 @@ lychee.define('strainer.api.PARSER').requires([
 
 		},
 
+		events: function(code) {
+
+			code = typeof code === 'string' ? code : '';
+
+
+			let events = [];
+			let lines  = code.split('\n');
+			let first  = lines[0].trim();
+			let last   = lines[lines.length - 1].trim();
+
+			// events[0] = {
+			// 	name: 'relayout',
+			// 	parameters: [ Module.detect('"test"') ]
+			// };
+
+			if (first.startsWith('function(') && first.endsWith(') {')) {
+				lines.shift();
+			}
+
+			if (last.endsWith('}')) {
+				lines.pop();
+			}
+
+
+			lines.map(function(line) {
+				return line.trim();
+			}).filter(function(line) {
+
+				if (
+					line.includes('that.trigger(')
+					|| line.includes('this.trigger(')
+				) {
+					return true;
+				}
+
+			}).map(function(line) {
+
+				let chunk = line.trim();
+
+				let i1 = chunk.indexOf('trigger(');
+				let i2 = chunk.indexOf(');');
+
+				if (i2 !== -1) {
+					chunk = chunk.substr(i1 + 8, i2 - i1 - 8).trim();
+				} else {
+					chunk = line.substr(i1 + 8) + _get_chunk(line, ');', code);
+					chunk = chunk.substr(0, chunk.length - 2).trim();
+				}
+
+				if (chunk.includes(',')) {
+
+					let tmp1 = chunk.split(',')[0].trim();
+					let tmp2 = chunk.split(',').slice(1).join(',').trim();
+					let tmp3 = [];
+
+					if (tmp1.startsWith('\'')) tmp1 = tmp1.substr(1);
+					if (tmp1.endsWith('\''))   tmp1 = tmp1.substr(0, tmp1.length - 1);
+
+					if (tmp2.startsWith('[') && tmp2.endsWith(']')) {
+
+						tmp2.substr(1, tmp2.length - 2).split(',').forEach(function(val) {
+							tmp3.push(Module.detect(val.trim()));
+						});
+
+					}
+
+					return {
+						name:       tmp1,
+						parameters: tmp3
+					};
+
+				} else {
+
+					let tmp1 = chunk;
+
+					if (tmp1.startsWith('\'')) tmp1 = tmp1.substr(1);
+					if (tmp1.endsWith('\''))   tmp1 = tmp1.substr(0, tmp1.length - 1);
+
+					return {
+						name:       tmp1,
+						parameters: []
+					};
+
+				}
+
+			}).forEach(function(val) {
+
+				if (val.parameters.length > 0) {
+
+					val.parameters.forEach(function(param) {
+
+						let chunk = param.chunk;
+						let type  = param.type;
+
+						if (type === 'undefined' && /^([A-Za-z0-9]+)$/g.test(chunk)) {
+
+							let mutations = Module.mutations(chunk, code);
+							if (mutations.length > 0) {
+
+								let val = mutations.find(function(mutation) {
+									return mutation.type !== 'undefined';
+								});
+
+								if (val !== undefined) {
+
+									param.type  = val.type;
+									param.value = val.value;
+
+								}
+
+							} else {
+
+								if (lychee.debug === true) {
+									console.warn('strainer.api.PARSER: No traceable mutations for parameter "' + chunk + '".');
+								}
+
+							}
+
+						}
+
+					});
+
+				}
+
+
+				events.push(val);
+
+			});
+
+
+			return events;
+
+		},
+
 		hash: function(code) {
 
 			code = typeof code === 'string' ? code : '';
@@ -776,7 +910,14 @@ lychee.define('strainer.api.PARSER').requires([
 					let i1 = line.indexOf(name);
 					let i2 = line.indexOf('=', i1);
 					let i3 = line.indexOf('.', i1);
-					if (i1 !== -1 && i2 !== -1 && (i3 === -1 || i3 > i2)) {
+					let i4 = line.indexOf('[', i1);
+
+					if (
+						i1 !== -1
+						&& i2 !== -1
+						&& (i3 === -1 || i3 > i2)
+						&& (i4 === -1 || i4 > i2)
+					) {
 						return true;
 					}
 
@@ -839,9 +980,19 @@ lychee.define('strainer.api.PARSER').requires([
 			let values     = [];
 			let lines      = code.split('\n');
 			let nest_level = 0;
+			let first      = lines[0].trim();
+			let last       = lines[lines.length - 1].trim();
+
+			if (first.startsWith('function(') && first.endsWith(') {')) {
+				lines.shift();
+			}
+
+			if (last.endsWith('}')) {
+				lines.pop();
+			}
 
 
-			lines.slice(1, -1).map(function(line) {
+			lines.map(function(line) {
 				return line.trim();
 			}).filter(function(line) {
 
@@ -910,16 +1061,14 @@ lychee.define('strainer.api.PARSER').requires([
 				let i1 = chunk.indexOf('return ');
 				let i2 = chunk.indexOf(';', i1);
 				if (i2 !== -1) {
-					return chunk.substr(i1 + 7, i2 - i1 - 7).trim();
+					return Module.detect(chunk.substr(i1 + 7, i2 - i1 - 7).trim());
 				}
 
 				chunk = line.substr(i1 + 7) + ' ' + _get_chunk(line, ';', code);
 				chunk = chunk.substr(0, chunk.length - 1);
 
-				return chunk.trim();
+				return Module.detect(chunk.trim());
 
-			}).map(function(chunk) {
-				return Module.detect(chunk);
 			}).forEach(function(val) {
 
 				let chunk = val.chunk;
@@ -927,7 +1076,6 @@ lychee.define('strainer.api.PARSER').requires([
 				let value = val.value;
 
 				if (type === 'undefined' && /^([A-Za-z0-9]+)$/g.test(chunk)) {
-
 
 					let mutations = Module.mutations(chunk, code);
 					if (mutations.length > 0) {
@@ -945,7 +1093,7 @@ lychee.define('strainer.api.PARSER').requires([
 					} else {
 
 						if (lychee.debug === true) {
-							console.warn('strainer.api.PARSER: No traceable mutations for "' + chunk + '".');
+							console.warn('strainer.api.PARSER: No traceable mutations for value "' + chunk + '".');
 						}
 
 					}

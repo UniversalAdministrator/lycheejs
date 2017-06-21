@@ -4,6 +4,9 @@
 			"Main": [
 				"json"
 			],
+			"Quickfix": [
+				"json"
+			],
 			"Template": [
 				"json"
 			],

@@ -302,6 +302,87 @@ lychee.define('strainer.api.Composite').requires([
 
 	};
 
+	const _parse_events = function(methods, events, stream, errors) {
+
+		for (let mid in methods) {
+
+			let method = methods[mid];
+			let body   = method.body;
+			let ewents = _PARSER.events(body);
+			if (ewents.length > 0) {
+
+				ewents.forEach(function(event) {
+
+					let cache = events[event.name];
+					if (cache === undefined) {
+
+						cache = events[event.name] = {
+							name:       event.name,
+							methods:    [ mid ],
+							parameters: event.parameters
+						};
+
+					} else {
+
+						if (cache.methods.includes(mid) === false) {
+							cache.methods.push(mid);
+						}
+
+						let c_params = cache.parameters;
+						let e_params = event.parameters;
+
+						if (c_params.length !== e_params.length) {
+
+							if (c_params.length > e_params.length) {
+
+								c_params.forEach(function(param, c) {
+
+									let other = e_params[c];
+									if (other !== undefined) {
+
+										if (param.type === 'undefined' && other.type !== 'undefined') {
+											param.chunk = other.chunk;
+											param.type  = other.type;
+											param.value = other.value;
+										}
+
+									}
+
+								});
+
+							} else {
+
+								e_params.forEach(function(param, e) {
+
+									let other = c_params[e];
+									if (other !== undefined) {
+
+										if (param.type === 'undefined' && other.type !== 'undefined') {
+											param.chunk = other.chunk;
+											param.type  = other.type;
+											param.value = other.value;
+										}
+
+									} else if (other === undefined) {
+										c_params[e] = param;
+									}
+
+								});
+
+							}
+
+						}
+
+					}
+
+				});
+
+			}
+
+		}
+
+	};
+
 	const _parse_methods = function(methods, stream, errors) {
 
 		let i1 = stream.indexOf('\n\tComposite.prototype = {');
@@ -350,7 +431,7 @@ lychee.define('strainer.api.Composite').requires([
 
 				}).forEach(function(code) {
 
-					let name  = code.split(':')[0].trim();
+					let name = code.split(':')[0].trim();
 					if (name !== '') {
 
 						let body  = code.split(':').slice(1).join(':').trim();
@@ -517,6 +598,7 @@ lychee.define('strainer.api.Composite').requires([
 				_parse_properties(result.properties, stream, errors);
 				_parse_enums(result.enums, stream, errors);
 				_parse_methods(result.methods, stream, errors);
+				_parse_events(result.methods, result.events, stream, errors);
 
 
 				if (result.constructor.parameters.length === 1) {
