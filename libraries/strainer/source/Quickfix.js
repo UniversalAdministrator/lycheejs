@@ -152,22 +152,22 @@ lychee.define('strainer.Quickfix').requires([
 					template.errors.forEach(function(err) {
 
 						let path = '/opt/lycheejs' + err.error.fileName;
-						let rule = err.error.ruleId  || '-';
+						let rule = err.error.ruleId  || 'parser-error';
 						let line = err.error.line    || 0;
 						let col  = err.error.column  || 0;
 						let msg  = err.error.message || 'Parsing error: unknown';
 						if (msg.endsWith('.') === false) {
-							msg += '.';
+							msg = msg.trim() + '.';
 						}
 
 
 						let message = '';
 
 						message += path.substr(cwd.length + 1);
-						message += ': line ' + line;
-						message += ', col ' + col;
-						message += ', Error - ' + msg;
-						message += ' (' + rule + ')';
+						message += ':' + line;
+						message += ':' + col;
+						message += ': ' + msg;
+						message += ' [' + rule + ']';
 
 						console.error(message);
 

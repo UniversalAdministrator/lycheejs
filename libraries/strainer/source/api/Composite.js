@@ -58,6 +58,7 @@ lychee.define('strainer.api.Composite').requires([
 	const _find_reference = function(chunk, stream) {
 
 		let ref = {
+			chunk:  '',
 			line:   0,
 			column: 0
 		};
@@ -69,7 +70,8 @@ lychee.define('strainer.api.Composite').requires([
 
 		if (line !== -1) {
 
-			ref.line = line + 1;
+			ref.chunk = lines[line];
+			ref.line  = line + 1;
 
 			let column = lines[line].indexOf(chunk);
 			if (column !== -1) {
@@ -397,13 +399,21 @@ lychee.define('strainer.api.Composite').requires([
 
 						if (/^(control|render|update|deserialize|serialize)$/g.test(mid) === false) {
 
+							let key = found[0];
+							let col = ref.chunk.indexOf(key);
+							if (col !== -1) {
+								col = col + 1;
+							} else {
+								col = ref.column;
+							}
+
 							errors.push({
 								ruleId:     'no-parameter-value',
 								methodName: mid,
 								fileName:   null,
 								message:    'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".',
 								line:       ref.line,
-								column:     ref.column
+								column:     col
 							});
 
 						}
