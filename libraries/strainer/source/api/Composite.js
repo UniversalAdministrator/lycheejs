@@ -55,6 +55,33 @@ lychee.define('strainer.api.Composite').requires([
 
 	};
 
+	const _find_reference = function(chunk, stream) {
+
+		let ref = {
+			line:   0,
+			column: 0
+		};
+
+		let lines = stream.split('\n');
+		let line  = lines.findIndex(function(other) {
+			return other.trim() === chunk.trim();
+		});
+
+		if (line !== -1) {
+
+			ref.line = line + 1;
+
+			let column = lines[line].indexOf(chunk);
+			if (column !== -1) {
+				ref.column = column + 1;
+			}
+
+		}
+
+		return ref;
+
+	};
+
 	const _find_memory = function(key, stream) {
 
 		let str1 = 'const ' + key + ' = ';
@@ -319,13 +346,15 @@ lychee.define('strainer.api.Composite').requires([
 
 				}).forEach(function(code) {
 
-					let name = code.split(':')[0].trim();
+					let name  = code.split(':')[0].trim();
 					if (name !== '') {
 
-						let body = code.split(':').slice(1).join(':').trim();
+						let body  = code.split(':').slice(1).join(':').trim();
+						let chunk = code.split('\n')[0];
 
 						methods[name] = {
 							body:       body,
+							chunk:      chunk,
 							hash:       _PARSER.hash(body),
 							parameters: _PARSER.parameters(body),
 							values:     _PARSER.values(body)
@@ -353,6 +382,7 @@ lychee.define('strainer.api.Composite').requires([
 
 				let method = methods[mid];
 				let params = method.parameters;
+				let ref    = _find_reference(method.chunk, stream);
 				let values = method.values;
 
 				if (params.length > 0) {
@@ -371,7 +401,9 @@ lychee.define('strainer.api.Composite').requires([
 								ruleId:     'no-parameter-value',
 								methodName: mid,
 								fileName:   null,
-								message:    'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".'
+								message:    'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".',
+								line:       ref.line,
+								column:     ref.column
 							});
 
 						}
@@ -388,7 +420,9 @@ lychee.define('strainer.api.Composite').requires([
 							ruleId:     'no-return-value',
 							methodName: mid,
 							fileName:   null,
-							message:    'Invalid return value for method "' + mid + '()".'
+							message:    'Invalid return value for method "' + mid + '()".',
+							line:       ref.line,
+							column:     ref.column
 						});
 
 					}
@@ -411,7 +445,9 @@ lychee.define('strainer.api.Composite').requires([
 							ruleId:     'no-return-value',
 							methodName: mid,
 							fileName:   null,
-							message:    'No valid return values for method "' + mid + '()".'
+							message:    'No valid return values for method "' + mid + '()".',
+							line:       ref.line,
+							column:     ref.column
 						});
 
 					}

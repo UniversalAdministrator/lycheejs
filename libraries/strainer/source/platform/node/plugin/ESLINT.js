@@ -237,9 +237,6 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 	(function() {
 
-		_CONFIG.load();
-
-
 		try {
 
 			_eslint = global.require('eslint');
@@ -256,22 +253,27 @@ lychee.define('strainer.plugin.ESLINT').tags({
 		}
 
 
-		let config = null;
+		_CONFIG.onload = function() {
 
-		if (_CONFIG.buffer instanceof Object) {
+			let config = null;
 
-			config         = {};
-			config.envs    = _CONFIG.buffer.env;
-			config.globals = Object.values(_CONFIG.buffer.globals).map(function(value) {
-				return value + ':true';
-			});
+			if (this.buffer instanceof Object) {
 
-		}
+				config         = {};
+				config.envs    = Object.values(this.buffer.env);
+				config.globals = Object.values(this.buffer.globals).map(function(value) {
+					return value + ':true';
+				});
 
+			}
 
-		if (_eslint !== null && config !== null) {
-			_escli = new _eslint.CLIEngine(config);
-		}
+			if (_eslint !== null && config !== null) {
+				_escli = new _eslint.CLIEngine(config);
+			}
+
+		};
+
+		_CONFIG.load();
 
 	})();
 

@@ -55,6 +55,33 @@ lychee.define('strainer.api.Module').requires([
 
 	};
 
+	const _find_reference = function(chunk, stream) {
+
+		let ref = {
+			line:   0,
+			column: 0
+		};
+
+		let lines = stream.split('\n');
+		let line  = lines.findIndex(function(other) {
+			return other.trim() === chunk.trim();
+		});
+
+		if (line !== -1) {
+
+			ref.line = line + 1;
+
+			let column = lines[line].indexOf(chunk);
+			if (column !== -1) {
+				ref.column = column + 1;
+			}
+
+		}
+
+		return ref;
+
+	};
+
 	const _find_memory = function(key, stream) {
 
 		let str1 = 'const ' + key + ' = ';
@@ -207,6 +234,7 @@ lychee.define('strainer.api.Module').requires([
 
 				let method = methods[mid];
 				let params = method.parameters;
+				let ref    = _find_reference(method.chunk, stream);
 				let values = method.values;
 
 
@@ -226,7 +254,9 @@ lychee.define('strainer.api.Module').requires([
 								ruleId:     'no-parameter-value',
 								methodName: mid,
 								fileName:   null,
-								message:    'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".'
+								message:    'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".',
+								line:       ref.line,
+								column:     ref.column
 							});
 
 						}
@@ -241,7 +271,9 @@ lychee.define('strainer.api.Module').requires([
 						ruleId:     'no-return-value',
 						methodName: mid,
 						fileName:   null,
-						message:    'Invalid return value for method "' + mid + '()".'
+						message:    'Invalid return value for method "' + mid + '()".',
+						line:       ref.line,
+						column:     ref.column
 					});
 
 
@@ -262,7 +294,9 @@ lychee.define('strainer.api.Module').requires([
 							ruleId:     'no-return-value',
 							methodName: mid,
 							fileName:   null,
-							message:    'No valid return values for method "' + mid + '()".'
+							message:    'No valid return values for method "' + mid + '()".',
+							line:       ref.line,
+							column:     ref.column
 						});
 
 					}

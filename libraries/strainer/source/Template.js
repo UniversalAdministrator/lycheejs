@@ -185,7 +185,6 @@ lychee.define('strainer.Template').requires([
 
 				console.log('strainer: CHECK-ESLINT ' + project);
 
-
 				this.checks = this.codes.map(function(asset) {
 
 					let report = _plugin.ESLINT.check(asset);
@@ -194,6 +193,7 @@ lychee.define('strainer.Template').requires([
 						let result = _plugin.ESLINT.fix(asset, report);
 						if (result.length > 0) {
 							result.forEach(function(err) {
+								err.error.fileName = asset.url;
 								errors.push(err);
 							});
 						}
@@ -293,6 +293,7 @@ lychee.define('strainer.Template').requires([
 							let result = _plugin.API.fix(asset, report);
 							if (result.length > 0) {
 								result.forEach(function(err) {
+									err.error.fileName = asset.url;
 									errors.push(err);
 								});
 							}
