@@ -38,7 +38,7 @@ sudo bash -c "$(curl -fsSL https://lychee.js.org/install.sh)";
 ```
 
 
-**1.5) (Recommended) eslint Installation**
+### 2) (Required) Manual eslint Installation
 
 The lychee.js Engine heavily relies on [eslint](https://github.com/eslint)
 for both static and dynamic code analysis, as eslint helps
@@ -53,7 +53,6 @@ Therefore it is recommended to install eslint on your system
 globally and to link it into the lychee.js folder.
 
 ```bash
-# Install eslint
 sudo npm install -g eslint;
 
 cd /opt/lycheejs;
@@ -61,7 +60,7 @@ npm link eslint;
 ```
 
 
-### 2) Bootup
+### 3) Bootup
 
 The `lycheejs-harvester` integrates all projects with the
 Software Bots. Start the `development` profile and open
@@ -75,7 +74,7 @@ lycheejs-harvester start development;
 ```
 
 
-### 3) Integration
+### 4) Repository Integration
 
 <img src="./asset/quickstart-collaborators.png" align="right" width="340px">
 
@@ -104,29 +103,38 @@ Notes:
 - You do **not** need to add @humansneednotapply to your lychee.js Fork.
 
 
-### 4) IDE Integration
+### 5) IDE Integration
 
-The lychee.js Strainer also allows usage in quickfix
-mode, which in return can easily be integrated into any
-IDE linting plugin.
+The [lychee.js Strainer](../libraries/strainer) also allows usage
+in quickfix mode, which in return can be easily integrated into
+any IDE as an external linter command.
 
 The `lycheejs-strainer-quickfix` command will show errors
-every time it could not understand your code, its meaning
-or its relations to other files and definitions.
+every time it could not understand your code, its meanings
+or its relations to other definitions.
+
+The output format of the `lycheejs-strainer-quickfix` command
+is the following, where each line represents separate error:
 
 ```bash
-cd /opt/lycheejs;
-
-# Example Quickfix Usage
-lycheejs-strainer-quickfix /projects/boilerplate/source/Main.js;
+/path/to/file.js:line:column: Error Message. [error-rule-id]
 ```
 
-The output format of the `lycheejs-strainer-quickfix` command is
-`/path/to/file.js:line:column: Error Message. [error-rule-id]`
-where each line represents a new error.
+```bash
+# Example Output
+[$] cd /opt/lycheejs;
+[$] lycheejs-strainer-quickfix libraries/lychee/source/app/Main.js
+libraries/lychee/source/app/Main.js:37:11: Parsing error: Unexpected token an. [parser-error]
+libraries/lychee/source/app/Main.js:426:3: Invalid return value for method "init()". [no-return-value]
+libraries/lychee/source/app/Main.js:507:3: Invalid return value for method "destroy()". [no-return-value]
+libraries/lychee/source/app/Main.js:559:22: Invalid parameter values for "id" for method "setState()". [no-parameter-value]
+libraries/lychee/source/app/Main.js:577:26: Invalid parameter values for "whatever" for method "getState()". [no-parameter-value]
+
+5 problems
+```
 
 
-**VIM / ALE**:
+**VIM / NeoVIM**:
 
 An integration for VIM's [ALE](https://github.com/w0rp/ALE) plugin
 is available. Copy the [strainer.vim](../bin/linter/ale/strainer.vim)
