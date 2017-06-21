@@ -13,6 +13,7 @@ lychee.define('strainer.api.Module').requires([
 
 	const _SERIALIZE = {
 		body:       'function() { return {}; }',
+		chunk:      'function() {',
 		hash:       _PARSER.hash('function() { return {}; }'),
 		parameters: [],
 		values:     [{
@@ -26,8 +27,9 @@ lychee.define('strainer.api.Module').requires([
 	};
 
 	const _DESERIALIZE = {
-		body: 'function(blob) {}',
-		hash: _PARSER.hash('function(blob) {}'),
+		body:       'function(blob) {}',
+		chunk:      'function(blob) {',
+		hash:       _PARSER.hash('function(blob) {}'),
 		parameters: [{
 			name:  'blob',
 			type:  'SerializationBlob',
@@ -203,10 +205,12 @@ lychee.define('strainer.api.Module').requires([
 					let name = code.split(':')[0].trim();
 					if (name !== '') {
 
-						let body = code.split(':').slice(1).join(':').trim();
+						let body  = code.split(':').slice(1).join(':').trim();
+						let chunk = code.split('\n')[0];
 
 						methods[name] = {
 							body:       body,
+							chunk:      chunk,
 							hash:       _PARSER.hash(body),
 							parameters: _PARSER.parameters(body),
 							values:     _PARSER.values(body)
@@ -250,13 +254,21 @@ lychee.define('strainer.api.Module').requires([
 
 						if (/^(control|render|update|deserialize|serialize)$/g.test(mid) === false) {
 
+							let key = found[0];
+							let col = ref.chunk.indexOf(key);
+							if (col !== -1) {
+								col = col + 1;
+							} else {
+								col = ref.column;
+							}
+
 							errors.push({
 								ruleId:     'no-parameter-value',
 								methodName: mid,
 								fileName:   null,
 								message:    'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".',
 								line:       ref.line,
-								column:     ref.column
+								column:     col
 							});
 
 						}

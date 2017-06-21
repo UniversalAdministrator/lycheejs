@@ -13,6 +13,7 @@ lychee.define('strainer.api.Composite').requires([
 
 	const _SERIALIZE = {
 		body:       'function() { return {}; }',
+		chunk:      'function() {',
 		hash:       _PARSER.hash('function() { return {}; }'),
 		parameters: [],
 		values:     [{
@@ -26,8 +27,9 @@ lychee.define('strainer.api.Composite').requires([
 	};
 
 	const _DESERIALIZE = {
-		body: 'function(blob) {}',
-		hash: _PARSER.hash('function(blob) {}'),
+		body:       'function(blob) {}',
+		chunk:      'function(blob) {',
+		hash:       _PARSER.hash('function(blob) {}'),
 		parameters: [{
 			name:  'blob',
 			type:  'SerializationBlob',

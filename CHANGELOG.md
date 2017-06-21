@@ -22,6 +22,7 @@ and `fixed`.
 
 ## [2017-Q2] - UNRELEASED
 
+- **Changed**: Libraries and Projects refactor to match lychee.js Strainer's expectations.
 - **Changed**: lychee.js Strainer supports mutations, traces and dynamic memory lookups.
 - **Changed**: All helper scripts support `--autocomplete` syntax.
 - **Changed**: lychee.js Harvester synchronizes platform tags.
@@ -39,6 +40,7 @@ and `fixed`.
 - Removed: lychee.app.Sprite deprecates `getMap()` method.
 - Removed: lychee.ui.Sprite deprecates `getMap()` method.
 - Added: lychee.js Fertilizer supports `*/target` and `platform/*` syntax.
+- Added: lychee.js Strainer supports `quickfix mode` syntax.
 - Added: lychee.app.Main supports auto-sync of Stash and Storage instances.
 - Added: Project Immune as an RTS Game demo.
 - Added: lychee.app.Layer `query()` method.
