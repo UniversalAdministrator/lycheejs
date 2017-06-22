@@ -671,7 +671,8 @@ lychee.define('strainer.api.Composite').requires([
 
 					} else if (/^(main|client|remote|server)$/g.test(check.name) === false) {
 
-						let ref = _find_reference('\n\tlet Composite =', stream);
+						let chunk = result.constructor.body.split('\n')[0];
+						let ref   = _find_reference('\n\tlet Composite = ' + chunk, stream);
 
 						errors.push({
 							ruleId:     'no-composite',
