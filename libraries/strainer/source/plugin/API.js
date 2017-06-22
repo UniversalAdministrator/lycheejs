@@ -152,35 +152,18 @@ lychee.define('strainer.plugin.API').requires([
 
 			if (asset !== null && report !== null) {
 
-				let url = asset.url;
-
 				report.errors.forEach(function(err) {
 
-					let rule    = err.ruleId;
-					let message = err.message    || '';
-					let method  = err.methodName || '';
-
-
-					let fix = _FIXES[rule] || null;
-					let tmp = false;
+					let rule = err.ruleId;
+					let fix  = _FIXES[rule] || null;
+					let tmp  = false;
 
 					if (fix !== null) {
 						tmp = fix(err, report);
 					}
 
 					if (tmp === false) {
-
-						let header = '("' + rule + '") ' + url;
-						if (method !== '') {
-							header += '#' + method;
-						}
-
-						filtered.push({
-							error:   err,
-							header:  header,
-							message: message
-						});
-
+						filtered.push(err);
 					}
 
 				});

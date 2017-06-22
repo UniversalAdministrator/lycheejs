@@ -67,6 +67,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			if (pkg !== null) {
 
+				let id    = '';
 				let tmp_i = ns.indexOf('source');
 				let tmp_s = ns[ns.length - 1];
 
@@ -74,15 +75,12 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 					ns[ns.length - 1] = tmp_s.split('.').slice(0, -1).join('.');
 				}
 
-				let classId = '';
 				if (tmp_i !== -1) {
-					classId = ns.slice(tmp_i + 1).join('.');
+					id = ns.slice(tmp_i + 1).join('.');
 				}
 
 
-				this.id        = pkg.id + '.' + classId;
-				this.classId   = classId;
-				this.packageId = pkg.id;
+				this.id = pkg.id + '.' + id;
 
 			}
 
@@ -101,26 +99,18 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 		id = typeof id === 'string' ? id : '';
 
 
-		this.id        = '';
-		this.classId   = '';
-		this.packageId = '';
+		this.id     = '';
 
-		this.__file    = lychee.Environment.__FILENAME || null;
+		this.__file = lychee.Environment.__FILENAME || null;
 
 
 		if (/\./.test(id)) {
 
-			let tmp = id.split('.');
+			this.id = id;
 
-			this.id        = id;
-			this.classId   = tmp.slice(1).join('.');
-			this.packageId = tmp[0];
+		} else if (/^([A-Za-z0-9\.]+)/g.test(id)) {
 
-		} else if (/^([A-Za-z0-9\.]+)/g.test(id) === true) {
-
-			this.id        = 'lychee.' + id;
-			this.classId   = id;
-			this.packageId = 'lychee';
+			this.id = 'lychee.' + id;
 
 		} else {
 

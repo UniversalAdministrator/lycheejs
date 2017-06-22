@@ -213,25 +213,52 @@ lychee.define('strainer.api.Composite').requires([
 
 		if (i1 !== -1 && i2 !== -1) {
 
-			stream.substr(i1, i2 - i1 + 4).split('\n').forEach(function(line, l) {
+			let body = stream.substr(i1 + 18, i2 - i1 - 15).trim();
+			if (body.length > 0) {
 
-				let tmp1 = line.trim();
-				if (tmp1.startsWith('this.') && tmp1.includes('=')) {
+				body.split('\n').forEach(function(line, l) {
 
-					let tmp2 = tmp1.split(/this\.([a-z]+)([\s]+)=([\s]+)(.*);/g);
-					if (tmp2.pop() === '') {
+					let chunk = line.trim();
+					if (chunk.startsWith('this.') && chunk.includes('=')) {
 
-						// properties['alpha'] = { type: 'Number', value: 1 }
-						properties[tmp2[1]] = {
-							chunk: tmp1,
-							value: _PARSER.detect(tmp2[4])
-						};
+						let tmp = chunk.split(/this\.([a-z]+)([\s]+)=([\s]+)(.*);/g).filter(function(ch) {
+							return ch.trim() !== '';
+						});
+
+						if (tmp.length === 2) {
+
+							let name = tmp[0];
+							let prop = _PARSER.detect(tmp[1]);
+							if (prop.type === 'undefined' && /^([A-Za-z0-9]+)$/g.test(prop.chunk)) {
+
+								let mutations = _PARSER.mutations(prop.chunk, body);
+								if (mutations.length > 0) {
+
+									let val = mutations.find(function(mutation) {
+										return mutation.type !== 'undefined';
+									});
+
+									if (val !== undefined) {
+										prop.type  = val.type;
+										prop.value = val.value;
+									}
+
+								}
+
+							}
+
+							properties[name] = {
+								chunk: chunk,
+								value: prop
+							};
+
+						}
 
 					}
 
-				}
+				});
 
-			});
+			}
 
 		}
 

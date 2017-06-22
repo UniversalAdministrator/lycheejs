@@ -347,7 +347,6 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 			if (report !== null) {
 
-				let url   = asset.url;
 				let code  = asset.buffer.toString('utf8').split('\n');
 				let range = [ 0 ];
 
@@ -361,11 +360,9 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 				report.forEach(function(err) {
 
-					let line    = err.line;
-					let column  = err.column;
-					let rule    = err.ruleId;
-					let message = err.message || '';
-					let l       = line - 1;
+					let line = err.line;
+					let rule = err.ruleId;
+					let l    = line - 1;
 
 
 					let fix = _FIXES[rule] || null;
@@ -400,11 +397,7 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 					} else {
 
-						filtered.push({
-							error:   err,
-							header:  '("' + rule + '") ' + url + '#L' + line + ':' + column,
-							message: message
-						});
+						filtered.push(err);
 
 					}
 

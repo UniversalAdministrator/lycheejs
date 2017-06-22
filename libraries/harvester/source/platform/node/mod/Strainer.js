@@ -98,9 +98,10 @@ lychee.define('harvester.mod.Strainer').tags({
 				for (let l = 0, ll = lines.length; l < ll; l++) {
 
 					let line = lines[l];
-					let tmp1 = line.substr(15, line.length - 29);
-
-					console.warn(tmp1.trim());
+					let tmp1 = line.substr(15, line.length - 29).trim();
+					if (tmp1.startsWith('strainer: /')) {
+						console.error(tmp1.trim());
+					}
 
 				}
 

@@ -151,11 +151,11 @@ lychee.define('strainer.Quickfix').requires([
 
 					template.errors.forEach(function(err) {
 
-						let path = '/opt/lycheejs' + err.error.fileName;
-						let rule = err.error.ruleId  || 'parser-error';
-						let line = err.error.line    || 0;
-						let col  = err.error.column  || 0;
-						let msg  = err.error.message || 'Parsing error: unknown';
+						let path = '/opt/lycheejs' + err.fileName;
+						let rule = err.ruleId  || 'parser-error';
+						let line = err.line    || 0;
+						let col  = err.column  || 0;
+						let msg  = err.message || 'Parsing error: unknown';
 						if (msg.endsWith('.') === false) {
 							msg = msg.trim() + '.';
 						}

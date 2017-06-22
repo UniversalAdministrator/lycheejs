@@ -67,7 +67,7 @@ lychee.define('strainer.Template').requires([
 			files = files.map(function(value) {
 				return value.substr(1);
 			}).filter(function(value) {
-				return value.substr(0, 4) !== 'core' && value.substr(-12) !== 'bootstrap.js';
+				return value.substr(-12) !== 'bootstrap.js';
 			}).filter(function(value) {
 				return value.indexOf('__') === -1;
 			}).sort();
@@ -191,12 +191,16 @@ lychee.define('strainer.Template').requires([
 					if (report.length > 0) {
 
 						let result = _plugin.ESLINT.fix(asset, report);
-						if (result.length > 0) {
-							result.forEach(function(err) {
-								err.error.fileName = asset.url;
+
+						report.forEach(function(err) {
+
+							err.fileName = asset.url;
+
+							if (result.includes(err) === true) {
 								errors.push(err);
-							});
-						}
+							}
+
+						});
 
 						return result;
 
@@ -291,12 +295,19 @@ lychee.define('strainer.Template').requires([
 						if (report.errors.length > 0) {
 
 							let result = _plugin.API.fix(asset, report);
-							if (result.length > 0) {
-								result.forEach(function(err) {
-									err.error.fileName = asset.url;
+
+							report.errors = report.errors.filter(function(err) {
+
+								err.fileName = asset.url;
+
+								if (result.includes(err) === true) {
 									errors.push(err);
-								});
-							}
+									return true;
+								}
+
+								return false;
+
+							});
 
 						}
 

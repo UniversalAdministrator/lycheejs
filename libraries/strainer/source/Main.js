@@ -108,8 +108,27 @@ lychee.define('strainer.Main').requires([
 				} else {
 
 					template.errors.forEach(function(err) {
-						console.error('strainer: ' + err.header);
-						console.error('          ' + err.message);
+
+						let path = err.fileName;
+						let rule = err.ruleId  || 'parser-error';
+						let line = err.line    || 0;
+						let col  = err.column  || 0;
+						let msg  = err.message || 'Parsing error: unknown';
+						if (msg.endsWith('.') === false) {
+							msg = msg.trim() + '.';
+						}
+
+
+						let message = '';
+
+						message += path;
+						message += ':' + line;
+						message += ':' + col;
+						message += ': ' + msg;
+						message += ' [' + rule + ']';
+
+						console.error('strainer: ' + message);
+
 					});
 
 					console.error('strainer: FAILURE ("' + project + '")');

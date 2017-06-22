@@ -66,7 +66,7 @@ lychee.define('strainer.api.PARSER').requires([
 			type = 'String';
 		} else if (str.startsWith('\'') || str.startsWith('"')) {
 			type = 'String';
-		} else if (str.includes('toString')) {
+		} else if (str.includes('toString(') || str.includes('join(')) {
 			type = 'String';
 		} else if (str.startsWith('0b') || str.startsWith('0x') || str.startsWith('0o') || /^[0-9\.]+$/g.test(str)) {
 			type = 'Number';
@@ -276,7 +276,7 @@ lychee.define('strainer.api.PARSER').requires([
 			value = str.substr(1, str.length - 2);
 		} else if (str.startsWith('\'') || str.startsWith('"')) {
 			value = "<string>";
-		} else if (str.includes('toString')) {
+		} else if (str.includes('toString(') || str.includes('join(')) {
 			value = "<string>";
 		} else if (str.startsWith('0b') || str.startsWith('0x') || str.startsWith('0o') || /^[0-9\.]+$/g.test(str)) {
 			value = _parse_value(str);
