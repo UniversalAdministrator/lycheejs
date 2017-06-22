@@ -104,12 +104,22 @@ lychee.define('lychee.ui.entity.Select').includes([
 				let option = null;
 				let q      = this.options.indexOf(this.value);
 
-				if (key === 'w' || key === 'arrow-up')   option = this.options[--q] || this.options[0];
-				if (key === 's' || key === 'arrow-down') option = this.options[++q] || this.options[this.options.length - 1];
+				if (key === 'w' || key === 'arrow-up') {
+					option = this.options[--q] || this.options[0];
+				}
+
+				if (key === 's' || key === 'arrow-down') {
+					option = this.options[++q] || this.options[this.options.length - 1];
+				}
 
 
-				if (key === 'space') option = this.options[0];
-				if (key === 'enter') option = this.options[this.options.length - 1];
+				if (key === 'space') {
+					option = this.options[0];
+				}
+
+				if (key === 'enter') {
+					option = this.options[this.options.length - 1];
+				}
 
 
 				let result = this.setValue(option);

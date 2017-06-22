@@ -220,8 +220,13 @@ lychee.define('strainer.api.Composite').requires([
 
 					let tmp2 = tmp1.split(/this\.([a-z]+)([\s]+)=([\s]+)(.*);/g);
 					if (tmp2.pop() === '') {
+
 						// properties['alpha'] = { type: 'Number', value: 1 }
-						properties[tmp2[1]] = _PARSER.detect(tmp2[4]);
+						properties[tmp2[1]] = {
+							chunk: tmp1,
+							value: _PARSER.detect(tmp2[4])
+						};
+
 					}
 
 				}
@@ -639,11 +644,15 @@ lychee.define('strainer.api.Composite').requires([
 
 					} else if (/^(main|client|remote|server)$/g.test(check.name) === false) {
 
+						let ref = _find_reference('\n\tlet Composite =', stream);
+
 						errors.push({
 							ruleId:     'no-composite',
 							methodName: 'constructor',
 							fileName:   null,
-							message:    'Composite has no "settings" object.'
+							message:    'Composite has no "settings" object.',
+							line:       ref.line,
+							column:     ref.column
 						});
 
 					}
@@ -654,7 +663,7 @@ lychee.define('strainer.api.Composite').requires([
 				for (let p in result.properties) {
 
 					let property = result.properties[p];
-					if (property.type === 'undefined') {
+					if (property.value.type === 'undefined') {
 
 						let method = result.methods['set' + p.charAt(0).toUpperCase() + p.substr(1)] || null;
 						if (method !== null) {
@@ -664,26 +673,24 @@ lychee.define('strainer.api.Composite').requires([
 							});
 
 							if (found !== undefined && found.type !== 'undefined') {
-								property.type = found.type;
+								property.value.type = found.type;
 							}
 
 						}
 
 					}
 
-				}
+					if (property.value.type === 'undefined' && property.value.value === undefined) {
 
-
-				for (let p in result.properties) {
-
-					let property = result.properties[p];
-					if (property.type === 'undefined' && property.value === undefined) {
+						let ref = _find_reference(property.chunk, stream);
 
 						errors.push({
 							ruleId:       'no-property-value',
 							propertyName: p,
 							fileName:     null,
-							message:      'Unguessable property "' + p + '".'
+							message:      'Unguessable property "' + p + '".',
+							line:         ref.line,
+							column:       ref.column
 						});
 
 					}
@@ -691,25 +698,38 @@ lychee.define('strainer.api.Composite').requires([
 				}
 
 
-				if (result.methods['serialize'] === undefined) {
+				if (
+					result.methods['serialize'] === undefined
+					|| result.methods['deserialize'] === undefined
+				) {
 
-					errors.push({
-						ruleId:     'no-serialize',
-						methodName: 'serialize',
-						fileName:   null,
-						message:    'No "serialize()" method.'
-					});
+					let ref = _find_reference('\n\tComposite.prototype =', stream);
 
-				}
+					if (result.methods['serialize'] === undefined) {
 
-				if (result.methods['deserialize'] === undefined) {
+						errors.push({
+							ruleId:     'no-serialize',
+							methodName: 'serialize',
+							fileName:   null,
+							message:    'No "serialize()" method.',
+							line:       ref.line,
+							column:     ref.column
+						});
 
-					errors.push({
-						ruleId:     'no-deserialize',
-						methodName: 'deserialize',
-						fileName:   null,
-						message:    'No "deserialize()" method.'
-					});
+					}
+
+					if (result.methods['deserialize'] === undefined) {
+
+						errors.push({
+							ruleId:     'no-deserialize',
+							methodName: 'deserialize',
+							fileName:   null,
+							message:    'No "deserialize()" method.',
+							line:       ref.line,
+							column:     ref.column
+						});
+
+					}
 
 				}
 

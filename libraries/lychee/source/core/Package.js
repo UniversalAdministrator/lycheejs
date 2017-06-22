@@ -349,9 +349,6 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 		url = typeof url === 'string' ? url : null;
 
 
-		// This is public to allow loading packages
-		// as external renamespaced libraries
-
 		this.id   = id;
 		this.url  = null;
 		this.root = null;

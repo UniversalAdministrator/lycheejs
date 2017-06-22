@@ -1341,7 +1341,13 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 				}
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -1415,7 +1421,10 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		setDebug: function(debug) {
 
-			if (debug === true || debug === false) {
+			debug = typeof debug === 'boolean' ? debug : null;
+
+
+			if (debug !== null) {
 
 				this.debug = debug;
 
@@ -1466,7 +1475,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			if (id !== null) {
 
 				this.id = id;
-
 
 				return true;
 
@@ -1519,8 +1527,10 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		setSandbox: function(sandbox) {
 
-			if (sandbox === true || sandbox === false) {
+			sandbox = typeof sandbox === 'boolean' ? sandbox : null;
 
+
+			if (sandbox !== null) {
 
 				if (sandbox !== this.sandbox) {
 
@@ -1559,7 +1569,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 				this.tags = {};
 
-
 				for (let type in tags) {
 
 					let values = tags[type];
@@ -1572,7 +1581,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 					}
 
 				}
-
 
 				return true;
 
@@ -1603,17 +1611,22 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		setType: function(type) {
 
-			if (type === 'source' || type === 'export' || type === 'build') {
-
-				this.type = type;
+			type = typeof type === 'string' ? type : null;
 
 
-				for (let p = 0, pl = this.packages.length; p < pl; p++) {
-					this.packages[p].setType(this.type);
+			if (type !== null) {
+
+				if (type === 'source' || type === 'export' || type === 'build') {
+
+					this.type = type;
+
+					for (let p = 0, pl = this.packages.length; p < pl; p++) {
+						this.packages[p].setType(this.type);
+					}
+
+					return true;
+
 				}
-
-
-				return true;
 
 			}
 

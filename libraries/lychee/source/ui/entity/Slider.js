@@ -188,19 +188,34 @@ lychee.define('lychee.ui.entity.Slider').includes([
 
 				if (type === Composite.TYPE.horizontal) {
 
-					if (key === 'a' || key === 'arrow-left')  val -= step;
-					if (key === 'd' || key === 'arrow-right') val += step;
+					if (key === 'a' || key === 'arrow-left') {
+						val -= step;
+					}
+
+					if (key === 'd' || key === 'arrow-right') {
+						val += step;
+					}
 
 				} else if (type === Composite.TYPE.vertical) {
 
-					if (key === 'w' || key === 'arrow-up')    val -= step;
-					if (key === 's' || key === 'arrow-down')  val += step;
+					if (key === 'w' || key === 'arrow-up') {
+						val -= step;
+					}
+
+					if (key === 's' || key === 'arrow-down') {
+						val += step;
+					}
 
 				}
 
 
-				if (key === 'space') val = this.min;
-				if (key === 'enter') val = this.max;
+				if (key === 'space') {
+					val = this.min;
+				}
+
+				if (key === 'enter') {
+					val = this.max;
+				}
 
 
 				let result = this.setValue(val);

@@ -413,7 +413,7 @@ lychee.define('lychee.math.Matrix').requires([
 
 				let length = Math.sqrt(x * x + y * y + z * z);
 				if (Math.abs(length) < Composite.PRECISION) {
-					return;
+					return this;
 				}
 
 

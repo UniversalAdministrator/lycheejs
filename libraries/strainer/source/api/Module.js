@@ -364,25 +364,38 @@ lychee.define('strainer.api.Module').requires([
 				_parse_methods(result.methods, stream, errors);
 
 
-				if (result.methods['serialize'] === undefined) {
+				if (
+					result.methods['serialize'] === undefined
+					|| result.methods['deserialize'] === undefined
+				) {
 
-					errors.push({
-						ruleId:     'no-serialize',
-						methodName: 'serialize',
-						fileName:   null,
-						message:    'No "serialize()" method.'
-					});
+					let ref = _find_reference('\n\tconst Module = {', stream);
 
-				}
+					if (result.methods['serialize'] === undefined) {
 
-				if (result.methods['deserialize'] === undefined) {
+						errors.push({
+							ruleId:     'no-serialize',
+							methodName: 'serialize',
+							fileName:   null,
+							message:    'No "serialize()" method.',
+							line:       ref.line,
+							column:     ref.column
+						});
 
-					errors.push({
-						ruleId:     'no-deserialize',
-						methodName: 'deserialize',
-						fileName:   null,
-						message:    'No "deserialize()" method.'
-					});
+					}
+
+					if (result.methods['deserialize'] === undefined) {
+
+						errors.push({
+							ruleId:     'no-deserialize',
+							methodName: 'deserialize',
+							fileName:   null,
+							message:    'No "deserialize()" method.',
+							line:       ref.line,
+							column:     ref.column
+						});
+
+					}
 
 				}
 

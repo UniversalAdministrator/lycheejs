@@ -437,6 +437,10 @@ lychee.define('strainer.api.PARSER').requires([
 			str = typeof str === 'string' ? str : 'undefined';
 
 
+			if (str.startsWith('=')) {
+				str = str.substr(1).trim();
+			}
+
 			if (str.endsWith(';')) {
 				str = str.substr(0, str.length - 1);
 			}
@@ -450,60 +454,75 @@ lychee.define('strainer.api.PARSER').requires([
 
 
 			// XXX: This is explicitely to prevent parser
-			// from endless looping recursively while parsing
-			// itself
+			// from endless looping while parsing itself
 
 			val.chunk = str;
 			val.type  = _detect_type(str);
 			val.value = _detect_value(str);
 
 
-			if (val.value === undefined && str !== 'undefined') {
+			if (
+				val.chunk !== 'undefined'
+				&& val.chunk.includes('.') === false
+				&& val.value === undefined
+			) {
 
 				let dictionary = [];
 
-				if (val.type !== 'undefined') {
+				// TODO: Add support for multiple
+				// types, values in dict entries
 
-					dictionary = _DICTIONARY.filter(function(other) {
-						return str.startsWith(other.name) && other.type === val.type;
-					}).sort(function(a, b) {
-						if (a.name.length === b.name.length) return -1;
-						if (a.name.length !== b.name.length) return  1;
-						return 0;
-					});
+				dictionary = _DICTIONARY.filter(function(other) {
 
-				} else if (val.type === 'undefined') {
+					if (val.chunk.startsWith(other.chunk)) {
 
-					dictionary = _DICTIONARY.filter(function(other) {
-						return str.startsWith(other.name);
-					}).sort(function(a, b) {
-						if (a.name.length > b.name.length) return -1;
-						if (a.name.length < b.name.length) return  1;
-						return 0;
-					});
+						if (other.type !== undefined) {
 
-				}
+							if (val.type === 'undefined' || val.type === other.type) {
+								return true;
+							}
+
+						} else if (other.types !== undefined) {
+
+							if (val.type === 'undefined' || other.types.includes(val.type)) {
+								return true;
+							}
+
+						}
+
+					}
+
+					return false;
+
+				}).sort(function(a, b) {
+					if (a.chunk.length === b.chunk.length) return -1;
+					if (a.chunk.length !== b.chunk.length) return  1;
+					return 0;
+				});
 
 
 				let entry = dictionary[0] || null;
 				if (entry !== null) {
 
-					val.type  = entry.type;
-					val.value = entry.value;
+					if (entry.type !== undefined && entry.value !== undefined) {
 
+						val.type  = entry.type;
+						val.value = entry.value;
 
-					if (str !== entry.name) {
+					} else if (entry.types !== undefined && entry.values !== undefined) {
 
-						if (lychee.debug === true) {
-							console.info('strainer.api.PARSER: Fuzzy guessing for "' + str + '" with "' + entry.name + '".');
-						}
+						val.type  = entry.types[0];
+						val.value = entry.values[0];
 
 					}
 
-				} else {
 
-					if (lychee.debug === true) {
-						console.warn('strainer.api.PARSER: No guessing for "' + str + '".');
+					if (val.chunk !== entry.chunk) {
+
+						if (lychee.debug === true) {
+							console.info('strainer.api.PARSER: Fuzzy guessing for "' + val.chunk + '" with "' + entry.chunk + '".');
+						}
+
 					}
 
 				}
@@ -606,10 +625,6 @@ lychee.define('strainer.api.PARSER').requires([
 			let first  = lines[0].trim();
 			let last   = lines[lines.length - 1].trim();
 
-			// events[0] = {
-			// 	name: 'relayout',
-			// 	parameters: [ Module.detect('"test"') ]
-			// };
 
 			if (first.startsWith('function(') && first.endsWith(') {')) {
 				lines.shift();

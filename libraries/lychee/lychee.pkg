@@ -112,6 +112,23 @@
 					"json"
 				]
 			},
+			"core": {
+				"Asset": [
+					"json"
+				],
+				"Debugger": [
+					"json"
+				],
+				"Definition": [
+					"json"
+				],
+				"Environment": [
+					"json"
+				],
+				"Package": [
+					"json"
+				]
+			},
 			"crypto": {
 				"CRC32": [
 					"json"

@@ -1,11 +1,51 @@
 [
 	{
-		"name": "new _Array",
+		"chunk": "attachments[\"fnt\"]",
+		"type": "Font",
+		"value": {
+			"constructor": "Font",
+			"arguments": []
+		}
+	},
+	{
+		"chunk": "attachments[\"json\"]",
+		"type": "Config",
+		"value": {
+			"constructor": "Config",
+			"arguments": []
+		}
+	},
+	{
+		"chunk": "attachments[\"msc\"]",
+		"type": "Music",
+		"value": {
+			"constructor": "Music",
+			"arguments": []
+		}
+	},
+	{
+		"chunk": "attachments[\"png\"]",
+		"type": "Texture",
+		"value": {
+			"constructor": "Texture",
+			"arguments": []
+		}
+	},
+	{
+		"chunk": "attachments[\"snd\"]",
+		"type": "Sound",
+		"value": {
+			"constructor": "Sound",
+			"arguments": []
+		}
+	},
+	{
+		"chunk": "new _Array",
 		"type": "Array",
 		"value": []
 	},
 	{
-		"name": "new _Buffer",
+		"chunk": "new _Buffer",
 		"type": "Buffer",
 		"value": {
 			"constructor": "Buffer",
@@ -15,7 +55,7 @@
 		}
 	},
 	{
-		"name": "main.client",
+		"chunk": "main.client",
 		"type": "lychee.net.Client",
 		"value": {
 			"constructor": "lychee.net.Client",
@@ -23,7 +63,7 @@
 		}
 	},
 	{
-		"name": "main.input",
+		"chunk": "main.input",
 		"type": "lychee.Input",
 		"value": {
 			"constructor": "lychee.Input",
@@ -31,7 +71,7 @@
 		}
 	},
 	{
-		"name": "main.jukebox",
+		"chunk": "main.jukebox",
 		"type": "lychee.app.Jukebox",
 		"value": {
 			"constructor": "lychee.app.Jukebox",
@@ -39,7 +79,7 @@
 		}
 	},
 	{
-		"name": "main.loop",
+		"chunk": "main.loop",
 		"type": "lychee.app.Loop",
 		"value": {
 			"constructor": "lychee.app.Loop",
@@ -47,7 +87,7 @@
 		}
 	},
 	{
-		"name": "main.renderer",
+		"chunk": "main.renderer",
 		"type": "lychee.Renderer",
 		"value": {
 			"constructor": "lychee.Renderer",
@@ -55,7 +95,7 @@
 		}
 	},
 	{
-		"name": "main.server",
+		"chunk": "main.server",
 		"type": "lychee.net.Server",
 		"value": {
 			"constructor": "lychee.net.Server",
@@ -63,7 +103,7 @@
 		}
 	},
 	{
-		"name": "main.stash",
+		"chunk": "main.stash",
 		"type": "lychee.Stash",
 		"value": {
 			"constructor": "lychee.Stash",
@@ -71,7 +111,7 @@
 		}
 	},
 	{
-		"name": "main.storage",
+		"chunk": "main.storage",
 		"type": "lychee.Storage",
 		"value": {
 			"constructor": "lychee.Storage",
@@ -79,7 +119,7 @@
 		}
 	},
 	{
-		"name": "main.viewport",
+		"chunk": "main.viewport",
 		"type": "lychee.Viewport",
 		"value": {
 			"constructor": "lychee.Viewport",
@@ -87,7 +127,7 @@
 		}
 	},
 	{
-		"name": "_CONFIG",
+		"chunk": "_CONFIG",
 		"type": "Config",
 		"value": {
 			"constructor": "Config",
@@ -97,7 +137,7 @@
 		}
 	},
 	{
-		"name": "_FONT",
+		"chunk": "_FONT",
 		"type": "Font",
 		"value": {
 			"constructor": "Font",
@@ -107,7 +147,7 @@
 		}
 	},
 	{
-		"name": "_CONFIG",
+		"chunk": "_CONFIG",
 		"type": "Config",
 		"value": {
 			"constructor": "Config",
@@ -117,7 +157,7 @@
 		}
 	},
 	{
-		"name": "asset",
+		"chunk": "asset",
 		"type": "lychee.Asset",
 		"value": {
 			"constructor": "lychee.Asset",
@@ -125,7 +165,7 @@
 		}
 	},
 	{
-		"name": "_validate_asset(asset)",
+		"chunk": "_validate_asset(asset)",
 		"type": "lychee.Asset",
 		"value": {
 			"constructor": "lychee.Asset",
@@ -133,7 +173,7 @@
 		}
 	},
 	{
-		"name": "_validate_brain(brain)",
+		"chunk": "_validate_brain(brain)",
 		"type": "lychee.ai.*.Brain",
 		"value": {
 			"constructor": "lychee.ai.enn.Brain",
@@ -141,7 +181,7 @@
 		}
 	},
 	{
-		"name": "(lychee.interfaceof(_App_layer, layer) || lychee.interfaceof(_Ui_layer, layer))",
+		"chunk": "(lychee.interfaceof(_App_layer, layer) || lychee.interfaceof(_Ui_layer, layer))",
 		"type": "lychee.app.Layer",
 		"value": {
 			"constructor": "lychee.app.Layer",
@@ -149,7 +189,7 @@
 		}
 	},
 	{
-		"name": "_validate_agent(agent)",
+		"chunk": "_validate_agent(agent)",
 		"type": "lychee.ai.Agent",
 		"value": {
 			"constructor": "lychee.ai.Agent",
@@ -157,7 +197,7 @@
 		}
 	},
 	{
-		"name": "agent",
+		"chunk": "agent",
 		"type": "lychee.ai.Agent",
 		"value": {
 			"constructor": "lychee.ai.Agent",
@@ -165,7 +205,7 @@
 		}
 	},
 	{
-		"name": "_validate_effect(effect)",
+		"chunk": "_validate_effect(effect)",
 		"type": "lychee.effect.Alpha",
 		"value": {
 			"constructor": "lychee.effect.Alpha",
@@ -173,7 +213,7 @@
 		}
 	},
 	{
-		"name": "effect",
+		"chunk": "effect",
 		"type": "lychee.effect.Alpha",
 		"value": {
 			"constructor": "lychee.effect.Alpha",
@@ -181,31 +221,49 @@
 		}
 	},
 	{
-		"name": "_validate_entity(entity)",
-		"type": "lychee.app.Entity",
-		"value": {
-			"constructor": "lychee.app.Entity",
-			"arguments": []
-		}
+		"chunk": "_validate_entity(entity)",
+		"types": [ "lychee.app.Entity", "lychee.ui.Entity" ],
+		"values": [
+			{
+				"constructor": "lychee.app.Entity",
+				"arguments": []
+			},
+			{
+				"constructor": "lychee.ui.Entity",
+				"arguments": []
+			}
+		]
 	},
 	{
-		"name": "_validate_entity(parent)",
-		"type": "lychee.app.Entity",
-		"value": {
-			"constructor": "lychee.app.Entity",
-			"arguments": []
-		}
+		"chunk": "_validate_entity(parent)",
+		"types": [ "lychee.app.Entity", "lychee.ui.Entity" ],
+		"values": [
+			{
+				"constructor": "lychee.app.Entity",
+				"arguments": []
+			},
+			{
+				"constructor": "lychee.ui.Entity",
+				"arguments": []
+			}
+		]
 	},
 	{
-		"name": "entity",
-		"type": "lychee.app.Entity",
-		"value": {
-			"constructor": "lychee.app.Entity",
-			"arguments": []
-		}
+		"chunk": "entity",
+		"types": [ "lychee.app.Entity", "lychee.ui.Entity" ],
+		"values": [
+			{
+				"constructor": "lychee.app.Entity",
+				"arguments": []
+			},
+			{
+				"constructor": "lychee.ui.Entity",
+				"arguments": []
+			}
+		]
 	},
 	{
-		"name": "_Entity.SHAPE",
+		"chunk": "_Entity.SHAPE",
 		"type": "Enum",
 		"value": {
 			"reference": "lychee.app.Entity.SHAPE",
@@ -213,23 +271,49 @@
 		}
 	},
 	{
-		"name": "_validate_layer(layer)",
-		"type": "lychee.app.Layer",
-		"value": {
-			"constructor": "lychee.app.Layer",
-			"arguments": []
-		}
+		"chunk": "_validate_layer(layer)",
+		"types": [ "lychee.app.Layer", "lychee.ui.Layer" ],
+		"values": [
+			{
+				"constructor": "lychee.app.Layer",
+				"arguments": []
+			},
+			{
+				"constructor": "lychee.ui.Layer",
+				"arguments": []
+			}
+		]
 	},
 	{
-		"name": "layer",
-		"type": "lychee.app.Layer",
-		"value": {
-			"constructor": "lychee.app.Layer",
-			"arguments": []
-		}
+		"chunk": "layer",
+		"types": [ "lychee.app.Layer", "lychee.ui.Layer" ],
+		"values": [
+			{
+				"constructor": "lychee.app.Layer",
+				"arguments": []
+			},
+			{
+				"constructor": "lychee.ui.Layer",
+				"arguments": []
+			}
+		]
 	},
 	{
-		"name": "_JSON",
+		"chunk": "_validate_track(track)",
+		"types": [ "Music", "Sound" ],
+		"values": [
+			{
+				"constructor": "Music",
+				"arguments": []
+			},
+			{
+				"constructor": "Sound",
+				"arguments": []
+			}
+		]
+	},
+	{
+		"chunk": "_JSON",
 		"type": "lychee.codec.JSON",
 		"value": {
 			"reference": "lychee.codec.JSON",
@@ -237,7 +321,7 @@
 		}
 	},
 	{
-		"name": "client",
+		"chunk": "client",
 		"type": "lychee.net.Client",
 		"value": {
 			"constructor": "lychee.net.Client",
@@ -245,7 +329,7 @@
 		}
 	},
 	{
-		"name": "input",
+		"chunk": "input",
 		"type": "lychee.Input",
 		"value": {
 			"constructor": "lychee.Input",
@@ -253,7 +337,7 @@
 		}
 	},
 	{
-		"name": "jukebox",
+		"chunk": "jukebox",
 		"type": "lychee.app.Jukebox",
 		"value": {
 			"constructor": "lychee.app.Jukebox",
@@ -261,7 +345,7 @@
 		}
 	},
 	{
-		"name": "renderer",
+		"chunk": "renderer",
 		"type": "lychee.Renderer",
 		"value": {
 			"constructor": "lychee.Renderer",
@@ -269,7 +353,7 @@
 		}
 	},
 	{
-		"name": "stash",
+		"chunk": "stash",
 		"type": "lychee.Stash",
 		"value": {
 			"constructor": "lychee.Stash",
@@ -277,7 +361,7 @@
 		}
 	},
 	{
-		"name": "storage",
+		"chunk": "storage",
 		"type": "lychee.Storage",
 		"value": {
 			"constructor": "lychee.Storage",
@@ -285,7 +369,7 @@
 		}
 	},
 	{
-		"name": "viewport",
+		"chunk": "viewport",
 		"type": "lychee.Viewport",
 		"value": {
 			"constructor": "lychee.Viewport",
@@ -293,7 +377,7 @@
 		}
 	},
 	{
-		"name": "remote",
+		"chunk": "remote",
 		"type": "lychee.net.Remote",
 		"value": {
 			"constructor": "lychee.net.Remote",
@@ -301,7 +385,7 @@
 		}
 	},
 	{
-		"name": "server",
+		"chunk": "server",
 		"type": "lychee.net.Server",
 		"value": {
 			"constructor": "lychee.net.Server",
@@ -309,7 +393,7 @@
 		}
 	},
 	{
-		"name": "tunnel",
+		"chunk": "tunnel",
 		"type": "lychee.net.Tunnel",
 		"value": {
 			"constructor": "lychee.net.Tunnel",
@@ -317,52 +401,47 @@
 		}
 	},
 	{
-		"name": "id",
+		"chunk": "id",
 		"type": "String",
 		"value": "<unique identifier>"
 	},
 	{
-		"name": "width",
+		"chunk": "width",
 		"type": "Number",
 		"value": 1337
 	},
 	{
-		"name": "height",
+		"chunk": "height",
 		"type": "Number",
 		"value": 1337
 	},
 	{
-		"name": "depth",
+		"chunk": "depth",
 		"type": "Number",
 		"value": 1337
 	},
 	{
-		"name": "radius",
+		"chunk": "radius",
 		"type": "Number",
 		"value": 137
 	},
 	{
-		"name": "Math.pow",
+		"chunk": "Math.pow",
 		"type": "Number",
 		"value": 13.37
 	},
 	{
-		"name": "Math.sqrt",
+		"chunk": "Math.sqrt",
 		"type": "Number",
 		"value": 13.37
 	},
 	{
-		"name": "global",
+		"chunk": "object",
 		"type": "Object",
 		"value": {}
 	},
 	{
-		"name": "object",
-		"type": "Object",
-		"value": {}
-	},
-	{
-		"name": "result",
+		"chunk": "result",
 		"type": "Boolean",
 		"value": true
 	}

@@ -2,6 +2,181 @@
 lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments) {
 
 	/*
+	 * HELPERS
+	 */
+
+	const _validate_track = function(track) {
+
+		if (
+			track instanceof Music
+			|| track instanceof Sound
+		) {
+			return true;
+		}
+
+
+		return false;
+
+	};
+
+	const _play_track = function(track) {
+
+		let volume = this.volume;
+
+		if (track instanceof Music && this.music === true) {
+
+			let music = this.__music;
+			if (music !== null) {
+				music.stop();
+			}
+
+
+			this.__music = track;
+			this.__music.setVolume(volume);
+			this.__music.play();
+
+
+			return true;
+
+		} else if (track instanceof Sound && this.sound === true) {
+
+			let found  = false;
+			let sounds = this.__sounds;
+
+			for (let s = 0, sl = sounds.length; s < sl; s++) {
+
+				let sound = sounds[s];
+				if (sound === null) {
+
+					sounds[s] = track.clone();
+					sounds[s].setVolume(volume);
+					sounds[s].play();
+					found = true;
+
+					break;
+
+				} else if (sound.isIdle === true) {
+
+					if (sound.url === track.url) {
+
+						sound.setVolume(volume);
+						sound.play();
+						found = true;
+
+						break;
+
+					}
+
+				}
+
+			}
+
+
+			if (found === false) {
+
+				if (track.isIdle === true) {
+
+					track.setVolume(volume);
+					track.play();
+
+				} else {
+
+					for (let s = 0, sl = sounds.length; s < sl; s++) {
+
+						let sound = sounds[s];
+						if (sound.isIdle === true) {
+
+							sounds[s] = null;
+							sounds[s] = track.clone();
+							sounds[s].setVolume(volume);
+							sounds[s].play();
+
+							break;
+
+						}
+
+					}
+
+				}
+
+			}
+
+
+			return true;
+
+		}
+
+
+		return false;
+
+	};
+
+	const _stop_track = function(track) {
+
+		let found  = false;
+		let music  = this.__music;
+		let sounds = this.__sounds;
+
+
+		let s, sl, sound = null;
+
+		if (track instanceof Music) {
+
+			if (music === track) {
+				found = true;
+				music.stop();
+			}
+
+
+			this.__music = null;
+
+		} else if (track instanceof Sound) {
+
+			for (s = 0, sl = sounds.length; s < sl; s++) {
+
+				sound = sounds[s];
+
+				if (sound !== null && sound.url === track.url && sound.isIdle === false) {
+					found = true;
+					sound.stop();
+				}
+
+			}
+
+		} else if (track === null) {
+
+			if (music !== null) {
+				found = true;
+				music.stop();
+			}
+
+
+			for (s = 0, sl = sounds.length; s < sl; s++) {
+
+				sound = sounds[s];
+
+				if (sound !== null && sound.isIdle === false) {
+					found = true;
+					sound.stop();
+				}
+
+			}
+
+		}
+
+
+		if (found === true) {
+			return true;
+		}
+
+
+		return false;
+
+	};
+
+
+
+	/*
 	 * IMPLEMENTATION
 	 */
 
@@ -70,92 +245,15 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 
 		play: function(track) {
 
-			track = (track instanceof Music || track instanceof Sound) ? track : null;
+			track = _validate_track(track) ? track : null;
 
 
-			let volume = this.volume;
+			if (track !== null) {
 
-
-			if (track instanceof Music && this.music === true) {
-
-				let music = this.__music;
-				if (music !== null) {
-					music.stop();
+				let result = _play_track.call(this, track);
+				if (result === true) {
+					return true;
 				}
-
-
-				this.__music = track;
-				this.__music.setVolume(this.volume);
-				this.__music.play();
-
-
-				return true;
-
-			} else if (track instanceof Sound && this.sound === true) {
-
-				let found  = false;
-				let sounds = this.__sounds;
-
-				for (let s = 0, sl = sounds.length; s < sl; s++) {
-
-					let sound = sounds[s];
-					if (sound === null) {
-
-						sounds[s] = track.clone();
-						sounds[s].setVolume(volume);
-						sounds[s].play();
-						found = true;
-
-						break;
-
-					} else if (sound.isIdle === true) {
-
-						if (sound.url === track.url) {
-
-							sound.setVolume(volume);
-							sound.play();
-							found = true;
-
-							break;
-
-						}
-
-					}
-
-				}
-
-
-				if (found === false) {
-
-					if (track.isIdle === true) {
-
-						track.setVolume(volume);
-						track.play();
-
-					} else {
-
-						for (let s = 0, sl = sounds.length; s < sl; s++) {
-
-							let sound = sounds[s];
-							if (sound.isIdle === true) {
-
-								sounds[s] = null;
-								sounds[s] = track.clone();
-								sounds[s].setVolume(volume);
-								sounds[s].play();
-
-								break;
-
-							}
-
-						}
-
-					}
-
-				}
-
-
-				return true;
 
 			}
 
@@ -166,63 +264,16 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 
 		stop: function(track) {
 
-			track = (track instanceof Music || track instanceof Sound) ? track : null;
+			track = _validate_track(track) ? track : null;
 
 
-			let found  = false;
-			let music  = this.__music;
-			let sounds = this.__sounds;
+			if (track !== null) {
 
-
-			let s, sl, sound = null;
-
-			if (track instanceof Music) {
-
-				if (music === track) {
-					found = true;
-					music.stop();
+				let result = _stop_track.call(this, track);
+				if (result === true) {
+					return true;
 				}
 
-
-				this.__music = null;
-
-			} else if (track instanceof Sound) {
-
-				for (s = 0, sl = sounds.length; s < sl; s++) {
-
-					sound = sounds[s];
-
-					if (sound !== null && sound.url === track.url && sound.isIdle === false) {
-						found = true;
-						sound.stop();
-					}
-
-				}
-
-			} else if (track === null) {
-
-				if (music !== null) {
-					found = true;
-					music.stop();
-				}
-
-
-				for (s = 0, sl = sounds.length; s < sl; s++) {
-
-					sound = sounds[s];
-
-					if (sound !== null && sound.isIdle === false) {
-						found = true;
-						sound.stop();
-					}
-
-				}
-
-			}
-
-
-			if (found === true) {
-				return true;
 			}
 
 

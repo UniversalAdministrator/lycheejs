@@ -271,21 +271,23 @@ else
 			echo " (L) > Integrating CLI applications ...";
 
 
-			rm /usr/local/bin/lycheejs-breeder    2> /dev/null;
-			rm /usr/local/bin/lycheejs-fertilizer 2> /dev/null;
-			rm /usr/local/bin/lycheejs-harvester  2> /dev/null;
-			rm /usr/local/bin/lycheejs-helper     2> /dev/null;
-			rm /usr/local/bin/lycheejs-ranger     2> /dev/null;
-			rm /usr/local/bin/lycheejs-strainer   2> /dev/null;
-			rm /usr/local/bin/lycheejs-studio     2> /dev/null;
+			rm /usr/local/bin/lycheejs-breeder           2> /dev/null;
+			rm /usr/local/bin/lycheejs-fertilizer        2> /dev/null;
+			rm /usr/local/bin/lycheejs-harvester         2> /dev/null;
+			rm /usr/local/bin/lycheejs-helper            2> /dev/null;
+			rm /usr/local/bin/lycheejs-ranger            2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer          2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer-quickfix 2> /dev/null;
+			rm /usr/local/bin/lycheejs-studio            2> /dev/null;
 
-			ln -s "$LYCHEEJS_ROOT/bin/helper.sh"                          /usr/local/bin/lycheejs-helper;
-			ln -s "$LYCHEEJS_ROOT/libraries/breeder/bin/breeder.sh"       /usr/local/bin/lycheejs-breeder;
-			ln -s "$LYCHEEJS_ROOT/libraries/fertilizer/bin/fertilizer.sh" /usr/local/bin/lycheejs-fertilizer;
-			ln -s "$LYCHEEJS_ROOT/libraries/harvester/bin/harvester.sh"   /usr/local/bin/lycheejs-harvester;
-			ln -s "$LYCHEEJS_ROOT/libraries/ranger/bin/ranger.sh"         /usr/local/bin/lycheejs-ranger;
-			ln -s "$LYCHEEJS_ROOT/libraries/strainer/bin/strainer.sh"     /usr/local/bin/lycheejs-strainer;
-			ln -s "$LYCHEEJS_ROOT/libraries/studio/bin/studio.sh"         /usr/local/bin/lycheejs-studio;
+			ln -s "$LYCHEEJS_ROOT/bin/helper.sh"                               /usr/local/bin/lycheejs-helper;
+			ln -s "$LYCHEEJS_ROOT/libraries/breeder/bin/breeder.sh"            /usr/local/bin/lycheejs-breeder;
+			ln -s "$LYCHEEJS_ROOT/libraries/fertilizer/bin/fertilizer.sh"      /usr/local/bin/lycheejs-fertilizer;
+			ln -s "$LYCHEEJS_ROOT/libraries/harvester/bin/harvester.sh"        /usr/local/bin/lycheejs-harvester;
+			ln -s "$LYCHEEJS_ROOT/libraries/ranger/bin/ranger.sh"              /usr/local/bin/lycheejs-ranger;
+			ln -s "$LYCHEEJS_ROOT/libraries/strainer/bin/strainer.sh"          /usr/local/bin/lycheejs-strainer;
+			ln -s "$LYCHEEJS_ROOT/libraries/strainer/bin/strainer-quickfix.sh" /usr/local/bin/lycheejs-strainer-quickfix;
+			ln -s "$LYCHEEJS_ROOT/libraries/studio/bin/studio.sh"              /usr/local/bin/lycheejs-studio;
 
 
 			echo -e "\e[42m\e[97m (I) > SUCCESS \e[0m";
@@ -349,21 +351,23 @@ else
 			fi;
 
 
-			rm /usr/local/bin/lycheejs-breeder    2> /dev/null;
-			rm /usr/local/bin/lycheejs-fertilizer 2> /dev/null;
-			rm /usr/local/bin/lycheejs-harvester  2> /dev/null;
-			rm /usr/local/bin/lycheejs-helper     2> /dev/null;
-			rm /usr/local/bin/lycheejs-ranger     2> /dev/null;
-			rm /usr/local/bin/lycheejs-strainer   2> /dev/null;
-			rm /usr/local/bin/lycheejs-studio     2> /dev/null;
+			rm /usr/local/bin/lycheejs-breeder           2> /dev/null;
+			rm /usr/local/bin/lycheejs-fertilizer        2> /dev/null;
+			rm /usr/local/bin/lycheejs-harvester         2> /dev/null;
+			rm /usr/local/bin/lycheejs-helper            2> /dev/null;
+			rm /usr/local/bin/lycheejs-ranger            2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer          2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer-quickfix 2> /dev/null;
+			rm /usr/local/bin/lycheejs-studio            2> /dev/null;
 
-			ln -s "$LYCHEEJS_ROOT/bin/helper.sh"                          /usr/local/bin/lycheejs-helper;
-			ln -s "$LYCHEEJS_ROOT/libraries/breeder/bin/breeder.sh"       /usr/local/bin/lycheejs-breeder;
-			ln -s "$LYCHEEJS_ROOT/libraries/fertilizer/bin/fertilizer.sh" /usr/local/bin/lycheejs-fertilizer;
-			ln -s "$LYCHEEJS_ROOT/libraries/harvester/bin/harvester.sh"   /usr/local/bin/lycheejs-harvester;
-			ln -s "$LYCHEEJS_ROOT/libraries/ranger/bin/ranger.sh"         /usr/local/bin/lycheejs-ranger;
-			ln -s "$LYCHEEJS_ROOT/libraries/strainer/bin/strainer.sh"     /usr/local/bin/lycheejs-strainer;
-			ln -s "$LYCHEEJS_ROOT/libraries/studio/bin/studio.sh"         /usr/local/bin/lycheejs-studio;
+			ln -s "$LYCHEEJS_ROOT/bin/helper.sh"                               /usr/local/bin/lycheejs-helper;
+			ln -s "$LYCHEEJS_ROOT/libraries/breeder/bin/breeder.sh"            /usr/local/bin/lycheejs-breeder;
+			ln -s "$LYCHEEJS_ROOT/libraries/fertilizer/bin/fertilizer.sh"      /usr/local/bin/lycheejs-fertilizer;
+			ln -s "$LYCHEEJS_ROOT/libraries/harvester/bin/harvester.sh"        /usr/local/bin/lycheejs-harvester;
+			ln -s "$LYCHEEJS_ROOT/libraries/ranger/bin/ranger.sh"              /usr/local/bin/lycheejs-ranger;
+			ln -s "$LYCHEEJS_ROOT/libraries/strainer/bin/strainer.sh"          /usr/local/bin/lycheejs-strainer;
+			ln -s "$LYCHEEJS_ROOT/libraries/strainer/bin/strainer-quickfix.sh" /usr/local/bin/lycheejs-strainer-quickfix;
+			ln -s "$LYCHEEJS_ROOT/libraries/studio/bin/studio.sh"              /usr/local/bin/lycheejs-studio;
 
 
 			echo -e "\e[42m\e[97m (I) > SUCCESS \e[0m";

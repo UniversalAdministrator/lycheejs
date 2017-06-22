@@ -10,8 +10,8 @@ lychee.Asset = typeof lychee.Asset !== 'undefined' ? lychee.Asset : (function(gl
 		let construct = null;
 
 
-		if (type === 'json')  construct = global.Config;
 		if (type === 'fnt')   construct = global.Font;
+		if (type === 'json')  construct = global.Config;
 		if (type === 'msc')   construct = global.Music;
 		if (type === 'pkg')   construct = global.Config;
 		if (type === 'png')   construct = global.Texture;
