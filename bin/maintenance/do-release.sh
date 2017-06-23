@@ -25,8 +25,8 @@ _get_version () {
 }
 
 
-TMP_SIZE=$(df /tmp --output=size | tail -n 1 | xargs);
-MNT_SIZE=$(df /mnt --output=size | tail -n 1 | xargs);
+TMP_SIZE=$(df /tmp --output=size  | tail -n 1 | xargs);
+MNT_SIZE=$(df /mnt --output=avail | tail -n 1 | xargs);
 
 if [ "$TMP_SIZE" -gt "6144000" ]; then
 
@@ -38,11 +38,12 @@ elif [ "$MNT_SIZE" -gt "6144000" ]; then
 
 else
 
-	echo "";
-	echo "Not enough memory in /tmp";
-	echo "Not enough space in /mnt";
-	echo "";
-	echo "This script needs 6G available somewhere ...";
+	echo -e "\e[41m\e[97m";
+	echo " (E) Not enough memory available:                      ";
+	echo "     /tmp - $TMP_SIZE";
+	echo "     /mnt - $MNT_SIZE";
+	echo " (E) Please make space for 6G in either of above paths.";
+	echo -e "\e[0m";
 
 	exit 1;
 
