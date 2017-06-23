@@ -1,6 +1,8 @@
 #!/bin/bash
 
+
 set -e;
+
 
 _get_version () {
 
@@ -23,8 +25,31 @@ _get_version () {
 }
 
 
+TMP_SIZE=$(df /tmp --output=size | tail -n 1 | xargs);
+MNT_SIZE=$(df /mnt --output=size | tail -n 1 | xargs);
+
+if [ "$TMP_SIZE" -gt "6144000" ]; then
+
+	NEW_FOLDER="/tmp/lycheejs";
+
+elif [ "$MNT_SIZE" -gt "6144000" ]; then
+
+	NEW_FOLDER="/mnt/lycheejs";
+
+else
+
+	echo "";
+	echo "Not enough memory in /tmp";
+	echo "Not enough space in /mnt";
+	echo "";
+	echo "This script needs 6G available somewhere ...";
+
+	exit 1;
+
+fi;
+
+
 OLD_FOLDER=$(cd "$(dirname "$0")/../../"; pwd);
-NEW_FOLDER="/tmp/lycheejs";
 LYCHEEJS_FERTILIZER="$NEW_FOLDER/libraries/fertilizer/bin/fertilizer.sh";
 OLD_VERSION=$(cd $OLD_FOLDER && cat ./libraries/lychee/source/core/lychee.js | grep VERSION | cut -d\" -f2);
 NEW_VERSION=$(_get_version);
@@ -54,6 +79,21 @@ if [ "$NPM_BIN" == "" ]; then
 
 	exit 1;
 
+else
+
+	NPM_USER=`$NPM_BIN whoami`;
+
+	if [ "$NPM_USER" != "artificial-engineering" ]; then
+
+		echo -e "\e[41m\e[97m";
+		echo " (E) NPM not logged in.                                   ";
+		echo "     Use \"npm login\" with user \"artificial-engineering\".  ";
+		echo -e "\e[0m";
+
+		exit 1;
+
+	fi;
+
 fi;
 
 
@@ -69,11 +109,11 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	echo " (L) organization and you will be questioned again when  ";
 	echo " (L) the release is ready to publish it.                 ";
 	echo " (L) ";
-	echo " (L) Old lychee.js Folder:  $OLD_FOLDER";
-	echo " (L) Old lychee.js Version: $OLD_VERSION";
+	echo " (L) Current lychee.js Folder:  $OLD_FOLDER";
+	echo " (L) Current lychee.js Version: $OLD_VERSION";
 	echo " (L) ";
-	echo " (L) New lychee.js Folder:  $NEW_FOLDER";
-	echo " (L) New lychee.js Version: $NEW_VERSION";
+	echo " (L) Release lychee.js Folder:  $NEW_FOLDER";
+	echo " (L) Release lychee.js Version: $NEW_VERSION";
 	echo " (L) ";
 	echo " (L) ";
 
@@ -93,20 +133,37 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	# INIT lycheejs
 	#
 
-	if [ -d $NEW_FOLDER ]; then
-		rm -rf $NEW_FOLDER;
+	if [ ! -d $NEW_FOLDER ]; then
+		mkdir -p $NEW_FOLDER;
+		git clone git@github.com:Artificial-Engineering/lycheejs.git $NEW_FOLDER;
 	fi;
 
-	mkdir $NEW_FOLDER;
-	git clone git@github.com:Artificial-Engineering/lycheejs.git $NEW_FOLDER;
 
+	if [ ! -d $NEW_FOLDER/bin/runtime ]; then
 
-	DOWNLOAD_URL=$(curl -s https://api.github.com/repos/Artificial-Engineering/lycheejs-runtime/releases/latest | grep browser_download_url | grep lycheejs-runtime | head -n 1 | cut -d'"' -f4);
+		if [ ! -f $NEW_FOLDER/bin/runtime.zip ]; then
 
-	if [ "$DOWNLOAD_URL" != "" ]; then
+			DOWNLOAD_URL=$(curl -s https://api.github.com/repos/Artificial-Engineering/lycheejs-runtime/releases/latest | grep browser_download_url | grep lycheejs-runtime | head -n 1 | cut -d'"' -f4);
 
-		cd $NEW_FOLDER/bin;
-		curl -sSL $DOWNLOAD_URL > $NEW_FOLDER/bin/runtime.zip;
+			if [ "$DOWNLOAD_URL" != "" ]; then
+
+				cd $NEW_FOLDER/bin;
+				curl -sSL $DOWNLOAD_URL > $NEW_FOLDER/bin/runtime.zip;
+
+			else
+
+				echo -e "\e[41m\e[97m";
+				echo " (E) No lycheejs-runtime download URL found.                                   ";
+				echo "     Please download it manually to $NEW_FOLDER/bin/runtime.zip.               ";
+				echo "     https://github.com/Artificial-Engineering/lycheejs-runtime/releases/latest";
+				echo -e "\e[0m";
+
+				exit 1;
+
+			fi;
+
+		fi;
+
 
 		mkdir $NEW_FOLDER/bin/runtime;
 		git clone --single-branch --branch master --depth 1 git@github.com:Artificial-Engineering/lycheejs-runtime.git $NEW_FOLDER/bin/runtime;
@@ -120,14 +177,13 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 		rm $NEW_FOLDER/bin/runtime.zip;
 
-	else
-
-		echo "No lycheejs-runtime download URL found.";
-
-		exit 1;
-
 	fi;
 
+
+
+	#
+	# UPDATE lycheejs HEAD
+	#
 
 	cd $NEW_FOLDER;
 	git checkout development;
@@ -141,25 +197,23 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	cd $NEW_FOLDER;
+	export LYCHEEJS_ROOT="$NEW_FOLDER";
 	$NEW_FOLDER/bin/configure.sh --sandbox;
 
 
 
 	#
-	# BUILD AND UPDATE lycheejs-runtime
+	# BUILD and UPDATE lycheejs-runtime
 	#
 
 	cd $NEW_FOLDER/bin/runtime;
+	export LYCHEEJS_ROOT="$NEW_FOLDER";
 	./bin/do-update.sh;
-
-	# XXX: lycheejs-bundle requires new runtimes
-	# cd $NEW_FOLDER/bin/runtime;
-	# ./bin/do-release.sh;
 
 
 
 	#
-	# BUILD AND PACKAGE lycheejs-harvester
+	# BUILD and PACKAGE lycheejs-harvester
 	#
 
 	cd $NEW_FOLDER;
@@ -170,7 +224,7 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
-	# BUILD AND PACKAGE lycheejs-library
+	# BUILD and PACKAGE lycheejs-library
 	#
 
 	cd $NEW_FOLDER;
@@ -181,13 +235,15 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
-	# BUILD AND PACKAGE lycheejs-bundle
+	# BUILD and PACKAGE lycheejs-bundle
 	#
 
 	cd $NEW_FOLDER;
 	export LYCHEEJS_ROOT="$NEW_FOLDER";
 	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-bundle.git $NEW_FOLDER/projects/lycheejs-bundle;
-	$LYCHEEJS_FERTILIZER auto /projects/lycheejs-bundle;
+
+	# XXX: Can only be done after lycheejs-runtime release
+	# $LYCHEEJS_FERTILIZER auto /projects/lycheejs-bundle;
 
 
 
@@ -230,6 +286,15 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
+	# PUBLISH lycheejs-library
+	#
+
+	cd $NEW_FOLDER/projects/lycheejs-library;
+	./bin/publish.sh;
+
+
+
+	#
 	# PUBLISH lycheejs-runtime
 	#
 
@@ -239,8 +304,12 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
-	# PUBLISH lycheejs-harvester
+	# BUILD, PACKAGE and PUBLISH lycheejs-harvester
 	#
+
+	cd $NEW_FOLDER;
+	export LYCHEEJS_ROOT="$NEW_FOLDER";
+	$LYCHEEJS_FERTILIZER node/main /projects/lycheejs-harvester;
 
 	cd $NEW_FOLDER/projects/lycheejs-harvester;
 	./bin/publish.sh;
@@ -248,12 +317,15 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
-	# PUBLISH lycheejs-library
+	# BUILD, PACKAGE and PUBLISH lycheejs-bundle
 	#
 
-	cd $NEW_FOLDER/projects/lycheejs-library;
-	./bin/publish.sh;
+	cd $NEW_FOLDER;
+	export LYCHEEJS_ROOT="$NEW_FOLDER";
+	$LYCHEEJS_FERTILIZER auto /projects/lycheejs-bundle;
 
+	cd $NEW_FOLDER/projects/lycheejs-bundle;
+	./bin/publish.sh;
 
 
 	echo " (L) ";
@@ -274,6 +346,7 @@ else
 	echo " (L) ";
 	echo -e "\e[42m\e[97m (I) lychee.js $NEW_VERSION release already done. \e[0m";
 	echo " (L) ";
+
 	exit 0;
 
 fi;
