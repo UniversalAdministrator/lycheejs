@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e;
+
 _get_version () {
 
 	local year=`date +%Y`;
@@ -117,6 +119,12 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 		chmod +x $NEW_FOLDER/bin/runtime/*/package.sh;
 
 		rm $NEW_FOLDER/bin/runtime.zip;
+
+	else
+
+		echo "No lycheejs-runtime download URL found.";
+
+		exit 1;
 
 	fi;
 
