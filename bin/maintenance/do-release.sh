@@ -333,7 +333,6 @@ if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	echo " (L) ";
 	echo " (L) Remaining manual steps:                                       ";
 	echo " (L) ";
-	echo " (L) - Create $NEW_VERSION release of lycheejs-bundle repository.  ";
 	echo " (L) - Create $NEW_VERSION release of lycheejs-website repository. ";
 	echo " (L) ";
 
