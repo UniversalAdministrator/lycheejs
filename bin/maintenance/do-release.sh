@@ -25,7 +25,7 @@ _get_version () {
 }
 
 
-TMP_SIZE=$(df /tmp --output=size  | tail -n 1 | xargs);
+TMP_SIZE=$(df /tmp --output=avail | tail -n 1 | xargs);
 MNT_SIZE=$(df /mnt --output=avail | tail -n 1 | xargs);
 
 if [ "$TMP_SIZE" -gt "6144000" ]; then
