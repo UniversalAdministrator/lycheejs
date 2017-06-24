@@ -1,5 +1,11 @@
 
-lychee.define('strainer.api.Definition').exports(function(lychee, global, attachments) {
+lychee.define('strainer.api.Definition').requires([
+	'strainer.api.PARSER'
+]).exports(function(lychee, global, attachments) {
+
+	const _PARSER = lychee.import('strainer.api.PARSER');
+
+
 
 	/*
 	 * HELPERS
@@ -58,6 +64,27 @@ lychee.define('strainer.api.Definition').exports(function(lychee, global, attach
 				fileName: null,
 				message:  'No Definition identifier defined.'
 			});
+
+		}
+
+	};
+
+	const _parse_supports = function(supports, stream, errors) {
+
+		let i1 = stream.indexOf('supports(');
+		let i2 = stream.indexOf('})', i1);
+
+
+		if (i1 !== -1 && i2 !== -1) {
+
+			let body = stream.substr(i1 + 9, i2 - i1 - 8).trim();
+			if (body.length > 0) {
+
+				supports.body       = body;
+				supports.hash       = _PARSER.hash(body);
+				supports.parameters = _PARSER.parameters(body);
+
+			}
 
 		}
 
@@ -206,7 +233,8 @@ lychee.define('strainer.api.Definition').exports(function(lychee, global, attach
 				attaches:   {},
 				tags:       {},
 				requires:   [],
-				includes:   []
+				includes:   [],
+				supports:   {}
 			};
 
 			if (asset !== null) {
@@ -233,8 +261,9 @@ lychee.define('strainer.api.Definition').exports(function(lychee, global, attach
 
 				}
 
-				// XXX: supports and exports are unnecessary
-				// _parse_supports(result.supports, stream, errors);
+				_parse_supports(result.supports, stream, errors);
+
+				// XXX: exports are unnecessary
 				// _parse_exports(result.exports, stream, errors);
 
 			}
