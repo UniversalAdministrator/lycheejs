@@ -74,7 +74,6 @@ lychee.define('strainer.api.Definition').requires([
 		let i1 = stream.indexOf('supports(');
 		let i2 = stream.indexOf('})', i1);
 
-
 		if (i1 !== -1 && i2 !== -1) {
 
 			let body = stream.substr(i1 + 9, i2 - i1 - 8).trim();
@@ -246,7 +245,10 @@ lychee.define('strainer.api.Definition').requires([
 				_parse_tags(result.tags, stream, errors);
 				_parse_requires(result.requires, stream, errors);
 				_parse_includes(result.includes, stream, errors);
+				_parse_supports(result.supports, stream, errors);
 
+				// XXX: exports are unnecessary
+				// _parse_exports(result.exports, stream, errors);
 
 				let i1 = stream.indexOf('lychee.define(');
 				let i2 = stream.indexOf('exports(function(lychee, global, attachments) {\n');
@@ -260,11 +262,6 @@ lychee.define('strainer.api.Definition').requires([
 					});
 
 				}
-
-				_parse_supports(result.supports, stream, errors);
-
-				// XXX: exports are unnecessary
-				// _parse_exports(result.exports, stream, errors);
 
 			}
 

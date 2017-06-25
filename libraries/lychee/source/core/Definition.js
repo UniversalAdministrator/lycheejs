@@ -275,7 +275,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 				for (let id in map) {
 
 					let value = map[id];
-					if (value instanceof Font || value instanceof Music || value instanceof Sound || value instanceof Texture || value !== undefined) {
+					if (value !== undefined) {
 						this._attaches[id] = map[id];
 					}
 
