@@ -374,10 +374,12 @@ lychee.define('game.state.Game').requires([
 
 	};
 
-	const _send_change = function(player) {
+	const _send_change = function() {
 
-		let client = this.client || null;
-		if (client !== null) {
+		let client = this.client   || null;
+		let player = this.__player || null;
+
+		if (client !== null && player !== null) {
 
 			let service = client.getService('control');
 			if (service !== null) {
@@ -659,14 +661,9 @@ lychee.define('game.state.Game').requires([
 
 					}
 
-
-					// TODO: Fix this, incorrect assumption
-					// Idea is to send changed player states, but
-					// local client cannot know other player's ids.
-
-					// if (changed === true) {
-					// 	_send_change.call(this, player);
-					// }
+					if (changed === true && this.__player === player) {
+						_send_change.call(this, player);
+					}
 
 				}
 
