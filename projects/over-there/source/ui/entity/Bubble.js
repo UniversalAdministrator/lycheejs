@@ -36,7 +36,7 @@ lychee.define('app.ui.entity.Bubble').includes([
 
 
 		settings.alpha  = 1.0;
-		settings.radius = 32;
+		settings.radius = 48;
 		settings.shape  = _Entity.SHAPE.circle;
 
 
