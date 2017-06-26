@@ -74,7 +74,7 @@ lychee.define('game.net.client.Control').includes([
 
 			if (data !== null) {
 
-				this.tunnel.send({
+				let result = this.tunnel.send({
 					tid:       data.tid,
 					position:  data.position,
 					action:    data.action,
@@ -85,7 +85,39 @@ lychee.define('game.net.client.Control').includes([
 				});
 
 
-				return true;
+				if (result === true) {
+					return true;
+				}
+
+			}
+
+
+			return false;
+
+		},
+
+		change: function(data) {
+
+			data = data instanceof Object ? data : null;
+
+
+			if (data !== null) {
+
+				let result = this.tunnel.send({
+					tid:       data.tid,
+					life:      data.life,
+					action:    null,
+					position:  data.position,
+					direction: data.direction
+				}, {
+					id:    this.id,
+					event: 'control'
+				});
+
+
+				if (result === true) {
+					return true;
+				}
 
 			}
 
