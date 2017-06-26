@@ -258,7 +258,9 @@ lychee.define('strainer.api.Definition').requires([
 					errors.push({
 						ruleId:   'no-definition',
 						fileName: null,
-						message:  'No lychee.Definition found.'
+						message:  'No lychee.Definition found.',
+						line:     0,
+						column:   0
 					});
 
 				}

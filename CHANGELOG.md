@@ -20,7 +20,7 @@ are listed in this specific order: `changed`, `removed`, `added`
 and `fixed`.
 
 
-## [2017-Q2] - UNRELEASED
+## [2017-Q2] - 2017-06-28
 
 - **Changed**: Libraries and Projects refactor to match lychee.js Strainer's expectations.
 - **Changed**: lychee.js Strainer supports mutations, traces and dynamic memory lookups.

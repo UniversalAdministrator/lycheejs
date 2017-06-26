@@ -11,6 +11,9 @@
 				"Profile": [
 					"json"
 				],
+				"Servers": [
+					"json"
+				],
 				"Welcome": [
 					"json"
 				]
@@ -124,7 +127,7 @@
 					"js",
 					"json"
 				],
-				"Welcome": [
+				"Servers": [
 					"js",
 					"json"
 				]

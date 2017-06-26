@@ -1,5 +1,5 @@
 
-lychee.define('ranger.state.Welcome').requires([
+lychee.define('ranger.state.Servers').requires([
 	'lychee.ui.entity.Helper',
 	'lychee.ui.entity.Label',
 	'lychee.ui.layer.Table',
@@ -23,8 +23,8 @@ lychee.define('ranger.state.Welcome').requires([
 
 	const _on_sync = function(projects) {
 
-		let dialog = this.query('ui > welcome > dialog');
-		let status = this.query('ui > welcome > status');
+		let dialog = this.query('ui > servers > dialog');
+		let status = this.query('ui > servers > status');
 
 		if (dialog !== null && status !== null) {
 			dialog.setVisible(false);
@@ -89,7 +89,7 @@ lychee.define('ranger.state.Welcome').requires([
 
 			if (value.length > 0) {
 
-				let table = this.query('ui > welcome > status > 1');
+				let table = this.query('ui > servers > status > 1');
 				if (table !== null) {
 					table.setValue(value);
 				}
@@ -136,7 +136,7 @@ lychee.define('ranger.state.Welcome').requires([
 			}
 
 
-			let dialog = this.query('ui > welcome > dialog');
+			let dialog = this.query('ui > servers > dialog');
 			if (dialog !== null) {
 
 				dialog.bind('#change', function(self, value) {
@@ -152,7 +152,7 @@ lychee.define('ranger.state.Welcome').requires([
 							self.setVisible(false);
 
 							this.loop.setTimeout(3000, function() {
-								this.changeState('welcome');
+								this.changeState('servers');
 							}, this.main);
 
 						}
@@ -165,11 +165,11 @@ lychee.define('ranger.state.Welcome').requires([
 
 
 			let viewport = this.viewport;
-			let welcome  = this.query('ui > welcome');
+			let servers  = this.query('ui > servers');
 
-			if (viewport !== null && welcome !== null) {
+			if (viewport !== null && servers !== null) {
 
-				welcome.bind('#relayout', function(self) {
+				servers.bind('#relayout', function(self) {
 
 					let element = self.query('status');
 					if (element !== null) {
@@ -195,7 +195,7 @@ lychee.define('ranger.state.Welcome').requires([
 		serialize: function() {
 
 			let data = _State.prototype.serialize.call(this);
-			data['constructor'] = 'ranger.state.Welcome';
+			data['constructor'] = 'ranger.state.Servers';
 
 
 			return data;
@@ -208,8 +208,8 @@ lychee.define('ranger.state.Welcome').requires([
 			data       = typeof data === 'string'       ? data       : null;
 
 
-			let dialog = this.query('ui > welcome > dialog');
-			let status = this.query('ui > welcome > status');
+			let dialog = this.query('ui > servers > dialog');
+			let status = this.query('ui > servers > status');
 
 			if (dialog !== null && status !== null) {
 				dialog.setVisible(true);

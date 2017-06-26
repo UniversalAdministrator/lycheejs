@@ -1,6 +1,6 @@
 
 lychee.define('ranger.Main').requires([
-	'ranger.state.Welcome',
+	'ranger.state.Servers',
 	'ranger.state.Profile',
 	'ranger.state.Console',
 	'harvester.net.Client'
@@ -54,12 +54,12 @@ lychee.define('ranger.Main').requires([
 			}
 
 
-			this.setState('welcome', new _ranger.state.Welcome(this));
+			this.setState('servers', new _ranger.state.Servers(this));
 			this.setState('profile', new _ranger.state.Profile(this));
 			this.setState('console', new _ranger.state.Console(this));
 
 
-			this.changeState('welcome', 'welcome');
+			this.changeState('servers', 'servers');
 
 		}, this, true);
 
