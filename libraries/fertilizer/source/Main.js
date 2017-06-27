@@ -9,6 +9,8 @@ lychee.define('fertilizer.Main').requires([
 	'fertilizer.template.html-nwjs.Library',
 	'fertilizer.template.html-webview.Application',
 	'fertilizer.template.html-webview.Library',
+	'fertilizer.template.nidium.Application',
+	'fertilizer.template.nidium.Library',
 	'fertilizer.template.node.Application',
 	'fertilizer.template.node.Library'
 ]).includes([
