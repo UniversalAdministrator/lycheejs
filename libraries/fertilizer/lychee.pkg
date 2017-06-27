@@ -41,6 +41,14 @@
 						"json"
 					]
 				},
+				"nidium": {
+					"Application": [
+						"json"
+					],
+					"Library": [
+						"json"
+					]
+				},
 				"node": {
 					"Application": [
 						"json"
@@ -153,6 +161,16 @@
 				"html-webview": {
 					"Application": [
 						"icon.png",
+						"index.tpl",
+						"js"
+					],
+					"Library": [
+						"js",
+						"tpl"
+					]
+				},
+				"nidium": {
+					"Application": [
 						"index.tpl",
 						"js"
 					],

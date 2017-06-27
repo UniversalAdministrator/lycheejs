@@ -512,6 +512,14 @@ elif [ "$protocol" == "env" ]; then
 				_start_env $LYCHEEJS_ROOT/bin/runtime/nidium/osx/$ARCH/nidium $program $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $arg8;
 			fi;
 
+		elif [ "$platform" == "nidium" ]; then
+
+			if [ "$OS" == "linux" ] || [ "$OS" == "bsd" ]; then
+				_start_env $LYCHEEJS_ROOT/bin/runtime/nidium/linux/$ARCH/nidium $program $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $arg8;
+			elif [ "$OS" == "osx" ]; then
+				_start_env $LYCHEEJS_ROOT/bin/runtime/nidium/osx/$ARCH/nidium $program $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $arg8;
+			fi;
+
 		elif [ "$platform" == "node" ]; then
 
 			if [ "$OS" == "linux" ] || [ "$OS" == "bsd" ]; then
@@ -708,7 +716,7 @@ elif [ "$protocol" == "run" ]; then
 
 					if [ -f $program ]; then
 						chmod +x $program;
-						_start_env $program $arg1 $arg2 $arg3;
+						_start_env $program $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $arg8;
 					else
 						exit 1;
 					fi;

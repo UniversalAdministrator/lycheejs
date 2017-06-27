@@ -1,0 +1,105 @@
+{
+	"map": {
+		"boot": [
+			{
+				"x": 0,
+				"y": 0,
+				"w": 32,
+				"h": 32
+			}
+		],
+		"edit": [
+			{
+				"x": 32,
+				"y": 0,
+				"w": 32,
+				"h": 32
+			}
+		],
+		"file": [
+			{
+				"x": 64,
+				"y": 0,
+				"w": 32,
+				"h": 32
+			}
+		],
+		"profile": [
+			{
+				"x": 96,
+				"y": 0,
+				"w": 32,
+				"h": 32
+			}
+		],
+		"refresh": [
+			{
+				"x": 0,
+				"y": 32,
+				"w": 32,
+				"h": 32
+			}
+		],
+		"start": [
+			{
+				"x": 32,
+				"y": 32,
+				"w": 32,
+				"h": 32
+			}
+		],
+		"stop": [
+			{
+				"x": 64,
+				"y": 32,
+				"w": 32,
+				"h": 32
+			}
+		],
+		"unboot": [
+			{
+				"x": 96,
+				"y": 32,
+				"w": 32,
+				"h": 32
+			}
+		],
+		"web": [
+			{
+				"x": 0,
+				"y": 64,
+				"w": 32,
+				"h": 32
+			}
+		]
+	},
+	"states": {
+		"boot": {
+			"animation": false
+		},
+		"edit": {
+			"animation": false
+		},
+		"file": {
+			"animation": false
+		},
+		"profile": {
+			"animation": false
+		},
+		"refresh": {
+			"animation": false
+		},
+		"start": {
+			"animation": false
+		},
+		"stop": {
+			"animation": false
+		},
+		"unboot": {
+			"animation": false
+		},
+		"web": {
+			"animation": false
+		}
+	}
+}
