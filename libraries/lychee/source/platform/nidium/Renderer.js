@@ -36,6 +36,8 @@ lychee.define('Renderer').tags({
 		this.__ctx    = this.__buffer.getContext('2d');
 
 
+		this.resize(this.width, this.height);
+
 	};
 
 	_Buffer.prototype = {
@@ -104,6 +106,9 @@ lychee.define('Renderer').tags({
 				_canvas.remove(this.__canvas);
 			}
 
+
+			return true;
+
 		},
 
 
@@ -148,10 +153,17 @@ lychee.define('Renderer').tags({
 			if (alpha !== null) {
 
 				if (alpha >= 0 && alpha <= 1) {
+
 					this.alpha = alpha;
+
+					return true;
+
 				}
 
 			}
+
+
+			return false;
 
 		},
 
@@ -161,8 +173,16 @@ lychee.define('Renderer').tags({
 
 
 			if (color !== null) {
+
 				this.background = color;
+				// TODO: Render background in clear() / flush()
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -172,9 +192,16 @@ lychee.define('Renderer').tags({
 
 
 			if (id !== null) {
+
 				this.id = id;
 				this.__canvas.id = id;
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
@@ -184,14 +211,17 @@ lychee.define('Renderer').tags({
 
 
 			if (width !== null) {
-				this.width = width;
+				this.width = width | 0;
 			} else {
-				this.width = global.innerWidth;
+				this.width = global.innerWidth | 0;
 			}
 
 
 			this.__canvas.width = this.width;
 			this.offset.x       = this.__canvas.left;
+
+
+			return true;
 
 		},
 
@@ -201,14 +231,17 @@ lychee.define('Renderer').tags({
 
 
 			if (height !== null) {
-				this.height = height;
+				this.height = height | 0;
 			} else {
-				this.height = global.innerHeight;
+				this.height = global.innerHeight | 0;
 			}
 
 
 			this.__canvas.height = this.height;
 			this.offset.y        = this.__canvas.top;
+
+
+			return true;
 
 		},
 
@@ -236,14 +269,25 @@ lychee.define('Renderer').tags({
 
 			}
 
+
+			return true;
+
 		},
 
 		flush: function() {
 
+			return true;
+
 		},
 
 		createBuffer: function(width, height) {
+
+			width  = typeof width === 'number'  ? width  : 1;
+			height = typeof height === 'number' ? height : 1;
+
+
 			return new _Buffer(width, height);
+
 		},
 
 		setBuffer: function(buffer) {
@@ -257,6 +301,9 @@ lychee.define('Renderer').tags({
 				this.__ctx = this.__canvas.getContext('2d');
 			}
 
+
+			return true;
+
 		},
 
 
@@ -267,9 +314,14 @@ lychee.define('Renderer').tags({
 
 		drawArc: function(x, y, start, end, radius, color, background, lineWidth) {
 
-			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
+			x          = x | 0;
+			y          = y | 0;
+			radius     = radius | 0;
+			start      = typeof start === 'number'              ? start     : 0;
+			end        = typeof end === 'number'                ? end       : 2;
+			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color     : '#000000';
 			background = background === true;
-			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
+			lineWidth  = typeof lineWidth === 'number'          ? lineWidth : 1;
 
 
 			let ctx = this.__ctx;
@@ -297,10 +349,17 @@ lychee.define('Renderer').tags({
 
 			ctx.closePath();
 
+
+			return true;
+
 		},
 
 		drawBox: function(x1, y1, x2, y2, color, background, lineWidth) {
 
+			x1         = x1 | 0;
+			y1         = y1 | 0;
+			x2         = x2 | 0;
+			y2         = y2 | 0;
 			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
@@ -320,39 +379,121 @@ lychee.define('Renderer').tags({
 				ctx.fillRect(x1, y1, x2 - x1, y2 - y1);
 			}
 
+
+			return true;
+
 		},
 
-		drawBuffer: function(x1, y1, buffer) {
+		drawBuffer: function(x1, y1, buffer, map) {
 
+			x1     = x1 | 0;
+			y1     = y1 | 0;
 			buffer = buffer instanceof _Buffer ? buffer : null;
+			map    = map instanceof Object     ? map    : null;
 
 
 			if (buffer !== null) {
 
 				let ctx    = this.__ctx;
-				let width  = buffer.width;
-				let height = buffer.height;
+				let width  = 0;
+				let height = 0;
+				let x      = 0;
+				let y      = 0;
+				let r      = 0;
 
 
 				ctx.globalAlpha = this.alpha;
-				ctx.drawImage(
-					buffer.__buffer,
-					0,
-					0,
-					width,
-					height,
-					x1,
-					y1,
-					width,
-					height
-				);
+
+				if (map === null) {
+
+					width  = buffer.width;
+					height = buffer.height;
+
+					ctx.drawImage(
+						buffer.__buffer,
+						x,
+						y,
+						width,
+						height,
+						x1,
+						y1,
+						width,
+						height
+					);
+
+				} else {
+
+					width  = map.w;
+					height = map.h;
+					x      = map.x;
+					y      = map.y;
+					r      = map.r || 0;
+
+					if (r === 0) {
+
+						ctx.drawImage(
+							buffer.__buffer,
+							x,
+							y,
+							width,
+							height,
+							x1,
+							y1,
+							width,
+							height
+						);
+
+					} else {
+
+						let cos = Math.cos(r * Math.PI / 180);
+						let sin = Math.sin(r * Math.PI / 180);
+
+						ctx.setTransform(
+							cos,
+							sin,
+							-sin,
+							cos,
+							x1,
+							y1
+						);
+
+						ctx.drawImage(
+							buffer.__buffer,
+							x,
+							y,
+							width,
+							height,
+							-1 / 2 * width,
+							-1 / 2 * height,
+							width,
+							height
+						);
+
+						ctx.setTransform(
+							1,
+							0,
+							0,
+							1,
+							0,
+							0
+						);
+
+					}
+
+				}
 
 			}
+
+
+			return true;
 
 		},
 
 		drawCircle: function(x, y, radius, color, background, lineWidth) {
 
+			x          = x | 0;
+			y          = y | 0;
+			radius     = radius | 0;
 			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
@@ -384,10 +525,17 @@ lychee.define('Renderer').tags({
 
 			ctx.closePath();
 
+
+			return true;
+
 		},
 
 		drawLine: function(x1, y1, x2, y2, color, lineWidth) {
 
+			x1        = x1 | 0;
+			y1        = y1 | 0;
+			x2        = x2 | 0;
+			y2        = y2 | 0;
 			color     = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			lineWidth = typeof lineWidth === 'number' ? lineWidth : 1;
 
@@ -406,10 +554,19 @@ lychee.define('Renderer').tags({
 
 			ctx.closePath();
 
+
+			return true;
+
 		},
 
 		drawTriangle: function(x1, y1, x2, y2, x3, y3, color, background, lineWidth) {
 
+			x1         = x1 | 0;
+			y1         = y1 | 0;
+			x2         = x2 | 0;
+			y2         = y2 | 0;
+			x3         = x3 | 0;
+			y3         = y3 | 0;
 			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
@@ -436,10 +593,18 @@ lychee.define('Renderer').tags({
 
 			ctx.closePath();
 
+
+			return true;
+
 		},
 
 		// points, x1, y1, [ ... x(a), y(a) ... ], [ color, background, lineWidth ]
 		drawPolygon: function(points, x1, y1) {
+
+			points = typeof points === 'number' ? points : 0;
+			x1     = x1 | 0;
+			y1     = y1 | 0;
+
 
 			let l = arguments.length;
 
@@ -481,8 +646,8 @@ lychee.define('Renderer').tags({
 				for (let p = 1; p < points; p++) {
 
 					ctx.lineTo(
-						arguments[1 + p * 2],
-						arguments[1 + p * 2 + 1]
+						arguments[1 + p * 2]     | 0,
+						arguments[1 + p * 2 + 1] | 0
 					);
 
 				}
@@ -500,12 +665,20 @@ lychee.define('Renderer').tags({
 
 				ctx.closePath();
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
 		drawSprite: function(x1, y1, texture, map) {
 
+			x1      = x1 | 0;
+			y1      = y1 | 0;
 			texture = texture instanceof Texture ? texture : null;
 			map     = map instanceof Object      ? map     : null;
 
@@ -600,29 +773,38 @@ lychee.define('Renderer').tags({
 
 				}
 
+
+				return true;
+
 			}
+
+
+			return false;
 
 		},
 
 		drawText: function(x1, y1, text, font, center) {
 
-			font   = font instanceof Font ? font : null;
+			x1     = x1 | 0;
+			y1     = y1 | 0;
+			text   = typeof text === 'string' ? text : null;
+			font   = font instanceof Font     ? font : null;
 			center = center === true;
 
 
-			if (font !== null) {
+			if (text !== null && font !== null) {
 
 				if (center === true) {
 
 					let dim = font.measure(text);
 
-					x1 -= dim.realwidth / 2;
-					y1 -= (dim.realheight - font.baseline) / 2;
+					x1 = (x1 - dim.realwidth / 2) | 0;
+					y1 = (y1 - (dim.realheight - font.baseline) / 2) | 0;
 
 				}
 
 
-				y1 -= font.baseline / 2;
+				y1 = (y1 - font.baseline / 2) | 0;
 
 
 				let margin  = 0;
@@ -650,13 +832,19 @@ lychee.define('Renderer').tags({
 							chr.height
 						);
 
-						margin += chr.realwidth + font.kerning;
+						margin = margin + chr.realwidth + font.kerning;
 
 					}
+
+
+					return true;
 
 				}
 
 			}
+
+
+			return false;
 
 		}
 

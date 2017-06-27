@@ -173,8 +173,8 @@ lychee.define('Viewport').tags({
 
 
 		this.fullscreen = false;
-		this.width      = global.innerWidth;
-		this.height     = global.innerHeight;
+		this.width      = global.innerWidth  | 0;
+		this.height     = global.innerHeight | 0;
 
 
 		_Emitter.call(this);
@@ -195,7 +195,7 @@ lychee.define('Viewport').tags({
 			this.width  = 0;
 			this.height = 0;
 
-			_process_reshape.call(this, global.innerWidth, global.innerHeight);
+			_process_reshape.call(this, global.innerWidth | 0, global.innerHeight | 0);
 
 		}.bind(this), 100);
 
@@ -263,8 +263,16 @@ lychee.define('Viewport').tags({
 
 		setFullscreen: function(fullscreen) {
 
-			// XXX: No Fullscreen support
-			// https://github.com/nidium/Nidium/issues/65
+			fullscreen = typeof fullscreen === 'boolean' ? fullscreen : null;
+
+
+			if (fullscreen !== null) {
+
+				// XXX: No Fullscreen support
+				// https://github.com/nidium/Nidium/issues/65
+
+			}
+
 
 			return false;
 

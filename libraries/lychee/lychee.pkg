@@ -365,6 +365,29 @@
 						}
 					}
 				},
+				"nidium": {
+					"Renderer": [
+						"json"
+					],
+					"Storage": [
+						"json"
+					],
+					"Viewport": [
+						"json"
+					],
+					"net": {
+						"Server": [
+							"json"
+						]
+					},
+					"ui": {
+						"entity": {
+							"Helper": [
+								"json"
+							]
+						}
+					}
+				},
 				"node": {
 					"Input": [
 						"json"
@@ -680,6 +703,7 @@
 				"html": "platform/html",
 				"html-nwjs": "platform/html-nwjs",
 				"html-webview": "platform/html-webview",
+				"nidium": "platform/nidium",
 				"node": "platform/node",
 				"node-sdl": "platform/node-sdl"
 			}
@@ -1072,6 +1096,34 @@
 					"bootstrap": [
 						"js"
 					]
+				},
+				"nidium": {
+					"Renderer": [
+						"js"
+					],
+					"Storage": [
+						"js"
+					],
+					"Viewport": [
+						"js"
+					],
+					"bootstrap": [
+						"js"
+					],
+					"net": {
+						"Server": [
+							"js"
+						]
+					},
+					"ui": {
+						"entity": {
+							"Helper": [
+								"js",
+								"json",
+								"png"
+							]
+						}
+					}
 				},
 				"node": {
 					"Input": [
