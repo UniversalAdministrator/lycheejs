@@ -623,6 +623,17 @@
 				},
 				"variant": "library"
 			},
+			"nidium/dist": {
+				"build": "lychee.DIST",
+				"debug": false,
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"nidium"
+					]
+				},
+				"variant": "library"
+			},
 			"node/dist": {
 				"build": "lychee.DIST",
 				"debug": false,
