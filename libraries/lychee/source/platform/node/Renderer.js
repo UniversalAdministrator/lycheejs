@@ -598,7 +598,7 @@ lychee.define('Renderer').tags({
 
 
 						// TODO: Implement polygon-drawing ASCII art algorithm
-						let ctx = this.__ctx;
+						// let ctx = this.__ctx;
 
 			}
 
@@ -617,12 +617,15 @@ lychee.define('Renderer').tags({
 
 			if (texture !== null && texture.buffer !== null) {
 
-				// TODO: Implement sprite-drawing ASCII art algorithm
-				let ctx = this.__ctx;
+				// let ctx = this.__ctx;
 
 				if (map === null) {
 
+					// TODO: Implement sprite-drawing ASCII art algorithm
+
 				} else {
+
+					// TODO: Implement sprite-drawing ASCII art algorithm
 
 				}
 

@@ -144,9 +144,9 @@ lychee.define('lychee.ui.entity.Select').includes([
 			let lh = this.__height;
 
 			if (this.options.length > 0) {
-				this.height = lh * this.options.length;
+				this.height = (lh * this.options.length) | 0;
 			} else {
-				this.height = lh;
+				this.height = (lh) | 0;
 			}
 
 		}, this);
