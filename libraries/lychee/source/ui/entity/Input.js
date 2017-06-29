@@ -186,7 +186,7 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 				if (key.length === 1) {
 
-					if (type === Composite.TYPE.text && /^([A-Za-z0-9\s`~!@#$%^&*\(\)-_=+\[\{\]\}\\|;:'",<.>/?]+)$/g.test(key)) {
+					if (type === Composite.TYPE.text && /^([A-Za-z0-9\s`~!@#$%^&*()-_=+[{\]}\\|;:'",<.>/?]+)$/g.test(key)) {
 
 						this.__value = this.__value + key;
 

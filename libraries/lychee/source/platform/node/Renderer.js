@@ -563,44 +563,44 @@ lychee.define('Renderer').tags({
 			y1     = y1 | 0;
 
 
-			// TODO: Implement polygon-drawing ASCII art algorithm
-			// let l = arguments.length;
+			let l = arguments.length;
 
-			// if (points > 3) {
+			if (points > 3) {
 
-				// let optargs = l - (points * 2) - 1;
-
-
-				// let color, background, lineWidth;
-
-				// if (optargs === 3) {
-
-				// 	color      = arguments[l - 3];
-				// 	background = arguments[l - 2];
-				// 	lineWidth  = arguments[l - 1];
-
-				// } else if (optargs === 2) {
-
-				// 	color      = arguments[l - 2];
-				// 	background = arguments[l - 1];
-
-				// } else if (optargs === 1) {
-
-				// 	color      = arguments[l - 1];
-
-				// }
+				let optargs = l - (points * 2) - 1;
 
 
-				// x1         = x1 | 0;
-				// y1         = y1 | 0;
-				// color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
-				// background = background === true;
-				// lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
+				let color, background, lineWidth;
+
+				if (optargs === 3) {
+
+					color      = arguments[l - 3];
+					background = arguments[l - 2];
+					lineWidth  = arguments[l - 1];
+
+					} else if (optargs === 2) {
+
+						color      = arguments[l - 2];
+						background = arguments[l - 1];
+
+						} else if (optargs === 1) {
+
+							color      = arguments[l - 1];
+
+						}
 
 
-				// let ctx = this.__ctx;
+						x1         = x1 | 0;
+						y1         = y1 | 0;
+						color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
+						background = background === true;
+						lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
 
-			// }
+
+						// TODO: Implement polygon-drawing ASCII art algorithm
+						let ctx = this.__ctx;
+
+			}
 
 
 			return false;
@@ -618,11 +618,13 @@ lychee.define('Renderer').tags({
 			if (texture !== null && texture.buffer !== null) {
 
 				// TODO: Implement sprite-drawing ASCII art algorithm
-				// if (map === null) {
+				let ctx = this.__ctx;
 
-				// } else {
+				if (map === null) {
 
-				// }
+				} else {
+
+				}
 
 			}
 
@@ -640,7 +642,7 @@ lychee.define('Renderer').tags({
 			center = center === true;
 
 
-			if (font !== null) {
+			if (text !== null && font !== null) {
 
 				if (center === true) {
 

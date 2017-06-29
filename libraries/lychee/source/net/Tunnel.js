@@ -1,7 +1,7 @@
 
 lychee.define('lychee.net.Tunnel').requires([
 	'lychee.net.socket.HTTP',
-//	'lychee.net.socket.TCP',
+	// 'lychee.net.socket.TCP',
 	'lychee.net.socket.WS',
 	'lychee.codec.BENCODE',
 	'lychee.codec.BITON',

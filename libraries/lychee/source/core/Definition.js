@@ -108,7 +108,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			this.id = id;
 
-		} else if (/^([A-Za-z0-9\.]+)/g.test(id)) {
+		} else if (/^([A-Za-z0-9.]+)/g.test(id)) {
 
 			this.id = 'lychee.' + id;
 
