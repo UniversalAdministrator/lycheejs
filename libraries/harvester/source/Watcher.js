@@ -136,24 +136,13 @@ lychee.define('harvester.Watcher').requires([
 
 	const _update_mods = function() {
 
-		let Fertilizer = _mod.Fertilizer;
+		// XXX: Fertilizer disabled for performance reasons
+		// let Fertilizer = _mod.Fertilizer;
+		let Fertilizer = null;
 		let Harvester  = _mod.Harvester;
 		let Packager   = _mod.Packager;
 		let Server     = _mod.Server;
 		let Strainer   = _mod.Strainer;
-		let sandbox    = this.sandbox;
-
-		if (sandbox === true) {
-
-			Harvester  = null;
-			Fertilizer = null;
-
-		} else {
-
-			// XXX: Fertilizer disabled for performance reasons
-			Fertilizer = null;
-
-		}
 
 
 		for (let lid in this.libraries) {
@@ -249,7 +238,6 @@ lychee.define('harvester.Watcher').requires([
 		this.filesystem = new _Filesystem();
 		this.libraries  = {};
 		this.projects   = {};
-		this.sandbox    = true;
 
 
 		// Figure out if there's a cleaner way
@@ -275,32 +263,44 @@ lychee.define('harvester.Watcher').requires([
 
 		},
 
-		init: function(sandbox) {
+		init: function() {
 
-			sandbox = sandbox === true;
+			// XXX: Don't flood log on initialization
+			_update_cache.call(this, true);
 
 
-			if (sandbox === true) {
+			let can_update = true;
 
-				console.warn('harvester.Watcher: Sandbox Mode enabled  ');
-				console.warn('harvester.Watcher: Software Bots disabled');
-				console.log('\n\n');
+			for (let lid in this.libraries) {
 
-				this.sandbox = true;
+				if (_mod.Harvester !== null && _mod.Harvester.can(this.libraries[lid]) === false) {
+					can_update = false;
+				}
 
-			} else {
+			}
 
-				console.info('harvester.Watcher: Sandbox Mode disabled');
-				console.info('harvester.Watcher: Software Bots enabled');
-				console.log('\n\n');
+			for (let pid in this.projects) {
 
-				this.sandbox = false;
+				if (_mod.Harvester !== null && _mod.Harvester.can(this.projects[pid]) === false) {
+					can_update = false;
+				}
 
 			}
 
 
-			// XXX: Don't flood log on initialization
-			_update_cache.call(this, true);
+			if (can_update === true) {
+
+				console.info('harvester.Watcher: Software Bot Assimilation enabled');
+				console.log('\n');
+
+			} else {
+
+				console.log('\n');
+				console.warn('harvester.Watcher: Software Bot Assimilation disabled');
+				console.warn('                   Please pull from "upstream" manually.');
+				console.log('\n');
+
+			}
 
 
 			for (let lid in this.libraries) {

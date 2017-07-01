@@ -106,15 +106,13 @@ lychee.define('harvester.Main').requires([
 	let Composite = function(settings) {
 
 		this.settings = lychee.assignunlink({
-			host:    null,
-			port:    null,
-			sandbox: false
+			host: null,
+			port: null
 		}, settings);
 
 		this.defaults = lychee.assignunlink({
-			host:    null,
-			port:    null,
-			sandbox: false
+			host: null,
+			port: null
 		}, this.settings);
 
 
@@ -129,9 +127,8 @@ lychee.define('harvester.Main').requires([
 		this.__interval = null;
 
 
-		settings.host    = typeof settings.host === 'string' ? settings.host       : null;
-		settings.port    = typeof settings.port === 'number' ? (settings.port | 0) : 8080;
-		settings.sandbox = settings.sandbox === true;
+		settings.host = typeof settings.host === 'string' ? settings.host       : null;
+		settings.port = typeof settings.port === 'number' ? (settings.port | 0) : 8080;
 
 
 		_Emitter.call(this);
@@ -170,7 +167,7 @@ lychee.define('harvester.Main').requires([
 			this.getHosts().forEach(function(host) {
 				console.log(host);
 			});
-			console.log('\n\n');
+			console.log('\n');
 
 		}, this, true);
 
@@ -179,7 +176,7 @@ lychee.define('harvester.Main').requires([
 			let watcher = this.watcher || null;
 			if (watcher !== null) {
 
-				watcher.init(settings.sandbox);
+				watcher.init();
 
 				this.__interval = _setInterval(function() {
 					watcher.update();

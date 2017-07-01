@@ -49,34 +49,34 @@ lychee.define('harvester.mod.Harvester').requires([
 
 			if (project !== null) {
 
-				if (_CLIENT === null) {
+				// if (_CLIENT === null) {
 
-					_CLIENT = new _Client({
-						host: 'harvester.artificial.engineering',
-						port: 4848
-					});
+				// 	_CLIENT = new _Client({
+				// 		host: 'harvester.artificial.engineering',
+				// 		port: 4848
+				// 	});
 
-					_CLIENT.bind('connect', function() {
+				// 	_CLIENT.bind('connect', function() {
 
-						let service = _CLIENT.getService('harvester');
-						if (service !== null) {
-							service.connect();
-						}
+				// 		let service = _CLIENT.getService('harvester');
+				// 		if (service !== null) {
+				// 			service.connect();
+				// 		}
 
-					});
+				// 	});
 
-					_CLIENT.bind('disconnect', function() {
+				// 	_CLIENT.bind('disconnect', function() {
 
-						console.log('\n');
-						console.warn('+--------------------------------------------------------+');
-						console.warn('| No connection to harvester.artificial.engineering:4848 |');
-						console.warn('| Cannot synchronize the AI\'s api, knowledge or training |');
-						console.warn('+--------------------------------------------------------+');
-						console.log('\n');
+				// 		console.log('\n');
+				// 		console.warn('+--------------------------------------------------------+');
+				// 		console.warn('| No connection to harvester.artificial.engineering:4848 |');
+				// 		console.warn('| Cannot synchronize the AI\'s api, knowledge or training |');
+				// 		console.warn('+--------------------------------------------------------+');
+				// 		console.log('\n');
 
-					});
+				// 	});
 
-				}
+				// }
 
 
 				let id  = project.identifier;
@@ -87,13 +87,19 @@ lychee.define('harvester.mod.Harvester').requires([
 					let timeout = _TIMEOUTS[id] || null;
 					if (timeout === null || Date.now() > timeout) {
 
-						let diff = _git.diff(project.identifier);
-						if (diff === null) {
+						let status = _git.status(project.identifier);
+						if (status.changes.length === 0) {
 
-							let service = _CLIENT.getService('harvester');
-							if (service !== null) {
-								return true;
-							}
+							// TODO: Broadcast local HEAD and reflog
+							// TODO: Find system with real HEAD
+							// TODO: Synchronize reflog and pull from real HEAD
+
+							return true;
+
+						} else if (status.changes.length > 0) {
+
+							console.error('harvester.mod.Harvester: LOCAL CHANGES ("' + project.identifier + '" | "' + status.branch + '")');
+							console.error('                         Please add and commit local changes manually.');
 
 						}
 
@@ -144,26 +150,26 @@ lychee.define('harvester.mod.Harvester').requires([
 
 						// XXX: This filters unnecessary checkouts
 
-						if (timeout !== null) {
+						// if (timeout !== null) {
 
-							if (report.branch === 'master' || report.branch === 'development') {
+						// 	if (report.branch === 'master' || report.branch === 'development') {
 
-								let result = _git.checkout(report.branch, id);
-								if (result === true) {
+						// 		let result = _git.checkout(report.branch, id);
+						// 		if (result === true) {
 
-									console.info('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
+						// 			console.info('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
 
-								} else {
+						// 		} else {
 
-									console.error('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
+						// 			console.error('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
 
-								}
+						// 		}
 
-								return result;
+						// 		return result;
 
-							}
+						// 	}
 
-						}
+						// }
 
 					}
 

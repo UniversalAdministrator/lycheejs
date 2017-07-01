@@ -46,7 +46,6 @@ lychee.define('ranger.state.Profile').requires([
 						entity.getEntity('host').setValue(profile.host);
 						entity.getEntity('port').setValue(profile.port);
 						entity.getEntity('debug').setValue(profile.debug === true ? 'on' : 'off');
-						entity.getEntity('sandbox').setValue(profile.sandbox === true ? 'on' : 'off');
 					}
 
 
@@ -70,7 +69,6 @@ lychee.define('ranger.state.Profile').requires([
 			let host       = entity.getEntity('host').value;
 			let port       = entity.getEntity('port').value;
 			let debug      = entity.getEntity('debug').value;
-			let sandbox    = entity.getEntity('sandbox').value;
 			let profile    = _CACHE[identifier] || null;
 			if (profile !== null) {
 
@@ -78,8 +76,7 @@ lychee.define('ranger.state.Profile').requires([
 					identifier: identifier,
 					host:       host,
 					port:       port,
-					debug:      debug   === 'on',
-					sandbox:    sandbox === 'on'
+					debug:      debug   === 'on'
 				};
 
 
