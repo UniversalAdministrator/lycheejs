@@ -105,10 +105,6 @@ lychee.define('fertilizer.template.node.Application').includes([
 			let sandbox = this.sandbox;
 			let shell   = this.shell;
 
-			if (name === 'cultivator') {
-				name = this.environment.id.split('/')[3];
-			}
-
 
 			if (sandbox !== '') {
 
