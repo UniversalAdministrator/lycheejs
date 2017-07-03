@@ -159,15 +159,15 @@ lychee.define('harvester.Main').requires([
 			this.server.connect();
 
 
-			console.log('\n');
+			console.log('');
 			console.info('+-------------------------------------------------------+');
 			console.info('| Open one of these URLs with a Blink-based Web Browser |');
 			console.info('+-------------------------------------------------------+');
-			console.log('\n');
+			console.log('');
 			this.getHosts().forEach(function(host) {
 				console.log(host);
 			});
-			console.log('\n');
+			console.log('');
 
 		}, this, true);
 

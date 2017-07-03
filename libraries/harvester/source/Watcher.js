@@ -159,7 +159,9 @@ lychee.define('harvester.Watcher').requires([
 
 				if (silent === false) {
 
-					console.info('harvester.Watcher: Software Assimilation Mode enabled');
+					console.info('+-------------------------------------------------------+');
+					console.info('| Software Updates and AI Knowledge Updates enabled     |');
+					console.info('+-------------------------------------------------------+');
 					console.log('\n');
 
 				}
@@ -171,10 +173,19 @@ lychee.define('harvester.Watcher').requires([
 
 				if (silent === false) {
 
-					console.log('\n');
-					console.warn('harvester.Watcher: Software Assimilation Mode disabled');
-					console.warn('                   Please use "git pull upstream ' + branch + '" manually.');
-					console.log('\n');
+					console.warn('+-------------------------------------------------------+');
+					console.warn('| Software Updates and AI Knowledge Updates disabled    |');
+					console.warn('+-------------------------------------------------------+');
+					console.log('');
+
+					if (status.ahead !== 0) {
+						console.warn('Local git branch is ahead of "upstream" or "origin".');
+					} else if (status.changes.length > 0) {
+						console.warn('Local changes need to be commited before starting lychee.js Harvester.');
+					}
+
+					console.warn('Please use "git pull upstream ' + branch + '" manually.');
+					console.log('');
 
 				}
 
