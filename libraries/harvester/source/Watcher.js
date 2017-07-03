@@ -269,36 +269,65 @@ lychee.define('harvester.Watcher').requires([
 			_update_cache.call(this, true);
 
 
-			let can_update = true;
+			if (_mod.Harvester !== null) {
 
-			for (let lid in this.libraries) {
+				let branch = 'master';
+				let update = true;
 
-				if (_mod.Harvester !== null && _mod.Harvester.can(this.libraries[lid]) === false) {
-					can_update = false;
+				for (let lid in this.libraries) {
+
+					let status = _mod.Harvester.can(this.libraries[lid]);
+					if (status !== null) {
+
+						if (
+							status.changes.length === 0
+							|| status.ahead !== 0
+						) {
+							update = false;
+						}
+
+						if (status.branch !== 'master') {
+							branch = status.branch;
+						}
+
+					}
+
 				}
 
-			}
+				for (let pid in this.projects) {
 
-			for (let pid in this.projects) {
+					let status = _mod.Harvester.can(this.projects[pid]);
+					if (status !== null) {
 
-				if (_mod.Harvester !== null && _mod.Harvester.can(this.projects[pid]) === false) {
-					can_update = false;
+						if (
+							status.changes.length === 0
+							|| status.ahead !== 0
+						) {
+							update = false;
+						}
+
+						if (status.branch !== 'master') {
+							branch = status.branch;
+						}
+
+					}
+
 				}
 
-			}
 
+				if (update === true) {
 
-			if (can_update === true) {
+					console.info('harvester.Watcher: Software Assimilation Mode enabled');
+					console.log('\n');
 
-				console.info('harvester.Watcher: Software Bot Assimilation enabled');
-				console.log('\n');
+				} else {
 
-			} else {
+					console.log('\n');
+					console.warn('harvester.Watcher: Software Assimilation Mode disabled');
+					console.warn('                   Please use "git pull upstream ' + branch + '" manually.');
+					console.log('\n');
 
-				console.log('\n');
-				console.warn('harvester.Watcher: Software Bot Assimilation disabled');
-				console.warn('                   Please pull from "upstream" manually.');
-				console.log('\n');
+				}
 
 			}
 

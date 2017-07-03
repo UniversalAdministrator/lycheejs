@@ -88,20 +88,24 @@ lychee.define('harvester.mod.Harvester').requires([
 					if (timeout === null || Date.now() > timeout) {
 
 						let status = _git.status(project.identifier);
-						if (status.changes.length === 0) {
+						if (status.ahead === 0 && status.changes.length === 0) {
 
 							// TODO: Broadcast local HEAD and reflog
 							// TODO: Find system with real HEAD
 							// TODO: Synchronize reflog and pull from real HEAD
 
-							return true;
-
-						} else if (status.changes.length > 0) {
+						} else if (status.ahead === 0 && status.changes.length > 0) {
 
 							console.error('harvester.mod.Harvester: LOCAL CHANGES ("' + project.identifier + '" | "' + status.branch + '")');
-							console.error('                         Please add and commit local changes manually.');
+
+						} else if (status.ahead !== 0) {
+
+							console.error('harvester.mod.Harvester: UNSYNCED CHANGES ("' + project.identifier + '" | "' + status.branch + '")');
 
 						}
+
+
+						return status;
 
 					}
 
@@ -110,7 +114,7 @@ lychee.define('harvester.mod.Harvester').requires([
 			}
 
 
-			return false;
+			return null;
 
 		},
 
