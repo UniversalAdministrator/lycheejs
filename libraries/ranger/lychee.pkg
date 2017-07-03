@@ -13,9 +13,6 @@
 				],
 				"Servers": [
 					"json"
-				],
-				"Welcome": [
-					"json"
 				]
 			},
 			"ui": {

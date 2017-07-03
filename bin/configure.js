@@ -304,7 +304,7 @@
 	 * 0: ENVIRONMENT CHECK (SYNC)
 	 */
 
-	(function(libraries, projects, cultivator) {
+	(function(libraries, projects) {
 
 		let errors = 0;
 
@@ -387,6 +387,11 @@
 		libraries.forEach(function(path) {
 
 			let real = _path.resolve(_ROOT, path);
+
+			if (_is_directory(real + '/api')) {
+				_remove_directory(real + '/api');
+			}
+
 			if (_is_directory(real + '/build')) {
 				_remove_directory(real + '/build');
 			}
@@ -396,15 +401,11 @@
 		projects.forEach(function(path) {
 
 			let real = _path.resolve(_ROOT, path);
-			if (_is_directory(real + '/build')) {
-				_remove_directory(real + '/build');
+
+			if (_is_directory(real + '/api')) {
+				_remove_directory(real + '/api');
 			}
 
-		});
-
-		cultivator.forEach(function(path) {
-
-			let real = _path.resolve(_ROOT, path);
 			if (_is_directory(real + '/build')) {
 				_remove_directory(real + '/build');
 			}
@@ -413,7 +414,7 @@
 
 		console.info('SUCCESS');
 
-	})(_get_projects('./libraries'), _get_projects('./projects'), _get_projects('./projects/cultivator'));
+	})(_get_projects('./libraries'), _get_projects('./projects'));
 
 
 
