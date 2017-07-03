@@ -134,12 +134,61 @@ lychee.define('harvester.Watcher').requires([
 
 	};
 
+	const _update_harvester = function(silent) {
+
+		silent = silent === true;
+
+
+		if (_mod.Harvester !== null) {
+
+			let branch = 'master';
+			let check  = false;
+			let status = _mod.Harvester.can();
+			if (status !== null) {
+
+				branch = status.branch || 'master';
+
+				if (status.changes.length === 0 && status.ahead === 0) {
+					check = true;
+				}
+
+			}
+
+
+			if (check === true) {
+
+				if (silent === false) {
+
+					console.info('harvester.Watcher: Software Assimilation Mode enabled');
+					console.log('\n');
+
+				}
+
+
+				_mod.Harvester.process();
+
+			} else {
+
+				if (silent === false) {
+
+					console.log('\n');
+					console.warn('harvester.Watcher: Software Assimilation Mode disabled');
+					console.warn('                   Please use "git pull upstream ' + branch + '" manually.');
+					console.log('\n');
+
+				}
+
+			}
+
+		}
+
+	};
+
 	const _update_mods = function() {
 
 		// XXX: Fertilizer disabled for performance reasons
 		// let Fertilizer = _mod.Fertilizer;
 		let Fertilizer = null;
-		let Harvester  = _mod.Harvester;
 		let Packager   = _mod.Packager;
 		let Server     = _mod.Server;
 		let Strainer   = _mod.Strainer;
@@ -161,17 +210,13 @@ lychee.define('harvester.Watcher').requires([
 
 			if (reasons.length > 0) {
 
-				let changed_api = reasons.find(function(path) {
+				reasons.find(function(path) {
 					return path.startsWith('/api/files');
 				}) || null;
 
 				let changed_source = reasons.find(function(path) {
 					return path.startsWith('/source/files');
 				}) || null;
-
-				if (changed_api !== null && Harvester !== null && Harvester.can(library) === true) {
-					Harvester.process(library);
-				}
 
 				if (changed_source !== null && Strainer !== null && Strainer.can(library) === true) {
 					Strainer.process(library);
@@ -201,17 +246,13 @@ lychee.define('harvester.Watcher').requires([
 
 			if (reasons.length > 0) {
 
-				let changed_api = reasons.find(function(path) {
+				reasons.find(function(path) {
 					return path.startsWith('/api/files');
 				}) || null;
 
 				let changed_source = reasons.find(function(path) {
 					return path.startsWith('/source/files');
 				}) || null;
-
-				if (changed_api !== null && Harvester !== null && Harvester.can(project) === true) {
-					Harvester.process(project);
-				}
 
 				if (changed_source !== null && Strainer !== null && Strainer.can(project) === true) {
 					Strainer.process(project);
@@ -269,67 +310,7 @@ lychee.define('harvester.Watcher').requires([
 			_update_cache.call(this, true);
 
 
-			if (_mod.Harvester !== null) {
-
-				let branch = 'master';
-				let update = true;
-
-				for (let lid in this.libraries) {
-
-					let status = _mod.Harvester.can(this.libraries[lid]);
-					if (status !== null) {
-
-						if (
-							status.changes.length === 0
-							|| status.ahead !== 0
-						) {
-							update = false;
-						}
-
-						if (status.branch !== 'master') {
-							branch = status.branch;
-						}
-
-					}
-
-				}
-
-				for (let pid in this.projects) {
-
-					let status = _mod.Harvester.can(this.projects[pid]);
-					if (status !== null) {
-
-						if (
-							status.changes.length === 0
-							|| status.ahead !== 0
-						) {
-							update = false;
-						}
-
-						if (status.branch !== 'master') {
-							branch = status.branch;
-						}
-
-					}
-
-				}
-
-
-				if (update === true) {
-
-					console.info('harvester.Watcher: Software Assimilation Mode enabled');
-					console.log('\n');
-
-				} else {
-
-					console.log('\n');
-					console.warn('harvester.Watcher: Software Assimilation Mode disabled');
-					console.warn('                   Please use "git pull upstream ' + branch + '" manually.');
-					console.log('\n');
-
-				}
-
-			}
+			_update_harvester.call(this);
 
 
 			for (let lid in this.libraries) {
@@ -385,6 +366,10 @@ lychee.define('harvester.Watcher').requires([
 
 			_update_cache.call(this);
 			_update_mods.call(this);
+
+
+			// XXX: Don't flood log on update
+			_update_harvester.call(this, true);
 
 		}
 

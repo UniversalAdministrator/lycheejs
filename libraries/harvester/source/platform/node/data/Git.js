@@ -464,63 +464,50 @@ lychee.define('harvester.data.Git').tags({
 
 		},
 
-		status: function(path) {
+		status: function() {
 
-			path = typeof path === 'string' ? path : null;
+			let filesystem = this.filesystem;
+			let result     = null;
 
+			try {
 
-			if (path !== null) {
+				let root = _ROOT;
+				let tmp  = filesystem.root.split('/');
+				if (tmp.pop() === '.git') {
 
-				let filesystem = this.filesystem;
-				let result     = null;
-
-				try {
-
-					let root = _ROOT;
-					let tmp  = filesystem.root.split('/');
-					if (tmp.pop() === '.git') {
-
-						if (tmp.length > 0) {
-							root = _ROOT + '/' + tmp.join('/');
-						}
-
+					if (tmp.length > 0) {
+						root = _ROOT + '/' + tmp.join('/');
 					}
 
+				}
 
-					let handle = _child_process.spawnSync('git', [
-						'status',
-						'-b',
-						'--porcelain'
-					], {
-						cwd: root
-					});
 
-					let stdout = (handle.stdout || '').toString().trim();
-					let stderr = (handle.stderr || '').toString().trim();
-					if (stderr !== '') {
-						result = null;
-					} else {
-						result = stdout;
-					}
+				let handle = _child_process.spawnSync('git', [
+					'status',
+					'-b',
+					'--porcelain'
+				], {
+					cwd: root
+				});
 
-				} catch (err) {
-
+				let stdout = (handle.stdout || '').toString().trim();
+				let stderr = (handle.stderr || '').toString().trim();
+				if (stderr !== '') {
 					result = null;
-
+				} else {
+					result = stdout;
 				}
 
+			} catch (err) {
 
-				if (result !== null) {
+				result = null;
 
-					let status = _parse_status(result);
+			}
 
-					status.changes = status.changes.filter(function(other) {
-						return other.path.startsWith(path);
-					});
 
-					return status;
+			if (result !== null) {
 
-				}
+				return _parse_status(result);
 
 			}
 
