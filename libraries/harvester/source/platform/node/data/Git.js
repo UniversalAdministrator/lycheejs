@@ -112,6 +112,7 @@ lychee.define('harvester.data.Git').tags({
 
 	const _parse_status = function(content) {
 
+		let ahead   = 0;
 		let changes = [];
 		let branch  = null;
 
@@ -125,7 +126,29 @@ lychee.define('harvester.data.Git').tags({
 
 			if (state === '##') {
 
-				branch = path;
+				if (path.includes('...')) {
+
+					let tmp1 = path.split('...');
+					if (tmp1.length === 2) {
+						branch = tmp1[0];
+					}
+
+					let tmp2 = tmp1[1].substr(tmp1[1].indexOf(' ')).trim();
+					let tmp3 = tmp2.split(/\[ahead\s([0-9]+)]/g);
+					if (tmp3.length === 3) {
+
+						let tmp4 = parseInt(tmp3[1], 10);
+						if (!isNaN(tmp4)) {
+							ahead = tmp4;
+						}
+
+					}
+
+				} else {
+
+					branch = path;
+
+				}
 
 			} else if (path.length > 0) {
 
@@ -149,6 +172,7 @@ lychee.define('harvester.data.Git').tags({
 
 		return {
 			branch:  branch,
+			ahead:   ahead,
 			changes: changes
 		};
 
