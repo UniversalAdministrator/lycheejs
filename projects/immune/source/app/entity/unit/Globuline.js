@@ -30,7 +30,7 @@ lychee.define('game.app.entity.unit.Globuline').includes([
 
 	Composite.prototype = {
 
-        /*
+		/*
 		 * ENTITY API
 		 */
 

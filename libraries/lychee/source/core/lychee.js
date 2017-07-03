@@ -1131,7 +1131,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 							} else {
 
 								console.warn('lychee.pkginit: Invalid settings for "' + identifier + '" in lychee.pkg.');
-								console.info('lychee.pkginit: Insert settings at "/build/environments/\"' + identifier + '\"" in lychee.pkg.');
+								console.info('lychee.pkginit: Insert settings at "/build/environments/' + identifier + '" in lychee.pkg.');
 
 							}
 

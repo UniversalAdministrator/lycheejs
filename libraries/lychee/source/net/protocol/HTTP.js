@@ -221,8 +221,8 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 
 				if (key === 'host') {
 
-					if (/^\[([a-f0-9\:]+)\](.*)$/g.test(val) === true) {
-						chunk.headers[key] = val.split(/^\[([a-f0-9\:]+)\](.*)$/g)[1];
+					if (/^\[([a-f0-9:]+)\](.*)$/g.test(val) === true) {
+						chunk.headers[key] = val.split(/^\[([a-f0-9:]+)\](.*)$/g)[1];
 					} else {
 						chunk.headers[key] = val;
 					}
@@ -481,7 +481,7 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 
 			if (this.__isClosed === false) {
 
-// TODO: Close method should create a close status buffer
+				// TODO: Close method should create a close status buffer
 				// let buffer = new Buffer(4);
 
 				// buffer[0]  = 128 + 0x08;

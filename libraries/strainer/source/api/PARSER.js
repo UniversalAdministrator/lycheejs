@@ -68,11 +68,11 @@ lychee.define('strainer.api.PARSER').requires([
 			type = 'String';
 		} else if (str.includes('toString(') || str.includes('join(')) {
 			type = 'String';
-		} else if (str.startsWith('0b') || str.startsWith('0x') || str.startsWith('0o') || /^[0-9\.]+$/g.test(str)) {
+		} else if (str.startsWith('0b') || str.startsWith('0x') || str.startsWith('0o') || /^[0-9.]+$/g.test(str)) {
 			type = 'Number';
 		} else if (str === 'Infinity') {
 			type = 'Number';
-		} else if (str.includes(' + ') && (str.includes('\'') || str.includes('"') || str.includes('\.substr(') || str.includes('trim()'))) {
+		} else if (str.includes(' + ') && (str.includes('\'') || str.includes('"') || str.includes('.substr(') || str.includes('.trim()'))) {
 			type = 'String';
 		} else if (str.includes(' * ') || str.includes(' / ') || str.includes(' + ') || str.includes(' - ')) {
 			type = 'Number';
@@ -80,7 +80,7 @@ lychee.define('strainer.api.PARSER').requires([
 
 			if (str.includes('instanceof') && str.includes('?') && str.includes(':')) {
 
-				let tmp = str.split(/(.*)instanceof\s([A-Za-z0-9_\.]+)([\s]+)\?(.*)/g);
+				let tmp = str.split(/(.*)instanceof\s([A-Za-z0-9_.]+)([\s]+)\?(.*)/g);
 				if (tmp.length > 2) {
 					type = tmp[2];
 				}
@@ -88,7 +88,7 @@ lychee.define('strainer.api.PARSER').requires([
 			} else if (str.startsWith('typeof') && str.includes('===') && str.includes('?') && str.includes(':')) {
 
 				let tmp = (str.split('?')[0].split('===')[1] || '').trim();
-				if (tmp.startsWith('\'') || tmp.startsWith('\"')) {
+				if (tmp.startsWith('\'') || tmp.startsWith('"')) {
 					tmp = tmp.substr(1, tmp.length - 2);
 				}
 
@@ -146,7 +146,7 @@ lychee.define('strainer.api.PARSER').requires([
 
 			} else if (str.startsWith('lychee.interfaceof') || str.startsWith('_lychee.interfaceof')) {
 
-				let tmp = str.split(/lychee.interfaceof\(([A-Za-z0-9_\.]+),(.*)\)/g);
+				let tmp = str.split(/lychee.interfaceof\(([A-Za-z0-9_.]+),(.*)\)/g);
 				if (tmp.length > 1) {
 					type = tmp[1];
 				}
@@ -278,11 +278,11 @@ lychee.define('strainer.api.PARSER').requires([
 			value = "<string>";
 		} else if (str.includes('toString(') || str.includes('join(')) {
 			value = "<string>";
-		} else if (str.startsWith('0b') || str.startsWith('0x') || str.startsWith('0o') || /^[0-9\.]+$/g.test(str)) {
+		} else if (str.startsWith('0b') || str.startsWith('0x') || str.startsWith('0o') || /^[0-9.]+$/g.test(str)) {
 			value = _parse_value(str);
 		} else if (str === 'Infinity') {
 			value = Infinity;
-		} else if (str.includes(' + ') && (str.includes('\'') || str.includes('"') || str.includes('\.substr(') || str.includes('trim()'))) {
+		} else if (str.includes(' + ') && (str.includes('\'') || str.includes('"') || str.includes('.substr(') || str.includes('.trim()'))) {
 			value = "<string>";
 		} else if (str.includes(' * ') || str.includes(' / ') || str.includes(' + ') || str.includes(' - ')) {
 			value = 1337;
@@ -341,7 +341,7 @@ lychee.define('strainer.api.PARSER').requires([
 
 			} else if (str.startsWith('lychee.import') || str.startsWith('_lychee.import')) {
 
-				let tmp = str.split(/lychee\.import\(\'([A-Za-z0-9_\.]+)\'\)/g);
+				let tmp = str.split(/lychee\.import\('([A-Za-z0-9_.]+)'\)/g);
 				if (tmp.length > 2) {
 
 					value = {

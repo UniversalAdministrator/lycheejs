@@ -252,7 +252,7 @@ lychee.define('Input').tags({
 		17:  'ctrl',
 		18:  'alt',
 		19:  'pause',
-//		20:  'capslock',
+		// 20:  'capslock',
 
 		27:  'escape',
 		32:  'space',
