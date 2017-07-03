@@ -27,8 +27,10 @@ lychee.define('harvester.mod.Strainer').tags({
 	const _child_process = global.require('child_process');
 	const _setInterval   = global.setInterval;
 	const _Project       = lychee.import('harvester.data.Project');
+	const _BINARY        = process.execPath;
 	let   _ACTIVE        = false;
 	const _QUEUE         = [];
+	const _ROOT          = lychee.ROOT.lychee;
 
 
 
@@ -78,40 +80,55 @@ lychee.define('harvester.mod.Strainer').tags({
 
 	const _strain = function(project) {
 
-		_child_process.execFile(lychee.ROOT.lychee + '/libraries/strainer/bin/strainer.sh', [
-			'check',
-			project
-		], {
-			cwd: lychee.ROOT.lychee
-		}, function(error, stdout, stderr) {
+		let handle = null;
 
-			_ACTIVE = false;
+		try {
+
+			// XXX: Alternative (_ROOT + '/bin/helper.sh', [ 'env:node', _ROOT + '/libraries/strainer/bin/strainer.js', target, project ])
+
+			handle = _child_process.execFile(_BINARY, [
+				_ROOT + '/libraries/strainer/bin/strainer.js',
+				'check',
+				project
+			], {
+				cwd: _ROOT
+			}, function(error, stdout, stderr) {
+
+				_ACTIVE = false;
 
 
-			let tmp = stderr.trim();
-			if (error || tmp.indexOf('(E)') !== -1) {
+				let tmp = stderr.trim();
+				if (error || tmp.indexOf('(E)') !== -1) {
 
-				console.error('harvester.mod.Strainer: FAILURE ("' + project + '")');
+					console.error('harvester.mod.Strainer: FAILURE ("' + project + '")');
 
-				let lines = tmp.split('\n');
+					let lines = tmp.split('\n');
 
-				for (let l = 0, ll = lines.length; l < ll; l++) {
+					for (let l = 0, ll = lines.length; l < ll; l++) {
 
-					let line = lines[l];
-					let tmp1 = line.substr(15, line.length - 29).trim();
-					if (tmp1.startsWith('strainer: /')) {
-						console.error(tmp1.trim());
+						let line = lines[l];
+						let tmp1 = line.substr(15, line.length - 29).trim();
+						if (tmp1.startsWith('strainer: /')) {
+							console.error(tmp1.trim());
+						}
+
 					}
+
+				} else {
+
+					console.info('harvester.mod.Strainer: SUCCESS ("' + project + '")');
 
 				}
 
-			} else {
+			});
 
-				console.info('harvester.mod.Strainer: SUCCESS ("' + project + '")');
+		} catch (err) {
 
-			}
+			handle = null;
 
-		});
+		}
+
+		return handle;
 
 	};
 

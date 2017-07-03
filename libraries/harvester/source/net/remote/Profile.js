@@ -72,8 +72,7 @@ lychee.define('harvester.net.remote.Profile').requires([
 			identifier: profile.identifier || '',
 			host:       profile.host       || 'localhost',
 			port:       profile.port       || 8080,
-			debug:      profile.debug      || false,
-			sandbox:    profile.sandbox    || false
+			debug:      profile.debug      || false
 		};
 
 	};
@@ -90,7 +89,6 @@ lychee.define('harvester.net.remote.Profile').requires([
 				profile.host       = data.host    || 'localhost';
 				profile.port       = data.port    || 8080;
 				profile.debug      = data.debug   || false;
-				profile.sandbox    = data.sandbox || false;
 
 
 				_save_profile(profile);

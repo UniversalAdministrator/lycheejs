@@ -27,9 +27,11 @@ lychee.define('harvester.mod.Fertilizer').tags({
 	const _child_process = global.require('child_process');
 	const _setInterval   = global.setInterval;
 	const _Project       = lychee.import('harvester.data.Project');
+	const _BINARY        = process.execPath;
 	let   _ACTIVE        = false;
 	const _CACHE         = {};
 	const _QUEUE         = [];
+	const _ROOT          = lychee.ROOT.lychee;
 
 
 
@@ -80,22 +82,36 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 	const _fertilize = function(project, target) {
 
-		_child_process.execFile(lychee.ROOT.lychee + '/libraries/fertilizer/bin/fertilizer.sh', [
-			target,
-			project
-		], {
-			cwd: lychee.ROOT.lychee
-		}, function(error, stdout, stderr) {
+		let handle = null;
 
-			_ACTIVE = false;
+		try {
 
-			if (error || stdout.indexOf('fertilizer: SUCCESS') === -1) {
-				console.error('harvester.mod.Fertilizer: FAILURE ("' + project + ' | ' + target + '")');
-			} else {
-				console.info('harvester.mod.Fertilizer: SUCCESS ("' + project + ' | ' + target + '")');
-			}
+			// XXX: Alternative (_ROOT + '/bin/helper.sh', [ 'env:node', _ROOT + '/libraries/fertilizer/bin/fertilizer.js', target, project ])
+			handle = _child_process.execFile(_BINARY, [
+				_ROOT + '/libraries/fertilizer/bin/fertilizer.js',
+				target,
+				project
+			], {
+				cwd: lychee.ROOT.lychee
+			}, function(error, stdout, stderr) {
 
-		});
+				_ACTIVE = false;
+
+				if (error || stdout.indexOf('fertilizer: SUCCESS') === -1) {
+					console.error('harvester.mod.Fertilizer: FAILURE ("' + project + ' | ' + target + '")');
+				} else {
+					console.info('harvester.mod.Fertilizer: SUCCESS ("' + project + ' | ' + target + '")');
+				}
+
+			});
+
+		} catch (err) {
+
+			handle = null;
+
+		}
+
+		return handle;
 
 	};
 

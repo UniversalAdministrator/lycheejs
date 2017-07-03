@@ -13,7 +13,7 @@ lychee.define('game.Camera').exports(function(lychee, global, attachments) {
 		this.offset   = 0;
 		this.position = { x: 0, y: 0, z: 0 };
 
-		this.__ratio    = 1.2;
+		this.__ratio  = 1.2;
 
 	};
 

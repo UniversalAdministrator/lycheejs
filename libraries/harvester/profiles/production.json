@@ -1,6 +1,5 @@
 {
 	"host": "yourwebsite.tld",
 	"port": 80,
-	"debug": false,
-	"sandbox": false
+	"debug": false
 }

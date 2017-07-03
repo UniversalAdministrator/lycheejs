@@ -578,27 +578,27 @@ lychee.define('Renderer').tags({
 					background = arguments[l - 2];
 					lineWidth  = arguments[l - 1];
 
-					} else if (optargs === 2) {
+				} else if (optargs === 2) {
 
-						color      = arguments[l - 2];
-						background = arguments[l - 1];
+					color      = arguments[l - 2];
+					background = arguments[l - 1];
 
-						} else if (optargs === 1) {
+				} else if (optargs === 1) {
 
-							color      = arguments[l - 1];
+					color      = arguments[l - 1];
 
-						}
-
-
-						x1         = x1 | 0;
-						y1         = y1 | 0;
-						color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
-						background = background === true;
-						lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
+				}
 
 
-						// TODO: Implement polygon-drawing ASCII art algorithm
-						// let ctx = this.__ctx;
+				x1         = x1 | 0;
+				y1         = y1 | 0;
+				color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
+				background = background === true;
+				lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
+
+
+				// TODO: Implement polygon-drawing ASCII art algorithm
+				// let ctx = this.__ctx;
 
 			}
 

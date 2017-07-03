@@ -110,6 +110,74 @@ lychee.define('harvester.data.Git').tags({
 
 	};
 
+	const _parse_status = function(content) {
+
+		let ahead   = 0;
+		let changes = [];
+		let branch  = null;
+
+		content.split('\n').filter(function(line) {
+			return line.trim() !== '';
+		}).map(function(line) {
+
+			let state = line.substr(0, 2);
+			let path  = line.substr(2).trim();
+
+
+			if (state === '##') {
+
+				if (path.includes('...')) {
+
+					let tmp1 = path.split('...');
+					if (tmp1.length === 2) {
+						branch = tmp1[0];
+					}
+
+					let tmp2 = tmp1[1].substr(tmp1[1].indexOf(' ')).trim();
+					let tmp3 = tmp2.split(/\[ahead\s([0-9]+)]/g);
+					if (tmp3.length === 3) {
+
+						let tmp4 = parseInt(tmp3[1], 10);
+						if (!isNaN(tmp4)) {
+							ahead = tmp4;
+						}
+
+					}
+
+				} else {
+
+					branch = path;
+
+				}
+
+			} else if (path.length > 0) {
+
+				if (path.startsWith('./')) {
+					path = path.substr(1);
+				}
+
+				if (path.charAt(0) !== '/') {
+					path = '/' + path;
+				}
+
+				changes.push({
+					state: state,
+					path:  path
+				});
+
+			}
+
+		});
+
+
+		return {
+			branch:  branch,
+			ahead:   ahead,
+			changes: changes
+		};
+
+	};
+
 	const _get_log = function() {
 
 		let development = _parse_log((this.filesystem.read('/logs/refs/remotes/origin/development') || '').toString('utf8'));
@@ -261,49 +329,13 @@ lychee.define('harvester.data.Git').tags({
 
 		},
 
-		diff: function(path) {
+		fetch: function(remote, branch) {
 
-			path = typeof path === 'string' ? path : null;
-
-
-			if (path !== null) {
-
-				let filesystem = this.filesystem;
-				let result     = null;
-
-				try {
-
-					let root = _ROOT;
-					let tmp  = filesystem.root.split('/');
-					if (tmp.pop() === '.git') {
-						root = tmp.join('/');
-					}
-
-					result = _child_process.execSync('git diff HEAD .' + path, {
-						cwd: root
-					}).toString() || null;
-
-				} catch (err) {
-
-					result = null;
-
-				}
-
-				return result;
-
-			}
+			remote = typeof remote === 'string' ? remote : 'upstream';
+			branch = typeof branch === 'string' ? branch : 'development';
 
 
-			return null;
-
-		},
-
-		fetch: function(branch) {
-
-			branch = typeof branch === 'string' ? branch : null;
-
-
-			if (branch !== null) {
+			if (remote !== null && branch !== null) {
 
 				let filesystem = this.filesystem;
 				let result     = null;
@@ -316,7 +348,7 @@ lychee.define('harvester.data.Git').tags({
 						cwd = tmp.join('/');
 					}
 
-					result = _child_process.execSync('git fetch --quiet origin "' + branch + '"', {
+					result = _child_process.execSync('git fetch --quiet ' + remote + ' "' + branch + '"', {
 						cwd: cwd
 					}).toString();
 
@@ -347,10 +379,7 @@ lychee.define('harvester.data.Git').tags({
 
 		},
 
-		report: function(path) {
-
-			path = typeof path === 'string' ? path : null;
-
+		report: function() {
 
 			let head       = (this.filesystem.read('/HEAD')       || '').toString().trim();
 			let fetch_head = (this.filesystem.read('/FETCH_HEAD') || '').toString().trim();
@@ -422,26 +451,68 @@ lychee.define('harvester.data.Git').tags({
 			}
 
 
-			if (path !== null) {
-
-				let diff = this.diff(path);
-				if (diff !== null) {
-					status = Composite.STATUS.manual;
-				}
-
-			}
-
-
 			return {
 				branch: branch,
+				log:    log,
 				status: status,
 				head: {
 					branch: head,
 					fetch:  fetch_head,
 					origin: orig_head
-				},
-				log: log
+				}
 			};
+
+		},
+
+		status: function() {
+
+			let filesystem = this.filesystem;
+			let result     = null;
+
+			try {
+
+				let root = _ROOT;
+				let tmp  = filesystem.root.split('/');
+				if (tmp.pop() === '.git') {
+
+					if (tmp.length > 0) {
+						root = _ROOT + '/' + tmp.join('/');
+					}
+
+				}
+
+
+				let handle = _child_process.spawnSync('git', [
+					'status',
+					'-b',
+					'--porcelain'
+				], {
+					cwd: root
+				});
+
+				let stdout = (handle.stdout || '').toString().trim();
+				let stderr = (handle.stderr || '').toString().trim();
+				if (stderr !== '') {
+					result = null;
+				} else {
+					result = stdout;
+				}
+
+			} catch (err) {
+
+				result = null;
+
+			}
+
+
+			if (result !== null) {
+
+				return _parse_status(result);
+
+			}
+
+
+			return null;
 
 		}
 

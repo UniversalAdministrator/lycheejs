@@ -52,17 +52,12 @@
 											{
 												"constructor": "lychee.ui.entity.Switch",
 												"arguments": []
-											},
-											{
-												"constructor": "lychee.ui.entity.Switch",
-												"arguments": []
 											}
 										],
 										"map": {
 											"host": 0,
 											"port": 1,
-											"debug": 2,
-											"sandbox": 3
+											"debug": 2
 										}
 									}
 								}

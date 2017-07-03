@@ -5,13 +5,11 @@ lychee.define('harvester.mod.Harvester').requires([
 	'harvester.net.Client'
 ]).exports(function(lychee, global, attachments) {
 
-	const _Client   = lychee.import('harvester.net.Client');
-	const _Git      = lychee.import('harvester.data.Git');
-	const _Project  = lychee.import('harvester.data.Project');
-	const _git      = new _Git();
-	let   _CLIENT   = null;
-	const _TIMEOUTS = {};
-	let   _TIMEOUT  = null;
+	const _Client  = lychee.import('harvester.net.Client');
+	const _Git     = lychee.import('harvester.data.Git');
+	const _Project = lychee.import('harvester.data.Project');
+	const _git     = new _Git();
+	let   _TIMEOUT = null;
 
 
 
@@ -42,128 +40,49 @@ lychee.define('harvester.mod.Harvester').requires([
 		 * CUSTOM API
 		 */
 
-		can: function(project) {
+		can: function() {
 
-			project = project instanceof _Project ? project : null;
+			let timeout = _TIMEOUT;
+			if (timeout === null || Date.now() > timeout) {
 
-
-			if (project !== null) {
-
-				if (_CLIENT === null) {
-
-					_CLIENT = new _Client({
-						host: 'harvester.artificial.engineering',
-						port: 4848
-					});
-
-					_CLIENT.bind('connect', function() {
-
-						let service = _CLIENT.getService('harvester');
-						if (service !== null) {
-							service.connect();
-						}
-
-					});
-
-					_CLIENT.bind('disconnect', function() {
-
-						console.log('\n');
-						console.warn('+--------------------------------------------------------+');
-						console.warn('| No connection to harvester.artificial.engineering:4848 |');
-						console.warn('| Cannot synchronize the AI\'s api, knowledge or training |');
-						console.warn('+--------------------------------------------------------+');
-						console.log('\n');
-
-					});
-
-				}
-
-
-				let id  = project.identifier;
-				let pkg = project.package;
-
-				if (id.indexOf('__') === -1 && pkg !== null) {
-
-					let timeout = _TIMEOUTS[id] || null;
-					if (timeout === null || Date.now() > timeout) {
-
-						let diff = _git.diff(project.identifier);
-						if (diff === null) {
-
-							let service = _CLIENT.getService('harvester');
-							if (service !== null) {
-								return true;
-							}
-
-						}
-
-					}
-
+				let status = _git.status();
+				if (status !== null) {
+					return status;
 				}
 
 			}
 
 
-			return false;
+			return null;
 
 		},
 
-		process: function(project) {
+		process: function() {
 
-			project = project instanceof _Project ? project : null;
+			let timeout = _TIMEOUT || null;
+			if (timeout === null || Date.now() > timeout) {
 
+				let report = _git.report();
+				if (report.status === _Git.STATUS.update) {
 
-			if (project !== null) {
-
-				let id  = project.identifier;
-				let pkg = project.package;
-
-				if (id.indexOf('__') === -1 && pkg !== null) {
-
-					let report = _git.report(id);
-					if (report.status === _Git.STATUS.update) {
-
-						_TIMEOUTS[id] = Date.now() + 24 * 60 * 60 * 1000;
+					// XXX: timeout is 60 minutes
+					_TIMEOUT = Date.now() + 60 * 60 * 1000;
 
 
-						// XXX: lychee.js Libraries / Projects are not
-						// shipped in their own repositories.
+					let result = _git.fetch('upstream', report.branch);
+					if (result === true) {
 
-						let timeout = _TIMEOUT || null;
-						if (timeout === null || Date.now() > timeout) {
+						console.info('harvester.mod.Harvester: FETCH ("' + report.branch + '")');
 
-							let result = _git.fetch(report.branch);
-							if (result === true) {
-								console.info('harvester.mod.Harvester: FETCH ("' + report.branch + '")');
-							}
+						// TODO: Merge new HEAD into local history
+						// (using git pull upstream <branch>?)
 
-							timeout = _TIMEOUT = Date.now() + 24 * 60 * 60 * 1000;
-
-						}
+						// TODO: Broadcast local HEAD and reflog
+						// TODO: Find system with real HEAD
+						// TODO: Synchronize reflog and pull from real HEAD
 
 
-						// XXX: This filters unnecessary checkouts
-
-						if (timeout !== null) {
-
-							if (report.branch === 'master' || report.branch === 'development') {
-
-								let result = _git.checkout(report.branch, id);
-								if (result === true) {
-
-									console.info('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
-
-								} else {
-
-									console.error('harvester.mod.Harvester: CHECKOUT ("' + report.branch + '", "' + id + '")');
-
-								}
-
-								return result;
-
-							}
-
-						}
+						return true;
 
 					}
 

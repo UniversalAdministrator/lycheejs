@@ -134,26 +134,75 @@ lychee.define('harvester.Watcher').requires([
 
 	};
 
+	const _update_harvester = function(silent) {
+
+		silent = silent === true;
+
+
+		if (_mod.Harvester !== null) {
+
+			let branch = 'master';
+			let check  = false;
+			let status = _mod.Harvester.can();
+			if (status !== null) {
+
+				branch = status.branch || 'master';
+
+				if (status.changes.length === 0 && status.ahead === 0) {
+					check = true;
+				}
+
+			}
+
+
+			if (check === true) {
+
+				if (silent === false) {
+
+					console.info('+-------------------------------------------------------+');
+					console.info('| Software Updates and AI Knowledge Updates enabled     |');
+					console.info('+-------------------------------------------------------+');
+					console.log('\n');
+
+				}
+
+
+				_mod.Harvester.process();
+
+			} else {
+
+				if (silent === false) {
+
+					console.warn('+-------------------------------------------------------+');
+					console.warn('| Software Updates and AI Knowledge Updates disabled    |');
+					console.warn('+-------------------------------------------------------+');
+					console.log('');
+
+					if (status.ahead !== 0) {
+						console.warn('Local git branch is ahead of "upstream" or "origin".');
+					} else if (status.changes.length > 0) {
+						console.warn('Local changes need to be commited before starting lychee.js Harvester.');
+					}
+
+					console.warn('Please use "git pull upstream ' + branch + '" manually.');
+					console.log('');
+
+				}
+
+			}
+
+		}
+
+	};
+
 	const _update_mods = function() {
 
-		let Fertilizer = _mod.Fertilizer;
-		let Harvester  = _mod.Harvester;
+		// XXX: Fertilizer disabled for performance reasons
+		// let Fertilizer = _mod.Fertilizer;
+		let Fertilizer = null;
 		let Packager   = _mod.Packager;
 		let Server     = _mod.Server;
 		let Strainer   = _mod.Strainer;
-		let sandbox    = this.sandbox;
-
-		if (sandbox === true) {
-
-			Harvester  = null;
-			Fertilizer = null;
-
-		} else {
-
-			// XXX: Fertilizer disabled for performance reasons
-			Fertilizer = null;
-
-		}
 
 
 		for (let lid in this.libraries) {
@@ -172,17 +221,13 @@ lychee.define('harvester.Watcher').requires([
 
 			if (reasons.length > 0) {
 
-				let changed_api = reasons.find(function(path) {
+				reasons.find(function(path) {
 					return path.startsWith('/api/files');
 				}) || null;
 
 				let changed_source = reasons.find(function(path) {
 					return path.startsWith('/source/files');
 				}) || null;
-
-				if (changed_api !== null && Harvester !== null && Harvester.can(library) === true) {
-					Harvester.process(library);
-				}
 
 				if (changed_source !== null && Strainer !== null && Strainer.can(library) === true) {
 					Strainer.process(library);
@@ -212,17 +257,13 @@ lychee.define('harvester.Watcher').requires([
 
 			if (reasons.length > 0) {
 
-				let changed_api = reasons.find(function(path) {
+				reasons.find(function(path) {
 					return path.startsWith('/api/files');
 				}) || null;
 
 				let changed_source = reasons.find(function(path) {
 					return path.startsWith('/source/files');
 				}) || null;
-
-				if (changed_api !== null && Harvester !== null && Harvester.can(project) === true) {
-					Harvester.process(project);
-				}
 
 				if (changed_source !== null && Strainer !== null && Strainer.can(project) === true) {
 					Strainer.process(project);
@@ -249,7 +290,6 @@ lychee.define('harvester.Watcher').requires([
 		this.filesystem = new _Filesystem();
 		this.libraries  = {};
 		this.projects   = {};
-		this.sandbox    = true;
 
 
 		// Figure out if there's a cleaner way
@@ -275,32 +315,13 @@ lychee.define('harvester.Watcher').requires([
 
 		},
 
-		init: function(sandbox) {
-
-			sandbox = sandbox === true;
-
-
-			if (sandbox === true) {
-
-				console.warn('harvester.Watcher: Sandbox Mode enabled  ');
-				console.warn('harvester.Watcher: Software Bots disabled');
-				console.log('\n\n');
-
-				this.sandbox = true;
-
-			} else {
-
-				console.info('harvester.Watcher: Sandbox Mode disabled');
-				console.info('harvester.Watcher: Software Bots enabled');
-				console.log('\n\n');
-
-				this.sandbox = false;
-
-			}
-
+		init: function() {
 
 			// XXX: Don't flood log on initialization
 			_update_cache.call(this, true);
+
+
+			_update_harvester.call(this);
 
 
 			for (let lid in this.libraries) {
@@ -356,6 +377,10 @@ lychee.define('harvester.Watcher').requires([
 
 			_update_cache.call(this);
 			_update_mods.call(this);
+
+
+			// XXX: Don't flood log on update
+			_update_harvester.call(this, true);
 
 		}
 

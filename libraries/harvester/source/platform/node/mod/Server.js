@@ -136,159 +136,169 @@ lychee.define('harvester.mod.Server').tags({
 
 	};
 
-	const _serve = function(project, host, port) {
+	const _serve = function(project, port) {
 
-		console.info('harvester.mod.Server: BOOTUP ("' + project + ' | ' + host + ':' + port + '")');
-
-
-		let server = null;
-
-		try {
-
-			// XXX: Alternative is (_ROOT + '/bin/helper.sh', [ 'env:node', file, port, host ])
-			server = _child_process.execFile(_BINARY, [
-				_ROOT + project + '/harvester.js',
-				port,
-				host
-			], {
-				cwd: _ROOT + project
-			}, function(error, stdout, stderr) {
-
-				stderr = (stderr.trim() || '').toString();
+		port = typeof port === 'number' ? port : null;
 
 
-				if (error !== null && error.signal !== 'SIGTERM') {
+		let handle = null;
 
-					_LOG_PROJECT = project;
-					console.error('harvester.mod.Server: FAILURE ("' + project + ' | ' + host + ':' + port + '")');
-					console.error(stderr);
+		if (port !== null && port >= _MIN_PORT && port <= _MAX_PORT) {
 
-				} else if (stderr !== '') {
+			let info = '"' + project + '" | "*:' + port + '"';
 
-					_LOG_PROJECT = project;
-					console.error('harvester.mod.Server: FAILURE ("' + project + ' | ' + host + ':' + port + '")');
-					_report_error(stderr);
+			console.info('harvester.mod.Server: BOOTUP (' + info + ')');
 
-				}
 
-			});
+			try {
 
-			server.stdout.on('data', function(lines) {
+				// XXX: Alternative (_ROOT + '/bin/helper.sh', [ 'env:node', file, port, host ])
+				handle = _child_process.execFile(_BINARY, [
+					_ROOT + project + '/harvester.js',
+					port,
+					'null'
+				], {
+					cwd: _ROOT + project
+				}, function(error, stdout, stderr) {
 
-				lines = lines.trim().split('\n').filter(function(message) {
+					stderr = (stderr.trim() || '').toString();
 
-					if (message.charAt(0) !== '\u001b') {
-						return true;
+
+					if (error !== null && error.signal !== 'SIGTERM') {
+
+						_LOG_PROJECT = project;
+						console.error('harvester.mod.Server: FAILURE (' + info + ')');
+						console.error(stderr);
+
+					} else if (stderr !== '') {
+
+						_LOG_PROJECT = project;
+						console.error('harvester.mod.Server: FAILURE (' + info + ')');
+						_report_error(stderr);
+
 					}
-
-					return false;
 
 				});
 
-				if (lines.length > 0) {
+				handle.stdout.on('data', function(lines) {
 
-					if (_LOG_PROJECT !== project) {
-						console.log('harvester.mod.Server: LOG ("' + project + '")');
-						_LOG_PROJECT = project;
-					}
+					lines = lines.trim().split('\n').filter(function(message) {
 
-					lines.forEach(function(message) {
-
-						let type = message.trim().substr(0, 3);
-						let line = message.trim().substr(3).trim();
-
-						if (type === '(L)') {
-							console.log('                      ' + line);
-						} else {
-							console.log('                      ' + message.trim());
+						if (message.charAt(0) !== '\u001b') {
+							return true;
 						}
+
+						return false;
 
 					});
 
-				}
+					if (lines.length > 0) {
 
-			});
-
-			server.stderr.on('data', function(lines) {
-
-				lines = lines.trim().split('\n').filter(function(message) {
-
-					if (message.charAt(0) === '\u001b') {
-						return true;
-					}
-
-					return false;
-
-				}).map(function(message) {
-
-					if (message.charAt(0) === '\u001b') {
-						message = message.substr(12);
-
-						if (message.charAt(message.length - 1) === 'm') {
-							message = message.substr(0, message.length - 12);
+						if (_LOG_PROJECT !== project) {
+							console.log('harvester.mod.Server: LOG ("' + project + '")');
+							_LOG_PROJECT = project;
 						}
 
-					}
+						lines.forEach(function(message) {
 
-					return message;
+							let type = message.trim().substr(0, 3);
+							let line = message.trim().substr(3).trim();
+
+							if (type === '(L)') {
+								console.log('                      ' + line);
+							} else {
+								console.log('                      ' + message.trim());
+							}
+
+						});
+
+					}
 
 				});
 
+				handle.stderr.on('data', function(lines) {
 
-				if (lines.length > 0) {
+					lines = lines.trim().split('\n').filter(function(message) {
 
-					if (_LOG_PROJECT !== project) {
-						console.error('harvester.mod.Server: ERROR ("' + project + '")');
-						_LOG_PROJECT = project;
-					}
-
-					lines.forEach(function(message) {
-
-						let type = message.trim().substr(0, 3);
-						let line = message.trim().substr(3).trim();
-
-						if (type === '(I)') {
-							console.info('                      ' + line);
-						} else if (type === '(W)') {
-							console.warn('                      ' + line);
-						} else if (type === '(E)') {
-							console.error('                      ' + line);
-						} else {
-							console.error('                      ' + message.trim());
+						if (message.charAt(0) === '\u001b') {
+							return true;
 						}
+
+						return false;
+
+					}).map(function(message) {
+
+						if (message.charAt(0) === '\u001b') {
+							message = message.substr(12);
+
+							if (message.charAt(message.length - 1) === 'm') {
+								message = message.substr(0, message.length - 12);
+							}
+
+						}
+
+						return message;
 
 					});
 
-				}
 
-			});
+					if (lines.length > 0) {
 
-			server.on('error', function() {
+						if (_LOG_PROJECT !== project) {
+							console.error('harvester.mod.Server: ERROR ("' + project + '")');
+							_LOG_PROJECT = project;
+						}
 
-				console.warn('harvester.mod.Server: SHUTDOWN ("' + project + ' | ' + host + ':' + port + '")');
+						lines.forEach(function(message) {
 
-				this.kill('SIGTERM');
+							let type = message.trim().substr(0, 3);
+							let line = message.trim().substr(3).trim();
 
-			});
+							if (type === '(I)') {
+								console.info('                      ' + line);
+							} else if (type === '(W)') {
+								console.warn('                      ' + line);
+							} else if (type === '(E)') {
+								console.error('                      ' + line);
+							} else {
+								console.error('                      ' + message.trim());
+							}
 
-			server.on('exit', function() {
-			});
+						});
 
-			server.destroy = function() {
+					}
 
-				console.warn('harvester.mod.Server: SHUTDOWN ("' + project + ' | ' + host + ':' + port + '")');
+				});
 
-				this.kill('SIGTERM');
+				handle.on('error', function() {
 
-			};
+					console.warn('harvester.mod.Server: SHUTDOWN (' + info + ')');
 
-		} catch (err) {
+					this.kill('SIGTERM');
 
-			server = null;
+				});
+
+				handle.on('exit', function() {
+				});
+
+				handle.destroy = function() {
+
+					console.warn('harvester.mod.Server: SHUTDOWN (' + info + ')');
+
+					this.kill('SIGTERM');
+
+				};
+
+			} catch (err) {
+
+				handle = null;
+
+			}
 
 		}
 
-		return server;
+
+		return handle;
 
 	};
 
@@ -358,22 +368,14 @@ lychee.define('harvester.mod.Server').tags({
 
 						_scan_port(function(port) {
 
-							if (port >= _MIN_PORT && port <= _MAX_PORT) {
+							let server = _serve(project.identifier, port);
+							if (server !== null) {
 
-								let server = _serve(project.identifier, null, port);
-								if (server !== null) {
-
-									project.setServer(new _Server({
-										process: server,
-										host:    null,
-										port:    port
-									}));
-
-								} else {
-
-									console.error('harvester.mod.Server: FAILURE ("' + project.identifier + ' | null:' + port + '") (chmod +x missing?)');
-
-								}
+								project.setServer(new _Server({
+									process: server,
+									host:    null,
+									port:    port
+								}));
 
 							}
 
