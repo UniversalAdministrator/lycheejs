@@ -1,15 +1,15 @@
 
 lychee.define('strainer.Main').requires([
 	'lychee.Input',
-	'strainer.Template'
+	'strainer.flow.Check'
 ]).includes([
 	'lychee.event.Emitter'
 ]).exports(function(lychee, global, attachments) {
 
-	const _lychee   = lychee.import('lychee');
-	const _Emitter  = lychee.import('lychee.event.Emitter');
-	const _Input    = lychee.import('lychee.Input');
-	const _Template = lychee.import('strainer.Template');
+	const _lychee  = lychee.import('lychee');
+	const _Emitter = lychee.import('lychee.event.Emitter');
+	const _Input   = lychee.import('lychee.Input');
+	const _flow    = lychee.import('strainer.flow');
 
 
 
@@ -63,92 +63,75 @@ lychee.define('strainer.Main').requires([
 
 		this.bind('init', function(project, action) {
 
-			let template = new _Template({
-				sandbox:  project,
-				settings: this.settings
-			});
+			let flow = null;
+			let name = action.charAt(0).toUpperCase() + action.substr(1);
 
+			if (_flow[name] !== undefined) {
 
-			if (action === 'check') {
-
-				template.then('read');
-
-				template.then('check-eslint');
-				template.then('check-api');
-
-				template.then('write-eslint');
-				template.then('write-api');
-				template.then('write-pkg');
-
-			} else if (action === 'stage') {
-
-				template.then('read');
-
-				template.then('check-eslint');
-				template.then('check-api');
-
-				template.then('write-eslint');
-				template.then('write-api');
-				template.then('write-pkg');
-
-				template.then('stage-eslint');
-				template.then('stage-api');
+				flow = new _flow[name]({
+					sandbox:  project,
+					settings: this.settings
+				});
 
 			}
 
 
-			template.bind('complete', function() {
+			if (flow !== null) {
 
-				if (template.errors.length === 0) {
+				flow.bind('complete', function() {
 
-					console.info('strainer: SUCCESS ("' + project + '")');
+					if (flow.errors.length === 0) {
 
-					this.destroy(0);
+						console.info('strainer: SUCCESS ("' + project + '")');
 
-				} else {
+						this.destroy(0);
 
-					template.errors.forEach(function(err) {
+					} else {
 
-						let path = err.fileName;
-						let rule = err.ruleId  || 'parser-error';
-						let line = err.line    || 0;
-						let col  = err.column  || 0;
-						let msg  = err.message || 'Parsing error: unknown';
-						if (msg.endsWith('.') === false) {
-							msg = msg.trim() + '.';
-						}
+						flow.errors.forEach(function(err) {
+
+							let path = err.fileName;
+							let rule = err.ruleId  || 'parser-error';
+							let line = err.line    || 0;
+							let col  = err.column  || 0;
+							let msg  = err.message || 'Parsing error: unknown';
+							if (msg.endsWith('.') === false) {
+								msg = msg.trim() + '.';
+							}
 
 
-						let message = '';
+							let message = '';
 
-						message += path;
-						message += ':' + line;
-						message += ':' + col;
-						message += ': ' + msg;
-						message += ' [' + rule + ']';
+							message += path;
+							message += ':' + line;
+							message += ':' + col;
+							message += ': ' + msg;
+							message += ' [' + rule + ']';
 
-						console.error('strainer: ' + message);
+							console.error('strainer: ' + message);
 
-					});
+						});
 
-					console.error('strainer: FAILURE ("' + project + '")');
+						console.error('strainer: FAILURE ("' + project + '")');
+
+						this.destroy(1);
+
+					}
+
+				}, this);
+
+				flow.bind('error', function(event) {
+
+					console.error('strainer: FAILURE ("' + project + '") at "' + event + '" event');
 
 					this.destroy(1);
 
-				}
-
-			}, this);
-
-			template.bind('error', function(event) {
-
-				console.error('strainer: FAILURE ("' + project + '") at "' + event + '" template event');
-
-				this.destroy(1);
-
-			}, this);
+				}, this);
 
 
-			template.init();
+				flow.init();
+
+			}
 
 
 			return true;

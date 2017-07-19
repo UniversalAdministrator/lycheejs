@@ -1,15 +1,15 @@
 
 lychee.define('strainer.Quickfix').requires([
 	'lychee.Input',
-	'strainer.Template'
+	'strainer.flow.Check'
 ]).includes([
 	'lychee.event.Emitter'
 ]).exports(function(lychee, global, attachments) {
 
-	const _lychee   = lychee.import('lychee');
-	const _Emitter  = lychee.import('lychee.event.Emitter');
-	const _Input    = lychee.import('lychee.Input');
-	const _Template = lychee.import('strainer.Template');
+	const _lychee  = lychee.import('lychee');
+	const _Emitter = lychee.import('lychee.event.Emitter');
+	const _Input   = lychee.import('lychee.Input');
+	const _flow    = lychee.import('strainer.flow');
 
 
 
@@ -63,14 +63,14 @@ lychee.define('strainer.Quickfix').requires([
 
 		this.bind('init', function(project, file) {
 
-			let template = new _Template({
+			let flow = new _flow.Check({
 				sandbox:  project,
 				settings: this.settings
 			});
 
 
-			template.unbind('read');
-			template.bind('read', function(oncomplete) {
+			flow.unbind('read');
+			flow.bind('read', function(oncomplete) {
 
 				let file    = this.settings.file;
 				let project = this.settings.project;
@@ -125,22 +125,14 @@ lychee.define('strainer.Quickfix').requires([
 				}
 
 
-			}, template);
+			}, flow);
 
-			template.then('read');
-
-			template.then('check-eslint');
-			template.then('check-api');
-
-			template.then('write-eslint');
-			template.then('write-api');
-
-			template.bind('complete', function() {
+			flow.bind('complete', function() {
 
 				let cwd = this.settings.cwd;
 
 
-				let length = template.errors.length;
+				let length = flow.errors.length;
 				if (length === 0) {
 
 					console.error('\n0 problems');
@@ -149,7 +141,7 @@ lychee.define('strainer.Quickfix').requires([
 
 				} else {
 
-					template.errors.forEach(function(err) {
+					flow.errors.forEach(function(err) {
 
 						let path = '/opt/lycheejs' + err.fileName;
 						let rule = err.ruleId  || 'parser-error';
@@ -181,14 +173,14 @@ lychee.define('strainer.Quickfix').requires([
 
 			}, this);
 
-			template.bind('error', function(event) {
+			flow.bind('error', function(event) {
 
 				this.destroy(1);
 
 			}, this);
 
 
-			template.init();
+			flow.init();
 
 
 			return true;

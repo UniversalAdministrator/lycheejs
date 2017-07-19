@@ -1,5 +1,5 @@
 
-lychee.define('strainer.Template').requires([
+lychee.define('strainer.flow.Check').requires([
 	'lychee.Stash',
 	'strainer.plugin.API',
 	'strainer.plugin.ESLINT'
@@ -270,11 +270,6 @@ lychee.define('strainer.Template').requires([
 
 		}, this);
 
-		this.bind('stage-eslint', function(oncomplete) {
-			// TODO: git add (stage) codes
-			oncomplete(true);
-		}, this);
-
 		this.bind('check-api', function(oncomplete) {
 
 			let api     = _plugin.API || null;
@@ -442,10 +437,20 @@ lychee.define('strainer.Template').requires([
 
 		}, this);
 
-		this.bind('stage-api', function(oncomplete) {
-			// TODO: git add (stage) configs
-			oncomplete(true);
-		}, this);
+
+
+		/*
+		 * FLOW
+		 */
+
+		this.then('read');
+
+		this.then('check-eslint');
+		this.then('check-api');
+
+		this.then('write-eslint');
+		this.then('write-api');
+		this.then('write-pkg');
 
 	};
 
@@ -506,7 +511,7 @@ lychee.define('strainer.Template').requires([
 		serialize: function() {
 
 			let data = _Flow.prototype.serialize.call(this);
-			data['constructor'] = 'strainer.Template';
+			data['constructor'] = 'strainer.flow.Check';
 
 
 			let settings = data['arguments'][0] || {};

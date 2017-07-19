@@ -27,6 +27,11 @@
 					"json"
 				]
 			},
+			"flow": {
+				"Check": [
+					"json"
+				]
+			},
 			"platform": {
 				"node": {
 					"plugin": {
@@ -38,6 +43,11 @@
 			},
 			"plugin": {
 				"API": [
+					"json"
+				]
+			},
+			"template": {
+				"Check": [
 					"json"
 				]
 			}
@@ -112,9 +122,6 @@
 			"Quickfix": [
 				"js"
 			],
-			"Template": [
-				"js"
-			],
 			"api": {
 				"Callback": [
 					"js"
@@ -131,6 +138,11 @@
 				"PARSER": [
 					"js",
 					"json"
+				]
+			},
+			"flow": {
+				"Check": [
+					"js"
 				]
 			},
 			"platform": {
