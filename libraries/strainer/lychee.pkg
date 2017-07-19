@@ -7,9 +7,6 @@
 			"Quickfix": [
 				"json"
 			],
-			"Template": [
-				"json"
-			],
 			"api": {
 				"Callback": [
 					"json"
@@ -43,11 +40,6 @@
 			},
 			"plugin": {
 				"API": [
-					"json"
-				]
-			},
-			"template": {
-				"Check": [
 					"json"
 				]
 			}
