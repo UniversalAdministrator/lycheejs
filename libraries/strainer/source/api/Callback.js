@@ -110,7 +110,6 @@ lychee.define('strainer.api.Callback').requires([
 				constructor.hash       = _PARSER.hash(body);
 				constructor.parameters = _PARSER.parameters(body);
 
-
 			}
 
 		}

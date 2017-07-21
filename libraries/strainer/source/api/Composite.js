@@ -86,6 +86,23 @@ lychee.define('strainer.api.Composite').requires([
 
 	};
 
+	const _find_enum = function(key, stream) {
+
+		let str1 = '\n\tComposite.' + key + ' = ';
+		let str2 = ';';
+
+		let i0 = stream.indexOf('\n\tlet Composite =');
+		let i1 = stream.indexOf(str1, i0);
+		let i2 = stream.indexOf(str2, i1);
+
+		if (i1 !== -1 && i2 !== -1) {
+			return key + ' = ' + stream.substr(i1 + str1.length, i2 - i1 - str1.length + str2.length);
+		}
+
+		return 'undefined';
+
+	};
+
 	const _find_memory = function(key, stream) {
 
 		let str1 = 'const ' + key + ' = ';
@@ -96,6 +113,23 @@ lychee.define('strainer.api.Composite').requires([
 
 		if (i1 !== -1 && i2 !== -1) {
 			return stream.substr(i1 + str1.length, i2 - i1 - str1.length + str2.length).trim();
+		}
+
+		return 'undefined';
+
+	};
+
+	const _find_method = function(key, stream) {
+
+		let str1 = '\n\t\t' + key + ': function';
+		let str2 = '\n\t\t}';
+
+		let i0 = stream.indexOf('\n\tComposite.prototype = {');
+		let i1 = stream.indexOf(str1, i0);
+		let i2 = stream.indexOf(str2, i1);
+
+		if (i1 !== -1 && i2 !== -1) {
+			return 'function' + stream.substr(i1 + str1.length, i2 - i1 - str1.length + str2.length).trim();
 		}
 
 		return 'undefined';
@@ -275,55 +309,51 @@ lychee.define('strainer.api.Composite').requires([
 				.filter(function(line) {
 
 					let tmp = line.trim();
-					if (
-						tmp === ''
-						|| tmp.startsWith('//')
-						|| tmp.startsWith('/*')
-						|| tmp.startsWith('*/')
-						|| tmp.startsWith('*')
-					) {
-						return false;
+					if (tmp.startsWith('Composite.') && tmp.includes('=')) {
+						return true;
 					}
 
-					return true;
+					return false;
 
-				})
-				.map(function(line) {
+				}).forEach(function(chunk) {
 
-					let tmp = line.trim();
-					if (tmp.startsWith('Composite.') && tmp.endsWith('= {')) {
-						return tmp.split('.').slice(1).join('.');
-					} else if (tmp.startsWith('Composite.') && tmp.includes('=')) {
-						return tmp.split('.').slice(1).join('.');
+					let enam = null;
+
+					if (chunk.includes('//')) {
+						chunk = chunk.split('//')[0];
 					}
 
-					return tmp;
 
-				})
-				.join('\n')
-				.split(';')
-				.filter(function(chunk) {
+					if (chunk.endsWith(';')) {
 
-					let tmp = chunk.trim();
-					if (tmp.startsWith('//')) {
-						return false;
+						enam = _PARSER.enum(chunk.trim());
+
+					} else {
+
+						let name = chunk.split('=')[0].trim().split('.')[1];
+						let body = _find_enum(name, stream);
+
+						if (body !== 'undefined') {
+							enam = _PARSER.enum(body);
+						}
+
 					}
 
-					return tmp !== '';
 
-				}).map(function(body) {
-
-					let enam = _PARSER.enum(body.trim());
-					if (enam.name !== undefined) {
+					if (enam !== null && enam.name !== undefined) {
 
 						if (enam.values !== undefined) {
+
 							enums[enam.name] = {
 								values: enam.values
 							};
+
 						} else if (enam.value !== undefined) {
+
 							enums[enam.name] = {
 								value: enam.value
 							};
+
 						}
 
 					}
@@ -451,52 +481,30 @@ lychee.define('strainer.api.Composite').requires([
 
 		if (i1 !== -1 && i2 !== -1) {
 
-			stream.substr(i1 + 25, i2 - i1 - 25).trim().split('\n')
+			stream.substr(i1 + 25, i2 - i1 - 25).split('\n')
 				.filter(function(line) {
 
-					let tmp = line.trim();
-					if (tmp.startsWith('// deserialize: function(blob) {}')) {
+					if (line.startsWith('\t\t')) {
 
-						methods['deserialize'] = Object.assign({}, _DESERIALIZE);
-						return false;
+						let tmp = line.substr(2);
+						if (/^([A-Za-z0-9]+):\sfunction/g.test(tmp)) {
+							return true;
+						} else if (tmp.startsWith('// deserialize: function(blob) {}')) {
+							methods['deserialize'] = Object.assign({}, _DESERIALIZE);
+						} else if (tmp.startsWith('// serialize: function() {}')) {
+							methods['serialize'] = Object.assign({}, _SERIALIZE);
+						}
 
-					} else if (tmp.startsWith('// serialize: function() {}')) {
-
-						methods['serialize'] = Object.assign({}, _SERIALIZE);
-						return false;
-
-					} else if (
-						tmp === ''
-						|| tmp.startsWith('//')
-						|| tmp.startsWith('/*')
-						|| tmp.startsWith('*/')
-						|| tmp.startsWith('*')
-					) {
-						return false;
 					}
 
-					return true;
+					return false;
 
-				})
-				.join('\n')
-				.split('\n\t\t}')
-				.filter(function(chunk) {
-					return chunk.trim() !== '';
-				}).map(function(body) {
+				}).forEach(function(chunk) {
 
-					if (body.startsWith(',')) {
-						body = body.substr(1);
-					}
+					let name = chunk.split(':')[0].trim();
+					let body = _find_method(name, stream);
 
-					return (body.trim() + '\n\t\t}');
-
-				}).forEach(function(code) {
-
-					let name = code.split(':')[0].trim();
-					if (name !== '') {
-
-						let body  = code.split(':').slice(1).join(':').trim();
-						let chunk = code.split('\n')[0];
+					if (body !== 'undefined') {
 
 						methods[name] = {
 							body:       body,
@@ -552,12 +560,12 @@ lychee.define('strainer.api.Composite').requires([
 							}
 
 							errors.push({
-								ruleId:     'no-parameter-value',
-								methodName: mid,
-								fileName:   null,
-								message:    'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".',
-								line:       ref.line,
-								column:     col
+								url:       null,
+								rule:      'no-parameter-value',
+								reference: mid,
+								message:   'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".',
+								line:      ref.line,
+								column:    col
 							});
 
 						}
@@ -571,12 +579,12 @@ lychee.define('strainer.api.Composite').requires([
 					if (/^(render|update)$/g.test(mid) === false) {
 
 						errors.push({
-							ruleId:     'no-return-value',
-							methodName: mid,
-							fileName:   null,
-							message:    'Invalid return value for method "' + mid + '()".',
-							line:       ref.line,
-							column:     ref.column
+							url:       null,
+							rule:      'no-return-value',
+							reference: mid,
+							message:   'Invalid return value for method "' + mid + '()".',
+							line:      ref.line,
+							column:    ref.column
 						});
 
 					}
@@ -589,22 +597,22 @@ lychee.define('strainer.api.Composite').requires([
 
 				} else if (values.length > 1) {
 
-					let found = values.find(function(other) {
-						return other.type === 'undefined' && other.value === undefined;
-					}) || null;
+					values.forEach(function(val) {
 
-					if (found !== null) {
+						if (val.type === 'undefined' && val.value === undefined) {
 
-						errors.push({
-							ruleId:     'no-return-value',
-							methodName: mid,
-							fileName:   null,
-							message:    'No valid return values for method "' + mid + '()".',
-							line:       ref.line,
-							column:     ref.column
-						});
+							errors.push({
+								url:       null,
+								rule:      'unguessable-return-value',
+								reference: mid,
+								message:   'Unguessable return value "' + val.chunk.trim() + '" for method "' + mid + '()".',
+								line:      ref.line,
+								column:    ref.column
+							});
 
-					}
+						}
+
+					});
 
 				}
 
@@ -675,12 +683,12 @@ lychee.define('strainer.api.Composite').requires([
 						let ref   = _find_reference('\n\tlet Composite = ' + chunk, stream);
 
 						errors.push({
-							ruleId:     'no-composite',
-							methodName: 'constructor',
-							fileName:   null,
-							message:    'Composite has no "settings" object.',
-							line:       ref.line,
-							column:     ref.column
+							url:       null,
+							rule:      'no-composite',
+							reference: 'constructor',
+							message:   'Composite has no "settings" object.',
+							line:      ref.line,
+							column:    ref.column
 						});
 
 					}
@@ -713,12 +721,12 @@ lychee.define('strainer.api.Composite').requires([
 						let ref = _find_reference(property.chunk, stream);
 
 						errors.push({
-							ruleId:       'no-property-value',
-							propertyName: p,
-							fileName:     null,
-							message:      'Unguessable property "' + p + '".',
-							line:         ref.line,
-							column:       ref.column
+							url:       null,
+							rule:      'unguessable-property-value',
+							reference: p,
+							message:   'Unguessable property "' + p + '".',
+							line:      ref.line,
+							column:    ref.column
 						});
 
 					}
@@ -736,9 +744,9 @@ lychee.define('strainer.api.Composite').requires([
 					if (result.methods['serialize'] === undefined) {
 
 						errors.push({
-							ruleId:     'no-serialize',
-							methodName: 'serialize',
-							fileName:   null,
+							url:       null,
+							rule:      'no-serialize',
+							reference: 'serialize',
 							message:    'No "serialize()" method.',
 							line:       ref.line,
 							column:     ref.column
@@ -749,12 +757,12 @@ lychee.define('strainer.api.Composite').requires([
 					if (result.methods['deserialize'] === undefined) {
 
 						errors.push({
-							ruleId:     'no-deserialize',
-							methodName: 'deserialize',
-							fileName:   null,
-							message:    'No "deserialize()" method.',
-							line:       ref.line,
-							column:     ref.column
+							url:       null,
+							rule:      'no-deserialize',
+							reference: 'deserialize',
+							message:   'No "deserialize()" method.',
+							line:      ref.line,
+							column:    ref.column
 						});
 
 					}

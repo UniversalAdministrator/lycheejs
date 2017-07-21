@@ -317,6 +317,8 @@ lychee.define('strainer.plugin.ESLINT').tags({
 			asset = _validate_asset(asset) === true ? asset : null;
 
 
+			let errors = [];
+
 			if (asset !== null) {
 
 				if (_escli !== null && _eslint !== null) {
@@ -326,15 +328,19 @@ lychee.define('strainer.plugin.ESLINT').tags({
 					let source = asset.buffer.toString('utf8');
 					let report = _eslint.linter.verify(source, config);
 
+					if (report.length > 0) {
 
-					return report;
+						for (let r = 0, rl = report.length; r < rl; r++) {
+							errors.push(report[r]);
+						}
+
+					}
 
 				}
 
 			}
 
-
-			return [];
+			return errors;
 
 		},
 

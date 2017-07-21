@@ -556,9 +556,18 @@ lychee.define('strainer.api.PARSER').requires([
 
 
 				lines.filter(function(line) {
-					return line.includes(':');
-				}).map(function(line) {
-					return line.trim();
+
+					if (line.includes(':')) {
+
+						let tmp = line.trim();
+						if (tmp.startsWith('//') === false) {
+							return true;
+						}
+
+					}
+
+					return false;
+
 				}).map(function(line) {
 
 					let i1 = line.indexOf(':');

@@ -187,20 +187,29 @@ lychee.define('strainer.flow.Check').requires([
 
 				this.checks = this.codes.map(function(asset) {
 
-					let report = _plugin.ESLINT.check(asset);
-					if (report.length > 0) {
+					let result         = [];
+					let eslint_report  = _plugin.ESLINT.check(asset);
+					let eslint_unfixed = _plugin.ESLINT.fix(asset, eslint_report);
 
-						let result = _plugin.ESLINT.fix(asset, report);
+					if (eslint_unfixed.length > 0) {
 
-						report.forEach(function(err) {
+						eslint_unfixed.map(function(err) {
 
-							err.fileName = asset.url;
+							return {
+								url:     asset.url,
+								rule:    err.ruleId  || 'parser-error',
+								line:    err.line    || 0,
+								column:  err.column  || 0,
+								message: err.message || ''
+							};
 
-							if (result.includes(err) === true) {
-								errors.push(err);
-							}
+						}).forEach(function(err) {
+
+							result.push(err);
+							errors.push(err);
 
 						});
+
 
 						return result;
 
@@ -283,33 +292,44 @@ lychee.define('strainer.flow.Check').requires([
 
 				this.configs = this.codes.map(function(asset) {
 
-					let url    = asset.url.replace(/source/, 'api').replace(/\.js$/, '.json');
-					let report = _plugin.API.check(asset);
-					if (report !== null) {
+					let result      = [];
+					let api_report  = _plugin.API.check(asset);
+					let api_unfixed = _plugin.API.fix(asset, api_report);
 
-						if (report.errors.length > 0) {
 
-							let result = _plugin.API.fix(asset, report);
+					if (api_report !== null) {
 
-							report.errors = report.errors.filter(function(err) {
+						if (api_unfixed.length > 0) {
 
-								err.fileName = asset.url;
+							api_unfixed.map(function(err) {
 
-								if (result.includes(err) === true) {
-									errors.push(err);
-									return true;
-								}
+								return {
+									url:     asset.url,
+									rule:    err.rule    || 'api-error',
+									line:    err.line    || 0,
+									column:  err.column  || 0,
+									message: err.message || ''
+								};
 
-								return false;
+							}).forEach(function(err) {
+
+								result.push(err);
+								errors.push(err);
 
 							});
+
+							api_report.errors = result;
 
 						}
 
 
+						let url    = asset.url.replace(/source/, 'api').replace(/\.js$/, '.json');
 						let config = new lychee.Asset(url, 'json', true);
+						if (config !== null) {
 
-						config.buffer = report;
+							config.buffer = api_report;
+
+						}
 
 						return config;
 

@@ -60,6 +60,7 @@ lychee.define('strainer.api.Module').requires([
 	const _find_reference = function(chunk, stream) {
 
 		let ref = {
+			chunk:  '',
 			line:   0,
 			column: 0
 		};
@@ -71,7 +72,8 @@ lychee.define('strainer.api.Module').requires([
 
 		if (line !== -1) {
 
-			ref.line = line + 1;
+			ref.chunk = lines[line];
+			ref.line  = line + 1;
 
 			let column = lines[line].indexOf(chunk);
 			if (column !== -1) {
@@ -94,6 +96,40 @@ lychee.define('strainer.api.Module').requires([
 
 		if (i1 !== -1 && i2 !== -1) {
 			return stream.substr(i1 + str1.length, i2 - i1 - str1.length + str2.length).trim();
+		}
+
+		return 'undefined';
+
+	};
+
+	const _find_method = function(key, stream) {
+
+		let str1 = '\n\t\t' + key + ': function';
+		let str2 = '\n\t\t}';
+
+		let i0 = stream.indexOf('\n\tconst Module = {');
+		let i1 = stream.indexOf(str1, i0);
+		let i2 = stream.indexOf(str2, i1);
+
+		if (i1 !== -1 && i2 !== -1) {
+			return 'function' + stream.substr(i1 + str1.length, i2 - i1 - str1.length + str2.length).trim();
+		}
+
+		return 'undefined';
+
+	};
+
+	const _find_property = function(key, stream) {
+
+		let str1 = '\n\t\t' + key + ': {';
+		let str2 = '\n\t\t}';
+
+		let i0 = stream.indexOf('\n\tconst Module = {');
+		let i1 = stream.indexOf(str1, i0);
+		let i2 = stream.indexOf(str2, i1);
+
+		if (i1 !== -1 && i2 !== -1) {
+			return stream.substr(i1 + str1.length - 1, i2 - i1 - str1.length + str2.length + 1).trim();
 		}
 
 		return 'undefined';
@@ -166,47 +202,31 @@ lychee.define('strainer.api.Module').requires([
 
 		if (i1 !== -1 && i2 !== -1) {
 
-			stream.substr(i1 + 18, i2 - i1 - 18).trim().split('\n')
+			stream.substr(i1 + 18, i2 - i1 - 18).split('\n')
 				.filter(function(line) {
 
-					let tmp = line.trim();
-					if (tmp.startsWith('// deserialize: function(blob) {}')) {
+					if (line.startsWith('\t\t')) {
 
-						methods['deserialize'] = Object.assign({}, _DESERIALIZE);
-						return false;
+						let tmp = line.substr(2);
+						if (/^([A-Za-z0-9]+):\sfunction/g.test(tmp)) {
+							return true;
+						} else if (tmp.startsWith('// deserialize: function(blob) {}')) {
+							methods['deserialize'] = Object.assign({}, _DESERIALIZE);
+						} else if (tmp.startsWith('// serialize: function() {}')) {
+							methods['serialize'] = Object.assign({}, _SERIALIZE);
+						}
 
-					} else if (
-						tmp === ''
-						|| tmp.startsWith('//')
-						|| tmp.startsWith('/*')
-						|| tmp.startsWith('*/')
-						|| tmp.startsWith('*')
-					) {
-						return false;
 					}
 
-					return true;
 
-				})
-				.join('\n')
-				.split('\n\t\t}')
-				.filter(function(chunk) {
-					return chunk.trim() !== '';
-				}).map(function(body) {
+					return false;
 
-					if (body.startsWith(',')) {
-						body = body.substr(1);
-					}
+				}).forEach(function(chunk) {
 
-					return (body.trim() + '\n\t\t}');
+					let name = chunk.split(':')[0].trim();
+					let body = _find_method(name, stream);
 
-				}).forEach(function(code) {
-
-					let name = code.split(':')[0].trim();
-					if (name !== '') {
-
-						let body  = code.split(':').slice(1).join(':').trim();
-						let chunk = code.split('\n')[0];
+					if (body !== 'undefined') {
 
 						methods[name] = {
 							body:       body,
@@ -263,12 +283,12 @@ lychee.define('strainer.api.Module').requires([
 							}
 
 							errors.push({
-								ruleId:     'no-parameter-value',
-								methodName: mid,
-								fileName:   null,
-								message:    'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".',
-								line:       ref.line,
-								column:     col
+								url:       null,
+								rule:      'no-parameter-value',
+								reference: mid,
+								message:   'Invalid parameter values for "' + found.join('", "') + '" for method "' + mid + '()".',
+								line:      ref.line,
+								column:    col
 							});
 
 						}
@@ -280,12 +300,12 @@ lychee.define('strainer.api.Module').requires([
 				if (values.length === 0) {
 
 					errors.push({
-						ruleId:     'no-return-value',
-						methodName: mid,
-						fileName:   null,
-						message:    'Invalid return value for method "' + mid + '()".',
-						line:       ref.line,
-						column:     ref.column
+						url:       null,
+						rule:      'no-return-value',
+						reference: mid,
+						message:   'Invalid return value for method "' + mid + '()".',
+						line:      ref.line,
+						column:    ref.column
 					});
 
 
@@ -296,26 +316,96 @@ lychee.define('strainer.api.Module').requires([
 
 				} else if (values.length > 1) {
 
-					let found = values.find(function(other) {
-						return other.type === 'undefined' && other.value === undefined;
-					}) || null;
+					values.forEach(function(val) {
 
-					if (found !== null) {
+						if (val.type === 'undefined' && val.value === undefined) {
 
-						errors.push({
-							ruleId:     'no-return-value',
-							methodName: mid,
-							fileName:   null,
-							message:    'No valid return values for method "' + mid + '()".',
-							line:       ref.line,
-							column:     ref.column
-						});
+							errors.push({
+								url:       null,
+								rule:      'unguessable-return-value',
+								reference: mid,
+								message:   'Unguessable return value "' + val.chunk.trim() + '" for method "' + mid + '()".',
+								line:      ref.line,
+								column:    ref.column
+							});
 
-					}
+						}
+
+					});
 
 				}
 
 			}
+
+		}
+
+	};
+
+	const _parse_properties = function(properties, stream, errors) {
+
+		let i1 = stream.indexOf('\n\tconst Module = {');
+		let i2 = stream.indexOf('\n\t};', i1);
+
+		if (i1 !== -1 && i2 !== -1) {
+
+			stream.substr(i1 + 18, i2 - i1 - 18).split('\n')
+				.filter(function(line) {
+
+					if (line.startsWith('\t\t')) {
+
+						let tmp = line.substr(2);
+						if (/^([A-Za-z0-9]+):\sfunction/g.test(tmp)) {
+							return false;
+						} else if (/^([A-Za-z0-9]+):\s/g.test(tmp)) {
+							return true;
+						}
+
+					}
+
+
+					return false;
+
+				}).forEach(function(chunk) {
+
+					if (chunk.endsWith(',')) {
+
+						chunk = chunk.substr(0, chunk.length - 1);
+
+
+						let tmp = chunk.split(':');
+						if (tmp.length === 2) {
+
+							let name = tmp[0].trim();
+							let prop = _PARSER.detect(tmp[1].trim());
+
+
+							properties[name] = {
+								chunk: chunk,
+								value: prop
+							};
+
+						}
+
+					} else if (chunk.endsWith('{')) {
+
+						let tmp = chunk.split(':');
+						if (tmp.length === 2) {
+
+							let name = tmp[0].trim();
+							let body = _find_property(name, stream);
+							let prop = _PARSER.detect(body);
+
+
+							properties[name] = {
+								chunk: body,
+								value: prop
+							};
+
+						}
+
+					}
+
+				});
 
 		}
 
@@ -362,6 +452,7 @@ lychee.define('strainer.api.Module').requires([
 
 				_parse_memory(memory, stream, errors);
 				_parse_methods(result.methods, stream, errors);
+				_parse_properties(result.properties, stream, errors);
 
 
 				if (
@@ -374,12 +465,12 @@ lychee.define('strainer.api.Module').requires([
 					if (result.methods['serialize'] === undefined) {
 
 						errors.push({
-							ruleId:     'no-serialize',
-							methodName: 'serialize',
-							fileName:   null,
-							message:    'No "serialize()" method.',
-							line:       ref.line,
-							column:     ref.column
+							url:       null,
+							rule:      'no-serialize',
+							reference: 'serialize',
+							message:   'No "serialize()" method.',
+							line:      ref.line,
+							column:    ref.column
 						});
 
 					}
@@ -387,12 +478,12 @@ lychee.define('strainer.api.Module').requires([
 					if (result.methods['deserialize'] === undefined) {
 
 						errors.push({
-							ruleId:     'no-deserialize',
-							methodName: 'deserialize',
-							fileName:   null,
-							message:    'No "deserialize()" method.',
-							line:       ref.line,
-							column:     ref.column
+							url:       null,
+							rule:      'no-deserialize',
+							reference: 'deserialize',
+							message:   'No "deserialize()" method.',
+							line:      ref.line,
+							column:    ref.column
 						});
 
 					}

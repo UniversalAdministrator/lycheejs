@@ -143,8 +143,8 @@ lychee.define('strainer.Quickfix').requires([
 
 					flow.errors.forEach(function(err) {
 
-						let path = '/opt/lycheejs' + err.fileName;
-						let rule = err.ruleId  || 'parser-error';
+						let path = '/opt/lycheejs' + err.url;
+						let rule = err.rule    || 'parser-error';
 						let line = err.line    || 0;
 						let col  = err.column  || 0;
 						let msg  = err.message || 'Parsing error: unknown';

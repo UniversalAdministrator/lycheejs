@@ -60,9 +60,12 @@ lychee.define('strainer.api.Definition').requires([
 		} else {
 
 			errors.push({
-				ruleId:   'no-identifier',
-				fileName: null,
-				message:  'No Definition identifier defined.'
+				url:       null,
+				rule:      'no-identifier',
+				reference: null,
+				message:   'No Definition identifier defined.',
+				line:      0,
+				column:    0
 			});
 
 		}
@@ -256,11 +259,12 @@ lychee.define('strainer.api.Definition').requires([
 				if (i1 === -1 || i2 === -1) {
 
 					errors.push({
-						ruleId:   'no-definition',
-						fileName: null,
-						message:  'No lychee.Definition found.',
-						line:     0,
-						column:   0
+						url:       null,
+						rule:      'no-definition',
+						reference: null,
+						message:   'No lychee.Definition found.',
+						line:      0,
+						column:    0
 					});
 
 				}

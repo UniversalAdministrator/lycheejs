@@ -14,9 +14,9 @@ lychee.define('strainer.plugin.API').requires([
 	};
 	const _TAB_STR = new Array(128).fill('\t').join('');
 	const _FIXES   = {
-		'no-return-value': function(err, report) {
+		'unguessable-return-value': function(err, report) {
 
-			let method = report.result.methods[err.methodName] || null;
+			let method = report.result.methods[err.reference] || null;
 			if (method !== null) {
 
 				let has_already = method.values.find(function(val) {
@@ -31,7 +31,23 @@ lychee.define('strainer.plugin.API').requires([
 
 			return false;
 
+		},
+
+		'unguessable-property-value': function(err, report) {
+
+			let property = report.result.properties[err.reference] || null;
+			if (property !== null) {
+
+				if (property.value.type !== 'undefined') {
+					return true;
+				}
+
+			}
+
+			return false;
+
 		}
+
 	};
 
 
@@ -154,7 +170,7 @@ lychee.define('strainer.plugin.API').requires([
 
 				report.errors.forEach(function(err) {
 
-					let rule = err.ruleId;
+					let rule = err.rule;
 					let fix  = _FIXES[rule] || null;
 					let tmp  = false;
 
