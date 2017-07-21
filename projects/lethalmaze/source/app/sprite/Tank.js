@@ -257,11 +257,17 @@ lychee.define('game.app.sprite.Tank').requires([
 
 			if (this.ammo < 16) {
 
-				return this.setAmmo(16);
+				let result = this.setAmmo(16);
+				if (result === true) {
+					return true;
+				}
 
 			} else if (this.life < 4) {
 
-				return this.setLife(4);
+				let result = this.setLife(4);
+				if (result === true) {
+					return true;
+				}
 
 			}
 

@@ -72,11 +72,17 @@ lychee.define('game.ui.sprite.Tile').includes([
 
 				if (this.state === 'default' && state !== 'default') {
 
-					return _Sprite.prototype.setState.call(this, state);
+					let result = _Sprite.prototype.setState.call(this, state);
+					if (result === true) {
+						return true;
+					}
 
 				} else if (state === 'default') {
 
-					return _Sprite.prototype.setState.call(this, state);
+					let result = _Sprite.prototype.setState.call(this, state);
+					if (result === true) {
+						return true;
+					}
 
 				}
 

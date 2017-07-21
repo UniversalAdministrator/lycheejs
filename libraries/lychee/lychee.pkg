@@ -127,6 +127,9 @@
 				],
 				"Package": [
 					"json"
+				],
+				"lychee": [
+					"json"
 				]
 			},
 			"crypto": {
