@@ -1003,6 +1003,7 @@ lychee.define('strainer.api.PARSER').requires([
 			let candidates = [];
 			let values     = [];
 			let lines      = code.split('\n');
+			let is_comment = false;
 			let nest_level = 0;
 			let first      = lines[0].trim();
 			let last       = lines[lines.length - 1].trim();
@@ -1019,6 +1020,19 @@ lychee.define('strainer.api.PARSER').requires([
 			lines.map(function(line) {
 				return line.trim();
 			}).filter(function(line) {
+
+				if (line.startsWith('//')) {
+					return false;
+				} else if (line.startsWith('/*')) {
+					is_comment = true;
+					return false;
+				} else if (line.endsWith('*/')) {
+					is_comment = false;
+					return false;
+				} else if (is_comment === true) {
+					return false;
+				}
+
 
 				// XXX: Following algorithm crashes itself
 				if (
