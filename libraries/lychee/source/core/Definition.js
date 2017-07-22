@@ -226,9 +226,14 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 				for (let aid in this._attaches) {
 
-					let asset = lychee.serialize(this._attaches[aid]);
-					if (asset !== null) {
-						blob.attaches[aid] = asset;
+					let asset = this._attaches[aid];
+					if (asset.url.startsWith('/tmp/Dummy') === false) {
+
+						let data = lychee.serialize(asset);
+						if (data !== null) {
+							blob.attaches[aid] = data;
+						}
+
 					}
 
 				}
