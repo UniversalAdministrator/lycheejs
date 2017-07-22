@@ -27,6 +27,9 @@
 			"flow": {
 				"Check": [
 					"json"
+				],
+				"Stage": [
+					"json"
 				]
 			},
 			"platform": {
@@ -134,6 +137,9 @@
 			},
 			"flow": {
 				"Check": [
+					"js"
+				],
+				"Stage": [
 					"js"
 				]
 			},
