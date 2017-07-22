@@ -34,12 +34,12 @@ function! ale_linters#javascript#strainer#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#javascript#strainer#Command(buffer)
-    return "/bin/bash /usr/local/bin/lycheejs-strainer-quickfix %s"
+    return "/bin/bash /usr/local/bin/lycheejs-strainer-fixer %s"
 endfunction
 
 call ale#linter#Define('javascript', {
 \   'name': 'strainer',
-\   'executable': 'lycheejs-strainer-quickfix',
+\   'executable': 'lycheejs-strainer-fixer',
 \   'command_callback': 'ale_linters#javascript#strainer#Command',
 \   'output_stream': 'stdout',
 \   'callback': 'ale_linters#javascript#strainer#Handle',

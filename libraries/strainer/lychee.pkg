@@ -114,7 +114,10 @@
 			"Main": [
 				"js"
 			],
-			"Quickfix": [
+			"Fixer": [
+				"js"
+			],
+			"Fuzzer": [
 				"js"
 			],
 			"api": {

@@ -1,7 +1,7 @@
 
-lychee.define('strainer.Quickfix').requires([
+lychee.define('strainer.Fuzzer').requires([
 	'lychee.Input',
-	'strainer.flow.Check'
+	'strainer.flow.Stage'
 ]).includes([
 	'lychee.event.Emitter'
 ]).exports(function(lychee, global, attachments) {
@@ -51,7 +51,7 @@ lychee.define('strainer.Quickfix').requires([
 				lychee.environment.global.lychee.ROOT.project = _lychee.ROOT.lychee + project;
 
 
-				this.trigger('init', [ project, file ]);
+				this.trigger('init');
 
 			} else {
 
@@ -61,13 +61,12 @@ lychee.define('strainer.Quickfix').requires([
 
 		}, this, true);
 
-		this.bind('init', function(project, file) {
+		this.bind('init', function() {
 
-			let flow = new _flow.Check({
-				sandbox:  project,
+			let flow = new _flow.Stage({
+				sandbox:  this.settings.project,
 				settings: this.settings
 			});
-
 
 			flow.unbind('read');
 			flow.bind('read', function(oncomplete) {
@@ -83,7 +82,7 @@ lychee.define('strainer.Quickfix').requires([
 
 
 					let that  = this;
-					let asset = new Stuff(sandbox + '/' + file, true);
+					let asset = new Config(sandbox + '/' + file, true);
 					let pkg   = new Config(sandbox + '/lychee.pkg');
 
 
@@ -95,7 +94,7 @@ lychee.define('strainer.Quickfix').requires([
 
 								if (result === true) {
 
-									that.codes = [ asset ];
+									that.configs = [ asset ];
 									oncomplete(true);
 
 								} else {
@@ -135,7 +134,7 @@ lychee.define('strainer.Quickfix').requires([
 				let length = flow.errors.length;
 				if (length === 0) {
 
-					console.error('\n0 problems');
+					console.info('0 problems');
 
 					this.destroy(0);
 
@@ -201,7 +200,7 @@ lychee.define('strainer.Quickfix').requires([
 		serialize: function() {
 
 			let data = _Emitter.prototype.serialize.call(this);
-			data['constructor'] = 'strainer.Quickfix';
+			data['constructor'] = 'strainer.Fuzzer';
 
 
 			let settings = _lychee.assignunlink({}, this.settings);

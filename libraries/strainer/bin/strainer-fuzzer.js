@@ -14,51 +14,30 @@ const _ROOT = process.env.LYCHEEJS_ROOT || '/opt/lycheejs';
 
 const _print_help = function() {
 
-	console.log('                                                                    ');
-	console.info('lychee.js ' + lychee.VERSION + ' Strainer (Quickfix Tool)');
-	console.log('                                                                    ');
-	console.log('Usage: lycheejs-strainer-quickfix [File]                            ');
-	console.log('                                                                    ');
-	console.log('Examples:                                                           ');
-	console.log('                                                                    ');
-	console.log('    # cwd has to be /opt/lycheejs                                   ');
-	console.log('    lycheejs-strainer-quickfix projects/boilerplate/source/Main.js; ');
-	console.log('                                                                    ');
+	console.log('                                                                 ');
+	console.info('lychee.js ' + lychee.VERSION + ' Strainer (Fuzzer)');
+	console.log('                                                                 ');
+	console.log('Usage: lycheejs-strainer-fuzzer [File]                           ');
+	console.log('                                                                 ');
+	console.log('Examples:                                                        ');
+	console.log('                                                                 ');
+	console.log('    # cwd has to be /opt/lycheejs                                ');
+	console.log('    lycheejs-strainer-fuzzer projects/boilerplate/api/Main.json; ');
+	console.log('                                                                 ');
 
 };
 
 const _bootup = function(settings) {
 
-	// XXX: Quickfix Mode doesn't allow
-	// console log/info/warn or pretty
-	// color codes, so strip them out.
-
-	console.log   = function() {};
-	console.info  = function() {};
-	console.warn  = function() {};
-	console.error = function() {
-
-		let al   = arguments.length;
-		let args = [];
-		for (let a = 0; a < al; a++) {
-			args.push(arguments[a]);
-		}
-
-		process.stdout.write(args.join(' ') + '\n');
-
-	};
-
-
 	let environment = new lychee.Environment({
 		id:       'strainer',
 		debug:    false,
 		sandbox:  true,
-		build:    'strainer.Quickfix',
+		build:    'strainer.Fuzzer',
 		timeout:  5000,
 		packages: [
-			new lychee.Package('lychee',     '/libraries/lychee/lychee.pkg'),
-			new lychee.Package('fertilizer', '/libraries/fertilizer/lychee.pkg'),
-			new lychee.Package('strainer',   '/libraries/strainer/lychee.pkg')
+			new lychee.Package('lychee',   '/libraries/lychee/lychee.pkg'),
+			new lychee.Package('strainer', '/libraries/strainer/lychee.pkg')
 		],
 		tags:     {
 			platform: [ 'node' ]
@@ -78,7 +57,7 @@ const _bootup = function(settings) {
 
 
 			// This allows using #MAIN in JSON files
-			sandbox.MAIN = new strainer.Quickfix(settings);
+			sandbox.MAIN = new strainer.Fuzzer(settings);
 
 			sandbox.MAIN.bind('destroy', function(code) {
 				process.exit(code);
@@ -122,30 +101,11 @@ const _bootup = function(settings) {
 
 
 
-/*
- * XXX: Quickfix Mode doesn't need console.info() calls.
- * This strips out all bootstrap info
- */
+if (_fs.existsSync(_ROOT + '/libraries/lychee/build/node/core.js') === false) {
+	require(_ROOT + '/bin/configure.js');
+}
 
-const lychee = (function() {
-
-	let _old_write = process.stdout.write;
-	process.stdout.write = function() {};
-
-	if (_fs.existsSync(_ROOT + '/libraries/lychee/build/node/core.js') === false) {
-		require(_ROOT + '/bin/configure.js');
-	}
-
-	let lychee = require(_ROOT + '/libraries/lychee/build/node/core.js')(_ROOT);
-	process.stdout.write = _old_write;
-
-
-	return lychee;
-
-})();
-
-
-
+const lychee    = require(_ROOT + '/libraries/lychee/build/node/core.js')(_ROOT);
 const _SETTINGS = (function() {
 
 	let args     = process.argv.slice(2).filter(val => val !== '');

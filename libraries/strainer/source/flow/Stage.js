@@ -1,7 +1,6 @@
 
 lychee.define('strainer.flow.Stage').requires([
-	'lychee.Stash',
-	'strainer.plugin.TEST'
+	'lychee.Stash'
 ]).includes([
 	'lychee.event.Flow'
 ]).exports(function(lychee, global, attachments) {
@@ -73,7 +72,6 @@ lychee.define('strainer.flow.Stage').requires([
 		let settings = Object.assign({}, data);
 
 
-		this.codes    = [];
 		this.configs  = [];
 		this.errors   = [];
 		this.sandbox  = '';
@@ -97,7 +95,7 @@ lychee.define('strainer.flow.Stage').requires([
 		 * INITIALIZATION
 		 */
 
-		this.bind('read-api', function(oncomplete) {
+		this.bind('read', function(oncomplete) {
 
 			let project = this.settings.project;
 			let sandbox = this.sandbox;
@@ -157,19 +155,25 @@ lychee.define('strainer.flow.Stage').requires([
 
 		}, this);
 
-		this.bind('build-sim', function(oncomplete) {
-			// TODO: Build this.codes[ ...Stuff ] Array
-			oncomplete(false);
-		}, this);
+		this.bind('fuzz', function(oncomplete) {
 
-		this.bind('write-sim', function(oncomplete) {
-			// TODO: Write this.codes to stash
-			oncomplete(false);
-		}, this);
+			let project = this.settings.project;
+			let sandbox = this.sandbox;
+			let stash   = this.stash;
 
-		this.bind('exec-sim', function(oncomplete) {
-			// TODO: Run all simulations
-			oncomplete(false);
+			if (sandbox !== '' && stash !== null) {
+
+				console.log('strainer: FUZZ ' + project);
+				console.warn('TODO: Run all fuzzer simulations');
+
+				oncomplete(true);
+
+			} else {
+
+				oncomplete(false);
+
+			}
+
 		}, this);
 
 
@@ -178,12 +182,9 @@ lychee.define('strainer.flow.Stage').requires([
 		 * FLOW
 		 */
 
-		this.then('read-api');
+		this.then('read');
 
-		this.then('build-sim');
-		this.then('write-sim');
-
-		this.then('exec-sim');
+		this.then('fuzz');
 
 	};
 

@@ -109,11 +109,11 @@ The [lychee.js Strainer](../libraries/strainer) also allows usage
 in quickfix mode, which in return can be easily integrated into
 any IDE as an external linter command.
 
-The `lycheejs-strainer-quickfix` command will show errors
+The `lycheejs-strainer-fixer` command will show errors
 every time it could not understand your code, its meanings
 or its relations to other definitions.
 
-The output format of the `lycheejs-strainer-quickfix` command
+The output format of the `lycheejs-strainer-fixer` command
 is the following, where each line represents separate error:
 
 ```bash
@@ -123,7 +123,7 @@ is the following, where each line represents separate error:
 ```bash
 # Example Output
 [$] cd /opt/lycheejs;
-[$] lycheejs-strainer-quickfix libraries/lychee/source/app/Main.js
+[$] lycheejs-strainer-fixer libraries/lychee/source/app/Main.js
 libraries/lychee/source/app/Main.js:37:11: Parsing error: Unexpected token an. [parser-error]
 libraries/lychee/source/app/Main.js:426:3: Invalid return value for method "init()". [no-return-value]
 libraries/lychee/source/app/Main.js:507:3: Invalid return value for method "destroy()". [no-return-value]

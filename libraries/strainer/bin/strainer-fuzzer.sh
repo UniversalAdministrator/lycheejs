@@ -15,7 +15,7 @@ if [ "$LYCHEEJS_HELPER" != "" ]; then
 
 	cd $LYCHEEJS_ROOT;
 
-	$LYCHEEJS_HELPER env:node ./libraries/strainer/bin/strainer-quickfix.js "$1" "$2" "$3" "$4";
+	$LYCHEEJS_HELPER env:node ./libraries/strainer/bin/strainer-fuzzer.js "$1" "$2" "$3" "$4";
 
 	exit $?;
 
