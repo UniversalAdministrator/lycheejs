@@ -12,7 +12,8 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	const _fuzz_asset = function(type) {
 
 		let asset = {
-			url: '/tmp/Dummy.' + type,
+			url:       '/tmp/Dummy.' + type,
+			_is_dummy: true,
 			serialize: function() {
 				return null;
 			}
@@ -27,7 +28,6 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 		Object.defineProperty(asset, 'buffer', {
 			get: function() {
-				console.warn('lychee.Definition: Injecting Attachment "' + this.url + '" (' + file + ')');
 				return null;
 			},
 			set: function() {
