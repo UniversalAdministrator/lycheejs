@@ -840,7 +840,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		this.build       = 'app.Main';
 		this.debug       = true;
 		this.definitions = {};
-		this.global      = global;
+		this.global      = global !== undefined ? global : {};
 		this.packages    = [];
 		this.sandbox     = false;
 		this.tags        = {};

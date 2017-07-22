@@ -161,7 +161,17 @@
 			let value = args[a];
 			let o     = 0;
 
-			if (value instanceof Object) {
+			if (typeof value === 'function') {
+
+				let tmp = (value).toString().split('\n');
+
+				for (let t = 0, tl = tmp.length; t < tl; t++) {
+					output.push(tmp[t]);
+				}
+
+				o = output.length - 1;
+
+			} else if (value instanceof Object) {
 
 				let tmp = [];
 

@@ -95,7 +95,17 @@
 			let value = args[a];
 			let o     = 0;
 
-			if (value instanceof Object) {
+			if (typeof value === 'function') {
+
+				let tmp = (value).toString().split('\n');
+
+				for (let t = 0, tl = tmp.length; t < tl; t++) {
+					output.push(tmp[t].replace(/\t/g, _INDENT));
+				}
+
+				o = output.length - 1;
+
+			} else if (value instanceof Object) {
 
 				let tmp = [];
 
@@ -126,7 +136,7 @@
 				if (tmp.length > 1) {
 
 					for (let t = 0, tl = tmp.length; t < tl; t++) {
-						output.push(tmp[t]);
+						output.push(tmp[t].replace(/\t/g, _INDENT));
 					}
 
 					o = output.length - 1;
@@ -147,7 +157,7 @@
 				let tmp = value.split('\n');
 
 				for (let t = 0, tl = tmp.length; t < tl; t++) {
-					output.push(tmp[t]);
+					output.push(tmp[t].replace(/\t/g, _INDENT));
 				}
 
 				o = output.length - 1;
