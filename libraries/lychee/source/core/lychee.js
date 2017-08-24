@@ -429,6 +429,10 @@
 
 		diff: function(aobject, bobject) {
 
+			aobject = aobject !== undefined ? aobject : undefined;
+			bobject = bobject !== undefined ? bobject : undefined;
+
+
 			if (aobject instanceof Object && bobject instanceof Object) {
 
 				let akeys = Object.keys(aobject);
@@ -470,11 +474,9 @@
 
 				}
 
-			} else {
+			} else if (aobject !== bobject) {
 
-				if (aobject !== bobject) {
-					return true;
-				}
+				return true;
 
 			}
 

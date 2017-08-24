@@ -69,15 +69,15 @@ lychee.define('lychee.ai.bnn.Brain').exports(function(lychee, global, attachment
 			for (let n = 0, nl = layer.length; n < nl; n++) {
 
 				let neuron = {
-					bias:    1,
-					delta:   0,
-					value:   _random(),
-					history: [],
-					weights: []
+					bias:     1,
+					delta:    0,
+					value:    _random(),
+					gradient: [],
+					weights:  []
 				};
 
 				for (let p = 0; p < prev; p++) {
-					neuron.history.push(0);
+					neuron.gradient.push(0);
 					neuron.weights.push(_random());
 				}
 
@@ -337,42 +337,33 @@ lychee.define('lychee.ai.bnn.Brain').exports(function(lychee, global, attachment
 				}
 
 
-				// 4. Calculate weights for Input Layer
+				// 4. Re-Calculate weights based on Gradient
 				let input_layer = layers[0];
 
-				for (let i = 0, il = input_layer.length; i < il; i++) {
+				for (let l = 0, ll = layers.length; l < ll; l++) {
 
-					let neuron = input_layer[i];
+					let layer      = layers[l];
+					let prev_layer = layers[l - 1] || null;
 
-					neuron.bias += _LEARNING_RATE * neuron.delta;
+					for (let n = 0, nl = layer.length; n < nl; n++) {
 
-
-					for (let w = 0, wl = neuron.weights.length; w < wl; w++) {
-						let delta = _LEARNING_RATE * neuron.delta * inputs[w];
-						neuron.weights[w] += delta + _LEARNING_MOMENTUM * neuron.history[w];
-						neuron.history[w]  = delta;
-					}
-
-				}
-
-
-				// 5. Calculate weights for Hidden Layers and Output Layer
-				for (let l = 1, ll = layers.length; l < ll; l++) {
-
-					let current_layer = layers[l];
-					let prev_layer    = layers[l - 1];
-
-					for (let c = 0, cl = current_layer.length; c < cl; c++) {
-
-						let neuron = current_layer[c];
+						let neuron = layer[n];
 
 						neuron.bias += _LEARNING_RATE * neuron.delta;
 
 
-						for (let w = 0, wl = neuron.weights.length; w < wl; w++) {
-							let delta = _LEARNING_RATE * neuron.delta * prev_layer[w].value;
-							neuron.weights[w] += delta + _LEARNING_MOMENTUM * neuron.history[w];
-							neuron.history[w]  = delta;
+						// XXX: Input layer has no weights
+						if (l > 0) {
+
+							for (let w = 0, wl = neuron.weights.length; w < wl; w++) {
+
+								let delta = _LEARNING_RATE * neuron.delta * prev_layer[w].value;
+
+								neuron.weights[w]  += delta + _LEARNING_MOMENTUM * neuron.gradient[w];
+								neuron.gradient[w]  = delta;
+
+							}
+
 						}
 
 					}
@@ -469,7 +460,7 @@ lychee.define('lychee.ai.bnn.Brain').exports(function(lychee, global, attachment
 					if (neuron.weights.length !== 0) {
 
 						for (let w = 0, wl = neuron.weights.length; w < wl; w++) {
-							weights.push(neuron.history[w]);
+							weights.push(neuron.gradient[w]);
 							weights.push(neuron.weights[w]);
 						}
 
@@ -510,8 +501,8 @@ lychee.define('lychee.ai.bnn.Brain').exports(function(lychee, global, attachment
 							if (neuron.weights.length !== 0) {
 
 								for (let w = 0, wl = neuron.weights.length; w < wl; w++) {
-									neuron.history[w] = weights[count++];
-									neuron.weights[w] = weights[count++];
+									neuron.gradient[w] = weights[count++];
+									neuron.weights[w]  = weights[count++];
 								}
 
 							}
