@@ -127,7 +127,7 @@ lychee.define('strainer.api.Core').requires([
 						url:       null,
 						rule:      'no-core',
 						reference: null,
-						message:   'Invalid core Definition.',
+						message:   'Invalid core Definition (no sandboxed global).',
 						line:      0,
 						column:    0
 					});

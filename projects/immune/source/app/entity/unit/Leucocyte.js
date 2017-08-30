@@ -1,7 +1,7 @@
 
 lychee.define('game.app.entity.unit.Leucocyte').includes([
 	'game.app.entity.Unit'
-]).exports(function(lychee, global) {
+]).exports(function(lychee, global, attachments) {
 
 	const _Unit = lychee.import('game.app.entity.Unit');
 
