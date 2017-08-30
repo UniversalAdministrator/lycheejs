@@ -63,7 +63,7 @@ lychee.define('strainer.api.Definition').requires([
 				url:       null,
 				rule:      'no-identifier',
 				reference: null,
-				message:   'No Definition identifier defined.',
+				message:   'Invalid Definition identifier.',
 				line:      0,
 				column:    0
 			});
@@ -262,7 +262,7 @@ lychee.define('strainer.api.Definition').requires([
 						url:       null,
 						rule:      'no-definition',
 						reference: null,
-						message:   'No lychee.Definition found.',
+						message:   'Invalid lychee.Definition.',
 						line:      0,
 						column:    0
 					});
