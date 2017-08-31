@@ -63,7 +63,7 @@ lychee.define('strainer.api.Definition').requires([
 				url:       null,
 				rule:      'no-identifier',
 				reference: null,
-				message:   'No Definition identifier defined.',
+				message:   'Invalid Definition identifier.',
 				line:      0,
 				column:    0
 			});
@@ -254,7 +254,7 @@ lychee.define('strainer.api.Definition').requires([
 				// _parse_exports(result.exports, stream, errors);
 
 				let i1 = stream.indexOf('lychee.define(');
-				let i2 = stream.indexOf('exports(function(lychee, global, attachments) {\n');
+				let i2 = stream.indexOf('exports(function(lychee, global, attachments) {\n', i1);
 
 				if (i1 === -1 || i2 === -1) {
 
@@ -262,7 +262,7 @@ lychee.define('strainer.api.Definition').requires([
 						url:       null,
 						rule:      'no-definition',
 						reference: null,
-						message:   'No lychee.Definition found.',
+						message:   'Invalid lychee.Definition (wrong API usage).',
 						line:      0,
 						column:    0
 					});

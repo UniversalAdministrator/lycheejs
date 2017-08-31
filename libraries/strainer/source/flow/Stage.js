@@ -155,6 +155,32 @@ lychee.define('strainer.flow.Stage').requires([
 
 		}, this);
 
+		this.bind('fuzz-methods', function(oncomplete) {
+
+			let configs = this.configs;
+			if (configs.length > 0) {
+
+				for (let c = 0, cl = configs.length; c < cl; c++) {
+
+					let config  = configs[c];
+					let header  = config.buffer.header;
+					let result  = config.buffer.result;
+					let methods = result.methods || {};
+
+					console.log(config.url);
+
+					for (let mid in methods) {
+
+						console.log('>', header.identifier, mid);
+
+					}
+
+				}
+
+			}
+
+		}, this);
+
 		this.bind('fuzz', function(oncomplete) {
 
 			let project = this.settings.project;
@@ -165,6 +191,7 @@ lychee.define('strainer.flow.Stage').requires([
 
 				console.log('strainer: FUZZ ' + project);
 				console.warn('TODO: Run all fuzzer simulations');
+				console.log(this.configs.map(c => c.url));
 
 				oncomplete(true);
 
@@ -183,6 +210,9 @@ lychee.define('strainer.flow.Stage').requires([
 		 */
 
 		this.then('read');
+		this.then('fuzz-methods');
+		// this.then('fuzz-branches');
+		// this.then('fuzz-properties');
 
 		this.then('fuzz');
 

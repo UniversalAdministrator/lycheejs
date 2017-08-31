@@ -1,10 +1,13 @@
 {
 	"api": {
 		"files": {
-			"Main": [
+			"Fixer": [
 				"json"
 			],
-			"Quickfix": [
+			"Fuzzer": [
+				"json"
+			],
+			"Main": [
 				"json"
 			],
 			"api": {
@@ -12,6 +15,9 @@
 					"json"
 				],
 				"Composite": [
+					"json"
+				],
+				"Core": [
 					"json"
 				],
 				"Definition": [
@@ -111,13 +117,13 @@
 			}
 		},
 		"files": {
-			"Main": [
-				"js"
-			],
 			"Fixer": [
 				"js"
 			],
 			"Fuzzer": [
+				"js"
+			],
+			"Main": [
 				"js"
 			],
 			"api": {
@@ -125,6 +131,9 @@
 					"js"
 				],
 				"Composite": [
+					"js"
+				],
+				"Core": [
 					"js"
 				],
 				"Definition": [
