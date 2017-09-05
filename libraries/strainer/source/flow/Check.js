@@ -51,6 +51,78 @@ lychee.define('strainer.flow.Check').requires([
 
 	};
 
+	const _trace_memory = function(memory, chunk) {
+
+		let values = [];
+
+
+		if (chunk.startsWith('_')) {
+
+			let tmp      = chunk.split('.');
+			let variable = memory[tmp.shift()];
+			if (variable !== undefined) {
+
+				if (variable.value !== undefined) {
+
+					let identifier = variable.value.reference;
+					let config     = this.configs.find(function(other) {
+						return identifier === other.buffer.header.identifier;
+					}) || null;
+
+					if (config !== null) {
+
+						let memory = config.buffer.memory;
+						let result = config.buffer.result;
+						let check  = tmp.shift();
+						if (check === 'prototype') {
+
+							let method = result.methods[tmp.shift()] || null;
+							if (method !== null) {
+
+								if (method.values.length === 1) {
+
+									let value = method.values[0];
+									if (value.type === 'undefined' && value.chunk !== undefined) {
+										return _trace_memory.call(this, memory, value.chunk);
+									} else {
+										values.push(value);
+									}
+
+								} else {
+
+									for (let v = 0, vl = method.values.length; v < vl; v++) {
+										values.push(method.values[v]);
+									}
+
+								}
+
+							}
+
+						} else {
+
+							// XXX: Potential Enum or static property lookup
+							console.log('WTF: ' + chunk);
+
+						}
+
+					}
+
+				} else {
+
+					// TODO: Figure out why static memory
+					// analysis didn't work
+
+				}
+
+			}
+
+		}
+
+
+		return values;
+
+	};
+
 	const _package_files = function(json) {
 
 		let files = [];
@@ -326,9 +398,7 @@ lychee.define('strainer.flow.Check').requires([
 						let url    = asset.url.replace(/source/, 'api').replace(/\.js$/, '.json');
 						let config = new lychee.Asset(url, 'json', true);
 						if (config !== null) {
-
 							config.buffer = api_report;
-
 						}
 
 						return config;
@@ -348,6 +418,73 @@ lychee.define('strainer.flow.Check').requires([
 				oncomplete(false);
 
 			}
+
+		}, this);
+
+		this.bind('patch-api', function(oncomplete) {
+
+			let configs = this.configs;
+			let project = this.settings.project;
+
+			if (configs.length > 0) {
+
+				console.log('strainer: PATCH-API ' + project);
+
+
+				for (let c = 0, cl = configs.length; c < cl; c++) {
+
+					let config  = configs[c];
+					let header  = config.buffer.header;
+					let result  = config.buffer.result;
+					let memory  = config.buffer.memory;
+					let methods = result.methods || {};
+
+
+					for (let mid in methods) {
+
+						let data = methods[mid];
+
+
+						let values = data.values;
+						if (values.length > 0) {
+
+							for (let v = 0, vl = values.length; v < vl; v++) {
+
+								let value = values[v];
+								if (value.type === 'undefined' && value.chunk !== undefined) {
+
+									let references = _trace_memory.call(this, memory, value.chunk);
+									if (references.length > 0) {
+
+										values.splice(v, 1);
+										vl--;
+										v--;
+
+										for (let r = 0, rl = references.length; r < rl; r++) {
+
+											let reference = references[r];
+											if (values.indexOf(reference) === -1) {
+												values.push(reference);
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+
+			oncomplete(true);
 
 		}, this);
 
@@ -467,6 +604,7 @@ lychee.define('strainer.flow.Check').requires([
 
 		this.then('check-eslint');
 		this.then('check-api');
+		this.then('patch-api');
 
 		this.then('write-eslint');
 		this.then('write-api');
