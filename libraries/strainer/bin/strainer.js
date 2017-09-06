@@ -13,7 +13,7 @@ const _ROOT = process.env.LYCHEEJS_ROOT || '/opt/lycheejs';
 
 const _print_autocomplete = function(action, project, flag) {
 
-	let actions   = [ 'check', 'stage' ];
+	let actions   = [ 'check' ];
 	let flags     = [ '--debug' ];
 	let libraries = _fs.readdirSync(_ROOT + '/libraries')
 		.sort()
@@ -72,7 +72,7 @@ const _print_help = function() {
 	console.log('                                                    ');
 	console.log('Available Actions:                                  ');
 	console.log('                                                    ');
-	console.log('    check, stage                                    ');
+	console.log('    check                                           ');
 	console.log('                                                    ');
 	console.log('Available Libraries:                                ');
 	console.log('                                                    ');
@@ -95,8 +95,6 @@ const _print_help = function() {
 	console.log('Examples:                                           ');
 	console.log('                                                    ');
 	console.log('    lycheejs-strainer check /libraries/lychee;      ');
-	console.log('    lycheejs-strainer stage /libraries/lychee;      ');
-	console.log('    lycheejs-strainer stage /projects/boilerplate;  ');
 	console.log('                                                    ');
 
 };
@@ -210,12 +208,12 @@ const _SETTINGS = (function() {
 	};
 
 
-	let action     = args.find(val => /^(check|stage)/g.test(val));
+	let action     = args.find(val => /^(check)/g.test(val));
 	let project    = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_\/]+)$/g.test(val));
 	let debug_flag = args.find(val => /--([debug]{5})/g.test(val));
 
 
-	if (action === 'check' || action === 'stage') {
+	if (action === 'check') {
 
 		if (project !== undefined) {
 

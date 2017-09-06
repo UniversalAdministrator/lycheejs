@@ -51,6 +51,24 @@ lychee.define('strainer.flow.Check').requires([
 
 	};
 
+	const _get_knowledge_url = function(id, knowledge) {
+
+		let found = null;
+
+		for (let url in knowledge) {
+
+			let data = knowledge[url];
+			if (data.identifier === id) {
+				found = url;
+				break;
+			}
+
+		}
+
+		return found;
+
+	};
+
 	const _trace_memory = function(memory, chunk) {
 
 		let values = [];
@@ -66,7 +84,14 @@ lychee.define('strainer.flow.Check').requires([
 
 					let identifier = variable.value.reference;
 					let config     = this.configs.find(function(other) {
-						return identifier === other.buffer.header.identifier;
+
+						let buffer = other.buffer;
+						if (buffer !== null) {
+							return identifier === buffer.header.identifier;
+						} else {
+							return false;
+						}
+
 					}) || null;
 
 					if (config !== null) {
@@ -101,16 +126,22 @@ lychee.define('strainer.flow.Check').requires([
 						} else {
 
 							// XXX: Potential Enum or static property lookup
-							console.log('WTF: ' + chunk);
+							console.warn('WTF chunk value: ' + chunk);
 
 						}
 
 					}
 
-				} else {
+				} else if (variable.values !== undefined) {
 
-					// TODO: Figure out why static memory
-					// analysis didn't work
+					let check = tmp.shift();
+					if (check.startsWith('call(') || check.startsWith('(')) {
+
+						for (let v = 0, vl = variable.values.length; v < vl; v++) {
+							values.push(variable.values[v]);
+						}
+
+					}
 
 				}
 
@@ -173,6 +204,7 @@ lychee.define('strainer.flow.Check').requires([
 		});
 
 		this.__dependencies = [];
+		this.__namespaces   = {};
 		this.__pkg          = null;
 
 
@@ -308,7 +340,6 @@ lychee.define('strainer.flow.Check').requires([
 			let project = this.settings.project;
 			let stash   = this.stash;
 
-
 			if (project !== null && stash !== null) {
 
 				console.log('strainer: WRITE-ESLINT ' + project);
@@ -427,6 +458,7 @@ lychee.define('strainer.flow.Check').requires([
 			let errors       = this.errors;
 			let pkg          = this.__pkg;
 			let project      = this.settings.project;
+			let sandbox      = this.sandbox;
 			let stash        = this.stash;
 
 			if (pkg !== null && stash !== null) {
@@ -434,9 +466,15 @@ lychee.define('strainer.flow.Check').requires([
 				console.log('strainer: READ-DEPS ' + project);
 
 
-				let namespaces = {
-					lychee: '/libraries/lychee'
-				};
+				let namespaces = this.__namespaces;
+				let knowledges = {};
+
+				if (sandbox === '/libraries/lychee') {
+					namespaces['lychee'] = '.';
+				} else {
+					namespaces['lychee'] = '/libraries/lychee';
+				}
+
 
 				let environments = pkg.buffer.build.environments || null;
 				if (environments !== null) {
@@ -474,6 +512,7 @@ lychee.define('strainer.flow.Check').requires([
 					}
 
 				}
+
 
 				this.configs.forEach(function(config) {
 
@@ -516,25 +555,66 @@ lychee.define('strainer.flow.Check').requires([
 				});
 
 
-				stash.bind('batch', function(type, assets) {
+				if (dependencies.length > 0) {
 
-					for (let a = 0, al = assets.length; a < al; a++) {
-						this.configs.push(assets[a]);
-					}
+					stash.bind('batch', function(type, assets) {
+
+						for (let ns in namespaces) {
+
+							let prefix = namespaces[ns];
+							let asset  = assets.find(function(asset) {
+								return asset.url.startsWith(prefix);
+							}) || null;
+
+							if (asset !== null) {
+								knowledges[ns] = asset;
+							}
+
+						}
+
+
+						setTimeout(function() {
+
+							stash.bind('batch', function(type, assets) {
+
+								for (let a = 0, al = assets.length; a < al; a++) {
+									this.configs.push(assets[a]);
+								}
+
+								oncomplete(true);
+
+							}, this, true);
+
+							stash.batch('read', dependencies.map(function(id) {
+
+								let ns        = id.split('.')[0];
+								let knowledge = knowledges[ns] || null;
+								if (knowledge !== null && knowledge.buffer !== null) {
+									return _get_knowledge_url(id, knowledge.buffer);
+								}
+
+								return null;
+
+							}).filter(function(url) {
+								return url !== null;
+							}));
+
+						}.bind(this), 500);
+
+					}, this, true);
+
+
+					stash.batch('read', Object.values(namespaces).filter(function(val) {
+						return val !== '.';
+					}).map(function(val) {
+						return val + '/api/strainer.pkg';
+					}));
+
+				} else {
 
 					oncomplete(true);
 
-				}, this, true);
-
-				stash.batch('read', dependencies.map(function(id) {
-
-					let tmp  = id.split('.');
-					let ns   = tmp.shift();
-					let path = namespaces[ns];
-
-					return path + '/api/' + tmp.join('/') + '.json';
-
-				}));
+				}
 
 			} else {
 
@@ -615,6 +695,7 @@ lychee.define('strainer.flow.Check').requires([
 
 			let configs      = this.configs;
 			let dependencies = this.__dependencies;
+			let namespaces   = this.__namespaces;
 
 			if (dependencies.length > 0) {
 
@@ -622,12 +703,20 @@ lychee.define('strainer.flow.Check').requires([
 
 					let config     = configs[c];
 					let identifier = config.buffer.header.identifier;
+					if (identifier !== null) {
 
-					if (dependencies.indexOf(identifier) !== -1) {
+						let ns = identifier.split('.')[0];
+						if (
+							namespaces[ns] !== undefined
+							&& namespaces[ns] !== '.'
+							&& dependencies.indexOf(identifier) !== -1
+						) {
 
-						configs.splice(c, 1);
-						cl--;
-						c--;
+							configs.splice(c, 1);
+							cl--;
+							c--;
+
+						}
 
 					}
 
@@ -644,7 +733,6 @@ lychee.define('strainer.flow.Check').requires([
 
 			let project = this.settings.project;
 			let stash   = this.stash;
-
 
 			if (project !== null && stash !== null) {
 
@@ -691,7 +779,6 @@ lychee.define('strainer.flow.Check').requires([
 			let project = this.settings.project;
 			let stash   = this.stash;
 
-
 			if (project !== null && stash !== null) {
 
 				console.log('strainer: WRITE-PKG ' + project);
@@ -714,13 +801,32 @@ lychee.define('strainer.flow.Check').requires([
 
 
 						let buffer = this.buffer;
-						if (buffer !== null) {
 
-							configs.forEach(function(config) {
-								buffer[config.url] = Date.now();
+						for (let c = 0, cl = configs.length; c < cl; c++) {
+
+							let config     = configs[c];
+							let identifier = config.buffer.header.identifier;
+							let knowledge  = {};
+							let result     = config.buffer.result;
+
+
+							knowledge.settings   = Object.keys(result.settings);
+							knowledge.properties = Object.keys(result.properties);
+							knowledge.enums      = Object.keys(result.enums);
+							knowledge.events     = Object.keys(result.events);
+							knowledge.methods    = Object.keys(result.methods).map(function(mid) {
+								return [ mid, result.methods[mid].hash ];
 							});
 
+
+							buffer[config.url] = {
+								identifier: identifier,
+								timestamp:  Date.now(),
+								knowledge:  knowledge
+							};
+
 						}
+
 
 						stash.write(index.url, index);
 						stash.sync();

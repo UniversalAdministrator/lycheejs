@@ -45,7 +45,7 @@ lychee.define('strainer.api.Definition').requires([
 
 		if (tmp.startsWith('lychee.define(')) {
 
-			let tmp1 = tmp.split(/lychee\.define\("?'?([A-Za-z.]+)"?'?\)\.(.*)/g);
+			let tmp1 = tmp.split(/lychee\.define\("?'?([A-Za-z.-]+)"?'?\)\.(.*)/g);
 			if (tmp1.length > 1) {
 
 				let id = tmp1[1];

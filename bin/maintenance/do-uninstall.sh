@@ -110,13 +110,14 @@ else
 			echo " (L) > Separating CLI applications ...";
 
 
-			rm /usr/local/bin/lycheejs-breeder    2> /dev/null;
-			rm /usr/local/bin/lycheejs-fertilizer 2> /dev/null;
-			rm /usr/local/bin/lycheejs-harvester  2> /dev/null;
-			rm /usr/local/bin/lycheejs-helper     2> /dev/null;
-			rm /usr/local/bin/lycheejs-ranger     2> /dev/null;
-			rm /usr/local/bin/lycheejs-strainer   2> /dev/null;
-			rm /usr/local/bin/lycheejs-studio     2> /dev/null;
+			rm /usr/local/bin/lycheejs-breeder        2> /dev/null;
+			rm /usr/local/bin/lycheejs-fertilizer     2> /dev/null;
+			rm /usr/local/bin/lycheejs-harvester      2> /dev/null;
+			rm /usr/local/bin/lycheejs-helper         2> /dev/null;
+			rm /usr/local/bin/lycheejs-ranger         2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer       2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer-fixer 2> /dev/null;
+			rm /usr/local/bin/lycheejs-studio         2> /dev/null;
 
 
 			echo -e "\e[42m\e[97m (I) > SUCCESS \e[0m";
@@ -161,13 +162,14 @@ else
 			echo " (L) > Separating CLI applications ...";
 
 
-			rm /usr/local/bin/lycheejs-breeder    2> /dev/null;
-			rm /usr/local/bin/lycheejs-fertilizer 2> /dev/null;
-			rm /usr/local/bin/lycheejs-harvester  2> /dev/null;
-			rm /usr/local/bin/lycheejs-helper     2> /dev/null;
-			rm /usr/local/bin/lycheejs-ranger     2> /dev/null;
-			rm /usr/local/bin/lycheejs-strainer   2> /dev/null;
-			rm /usr/local/bin/lycheejs-studio     2> /dev/null;
+			rm /usr/local/bin/lycheejs-breeder        2> /dev/null;
+			rm /usr/local/bin/lycheejs-fertilizer     2> /dev/null;
+			rm /usr/local/bin/lycheejs-harvester      2> /dev/null;
+			rm /usr/local/bin/lycheejs-helper         2> /dev/null;
+			rm /usr/local/bin/lycheejs-ranger         2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer       2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer-fixer 2> /dev/null;
+			rm /usr/local/bin/lycheejs-studio         2> /dev/null;
 
 
 			echo -e "\e[42m\e[97m (I) > SUCCESS \e[0m";

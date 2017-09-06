@@ -57,6 +57,17 @@ elif [ "$OS" == "freebsd" ] || [ "$OS" == "netbsd" ]; then
 
 fi;
 
+_echo_result() {
+
+	code="$1";
+
+	if [ "$code" == "0" ]; then
+		echo -e " (I) SUCCESS\n";
+	else
+		echo -e " (E) FAILURE\n";
+	fi;
+
+}
 
 
 if [ "$OS" == "linux" ] || [ "$OS" == "osx" ] || [ "$OS" == "bsd" ]; then
@@ -65,12 +76,19 @@ if [ "$OS" == "linux" ] || [ "$OS" == "osx" ] || [ "$OS" == "bsd" ]; then
 
 	$LYCHEEJS_NODE ./bin/configure.js;
 
+	echo -e "";
+
+
 	if [ "$?" == "0" ]; then
 
-		echo -e "\n\n";
 		echo -e " (L) Building lychee.js Libraries";
 
 		./libraries/fertilizer/bin/fertilizer.sh auto /libraries/lychee;
+
+		_echo_result $?;
+
+
+		echo -e " (L) Distributing lychee.js Libraries";
 
 		if [ "$CORE_FLAG" == "false" ]; then
 
@@ -84,7 +102,16 @@ if [ "$OS" == "linux" ] || [ "$OS" == "osx" ] || [ "$OS" == "bsd" ]; then
 
 		fi;
 
-		echo -e " (I) SUCCESS\n";
+		_echo_result 0;
+
+
+		echo -e " (L) Learning lychee.js Library";
+
+		if [ "$CORE_FLAG" == "false" ]; then
+			./libraries/strainer/bin/strainer.sh check /libraries/lychee;
+		fi;
+
+		_echo_result $?;
 
 	else
 

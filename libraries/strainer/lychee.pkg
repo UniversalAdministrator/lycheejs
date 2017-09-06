@@ -4,9 +4,6 @@
 			"Fixer": [
 				"json"
 			],
-			"Fuzzer": [
-				"json"
-			],
 			"Main": [
 				"json"
 			],
@@ -120,9 +117,6 @@
 			"Fixer": [
 				"js"
 			],
-			"Fuzzer": [
-				"js"
-			],
 			"Main": [
 				"js"
 			],
@@ -149,9 +143,6 @@
 			},
 			"flow": {
 				"Check": [
-					"js"
-				],
-				"Stage": [
 					"js"
 				]
 			},
