@@ -546,6 +546,7 @@ lychee.define('strainer.flow.Check').requires([
 
 		this.bind('trace-api', function(oncomplete) {
 
+			let that    = this;
 			let configs = this.configs;
 			let project = this.settings.project;
 
@@ -554,9 +555,8 @@ lychee.define('strainer.flow.Check').requires([
 				console.log('strainer: TRACE-API ' + project);
 
 
-				for (let c = 0, cl = configs.length; c < cl; c++) {
+				configs.forEach(function(config) {
 
-					let config  = configs[c];
 					let header  = config.buffer.header;
 					let result  = config.buffer.result;
 					let memory  = config.buffer.memory;
@@ -576,7 +576,7 @@ lychee.define('strainer.flow.Check').requires([
 								let value = values[v];
 								if (value.type === 'undefined' && value.chunk !== undefined) {
 
-									let references = _trace_memory.call(this, memory, value.chunk);
+									let references = _trace_memory.call(that, memory, value.chunk);
 									if (references.length > 0) {
 
 										values.splice(v, 1);
@@ -602,7 +602,7 @@ lychee.define('strainer.flow.Check').requires([
 
 					}
 
-				}
+				});
 
 			}
 
