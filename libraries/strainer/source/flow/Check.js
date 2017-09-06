@@ -172,6 +172,9 @@ lychee.define('strainer.flow.Check').requires([
 			type: _Stash.TYPE.persistent
 		});
 
+		this.__dependencies = [];
+		this.__pkg          = null;
+
 
 		this.setSandbox(settings.sandbox);
 		this.setSettings(settings.settings);
@@ -189,6 +192,7 @@ lychee.define('strainer.flow.Check').requires([
 
 		this.bind('read', function(oncomplete) {
 
+			let that    = this;
 			let project = this.settings.project;
 			let sandbox = this.sandbox;
 			let stash   = this.stash;
@@ -197,12 +201,8 @@ lychee.define('strainer.flow.Check').requires([
 
 				console.log('strainer: READ ' + project);
 
-
-				let that = this;
-				let pkg  = new Config(sandbox + '/lychee.pkg');
-
-
-				pkg.onload = function(result) {
+				this.__pkg        = new Config(sandbox + '/lychee.pkg');
+				this.__pkg.onload = function(result) {
 
 					if (result === true) {
 
@@ -237,7 +237,7 @@ lychee.define('strainer.flow.Check').requires([
 
 				};
 
-				pkg.load();
+				this.__pkg.load();
 
 			} else {
 
@@ -421,14 +421,137 @@ lychee.define('strainer.flow.Check').requires([
 
 		}, this);
 
-		this.bind('patch-api', function(oncomplete) {
+		this.bind('read-deps', function(oncomplete) {
+
+			let dependencies = this.__dependencies;
+			let errors       = this.errors;
+			let pkg          = this.__pkg;
+			let project      = this.settings.project;
+			let stash        = this.stash;
+
+			if (pkg !== null && stash !== null) {
+
+				console.log('strainer: READ-DEPS ' + project);
+
+
+				let namespaces = {
+					lychee: '/libraries/lychee'
+				};
+
+				let environments = pkg.buffer.build.environments || null;
+				if (environments !== null) {
+
+					for (let id in environments) {
+
+						let packages = environments[id].packages || null;
+						if (packages !== null) {
+
+							packages.forEach(function(raw) {
+
+								let ns  = raw[0];
+								let url = raw[1].substr(0, raw[1].length - 11);
+
+								if (namespaces[ns] === undefined) {
+
+									namespaces[ns] = url;
+
+								} else if (namespaces[ns] !== url) {
+
+									errors.push({
+										url:     pkg.url,
+										rule:    'pkg-error',
+										line:    0,
+										column:  0,
+										message: 'Package "' + ns + '" in environment "' + id + '" has wrong url "' + url + '".'
+									});
+
+								}
+
+							});
+
+						}
+
+					}
+
+				}
+
+				this.configs.forEach(function(config) {
+
+					let header = config.buffer.header;
+
+					if (header.requires.length > 0) {
+
+						header.requires.forEach(function(id) {
+
+							let ns = id.split('.').shift();
+
+							if (
+								dependencies.indexOf(id) === -1
+								&& namespaces[ns] !== '.'
+							) {
+								dependencies.push(id);
+							}
+
+						});
+
+					}
+
+					if (header.includes.length > 0) {
+
+						header.includes.forEach(function(id) {
+
+							let ns = id.split('.').shift();
+
+							if (
+								dependencies.indexOf(id) === -1
+								&& namespaces[ns] !== '.'
+							) {
+								dependencies.push(id);
+							}
+
+						});
+
+					}
+
+				});
+
+
+				stash.bind('batch', function(type, assets) {
+
+					for (let a = 0, al = assets.length; a < al; a++) {
+						this.configs.push(assets[a]);
+					}
+
+					oncomplete(true);
+
+				}, this, true);
+
+				stash.batch('read', dependencies.map(function(id) {
+
+					let tmp  = id.split('.');
+					let ns   = tmp.shift();
+					let path = namespaces[ns];
+
+					return path + '/api/' + tmp.join('/') + '.json';
+
+				}));
+
+			} else {
+
+				oncomplete(false);
+
+			}
+
+		}, this);
+
+		this.bind('trace-api', function(oncomplete) {
 
 			let configs = this.configs;
 			let project = this.settings.project;
 
 			if (configs.length > 0) {
 
-				console.log('strainer: PATCH-API ' + project);
+				console.log('strainer: TRACE-API ' + project);
 
 
 				for (let c = 0, cl = configs.length; c < cl; c++) {
@@ -488,6 +611,35 @@ lychee.define('strainer.flow.Check').requires([
 
 		}, this);
 
+		this.bind('clean-deps', function(oncomplete) {
+
+			let configs      = this.configs;
+			let dependencies = this.__dependencies;
+
+			if (dependencies.length > 0) {
+
+				for (let c = 0, cl = configs.length; c < cl; c++) {
+
+					let config     = configs[c];
+					let identifier = config.buffer.header.identifier;
+
+					if (dependencies.indexOf(identifier) !== -1) {
+
+						configs.splice(c, 1);
+						cl--;
+						c--;
+
+					}
+
+				}
+
+			}
+
+
+			oncomplete(true);
+
+		}, this);
+
 		this.bind('write-api', function(oncomplete) {
 
 			let project = this.settings.project;
@@ -499,7 +651,6 @@ lychee.define('strainer.flow.Check').requires([
 				console.log('strainer: WRITE-API ' + project);
 
 
-				// let sandbox = this.sandbox;
 				let configs = this.configs.filter(function(config, c) {
 					return config !== null;
 				});
@@ -604,7 +755,10 @@ lychee.define('strainer.flow.Check').requires([
 
 		this.then('check-eslint');
 		this.then('check-api');
-		this.then('patch-api');
+
+		this.then('read-deps');
+		this.then('trace-api');
+		this.then('clean-deps');
 
 		this.then('write-eslint');
 		this.then('write-api');
