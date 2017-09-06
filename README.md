@@ -8,13 +8,6 @@ brought to you as libre software with joy and pride by [Artificial Engineering](
 Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin:1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2?amount=0.5&label=lychee.js%20Support).
 
 
-**IMPORTANT NOTICE**
-
-AI went live on 1. Sept 2016. Make sure that `:balloon: AI History starts here`
-is on your `master` branch so that the `./bin/maintenance` auto-update integration
-works fine. Otherwise re-fork your fork or force-pull from upstream.
-
-
 **Work-in-Progress (aka alpha)**
 
 These are the things that we are currently working on:
