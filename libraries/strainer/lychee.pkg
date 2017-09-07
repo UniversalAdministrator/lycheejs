@@ -30,9 +30,6 @@
 			"flow": {
 				"Check": [
 					"json"
-				],
-				"Stage": [
-					"json"
 				]
 			},
 			"platform": {
