@@ -123,10 +123,27 @@ lychee.define('strainer.flow.Check').requires([
 
 							}
 
-						} else {
+						} else if (check === check.toUpperCase()) {
 
-							// XXX: Potential Enum or static property lookup
-							console.warn('WTF chunk value: ' + chunk);
+							let enam = result.enums[check] || null;
+							if (enam !== null) {
+
+								let name  = tmp.shift();
+								let value = enam.values.find(function(val) {
+									return val.name === name;
+								}) || null;
+
+								if (value !== null) {
+
+									values.push({
+										chunk: chunk,
+										type:  value.value.type,
+										value: value.value.value
+									});
+
+								}
+
+							}
 
 						}
 
@@ -637,18 +654,31 @@ lychee.define('strainer.flow.Check').requires([
 
 				configs.forEach(function(config) {
 
-					let header  = config.buffer.header;
-					let result  = config.buffer.result;
-					let memory  = config.buffer.memory;
-					let methods = result.methods || {};
+					let header     = config.buffer.header;
+					let result     = config.buffer.result;
+					let memory     = config.buffer.memory;
+
+					let methods    = result.methods    || {};
+					let properties = result.properties || {};
+
+					for (let pid in properties) {
+
+						let value = properties[pid].value;
+						if (value.type === 'undefined' && value.chunk !== undefined) {
+
+							let references = _trace_memory.call(that, memory, value.chunk);
+							if (references.length === 1) {
+								properties[pid].value = references[0];
+							}
+
+						}
+
+					}
 
 
 					for (let mid in methods) {
 
-						let data = methods[mid];
-
-
-						let values = data.values;
+						let values = methods[mid].values;
 						if (values.length > 0) {
 
 							for (let v = 0, vl = values.length; v < vl; v++) {
