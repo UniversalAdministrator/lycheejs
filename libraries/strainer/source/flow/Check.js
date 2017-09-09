@@ -644,6 +644,7 @@ lychee.define('strainer.flow.Check').requires([
 		this.bind('trace-api', function(oncomplete) {
 
 			let that    = this;
+			let errors  = this.errors;
 			let configs = this.configs;
 			let project = this.settings.project;
 
@@ -668,7 +669,29 @@ lychee.define('strainer.flow.Check').requires([
 
 							let references = _trace_memory.call(that, memory, value.chunk);
 							if (references.length === 1) {
+
 								properties[pid].value = references[0];
+
+
+								let error = config.buffer.errors.find(function(err) {
+									return err.rule === 'unguessable-property-value' && err.message.includes('"' + pid + '"');
+								}) || null;
+
+								if (error !== null) {
+
+									let e0 = errors.indexOf(error);
+									let e1 = config.buffer.errors.indexOf(error);
+
+									if (e0 !== -1) {
+										errors.splice(e0, 1);
+									}
+
+									if (e1 !== -1) {
+										config.buffer.errors.splice(e1, 1);
+									}
+
+								}
+
 							}
 
 						}
