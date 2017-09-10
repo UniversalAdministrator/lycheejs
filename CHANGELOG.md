@@ -25,6 +25,7 @@ and `fixed`.
 - **Changed**: harvester.mod.Harvester supports proper git flow.
 - **Removed**: Legacy Cultivator Projects.
 - **Added**: lychee.js Strainer supports Static Code Analysis, Memory Tracing and Knowledge Tracing.
+- Changed: lychee.codec.BENCODE support special primitives (undefined, Infinity, NaN).
 - Changed: lychee.codec.BITON supports special primitives (undefined, Infinity, NaN).
 - Changed: lychee.codec.JSON support special primitives (undefined, Infinity, NaN).
 
