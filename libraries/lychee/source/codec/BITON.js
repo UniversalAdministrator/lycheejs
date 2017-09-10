@@ -283,11 +283,9 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 			typeof data === 'boolean'
 			|| data === null
 			|| data === undefined
-			|| (
-				data === Infinity
-				|| data === -Infinity
-				|| isNaN(data)
-			)
+			|| data === Infinity
+			|| data === -Infinity
+			|| isNaN(data) === true
 		) {
 
 			stream.write(0, 3);
