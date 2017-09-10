@@ -278,17 +278,34 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 	const _encode = function(stream, data) {
 
-		// 0: Boolean or Null or EOS
-		if (typeof data === 'boolean' || data === null) {
+		// 0: Boolean, Null (or EOS), Undefined, Infinity, NaN
+		if (
+			typeof data === 'boolean'
+			|| data === null
+			|| data === undefined
+			|| (
+				data === Infinity
+				|| data === -Infinity
+				|| isNaN(data)
+			)
+		) {
 
 			stream.write(0, 3);
 
 			if (data === null) {
-				stream.write(1, 2);
+				stream.write(1, 3);
+			} else if (data === undefined) {
+				stream.write(2, 3);
 			} else if (data === false) {
-				stream.write(2, 2);
+				stream.write(3, 3);
 			} else if (data === true) {
-				stream.write(3, 2);
+				stream.write(4, 3);
+			} else if (data === Infinity) {
+				stream.write(5, 3);
+			} else if (data === -Infinity) {
+				stream.write(6, 3);
+			} else if (isNaN(data) === true) {
+				stream.write(7, 3);
 			}
 
 
@@ -406,7 +423,6 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 			}
 
 
-
 			stream.write(sign, 1);
 
 
@@ -521,17 +537,25 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 			let type = stream.read(3);
 
 
-			// 0: Boolean or Null (or EOS)
+			// 0: Boolean, Null (or EOS), Undefined, Infinity, NaN
 			if (type === 0) {
 
-				tmp = stream.read(2);
+				tmp = stream.read(3);
 
 				if (tmp === 1) {
 					value = null;
 				} else if (tmp === 2) {
-					value = false;
+					value = undefined;
 				} else if (tmp === 3) {
+					value = false;
+				} else if (tmp === 4) {
 					value = true;
+				} else if (tmp === 5) {
+					value = Infinity;
+				} else if (tmp === 6) {
+					value = -Infinity;
+				} else if (tmp === 7) {
+					value = NaN;
 				}
 
 
