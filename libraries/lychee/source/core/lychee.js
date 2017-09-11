@@ -922,8 +922,10 @@
 				_bootstrap_environment.call(this);
 
 
-				let definition = new lychee.Definition(identifier);
 				let that       = this;
+				let definition = new lychee.Definition({
+					id: identifier
+				});
 
 
 				// XXX: First sandboxed hierarchy

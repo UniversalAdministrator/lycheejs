@@ -854,7 +854,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		this.timeout     = 10000;
 		this.type        = 'source';
 
-
 		this.__cache    = {
 			active:        false,
 			assimilations: [],

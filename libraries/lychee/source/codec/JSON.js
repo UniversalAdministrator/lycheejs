@@ -152,9 +152,14 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 			typeof data === 'boolean'
 			|| data === null
 			|| data === undefined
-			|| data === Infinity
-			|| data === -Infinity
-			|| isNaN(data) === true
+			|| (
+				typeof data === 'number'
+				&& (
+					data === Infinity
+					|| data === -Infinity
+					|| isNaN(data) === true
+				)
+			)
 		) {
 
 			if (data === null) {
