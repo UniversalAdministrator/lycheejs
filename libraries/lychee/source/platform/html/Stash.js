@@ -8,7 +8,6 @@ lychee.define('Stash').tags({
 	if (
 		typeof global.Storage !== 'undefined'
 		&& typeof global.localStorage === 'object'
-		&& typeof global.sessionStorage === 'object'
 	) {
 		return true;
 	}
@@ -67,19 +66,18 @@ lychee.define('Stash').tags({
 	(function() {
 
 		let local   = false;
-		let session = false;
+		let session = true;
 
 
 		try {
+
 			local = 'localStorage' in global;
+
+			// XXX: Security Error
+			global.localStorage.getItem('lychee-Stash-PERSISTENT');
+
 		} catch (err) {
 			local = false;
-		}
-
-		try {
-			session = 'sessionStorage' in global;
-		} catch (err) {
-			session = false;
 		}
 
 
