@@ -314,24 +314,35 @@ lychee.define('strainer.api.Module').requires([
 						value: undefined
 					});
 
-				} else if (values.length > 1) {
+				} else if (values.length > 0) {
 
-					values.forEach(function(val) {
+					if (/^(serialize|deserialize)$/g.test(mid) === false) {
 
-						if (val.type === 'undefined' && val.value === undefined) {
+						values.forEach(function(val) {
 
-							errors.push({
-								url:       null,
-								rule:      'unguessable-return-value',
-								reference: mid,
-								message:   'Unguessable return value "' + val.chunk.trim() + '" for method "' + mid + '()".',
-								line:      ref.line,
-								column:    ref.column
-							});
+							if (val.type === 'undefined' && val.value === undefined) {
 
-						}
+								let message = 'Unguessable return value for method "' + mid + '()".';
+								let chunk   = (val.chunk || '').trim();
 
-					});
+								if (chunk !== '') {
+									message = 'Unguessable return value "' + chunk + '" for method "' + mid + '()".';
+								}
+
+								errors.push({
+									url:       null,
+									rule:      'unguessable-return-value',
+									reference: mid,
+									message:   message,
+									line:      ref.line,
+									column:    ref.column
+								});
+
+							}
+
+						});
+
+					}
 
 				}
 
@@ -378,11 +389,20 @@ lychee.define('strainer.api.Module').requires([
 							let name = tmp[0].trim();
 							let prop = _PARSER.detect(tmp[1].trim());
 
+							if (
+								properties[name] === undefined
+								|| (
+									properties[name].value.type === 'undefined'
+									&& prop.type !== 'undefined'
+								)
+							) {
 
-							properties[name] = {
-								chunk: chunk,
-								value: prop
-							};
+								properties[name] = {
+									chunk: chunk,
+									value: prop
+								};
+
+							}
 
 						}
 
@@ -395,11 +415,20 @@ lychee.define('strainer.api.Module').requires([
 							let body = _find_property(name, stream);
 							let prop = _PARSER.detect(body);
 
+							if (
+								properties[name] === undefined
+								|| (
+									properties[name].value.type === 'undefined'
+									&& prop.type !== 'undefined'
+								)
+							) {
 
-							properties[name] = {
-								chunk: body,
-								value: prop
-							};
+								properties[name] = {
+									chunk: body,
+									value: prop
+								};
+
+							}
 
 						}
 

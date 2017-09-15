@@ -122,7 +122,7 @@ lychee.define('Viewport').tags({
 		this.width      = _process.stdout.columns;
 		this.height     = _process.stdout.rows;
 
-		this.__orientation = 0; // Unsupported
+		this.__orientation = 0;
 
 
 		_Emitter.call(this);

@@ -103,6 +103,19 @@ lychee.define('strainer.api.Composite').requires([
 
 	};
 
+	const _find_statement = function(line, stream) {
+
+		let i1 = stream.indexOf(line);
+		let i2 = stream.indexOf(';', i1);
+
+		if (i1 !== -1 && i2 !== -1) {
+			return (line + stream.substr(i1 + line.length, i2 - i1 - line.length + 1)).trim();
+		}
+
+		return 'undefined';
+
+	};
+
 	const _find_memory = function(key, stream) {
 
 		let str1 = 'const ' + key + ' = ';
@@ -250,12 +263,22 @@ lychee.define('strainer.api.Composite').requires([
 			let body = stream.substr(i1 + 18, i2 - i1 - 15).trim();
 			if (body.length > 0) {
 
-				body.split('\n').forEach(function(line, l) {
+				body.split('\n').forEach(function(line, l, self) {
 
 					let chunk = line.trim();
-					if (chunk.startsWith('this.') && chunk.includes('=')) {
+					if (chunk.startsWith('this.') && chunk.includes(' = ')) {
 
-						let tmp = chunk.split(/this\.([a-z]+)([\s]+)=([\s]+)(.*);/g).filter(function(ch) {
+						if (chunk.endsWith('[') || chunk.endsWith('{')) {
+
+							let statement = _find_statement(line, body);
+							if (statement !== 'undefined') {
+								chunk = statement;
+							}
+
+						}
+
+
+						let tmp = chunk.split(/this\.([A-Za-z_]+)([\s]+)=([\s]+)([^\0]*);/g).filter(function(ch) {
 							return ch.trim() !== '';
 						});
 
@@ -281,10 +304,20 @@ lychee.define('strainer.api.Composite').requires([
 
 							}
 
-							properties[name] = {
-								chunk: chunk,
-								value: prop
-							};
+							if (
+								properties[name] === undefined
+								|| (
+									properties[name].value.type === 'undefined'
+									&& prop.type !== 'undefined'
+								)
+							) {
+
+								properties[name] = {
+									chunk: chunk,
+									value: prop
+								};
+
+							}
 
 						}
 
@@ -595,24 +628,35 @@ lychee.define('strainer.api.Composite').requires([
 						value: undefined
 					});
 
-				} else if (values.length > 1) {
+				} else if (values.length > 0) {
 
-					values.forEach(function(val) {
+					if (/^(serialize|deserialize)$/g.test(mid) === false) {
 
-						if (val.type === 'undefined' && val.value === undefined) {
+						values.forEach(function(val) {
 
-							errors.push({
-								url:       null,
-								rule:      'unguessable-return-value',
-								reference: mid,
-								message:   'Unguessable return value "' + val.chunk.trim() + '" for method "' + mid + '()".',
-								line:      ref.line,
-								column:    ref.column
-							});
+							if (val.type === 'undefined' && val.value === undefined) {
 
-						}
+								let message = 'Unguessable return value for method "' + mid + '()".';
+								let chunk   = (val.chunk || '').trim();
 
-					});
+								if (chunk !== '') {
+									message = 'Unguessable return value "' + chunk + '" for method "' + mid + '()".';
+								}
+
+								errors.push({
+									url:       null,
+									rule:      'unguessable-return-value',
+									reference: mid,
+									message:   message,
+									line:      ref.line,
+									column:    ref.column
+								});
+
+							}
+
+						});
+
+					}
 
 				}
 
