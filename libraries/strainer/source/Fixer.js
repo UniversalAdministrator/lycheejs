@@ -84,10 +84,10 @@ lychee.define('strainer.Fixer').requires([
 
 					let that  = this;
 					let asset = new Stuff(sandbox + '/' + file, true);
-					let pkg   = new Config(sandbox + '/lychee.pkg');
 
 
-					pkg.onload = function(result) {
+					this.__pkg        = new Config(sandbox + '/lychee.pkg');
+					this.__pkg.onload = function(result) {
 
 						if (result === true) {
 
@@ -116,7 +116,7 @@ lychee.define('strainer.Fixer').requires([
 
 					};
 
-					pkg.load();
+					this.__pkg.load();
 
 				} else {
 

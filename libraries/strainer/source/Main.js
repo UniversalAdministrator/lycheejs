@@ -108,7 +108,11 @@ lychee.define('strainer.Main').requires([
 							message += ': ' + msg;
 							message += ' [' + rule + ']';
 
-							console.error('strainer: ' + message);
+							if (err.rule.startsWith('unguessable-')) {
+								console.warn('strainer: ' + message);
+							} else {
+								console.error('strainer: ' + message);
+							}
 
 						});
 

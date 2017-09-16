@@ -97,22 +97,44 @@ lychee.define('harvester.mod.Strainer').tags({
 				_ACTIVE = false;
 
 
-				let tmp = stderr.trim();
-				if (error || tmp.indexOf('(E)') !== -1) {
+				let tmp_err = stderr.trim().split('\n').map(function(line) {
+					return line.substr(15, line.length - 29).trim();
+				}).filter(function(line) {
+					return line.startsWith('strainer: /');
+				});
+
+				let tmp_out = stdout.trim().split('\n').filter(function(line) {
+					return line.includes('(W)');
+				}).map(function(line) {
+					return line.substr(15, line.length - 29).trim();
+				}).filter(function(line) {
+					return line.startsWith('strainer: /');
+				});
+
+
+				if (tmp_err.length > 0) {
 
 					console.error('harvester.mod.Strainer: FAILURE ("' + project + '")');
 
-					let lines = tmp.split('\n');
+					tmp_out.forEach(function(line) {
+						console.warn(line);
+					});
 
-					for (let l = 0, ll = lines.length; l < ll; l++) {
+					tmp_err.forEach(function(line) {
+						console.error(line);
+					});
 
-						let line = lines[l];
-						let tmp1 = line.substr(15, line.length - 29).trim();
-						if (tmp1.startsWith('strainer: /')) {
-							console.error(tmp1.trim());
-						}
+				} else if (tmp_out.length > 0) {
 
-					}
+					console.info('harvester.mod.Strainer: SUCCESS ("' + project + '")');
+
+					tmp_out.forEach(function(line) {
+						console.warn(line);
+					});
+
+				} else if (error) {
+
+					console.error('harvester.mod.Strainer: ERROR ("' + project + '")');
 
 				} else {
 
