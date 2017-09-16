@@ -69,6 +69,78 @@ lychee.define('strainer.flow.Check').requires([
 
 	};
 
+	const _trace_dependencies = function() {
+
+		let configs      = this.configs;
+		let dependencies = [];
+		let namespaces   = this.__namespaces;
+
+
+		this.configs.map(function(config) {
+			return config.buffer.header;
+		}).forEach(function(header) {
+
+			if (header.requires.length > 0) {
+
+				header.requires.forEach(function(id) {
+
+					let ns = id.split('.').shift();
+
+					if (
+						dependencies.indexOf(id) === -1
+						&& namespaces[ns] !== '.'
+					) {
+						dependencies.push(id);
+					}
+
+				});
+
+			}
+
+			if (header.includes.length > 0) {
+
+				header.includes.forEach(function(id) {
+
+					let ns = id.split('.').shift();
+
+					if (
+						dependencies.indexOf(id) === -1
+						&& namespaces[ns] !== '.'
+					) {
+						dependencies.push(id);
+					}
+
+				});
+
+			}
+
+		});
+
+		dependencies = dependencies.filter(function(identifier) {
+
+			let config = configs.find(function(other) {
+
+				let buffer = other.buffer;
+				if (buffer !== null) {
+					return identifier === buffer.header.identifier;
+				}
+
+				return false;
+
+			}) || null;
+
+			if (config !== null) {
+				return false;
+			}
+
+			return true;
+
+		});
+
+		return dependencies;
+
+	};
+
 	const _trace_memory = function(memory, chunk) {
 
 		let values = [];
@@ -78,6 +150,7 @@ lychee.define('strainer.flow.Check').requires([
 
 			let tmp      = chunk.split('.');
 			let variable = memory[tmp.shift()];
+
 			if (variable !== undefined) {
 
 				if (variable.value !== undefined) {
@@ -88,9 +161,9 @@ lychee.define('strainer.flow.Check').requires([
 						let buffer = other.buffer;
 						if (buffer !== null) {
 							return identifier === buffer.header.identifier;
-						} else {
-							return false;
 						}
+
+						return false;
 
 					}) || null;
 
@@ -99,9 +172,11 @@ lychee.define('strainer.flow.Check').requires([
 						let memory = config.buffer.memory;
 						let result = config.buffer.result;
 						let check  = tmp.shift();
+
 						if (check === 'prototype') {
 
-							let method = result.methods[tmp.shift()] || null;
+							let mid    = tmp.shift();
+							let method = _trace_method.call(this, mid, config);
 							if (method !== null) {
 
 								if (method.values.length === 1) {
@@ -171,6 +246,54 @@ lychee.define('strainer.flow.Check').requires([
 
 	};
 
+	const _trace_method = function(mid, config) {
+
+		let configs = this.configs;
+		let header  = config.buffer.header;
+		let memory  = config.buffer.memory;
+		let result  = config.buffer.result;
+
+
+		let found = null;
+
+		if (result.methods[mid] !== undefined) {
+
+			found = result.methods[mid];
+
+		} else {
+
+			for (let i = 0, il = header.includes.length; i < il; i++) {
+
+				let identifier = header.includes[i];
+				let definition = configs.find(function(other) {
+
+					let buffer = other.buffer;
+					if (buffer !== null) {
+						return identifier === buffer.header.identifier;
+					}
+
+					return false;
+
+				}) || null;
+
+				if (definition !== null) {
+
+					let check = _trace_method.call(this, mid, definition);
+					if (check !== null) {
+						found = check;
+						break;
+					}
+
+				}
+
+			}
+
+		}
+
+		return found;
+
+	};
+
 	const _package_files = function(json) {
 
 		let files = [];
@@ -220,7 +343,7 @@ lychee.define('strainer.flow.Check').requires([
 			type: _Stash.TYPE.persistent
 		});
 
-		this.__dependencies = [];
+		this.__knowledges   = {};
 		this.__namespaces   = {};
 		this.__pkg          = null;
 
@@ -469,9 +592,8 @@ lychee.define('strainer.flow.Check').requires([
 
 		}, this);
 
-		this.bind('read-deps', function(oncomplete) {
+		this.bind('trace-pkgs', function(oncomplete) {
 
-			let dependencies = this.__dependencies;
 			let errors       = this.errors;
 			let pkg          = this.__pkg;
 			let project      = this.settings.project;
@@ -480,11 +602,11 @@ lychee.define('strainer.flow.Check').requires([
 
 			if (pkg !== null && stash !== null) {
 
-				console.log('strainer: READ-DEPS ' + project);
+				console.log('strainer: TRACE-PKGS ' + project);
 
 
+				let knowledges = this.__knowledges;
 				let namespaces = this.__namespaces;
-				let knowledges = {};
 
 				if (sandbox === '/libraries/lychee') {
 					namespaces['lychee'] = '.';
@@ -531,48 +653,13 @@ lychee.define('strainer.flow.Check').requires([
 				}
 
 
-				this.configs.forEach(function(config) {
-
-					let header = config.buffer.header;
-
-					if (header.requires.length > 0) {
-
-						header.requires.forEach(function(id) {
-
-							let ns = id.split('.').shift();
-
-							if (
-								dependencies.indexOf(id) === -1
-								&& namespaces[ns] !== '.'
-							) {
-								dependencies.push(id);
-							}
-
-						});
-
-					}
-
-					if (header.includes.length > 0) {
-
-						header.includes.forEach(function(id) {
-
-							let ns = id.split('.').shift();
-
-							if (
-								dependencies.indexOf(id) === -1
-								&& namespaces[ns] !== '.'
-							) {
-								dependencies.push(id);
-							}
-
-						});
-
-					}
-
+				let unloaded_knowledges = Object.values(namespaces).filter(function(val) {
+					return val !== '.';
+				}).map(function(val) {
+					return val + '/api/strainer.pkg';
 				});
 
-
-				if (dependencies.length > 0) {
+				if (unloaded_knowledges.length > 0) {
 
 					stash.bind('batch', function(type, assets) {
 
@@ -589,43 +676,88 @@ lychee.define('strainer.flow.Check').requires([
 
 						}
 
-
-						setTimeout(function() {
-
-							stash.bind('batch', function(type, assets) {
-
-								for (let a = 0, al = assets.length; a < al; a++) {
-									this.configs.push(assets[a]);
-								}
-
-								oncomplete(true);
-
-							}, this, true);
-
-							stash.batch('read', dependencies.map(function(id) {
-
-								let ns        = id.split('.')[0];
-								let knowledge = knowledges[ns] || null;
-								if (knowledge !== null && knowledge.buffer !== null) {
-									return _get_knowledge_url(id, knowledge.buffer);
-								}
-
-								return null;
-
-							}).filter(function(url) {
-								return url !== null;
-							}));
-
-						}.bind(this), 500);
+						oncomplete(true);
 
 					}, this, true);
 
+					stash.batch('read', unloaded_knowledges);
 
-					stash.batch('read', Object.values(namespaces).filter(function(val) {
-						return val !== '.';
-					}).map(function(val) {
-						return val + '/api/strainer.pkg';
-					}));
+				} else {
+
+					oncomplete(true);
+
+				}
+
+			} else {
+
+				oncomplete(false);
+
+			}
+
+		}, this);
+
+
+		this.bind('trace-deps', function(oncomplete) {
+
+			let knowledges = this.__knowledges;
+			let namespaces = this.__namespaces;
+			let project    = this.settings.project;
+			let stash      = this.stash;
+
+			if (stash !== null) {
+
+				let unknown_apis = _trace_dependencies.call(this);
+				if (unknown_apis.length > 0) {
+
+					console.log('strainer: TRACE-DEPS ' + project + ' (' + unknown_apis.length + ')');
+
+
+					let unloaded_apis = unknown_apis.map(function(id) {
+
+						let ns        = id.split('.')[0];
+						let knowledge = knowledges[ns] || null;
+						if (knowledge !== null && knowledge.buffer !== null) {
+							return _get_knowledge_url(id, knowledge.buffer);
+						}
+
+						return null;
+
+					}).filter(function(url) {
+						return url !== null;
+					});
+
+					if (unloaded_apis.length > 0) {
+
+						stash.bind('batch', function(type, assets) {
+
+							for (let a = 0, al = assets.length; a < al; a++) {
+								this.configs.push(assets[a]);
+							}
+
+							setTimeout(function() {
+
+								let unknown_deps = _trace_dependencies.call(this);
+								if (unknown_deps.length > 0) {
+
+									this.trigger('trace-deps', [ oncomplete ]);
+
+								} else {
+
+									oncomplete(true);
+
+								}
+
+							}.bind(this), 100);
+
+						}, this, true);
+
+						stash.batch('read', unloaded_apis);
+
+					} else {
+
+						oncomplete(true);
+
+					}
 
 				} else {
 
@@ -725,6 +857,26 @@ lychee.define('strainer.flow.Check').requires([
 
 										}
 
+
+										let error = config.buffer.errors.find(function(err) {
+											return err.rule === 'unguessable-return-value' && err.message.includes('"' + mid + '()"');
+										}) || null;
+
+										if (error !== null) {
+
+											let e0 = errors.indexOf(error);
+											let e1 = config.buffer.errors.indexOf(error);
+
+											if (e0 !== -1) {
+												errors.splice(e0, 1);
+											}
+
+											if (e1 !== -1) {
+												config.buffer.errors.splice(e1, 1);
+											}
+
+										}
+
 									}
 
 								}
@@ -746,30 +898,28 @@ lychee.define('strainer.flow.Check').requires([
 
 		this.bind('clean-deps', function(oncomplete) {
 
-			let configs      = this.configs;
-			let dependencies = this.__dependencies;
-			let namespaces   = this.__namespaces;
+			let configs    = this.configs;
+			let namespaces = this.__namespaces;
+			let project    = this.settings.project;
 
-			if (dependencies.length > 0) {
 
-				for (let c = 0, cl = configs.length; c < cl; c++) {
+			console.log('strainer: CLEAN-DEPS ' + project);
 
-					let config     = configs[c];
-					let identifier = config.buffer.header.identifier;
-					if (identifier !== null) {
+			for (let c = 0, cl = configs.length; c < cl; c++) {
 
-						let ns = identifier.split('.')[0];
-						if (
-							namespaces[ns] !== undefined
-							&& namespaces[ns] !== '.'
-							&& dependencies.indexOf(identifier) !== -1
-						) {
+				let config     = configs[c];
+				let identifier = config.buffer.header.identifier;
+				if (identifier !== null) {
 
-							configs.splice(c, 1);
-							cl--;
-							c--;
+					let ns = identifier.split('.')[0];
+					if (
+						namespaces[ns] !== undefined
+						&& namespaces[ns] !== '.'
+					) {
 
-						}
+						configs.splice(c, 1);
+						cl--;
+						c--;
 
 					}
 
@@ -915,7 +1065,8 @@ lychee.define('strainer.flow.Check').requires([
 		this.then('check-eslint');
 		this.then('check-api');
 
-		this.then('read-deps');
+		this.then('trace-pkgs');
+		this.then('trace-deps');
 		this.then('trace-api');
 		this.then('clean-deps');
 
