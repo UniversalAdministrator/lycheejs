@@ -128,6 +128,24 @@ lychee.define('strainer.api.PARSER').requires([
 
 				type = 'Object';
 
+			} else if (str.startsWith('lychee.deserialize') || str.startsWith('_lychee.deserialize')) {
+
+				if (str.includes('lychee.serialize(')) {
+
+					let tmp = str.split(/lychee\.deserialize\(lychee\.serialize\(([A-Za-z0-9_.]+)\)\)/g);
+					if (tmp.length > 2) {
+						type = 'undefined';
+					}
+
+				} else {
+
+					let tmp = str.split(/lychee\.deserialize\(([A-Za-z0-9_.]+)\)/g);
+					if (tmp.length > 2) {
+						type = 'Object';
+					}
+
+				}
+
 			} else if (str.startsWith('lychee.assignunlink') || str.startsWith('_lychee.assignunlink')) {
 
 				type = 'Object';
@@ -154,6 +172,10 @@ lychee.define('strainer.api.PARSER').requires([
 			} else if (str === 'this') {
 
 				type = 'Object';
+
+			} else if (str.startsWith('this.')) {
+
+				type = 'undefined';
 
 			} else if (str.endsWith(' || null')) {
 
@@ -323,6 +345,28 @@ lychee.define('strainer.api.PARSER').requires([
 
 				value = {};
 
+			} else if (str.startsWith('lychee.deserialize') || str.startsWith('_lychee.deserialize')) {
+
+				if (str.includes('lychee.serialize(')) {
+
+					let tmp = str.split(/lychee\.deserialize\(lychee\.serialize\(([A-Za-z0-9_.]+)\)\)/g);
+					if (tmp.length > 2) {
+
+						value = {
+							'reference': tmp[1],
+							'arguments': []
+						};
+
+					}
+
+				} else {
+
+					let tmp = str.split(/lychee\.deserialize\(([A-Za-z0-9_.]+)\)/g);
+					if (tmp.length > 2) {
+						value = {};
+					}
+
+				}
 
 			} else if (str.startsWith('lychee.assignunlink') || str.startsWith('_lychee.assignunlink')) {
 
@@ -374,6 +418,13 @@ lychee.define('strainer.api.PARSER').requires([
 			} else if (str === 'this') {
 
 				value = 'this';
+
+			} else if (str.startsWith('this.')) {
+
+				value = {
+					'reference': str,
+					'arguments': []
+				};
 
 			} else if (str.endsWith(' || null')) {
 

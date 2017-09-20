@@ -31,6 +31,7 @@ lychee.define('game.ai.Agent').requires([
 			entity: settings.plane,
 			target: settings.goal
 		});
+
 		let plane = new _Position({
 			entity: settings.plane,
 			limit:  settings.limit

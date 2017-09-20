@@ -1,6 +1,7 @@
 
 lychee.define('strainer.flow.Check').requires([
 	'lychee.Stash',
+	'strainer.api.PARSER',
 	'strainer.plugin.API',
 	'strainer.plugin.ESLINT'
 ]).includes([
@@ -13,6 +14,7 @@ lychee.define('strainer.flow.Check').requires([
 	};
 	const _Flow   = lychee.import('lychee.event.Flow');
 	const _Stash  = lychee.import('lychee.Stash');
+	const _PARSER = lychee.import('strainer.api.PARSER');
 	const _STASH  = new _Stash({
 		type: _Stash.TYPE.persistent
 	});
@@ -141,7 +143,10 @@ lychee.define('strainer.flow.Check').requires([
 
 	};
 
-	const _trace_memory = function(memory, chunk) {
+	const _trace_memory = function(memory, chunk, scope) {
+
+		scope = scope instanceof Object ? scope : null;
+
 
 		let values = [];
 
@@ -183,7 +188,7 @@ lychee.define('strainer.flow.Check').requires([
 
 									let value = method.values[0];
 									if (value.type === 'undefined' && value.chunk !== undefined) {
-										return _trace_memory.call(this, memory, value.chunk);
+										return _trace_memory.call(this, memory, value.chunk, scope);
 									} else {
 										values.push(value);
 									}
@@ -235,6 +240,48 @@ lychee.define('strainer.flow.Check').requires([
 
 					}
 
+				}
+
+			}
+
+		} else if (chunk.startsWith('this.')) {
+
+			let path    = chunk.split('.').slice(1);
+			let pointer = scope[path[0]] || null;
+			if (pointer !== null) {
+
+				if (pointer.value !== undefined && pointer.value.type === 'Object') {
+
+					let tmp = pointer.value.value;
+					if (tmp instanceof Object) {
+
+						for (let p = 1, pl = path.length; p < pl; p++) {
+
+							let prop = path[p];
+							if (
+								/^([A-Za-z0-9_]+)$/g.test(prop)
+								&& pointer.value !== undefined
+								&& pointer.value.type === 'Object'
+							) {
+
+								pointer = _PARSER.detect(pointer.value.value[prop]);
+
+							} else {
+
+								pointer = null;
+								break;
+
+							}
+
+						}
+
+					}
+
+				}
+
+
+				if (pointer !== null) {
+					values.push(pointer);
 				}
 
 			}
@@ -793,13 +840,14 @@ lychee.define('strainer.flow.Check').requires([
 
 					let methods    = result.methods    || {};
 					let properties = result.properties || {};
+					let scope      = properties;
 
 					for (let pid in properties) {
 
 						let value = properties[pid].value;
 						if (value.type === 'undefined' && value.chunk !== undefined) {
 
-							let references = _trace_memory.call(that, memory, value.chunk);
+							let references = _trace_memory.call(that, memory, value.chunk, scope);
 							if (references.length === 1) {
 
 								properties[pid].value = references[0];
@@ -841,7 +889,7 @@ lychee.define('strainer.flow.Check').requires([
 								let value = values[v];
 								if (value.type === 'undefined' && value.chunk !== undefined) {
 
-									let references = _trace_memory.call(that, memory, value.chunk);
+									let references = _trace_memory.call(that, memory, value.chunk, scope);
 									if (references.length > 0) {
 
 										values.splice(v, 1);
