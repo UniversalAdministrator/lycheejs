@@ -21,7 +21,14 @@ if [ "$LYCHEEJS_HELPER" != "" ] && [ "$LYCHEEJS_FERTILIZER" != "" ]; then
 	cd $LYCHEEJS_ROOT;
 
 	$LYCHEEJS_FERTILIZER html-nwjs/main /libraries/studio;
-	$LYCHEEJS_HELPER run:html-nwjs/main /libraries/studio;
+
+	project="$1";
+
+	if [ "$project" != "" ]; then
+		$LYCHEEJS_HELPER run:html-nwjs/main /libraries/studio "$project";
+	else
+		$LYCHEEJS_HELPER run:html-nwjs/main /libraries/studio;
+	fi;
 
 	exit $?;
 
