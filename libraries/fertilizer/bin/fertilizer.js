@@ -265,7 +265,7 @@ const _SETTINGS = (function() {
 
 
 	let identifier   = args.find(val => /^(([a-z-]+|\*))\/(([a-z]+)|\*)$/g.test(val)) || args.find(val => val === 'auto');
-	let project      = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_\/]+)$/g.test(val));
+	let project      = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_/]+)$/g.test(val));
 	let debug_flag   = args.find(val => /--([debug]{5})/g.test(val));
 	let sandbox_flag = args.find(val => /--([sandbox]{7})/g.test(val));
 

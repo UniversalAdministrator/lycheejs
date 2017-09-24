@@ -224,8 +224,8 @@ const _SETTINGS = (function() {
 
 
 	let action     = args.find(val => /^(init|fork|pull|push)/g.test(val));
-	let library    = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_\/]+)$/g.test(val));
-	let project    = args.find(val => /--project=\/(libraries|projects)\/([A-Za-z0-9-_\/]+)/g.test(val));
+	let library    = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_/]+)$/g.test(val));
+	let project    = args.find(val => /--project=\/(libraries|projects)\/([A-Za-z0-9-_/]+)/g.test(val));
 	let debug_flag = args.find(val => /--([debug]{5})/g.test(val));
 
 

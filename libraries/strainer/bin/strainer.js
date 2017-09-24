@@ -209,7 +209,7 @@ const _SETTINGS = (function() {
 
 
 	let action     = args.find(val => /^(check)/g.test(val));
-	let project    = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_\/]+)$/g.test(val));
+	let project    = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_/]+)$/g.test(val));
 	let debug_flag = args.find(val => /--([debug]{5})/g.test(val));
 
 
