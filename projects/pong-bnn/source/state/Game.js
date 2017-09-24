@@ -63,8 +63,8 @@ lychee.define('game.state.Game').requires([
 			};
 
 			let velocity = {
-				x: 300 + Math.random() * 200,
-				y: 100 + Math.random() * 300
+				x: 300,
+				y: 150 + Math.random() * 300
 			};
 
 			if (Math.random() > 0.5) {

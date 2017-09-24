@@ -84,6 +84,7 @@ lychee.define('studio.Main').requires([
 		}, data);
 
 
+		this.api     = null;
 		this.project = null;
 
 
@@ -128,8 +129,12 @@ lychee.define('studio.Main').requires([
 			this.changeState('project', 'Project');
 
 
-			let project = typeof _ARGS[0] === 'string' ? _ARGS[0] : null;
-			if (project !== null) {
+			let api     = this.api;
+			let project = _ARGS.find(function(val) {
+				return /^\/(libraries|projects)\/([A-Za-z0-9-_/]+)$/g.test(val);
+			}) || null;
+
+			if (api !== null && project !== null) {
 
 				let service = this.api.getService('project');
 				if (service !== null) {
