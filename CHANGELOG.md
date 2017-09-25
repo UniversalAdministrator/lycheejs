@@ -20,14 +20,18 @@ are listed in this specific order: `changed`, `removed`, `added`
 and `fixed`.
 
 
-## [2017-Q3] - UNRELEASED
+## [2017-Q3] - 2017-09-28
 
 - **Changed**: harvester.mod.Harvester supports proper git flow.
+- **Changed**: lychee.Definition supports Composite syntax.
 - **Removed**: Legacy Cultivator Projects.
 - **Added**: lychee.js Strainer supports Static Code Analysis, Memory Tracing and Knowledge Tracing.
 - Changed: lychee.codec.BENCODE support special primitives (undefined, Infinity, NaN).
 - Changed: lychee.codec.BITON supports special primitives (undefined, Infinity, NaN).
 - Changed: lychee.codec.JSON support special primitives (undefined, Infinity, NaN).
+- Added: lychee.js Helper supports cached builds.
+- Fixed: Harvester Mods use sandboxed node.js binaries.
+- Fixed: lychee.ai.bnn.Brain correctly boosts gradients.
 
 
 ## [2017-Q2] - 2017-06-28
