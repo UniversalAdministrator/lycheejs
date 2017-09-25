@@ -419,7 +419,7 @@
 			project: null
 		},
 
-		VERSION: "2017-Q2",
+		VERSION: "2017-Q3",
 
 
 
