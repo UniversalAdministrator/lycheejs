@@ -21,7 +21,12 @@ lychee.define('game.ui.layer.Board').requires([
 		let settings = Object.assign({}, data);
 
 
-		this.__statemap = _CONFIG.map['default'][0];
+		this.__statemap = {
+			x: 0,
+			y: 0,
+			w: 512,
+			h: 512
+		};
 
 
 		settings.width  = _CONFIG.width;
@@ -96,23 +101,19 @@ lychee.define('game.ui.layer.Board').requires([
 			let texture = _TEXTURE || null;
 			if (texture !== null) {
 
-				let map = this.__statemap || null;
-				if (map !== null) {
+				let statemap = this.__statemap;
+				let position = this.position;
 
-					let position = this.position;
-
-					let x1 = position.x + offsetX - this.width  / 2;
-					let y1 = position.y + offsetY - this.height / 2;
+				let x1 = position.x + offsetX - this.width  / 2;
+				let y1 = position.y + offsetY - this.height / 2;
 
 
-					renderer.drawSprite(
-						x1,
-						y1,
-						texture,
-						map
-					);
-
-				}
+				renderer.drawSprite(
+					x1,
+					y1,
+					texture,
+					statemap
+				);
 
 			}
 

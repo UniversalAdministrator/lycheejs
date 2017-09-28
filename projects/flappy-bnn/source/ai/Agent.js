@@ -23,37 +23,28 @@ lychee.define('game.ai.Agent').requires([
 		let settings = Object.assign({}, data);
 
 
-		let sensors  = [];
-		let controls = [];
-
-
-		let control = new _Control({
+		this._control = new _Control({
 			entity: settings.plane,
 			target: settings.goal
 		});
 
-		let plane = new _Position({
-			entity: settings.plane,
-			limit:  settings.limit
-		});
-
-		let goal = new _Position({
+		this._sensor = new _Position({
 			entity: settings.goal,
 			limit:  settings.limit
 		});
 
 
-		sensors.push(plane);
-		sensors.push(goal);
-		controls.push(control);
-
-		this._expected = goal;
-		this.__control = control;
-
-
 		settings.brain = new _Brain({
-			sensors:  sensors,
-			controls: controls
+			sensors:  [
+				new _Position({
+					entity: settings.plane,
+					limit:  settings.limit
+				}),
+				this._sensor
+			],
+			controls: [
+				this._control
+			]
 		});
 
 
@@ -92,7 +83,7 @@ lychee.define('game.ai.Agent').requires([
 			let training = {
 				iterations: diff,
 				inputs:     this.brain._inputs.slice(0),
-				outputs:    this.__control.sensor()
+				outputs:    this._control.sensor()
 			};
 
 			return _Agent.prototype.reward.call(this, diff, training);
@@ -107,7 +98,7 @@ lychee.define('game.ai.Agent').requires([
 			let training = {
 				iterations: diff,
 				inputs:     this.brain._inputs.slice(0),
-				outputs:    this.__control.sensor()
+				outputs:    this._control.sensor()
 			};
 
 			return _Agent.prototype.punish.call(this, diff, training);

@@ -383,8 +383,8 @@ lychee.define('game.state.Game').requires([
 					let plane = planes[p];
 					let agent = agents[p] || null;
 					if (agent !== null) {
-						agent.__control.target = next_goal;
-						agent._expected.entity = next_goal;
+						agent._control.target = next_goal;
+						agent._sensor.entity  = next_goal;
 						agent.update();
 					}
 

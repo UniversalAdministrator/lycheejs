@@ -307,8 +307,11 @@ lychee.define('strainer.api.Composite').requires([
 							if (
 								properties[name] === undefined
 								|| (
-									properties[name].value.type === 'undefined'
-									&& prop.type !== 'undefined'
+									prop.type !== 'undefined'
+									&& (
+										properties[name].value.type === 'undefined'
+										|| properties[name].value.type === 'null'
+									)
 								)
 							) {
 
