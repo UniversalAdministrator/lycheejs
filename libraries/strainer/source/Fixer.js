@@ -17,7 +17,7 @@ lychee.define('strainer.Fixer').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.settings = _lychee.assignunlink({
 			cwd:     lychee.ROOT.lychee,

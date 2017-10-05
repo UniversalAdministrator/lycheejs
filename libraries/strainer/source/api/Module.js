@@ -57,7 +57,10 @@ lychee.define('strainer.api.Module').requires([
 
 	};
 
-	const _find_reference = function(chunk, stream) {
+	const _find_reference = function(chunk, stream, fuzzy) {
+
+		fuzzy = fuzzy === true;
+
 
 		let ref = {
 			chunk:  '',
@@ -67,7 +70,13 @@ lychee.define('strainer.api.Module').requires([
 
 		let lines = stream.split('\n');
 		let line  = lines.findIndex(function(other) {
-			return other.trim() === chunk.trim();
+
+			if (fuzzy === true) {
+				return other.includes(chunk.trim());
+			} else {
+				return other.trim() === chunk.trim();
+			}
+
 		});
 
 		if (line !== -1) {
@@ -484,12 +493,27 @@ lychee.define('strainer.api.Module').requires([
 				_parse_properties(result.properties, stream, errors);
 
 
+				let ref = _find_reference('\n\tconst Module = {', stream);
+				if (ref.chunk === '') {
+
+					ref = _find_reference('Module =', stream, true);
+
+					errors.push({
+						url:       null,
+						rule:      'no-module',
+						reference: 'constructor',
+						message:   'Module is not constant (missing "const" declaration).',
+						line:      ref.line,
+						column:    ref.column
+					});
+
+				}
+
+
 				if (
 					result.methods['serialize'] === undefined
 					|| result.methods['deserialize'] === undefined
 				) {
-
-					let ref = _find_reference('\n\tconst Module = {', stream);
 
 					if (result.methods['serialize'] === undefined) {
 

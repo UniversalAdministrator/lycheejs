@@ -21,6 +21,44 @@ lychee.define('strainer.api.Callback').requires([
 
 	};
 
+	const _find_reference = function(chunk, stream, fuzzy) {
+
+		fuzzy = fuzzy === true;
+
+
+		let ref = {
+			chunk:  '',
+			line:   0,
+			column: 0
+		};
+
+		let lines = stream.split('\n');
+		let line  = lines.findIndex(function(other) {
+
+			if (fuzzy === true) {
+				return other.includes(chunk.trim());
+			} else {
+				return other.trim() === chunk.trim();
+			}
+
+		});
+
+		if (line !== -1) {
+
+			ref.chunk = lines[line];
+			ref.line  = line + 1;
+
+			let column = lines[line].indexOf(chunk);
+			if (column !== -1) {
+				ref.column = column + 1;
+			}
+
+		}
+
+		return ref;
+
+	};
+
 	const _find_memory = function(key, stream) {
 
 		let str1 = 'const ' + key + ' = ';
@@ -143,7 +181,11 @@ lychee.define('strainer.api.Callback').requires([
 			let errors = [];
 			let memory = {};
 			let result = {
-				constructor: {},
+				constructor: {
+					body:       null,
+					hash:       null,
+					parameters: []
+				},
 				settings:    {},
 				properties:  {},
 				enums:       {},
@@ -157,6 +199,23 @@ lychee.define('strainer.api.Callback').requires([
 
 				_parse_memory(memory, stream, errors);
 				_parse_constructor(result.constructor, stream, errors);
+
+
+				let ref = _find_reference('\n\tconst Callback = function(', stream);
+				if (ref.chunk === '') {
+
+					ref = _find_reference('Callback =', stream, true);
+
+					errors.push({
+						url:       null,
+						rule:      'no-callback',
+						reference: 'constructor',
+						message:   'Callback is not constant (missing "const" declaration).',
+						line:      ref.line,
+						column:    ref.column
+					});
+
+				}
 
 			}
 

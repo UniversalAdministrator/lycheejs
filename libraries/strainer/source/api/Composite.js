@@ -57,7 +57,10 @@ lychee.define('strainer.api.Composite').requires([
 
 	};
 
-	const _find_reference = function(chunk, stream) {
+	const _find_reference = function(chunk, stream, fuzzy) {
+
+		fuzzy = fuzzy === true;
+
 
 		let ref = {
 			chunk:  '',
@@ -67,7 +70,13 @@ lychee.define('strainer.api.Composite').requires([
 
 		let lines = stream.split('\n');
 		let line  = lines.findIndex(function(other) {
-			return other.trim() === chunk.trim();
+
+			if (fuzzy === true) {
+				return other.includes(chunk.trim());
+			} else {
+				return other.trim() === chunk.trim();
+			}
+
 		});
 
 		if (line !== -1) {
@@ -91,7 +100,7 @@ lychee.define('strainer.api.Composite').requires([
 		let str1 = '\n\tComposite.' + key + ' = ';
 		let str2 = ';';
 
-		let i0 = stream.indexOf('\n\tlet Composite =');
+		let i0 = stream.indexOf('\n\tconst Composite =');
 		let i1 = stream.indexOf(str1, i0);
 		let i2 = stream.indexOf(str2, i1);
 
@@ -152,7 +161,7 @@ lychee.define('strainer.api.Composite').requires([
 	const _parse_memory = function(memory, stream, errors) {
 
 		let i1 = stream.indexOf('.exports(function(lychee, global, attachments) {');
-		let i2 = stream.indexOf('\n\tlet Composite =');
+		let i2 = stream.indexOf('\n\tconst Composite =');
 
 		if (i1 !== -1 && i2 !== -1) {
 
@@ -210,12 +219,12 @@ lychee.define('strainer.api.Composite').requires([
 
 	const _parse_constructor = function(constructor, stream) {
 
-		let i1 = stream.indexOf('\n\tlet Composite =');
+		let i1 = stream.indexOf('\n\tconst Composite =');
 		let i2 = stream.indexOf('\n\t};', i1);
 
 		if (i1 !== -1 && i2 !== -1) {
 
-			let body = stream.substr(i1 + 18, i2 - i1 - 15).trim();
+			let body = stream.substr(i1 + 20, i2 - i1 - 17).trim();
 			if (body.length > 0) {
 
 				constructor.body       = body;
@@ -230,12 +239,12 @@ lychee.define('strainer.api.Composite').requires([
 
 	const _parse_settings = function(settings, stream) {
 
-		let i1 = stream.indexOf('\n\tlet Composite =');
+		let i1 = stream.indexOf('\n\tconst Composite =');
 		let i2 = stream.indexOf('\n\t};', i1);
 
 		if (i1 !== -1 && i2 !== -1) {
 
-			let body = stream.substr(i1 + 18, i2 - i1 - 15).trim();
+			let body = stream.substr(i1 + 20, i2 - i1 - 17).trim();
 			if (body.length > 0) {
 
 				let object = _PARSER.settings(body);
@@ -255,12 +264,12 @@ lychee.define('strainer.api.Composite').requires([
 
 	const _parse_properties = function(properties, stream) {
 
-		let i1 = stream.indexOf('\n\tlet Composite =');
+		let i1 = stream.indexOf('\n\tconst Composite =');
 		let i2 = stream.indexOf('\n\t};', i1);
 
 		if (i1 !== -1 && i2 !== -1) {
 
-			let body = stream.substr(i1 + 18, i2 - i1 - 15).trim();
+			let body = stream.substr(i1 + 20, i2 - i1 - 17).trim();
 			if (body.length > 0) {
 
 				body.split('\n').forEach(function(line, l, self) {
@@ -336,7 +345,7 @@ lychee.define('strainer.api.Composite').requires([
 
 	const _parse_enums = function(enums, stream) {
 
-		let i1 = stream.indexOf('\n\t};', stream.indexOf('\n\tlet Composite =')) + 4;
+		let i1 = stream.indexOf('\n\t};', stream.indexOf('\n\tconst Composite =')) + 4;
 		let i2 = stream.indexOf('\n\tComposite.prototype =', i1);
 
 		if (i1 !== -1 && i2 !== -1) {
@@ -696,7 +705,11 @@ lychee.define('strainer.api.Composite').requires([
 			let errors = [];
 			let memory = {};
 			let result = {
-				constructor: {},
+				constructor: {
+					body:       null,
+					hash:       null,
+					parameters: []
+				},
 				settings:    {},
 				properties:  {},
 				enums:       {},
@@ -727,13 +740,31 @@ lychee.define('strainer.api.Composite').requires([
 					} else if (/^(main|client|remote|server)$/g.test(check.name) === false) {
 
 						let chunk = result.constructor.body.split('\n')[0];
-						let ref   = _find_reference('\n\tlet Composite = ' + chunk, stream);
+						let ref   = _find_reference('\n\tconst Composite = ' + chunk, stream);
 
 						errors.push({
 							url:       null,
 							rule:      'no-composite',
 							reference: 'constructor',
 							message:   'Composite has no "settings" object.',
+							line:      ref.line,
+							column:    ref.column
+						});
+
+					}
+
+				} else {
+
+					let ref = _find_reference('\n\tconst Composite = function(', stream);
+					if (ref.chunk === '') {
+
+						ref = _find_reference('Composite =', stream, true);
+
+						errors.push({
+							url:       null,
+							rule:      'no-composite',
+							reference: 'constructor',
+							message:   'Composite is not constant (missing "const" declaration).',
 							line:      ref.line,
 							column:    ref.column
 						});
