@@ -45,6 +45,9 @@
 				],
 				"Project": [
 					"json"
+				],
+				"Scene": [
+					"json"
 				]
 			},
 			"ui": {
@@ -265,6 +268,10 @@
 					"json"
 				],
 				"Project": [
+					"js",
+					"json"
+				],
+				"Scene": [
 					"js",
 					"json"
 				]

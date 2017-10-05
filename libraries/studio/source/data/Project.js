@@ -385,6 +385,25 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 		},
 
+		getScenes: function() {
+
+			let filtered = [];
+			let files    = _package_files(this.config.buffer);
+
+			for (let f = 0, fl = files.length; f < fl; f++) {
+
+				let file = files[f];
+				if (file.substr(-3) === '.json') {
+					console.log(file);
+					filtered.push(file);
+				}
+
+			}
+
+			return filtered;
+
+		},
+
 		setHarvester: function(harvester) {
 
 			harvester = typeof harvester === 'boolean' ? harvester : null;
