@@ -66,6 +66,8 @@ lychee.define('legacy.app.Main').tags({
 
 		_Main.call(this, settings);
 
+		settings = null;
+
 
 
 		/*

@@ -19,6 +19,8 @@ lychee.define('app.net.Server').includes([
 
 		_Server.call(this, settings);
 
+		settings = null;
+
 
 
 		/*

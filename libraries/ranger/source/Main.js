@@ -31,6 +31,8 @@ lychee.define('ranger.Main').requires([
 
 		_Main.call(this, settings);
 
+		settings = null;
+
 
 
 		/*

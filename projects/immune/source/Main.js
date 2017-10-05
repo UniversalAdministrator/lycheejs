@@ -50,6 +50,8 @@ lychee.define('game.Main').requires([
 
 		_Main.call(this, settings);
 
+		settings = null;
+
 
 
 		/*

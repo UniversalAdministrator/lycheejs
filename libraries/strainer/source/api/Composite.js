@@ -774,6 +774,31 @@ lychee.define('strainer.api.Composite').requires([
 				}
 
 
+				let body = result.constructor.body || null;
+				if (body !== null) {
+
+					let ref1 = _find_reference('\n\t\tlet settings = ',  body, true);
+					let ref2 = _find_reference('\n\t\tsettings = null;', body);
+
+					if (ref1.line !== 0 && ref2.line === 0) {
+
+						let ref = _find_reference('\n\t\tlet settings = ', stream, true);
+
+						errors.push({
+							url:       null,
+							rule:      'no-garbage',
+							reference: 'constructor',
+							message:   'Composite produces garbage (missing "settings = null" statement).',
+							line:      ref.line,
+							column:    ref.column
+						});
+
+
+					}
+
+				}
+
+
 				for (let p in result.properties) {
 
 					let property = result.properties[p];

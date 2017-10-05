@@ -133,6 +133,8 @@ lychee.define('app.ui.entity.Messages').requires([
 
 		_Entity.call(this, settings);
 
+		settings = null;
+
 
 
 		/*

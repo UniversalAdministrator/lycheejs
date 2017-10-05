@@ -92,6 +92,8 @@ lychee.define('studio.Main').requires([
 
 		_Main.call(this, settings);
 
+		settings = null;
+
 
 
 		/*

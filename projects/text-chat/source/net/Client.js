@@ -23,6 +23,8 @@ lychee.define('app.net.Client').requires([
 
 		_Client.call(this, settings);
 
+		settings = null;
+
 
 
 		/*

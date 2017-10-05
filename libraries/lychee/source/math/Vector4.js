@@ -11,11 +11,12 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		let settings = Object.assign({}, data);
 
-
 		this.x = typeof settings.x === 'number' ? (settings.x | 0) : 0;
 		this.y = typeof settings.y === 'number' ? (settings.y | 0) : 0;
 		this.z = typeof settings.z === 'number' ? (settings.z | 0) : 0;
 		this.w = typeof settings.w === 'number' ? (settings.w | 0) : 0;
+
+		settings = null;
 
 	};
 
