@@ -110,7 +110,7 @@ lychee.define('lychee.ui.entity.Download').tags({
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({
 			label: 'DOWNLOAD'

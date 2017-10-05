@@ -11,7 +11,7 @@ lychee.define('harvester.net.remote.Console').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(remote) {
+	const Composite = function(remote) {
 
 		_Service.call(this, 'console', remote, _Service.TYPE.remote);
 

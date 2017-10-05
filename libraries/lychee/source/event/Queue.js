@@ -44,7 +44,7 @@ lychee.define('lychee.event.Queue').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function() {
+	const Composite = function() {
 
 		this.___init  = false;
 		this.___stack = [];

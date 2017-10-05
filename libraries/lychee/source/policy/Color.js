@@ -31,7 +31,7 @@ lychee.define('lychee.policy.Color').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.entity = settings.entity instanceof Object ? settings.entity : null;
 

@@ -50,7 +50,7 @@ lychee.define('lychee.crypto.CRC32').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function() {
+	const Composite = function() {
 
 		this.__crc = 0;
 

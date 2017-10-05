@@ -54,7 +54,7 @@ lychee.define('game.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({
 

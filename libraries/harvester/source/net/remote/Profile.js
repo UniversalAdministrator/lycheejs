@@ -116,7 +116,7 @@ lychee.define('harvester.net.remote.Profile').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(remote) {
+	const Composite = function(remote) {
 
 		_Service.call(this, 'profile', remote, _Service.TYPE.remote);
 

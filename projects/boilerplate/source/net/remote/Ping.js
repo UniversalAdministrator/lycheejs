@@ -33,7 +33,7 @@ lychee.define('app.net.remote.Ping').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(remote) {
+	const Composite = function(remote) {
 
 		_Service.call(this, 'ping', remote, _Service.TYPE.remote);
 

@@ -37,7 +37,7 @@ lychee.define('legacy.app.State').requires([
 	//   wrapper:    document.querySelector('main > section')
 	// })
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

@@ -193,7 +193,7 @@ lychee.define('lychee.ai.neat.Brain').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

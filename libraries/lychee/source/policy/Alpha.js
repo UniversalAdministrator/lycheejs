@@ -5,7 +5,7 @@ lychee.define('lychee.policy.Alpha').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.entity = settings.entity instanceof Object  ? settings.entity : null;
 		this.limit  = typeof settings.limit === 'number' ? settings.limit  : 1;

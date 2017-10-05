@@ -16,7 +16,7 @@ lychee.define('game.app.sprite.Goal').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, _CONFIG, data);
 

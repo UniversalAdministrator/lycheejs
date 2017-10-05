@@ -25,7 +25,7 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 	};
 
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		// this.genes   = [];
 		this.fitness = 0;
@@ -33,7 +33,6 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 		// this.network = {};
 		// this.maxneuron = 0;
 		this.globalRank = 0;
-
 
 	};
 

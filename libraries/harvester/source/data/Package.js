@@ -115,7 +115,7 @@ lychee.define('harvester.data.Package').exports(function(lychee, global, attachm
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

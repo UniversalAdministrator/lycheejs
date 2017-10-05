@@ -5,7 +5,7 @@ lychee.define('game.policy.Position').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = lychee.assignsafe({
 			entity: null,

@@ -16,7 +16,7 @@ lychee.define('game.ui.layer.Board').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

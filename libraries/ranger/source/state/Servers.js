@@ -106,7 +106,7 @@ lychee.define('ranger.state.Servers').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(main) {
+	const Composite = function(main) {
 
 		_State.call(this, main);
 

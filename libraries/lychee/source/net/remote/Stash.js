@@ -11,7 +11,7 @@ lychee.define('lychee.net.remote.Stash').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(remote) {
+	const Composite = function(remote) {
 
 		_Service.call(this, 'stash', remote, _Service.TYPE.remote);
 

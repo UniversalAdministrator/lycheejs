@@ -140,7 +140,7 @@ lychee.define('lychee.net.remote.Chat').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(id, remote, data) {
+	const Composite = function(id, remote, data) {
 
 		id = typeof id === 'string' ? id : 'chat';
 

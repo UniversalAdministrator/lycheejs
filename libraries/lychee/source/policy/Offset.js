@@ -5,7 +5,7 @@ lychee.define('lychee.policy.Offset').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.entity = settings.entity instanceof Object ? settings.entity : null;
 		this.limit  = { x: Infinity, y: Infinity };

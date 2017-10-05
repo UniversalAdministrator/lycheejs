@@ -11,7 +11,7 @@ lychee.define('lychee.math.Quaternion').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		this.data = new Float32Array(4);
 

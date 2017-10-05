@@ -285,7 +285,7 @@ lychee.define('harvester.Watcher').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(main) {
+	const Composite = function(main) {
 
 		this.filesystem = new _Filesystem();
 		this.libraries  = {};

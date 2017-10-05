@@ -11,7 +11,7 @@ lychee.define('game.app.entity.unit.Leucocyte').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({
 			team:   'neutral',

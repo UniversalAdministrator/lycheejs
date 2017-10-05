@@ -319,7 +319,7 @@ lychee.define('lychee.data.tree.Quad').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

@@ -11,7 +11,7 @@ lychee.define('game.effect.Explosion').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.delay    = 0;
 		this.duration = 250;

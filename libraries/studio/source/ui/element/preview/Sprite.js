@@ -16,7 +16,7 @@ lychee.define('studio.ui.element.preview.Sprite').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

@@ -434,16 +434,14 @@
 		let code = (function () {/*
 			lychee.define('lychee.DIST').requires([{{requires}}]).exports(function(lychee, global, attachments) {
 
-				let Composite = function() {};
-
-				Composite.prototype = {
+				const Module = {
 
 					// deserialize: function(blob) {},
 
 					serialize: function() {
 
 						return {
-							'constructor': 'lychee.DIST',
+							'reference': 'lychee.DIST',
 							'arguments': []
 						};
 
@@ -451,7 +449,7 @@
 
 				};
 
-				return Composite;
+				return Module;
 
 			});
 

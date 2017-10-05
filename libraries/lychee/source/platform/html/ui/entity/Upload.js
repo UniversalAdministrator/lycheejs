@@ -173,7 +173,7 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({
 			label: 'UPLOAD'

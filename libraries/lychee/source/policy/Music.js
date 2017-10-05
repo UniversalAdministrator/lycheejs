@@ -5,7 +5,7 @@ lychee.define('lychee.policy.Music').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.music = settings.music instanceof Music ? settings.music : null;
 

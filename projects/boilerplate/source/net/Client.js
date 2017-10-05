@@ -14,7 +14,7 @@ lychee.define('app.net.Client').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({
 			reconnect: 10000

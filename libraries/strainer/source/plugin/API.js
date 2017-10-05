@@ -16,6 +16,7 @@ lychee.define('strainer.plugin.API').requires([
 	};
 	const _TAB_STR = new Array(128).fill('\t').join('');
 	const _FIXES   = {
+
 		'unguessable-return-value': function(err, report) {
 
 			let method = report.result.methods[err.reference] || null;

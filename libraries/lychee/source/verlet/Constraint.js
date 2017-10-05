@@ -12,7 +12,7 @@ lychee.define('lychee.verlet.Constraint').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(a_vector, b_vector, rigidity) {
+	const Composite = function(a_vector, b_vector, rigidity) {
 
 		this.__a_vector = a_vector instanceof _Vector3 ? a_vector : null;
 		this.__b_vector = b_vector instanceof _Vector3 ? b_vector : null;

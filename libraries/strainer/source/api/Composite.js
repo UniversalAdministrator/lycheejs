@@ -755,7 +755,7 @@ lychee.define('strainer.api.Composite').requires([
 
 				} else {
 
-					let ref = _find_reference('\n\tconst Composite = function(', stream);
+					let ref = _find_reference('\n\tconst Composite = function(', stream, true);
 					if (ref.chunk === '') {
 
 						ref = _find_reference('Composite =', stream, true);

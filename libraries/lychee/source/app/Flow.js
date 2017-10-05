@@ -69,7 +69,7 @@ lychee.define('lychee.app.Flow').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(main) {
+	const Composite = function(main) {
 
 		this.main     = main          || null;
 		this.client   = main.client   || null;

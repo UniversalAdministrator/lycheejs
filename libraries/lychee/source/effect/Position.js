@@ -5,7 +5,7 @@ lychee.define('lychee.effect.Position').exports(function(lychee, global, attachm
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;

@@ -31,7 +31,7 @@ lychee.define('fertilizer.data.Shell').tags({
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function() {
+	const Composite = function() {
 
 		this.__stack = [];
 

@@ -83,7 +83,7 @@ lychee.define('lychee.net.remote.Debugger').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(remote) {
+	const Composite = function(remote) {
 
 		_Service.call(this, 'debugger', remote, _Service.TYPE.remote);
 

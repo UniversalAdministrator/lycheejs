@@ -5,7 +5,7 @@ lychee.define('lychee.effect.Height').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;

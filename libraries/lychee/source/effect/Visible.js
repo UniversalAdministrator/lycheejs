@@ -5,7 +5,7 @@ lychee.define('lychee.effect.Visible').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.delay    = 0;
 		this.visible  = true;

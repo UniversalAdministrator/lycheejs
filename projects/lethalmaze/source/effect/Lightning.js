@@ -75,7 +75,7 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;

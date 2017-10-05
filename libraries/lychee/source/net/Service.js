@@ -77,7 +77,7 @@ lychee.define('lychee.net.Service').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(id, tunnel, type) {
+	const Composite = function(id, tunnel, type) {
 
 		this.id     = typeof id === 'string'                        ? id     : null;
 		this.tunnel = lychee.interfaceof(lychee.net.Tunnel, tunnel) ? tunnel : null;

@@ -493,7 +493,7 @@ lychee.define('strainer.api.Module').requires([
 				_parse_properties(result.properties, stream, errors);
 
 
-				let ref = _find_reference('\n\tconst Module = {', stream);
+				let ref = _find_reference('\n\tconst Module = {', stream, true);
 				if (ref.chunk === '') {
 
 					ref = _find_reference('Module =', stream, true);

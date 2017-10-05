@@ -12,7 +12,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

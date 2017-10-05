@@ -310,7 +310,7 @@ lychee.define('lychee.app.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.settings = lychee.assignunlink({}, _DEFAULTS, settings);
 		this.defaults = lychee.assignunlink({}, this.settings);

@@ -26,7 +26,7 @@ lychee.define('harvester.net.Client').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({
 			host:      'localhost',

@@ -193,7 +193,7 @@ lychee.define('lychee.ui.State').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(main) {
+	const Composite = function(main) {
 
 		_State.call(this, main);
 

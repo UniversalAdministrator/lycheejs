@@ -158,7 +158,7 @@ lychee.define('lychee.ai.bnn.Brain').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

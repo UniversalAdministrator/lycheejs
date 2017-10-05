@@ -11,7 +11,7 @@ lychee.define('lychee.net.remote.Storage').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(remote) {
+	const Composite = function(remote) {
 
 		_Service.call(this, 'storage', remote, _Service.TYPE.remote);
 

@@ -12,7 +12,7 @@ lychee.define('lychee.net.client.Session').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(id, client, data) {
+	const Composite = function(id, client, data) {
 
 		id = typeof id === 'string' ? id : 'session';
 

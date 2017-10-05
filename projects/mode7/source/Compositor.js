@@ -5,7 +5,7 @@ lychee.define('game.Compositor').exports(function(lychee, global, attachments) {
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(main) {
+	const Composite = function(main) {
 
 		this.renderer = main.renderer || null;
 

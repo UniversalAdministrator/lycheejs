@@ -5,7 +5,7 @@ lychee.define('lychee.policy.Position').exports(function(lychee, global, attachm
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.entity = settings.entity instanceof Object ? settings.entity : null;
 		this.limit  = { x: Infinity, y: Infinity, z: Infinity };

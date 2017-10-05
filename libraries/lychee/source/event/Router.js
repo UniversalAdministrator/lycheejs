@@ -89,7 +89,7 @@ lychee.define('lychee.event.Router').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function() {
+	const Composite = function() {
 
 		this.__routes = {};
 

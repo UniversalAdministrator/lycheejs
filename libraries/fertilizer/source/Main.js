@@ -28,7 +28,7 @@ lychee.define('fertilizer.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.settings = _lychee.assignunlink({
 			project:    null,

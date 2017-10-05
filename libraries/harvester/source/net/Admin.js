@@ -23,7 +23,7 @@ lychee.define('harvester.net.Admin').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({
 			host:   'localhost',

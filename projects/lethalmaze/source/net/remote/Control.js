@@ -222,7 +222,7 @@ lychee.define('game.net.remote.Control').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(remote) {
+	const Composite = function(remote) {
 
 		let settings = {};
 

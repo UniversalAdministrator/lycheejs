@@ -735,7 +735,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

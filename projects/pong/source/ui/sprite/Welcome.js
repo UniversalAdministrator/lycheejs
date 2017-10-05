@@ -16,7 +16,7 @@ lychee.define('game.ui.sprite.Welcome').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

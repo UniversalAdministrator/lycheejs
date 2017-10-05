@@ -5,7 +5,7 @@ lychee.define('lychee.policy.Visible').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.entity = settings.entity instanceof Object ? settings.entity : null;
 

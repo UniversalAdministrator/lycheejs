@@ -166,7 +166,7 @@ lychee.define('lychee.ui.element.Network').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

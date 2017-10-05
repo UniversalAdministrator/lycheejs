@@ -120,7 +120,7 @@ lychee.define('lychee.net.socket.HTTP').tags({
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function() {
+	const Composite = function() {
 
 		this.__connection = null;
 		this.__protocol   = null;

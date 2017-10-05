@@ -5,7 +5,7 @@ lychee.define('game.policy.Paddle').exports(function(lychee, global, attachments
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = lychee.assignsafe({
 			entity: null,

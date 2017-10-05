@@ -39,7 +39,7 @@ lychee.define('lychee.net.client.Debugger').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(client) {
+	const Composite = function(client) {
 
 		_Service.call(this, 'debugger', client, _Service.TYPE.client);
 

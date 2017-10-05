@@ -114,7 +114,7 @@ lychee.define('ranger.ui.entity.Console').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

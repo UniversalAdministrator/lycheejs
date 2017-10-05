@@ -11,7 +11,7 @@ lychee.define('lychee.net.client.Storage').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(client) {
+	const Composite = function(client) {
 
 		_Service.call(this, 'storage', client, _Service.TYPE.client);
 

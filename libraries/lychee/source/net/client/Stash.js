@@ -11,7 +11,7 @@ lychee.define('lychee.net.client.Stash').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(client) {
+	const Composite = function(client) {
 
 		_Service.call(this, 'stash', client, _Service.TYPE.client);
 

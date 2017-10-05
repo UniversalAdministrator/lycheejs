@@ -13,7 +13,7 @@ lychee.define('game.app.sprite.Ball').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, _CONFIG, data);
 

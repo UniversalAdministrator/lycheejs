@@ -386,7 +386,7 @@ lychee.define('lychee.app.State').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(main) {
+	const Composite = function(main) {
 
 		this.main     = main          || null;
 		this.client   = main.client   || null;

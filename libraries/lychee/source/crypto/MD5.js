@@ -67,7 +67,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function() {
+	const Composite = function() {
 
 		this.__a = 1732584193;
 		this.__b = -271733879;

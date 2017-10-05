@@ -14,7 +14,7 @@ lychee.define('game.app.sprite.Wall').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

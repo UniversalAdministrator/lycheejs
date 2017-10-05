@@ -11,7 +11,7 @@ lychee.define('lychee.ai.neat.Pool').exports(function(lychee, global, attachment
 
 	};
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		this.species = [];
 		this.generation = 0;

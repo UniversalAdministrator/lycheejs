@@ -343,7 +343,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(id, url) {
+	const Composite = function(id, url) {
 
 		id  = typeof id === 'string'  ? id  : 'app';
 		url = typeof url === 'string' ? url : null;

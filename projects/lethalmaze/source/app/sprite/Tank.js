@@ -24,7 +24,7 @@ lychee.define('game.app.sprite.Tank').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

@@ -37,7 +37,7 @@ lychee.define('harvester.net.client.Harvester').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(client) {
+	const Composite = function(client) {
 
 		_Service.call(this, 'harvester', client, _Service.TYPE.client);
 

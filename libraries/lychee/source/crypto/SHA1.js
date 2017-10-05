@@ -158,7 +158,7 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function() {
+	const Composite = function() {
 
 		this.__a = 0x67452301 | 0;
 		this.__b = 0xefcdab89 | 0;

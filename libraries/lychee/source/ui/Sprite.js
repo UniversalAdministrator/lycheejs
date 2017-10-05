@@ -47,7 +47,7 @@ lychee.define('lychee.ui.Sprite').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

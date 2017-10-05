@@ -201,7 +201,7 @@ lychee.define('strainer.api.Callback').requires([
 				_parse_constructor(result.constructor, stream, errors);
 
 
-				let ref = _find_reference('\n\tconst Callback = function(', stream);
+				let ref = _find_reference('\n\tconst Callback = function(', stream, true);
 				if (ref.chunk === '') {
 
 					ref = _find_reference('Callback =', stream, true);

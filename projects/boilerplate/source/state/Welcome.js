@@ -17,7 +17,7 @@ lychee.define('app.state.Welcome').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(main) {
+	const Composite = function(main) {
 
 		_State.call(this, main);
 

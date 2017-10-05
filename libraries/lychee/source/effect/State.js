@@ -5,7 +5,7 @@ lychee.define('lychee.effect.State').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.delay = 0;
 		this.state = null;

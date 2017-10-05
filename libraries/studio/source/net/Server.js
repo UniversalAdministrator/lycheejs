@@ -44,7 +44,7 @@ lychee.define('studio.net.Server').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data, main) {
+	const Composite = function(data, main) {
 
 		let settings = Object.assign({
 		}, data);

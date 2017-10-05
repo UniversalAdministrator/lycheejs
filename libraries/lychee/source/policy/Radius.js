@@ -5,7 +5,7 @@ lychee.define('lychee.policy.Radius').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.entity = settings.entity instanceof Object  ? settings.entity      : null;
 		this.limit  = typeof settings.limit === 'number' ? (settings.limit | 0) : Infinity;

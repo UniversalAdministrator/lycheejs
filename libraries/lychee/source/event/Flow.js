@@ -69,7 +69,7 @@ lychee.define('lychee.event.Flow').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function() {
+	const Composite = function() {
 
 		this.___init    = false;
 		this.___stack   = [];

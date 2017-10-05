@@ -18,7 +18,7 @@ lychee.define('fertilizer.template.html.Application').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		_Template.call(this, data);
 

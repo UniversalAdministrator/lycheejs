@@ -103,7 +103,7 @@ lychee.define('harvester.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(settings) {
+	const Composite = function(settings) {
 
 		this.settings = lychee.assignunlink({
 			host: null,

@@ -29,7 +29,7 @@ lychee.define('app.net.client.Ping').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(client) {
+	const Composite = function(client) {
 
 		_Service.call(this, 'ping', client, _Service.TYPE.client);
 

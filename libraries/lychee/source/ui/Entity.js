@@ -35,7 +35,7 @@ lychee.define('lychee.ui.Entity').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
 		let settings = Object.assign({}, data);
 

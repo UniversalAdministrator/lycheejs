@@ -281,7 +281,7 @@ lychee.define('lychee.net.remote.Session').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(id, remote, data) {
+	const Composite = function(id, remote, data) {
 
 		id = typeof id === 'string' ? id : 'session';
 

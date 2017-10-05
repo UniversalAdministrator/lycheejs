@@ -207,7 +207,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function() {
+	const Composite = function() {
 
 		this.___events   = {};
 		this.___timeline = {

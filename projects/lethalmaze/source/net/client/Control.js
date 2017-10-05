@@ -11,7 +11,7 @@ lychee.define('game.net.client.Control').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(client) {
+	const Composite = function(client) {
 
 		let settings = {};
 

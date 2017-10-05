@@ -12,7 +12,7 @@ lychee.define('lychee.crypto.MURMUR').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function() {
+	const Composite = function() {
 
 		this.__hash = 0;
 
