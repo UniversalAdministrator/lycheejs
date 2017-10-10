@@ -1,8 +1,8 @@
 
-lychee.define('lychee.ai.neat.Agent').includes([
-	'lychee.ai.Agent'
-]).requires([
+lychee.define('lychee.ai.neat.Agent').requires([
 	'lychee.ai.neat.Genome'
+]).includes([
+	'lychee.ai.Agent'
 ]).exports(function(lychee, global, attachments) {
 
 	const _Agent            = lychee.import('lychee.ai.Agent');

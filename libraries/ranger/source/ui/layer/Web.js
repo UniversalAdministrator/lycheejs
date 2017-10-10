@@ -1,8 +1,8 @@
 
-lychee.define('ranger.ui.layer.Web').includes([
-	'lychee.ui.Layer'
-]).requires([
+lychee.define('ranger.ui.layer.Web').requires([
 	'lychee.ui.entity.Helper'
+]).includes([
+	'lychee.ui.Layer'
 ]).exports(function(lychee, global, attachments) {
 
 	const _Helper = lychee.import('lychee.ui.entity.Helper');

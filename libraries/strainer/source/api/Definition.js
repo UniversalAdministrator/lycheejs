@@ -11,6 +11,20 @@ lychee.define('strainer.api.Definition').requires([
 	 * HELPERS
 	 */
 
+	const _create_error = function(rule, message) {
+
+		return {
+			url:       null,
+			rule:      rule,
+			reference: null,
+			message:   message,
+			line:      0,
+			column:    0
+
+		};
+
+	};
+
 	const _validate_asset = function(asset) {
 
 		if (asset instanceof Object && typeof asset.serialize === 'function') {
@@ -257,16 +271,37 @@ lychee.define('strainer.api.Definition').requires([
 				let i2 = stream.indexOf('exports(function(lychee, global, attachments) {\n', i1);
 
 				if (i1 === -1 || i2 === -1) {
+					errors.push(_create_error('no-definition', 'Invalid Definition (wrong API usage).'));
+				}
 
-					errors.push({
-						url:       null,
-						rule:      'no-definition',
-						reference: null,
-						message:   'Invalid lychee.Definition (wrong API usage).',
-						line:      0,
-						column:    0
-					});
 
+				let i3 = stream.indexOf('requires([\n');
+				let i4 = stream.indexOf('includes([\n');
+				let i5 = stream.indexOf('supports(function(lychee, global) {\n');
+				let i6 = stream.indexOf('exports(function(lychee, global, attachments) {\n');
+
+				if (i3 !== -1 && i4 !== -1 && i3 > i4) {
+					errors.push(_create_error('no-meta', 'Invalid Definition ("requires()" after "includes()").'));
+				}
+
+				if (i3 !== -1 && i5 !== -1 && i3 > i5) {
+					errors.push(_create_error('no-meta', 'Invalid Definition ("requires()" after "supports()").'));
+				}
+
+				if (i4 !== -1 && i5 !== -1 && i4 > i5) {
+					errors.push(_create_error('no-meta', 'Invalid Definition ("includes()" after "supports()").'));
+				}
+
+				if (i3 !== -1 && i6 !== -1 && i3 > i6) {
+					errors.push(_create_error('no-meta', 'Invalid Definition ("requires()" after "exports()").'));
+				}
+
+				if (i4 !== -1 && i6 !== -1 && i4 > i6) {
+					errors.push(_create_error('no-meta', 'Invalid Definition ("includes()" after "exports()").'));
+				}
+
+				if (i5 !== -1 && i6 !== -1 && i5 > i6) {
+					errors.push(_create_error('no-meta', 'Invalid Definition ("supports()" after "exports()").'));
 				}
 
 			}

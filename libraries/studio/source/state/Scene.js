@@ -1,13 +1,13 @@
 
-lychee.define('studio.state.Scene').includes([
-	'lychee.ui.State'
-]).requires([
+lychee.define('studio.state.Scene').requires([
 	// 'studio.ui.element.select.Scene',
 	// 'studio.ui.element.modify.Scene',
 	// 'studio.ui.element.preview.Scene',
 	'lychee.ui.Blueprint',
 	'lychee.ui.Element',
 	'lychee.ui.Layer'
+]).includes([
+	'lychee.ui.State'
 ]).exports(function(lychee, global, attachments) {
 
 	const _State = lychee.import('lychee.ui.State');

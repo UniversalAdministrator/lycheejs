@@ -1,7 +1,5 @@
 
-lychee.define('studio.state.Asset').includes([
-	'lychee.ui.State'
-]).requires([
+lychee.define('studio.state.Asset').requires([
 	'studio.codec.FONT',
 	'studio.ui.element.modify.Font',
 	// 'studio.ui.element.modify.Music',
@@ -15,6 +13,8 @@ lychee.define('studio.state.Asset').includes([
 	'lychee.ui.Element',
 	'lychee.ui.Layer',
 	'lychee.ui.element.Search'
+]).includes([
+	'lychee.ui.State'
 ]).exports(function(lychee, global, attachments) {
 
 	const _State   = lychee.import('lychee.ui.State');

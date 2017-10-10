@@ -1,13 +1,13 @@
 
-lychee.define('studio.state.Project').includes([
-	'lychee.ui.State'
-]).requires([
+lychee.define('studio.state.Project').requires([
 	'studio.data.Project',
 	'studio.ui.element.modify.Project',
 	'lychee.ui.Blueprint',
 	'lychee.ui.Element',
 	'lychee.ui.Layer',
 	'lychee.ui.element.Search'
+]).includes([
+	'lychee.ui.State'
 ]).exports(function(lychee, global, attachments) {
 
 	const _Project = lychee.import('studio.data.Project');
