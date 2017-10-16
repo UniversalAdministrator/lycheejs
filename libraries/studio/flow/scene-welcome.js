@@ -25,17 +25,17 @@
 
 	});
 
-	flow.then(function(oncomplete) {
+	// flow.then(function(oncomplete) {
 
-		let entity = this.main.state.query('ui > scene > select > search');
-		entity.setValue('welcome/ui/welcome');
-		entity.trigger('change', [ entity.value ]);
+	// 	let entity = this.main.state.query('ui > scene > select > search');
+	// 	entity.setValue('welcome/ui/welcome');
+	// 	entity.trigger('change', [ entity.value ]);
 
-		setTimeout(function() {
-			oncomplete(true);
-		}, 200);
+	// 	setTimeout(function() {
+	// 		oncomplete(true);
+	// 	}, 200);
 
-	});
+	// });
 
 	flow.bind('error', function(error) {
 		console.error(error);

@@ -375,7 +375,10 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 			for (let f = 0, fl = files.length; f < fl; f++) {
 
 				let file = files[f];
-				if (file.substr(-3) === '.js') {
+				if (
+					(file.startsWith('app/') || file.startsWith('ui/'))
+					&& file.endsWith('.js')
+				) {
 					filtered.push(file);
 				}
 
@@ -393,8 +396,7 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 			for (let f = 0, fl = files.length; f < fl; f++) {
 
 				let file = files[f];
-				if (file.substr(-3) === '.json') {
-					console.log(file);
+				if (file.startsWith('state/') && file.endsWith('.json')) {
 					filtered.push(file);
 				}
 

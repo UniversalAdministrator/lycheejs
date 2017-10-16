@@ -17,6 +17,8 @@ if [ "$LYCHEEJS_HELPER" != "" ] && [ "$LYCHEEJS_FERTILIZER" != "" ]; then
 
 	cd $LYCHEEJS_ROOT/libraries/studio;
 	cp ./index-normal.html ./index.html;
+	sed -i "s|/libraries/lychee/build/html|file:///opt/lycheejs/libraries/lychee/build/html-nwjs|g" index.html;
+	sed -i "s|lychee.pkginit('html/main'|lychee.pkginit('html-nwjs/main'|g" index.html;
 
 	cd $LYCHEEJS_ROOT;
 
