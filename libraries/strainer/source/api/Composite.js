@@ -842,7 +842,7 @@ lychee.define('strainer.api.Composite').requires([
 					|| result.methods['deserialize'] === undefined
 				) {
 
-					let ref = _find_reference('\n\tComposite.prototype =', stream);
+					let ref = _find_reference('\n\tComposite.prototype =', stream, true);
 
 					if (result.methods['serialize'] === undefined) {
 

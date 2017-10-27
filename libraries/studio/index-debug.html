@@ -82,7 +82,29 @@
 			}, {
 			});
 
+			// XXX: Move window to right screen
+			setTimeout(function() {
 
+				if (typeof nw !== 'undefined') {
+
+					let screens = nw.Screen.screens;
+					if (screens.length > 1) {
+
+						let target   = screens[screens.length - 1];
+						let offset_x = target['work_area'].x;
+						let offset_y = target['work_area'].y;
+
+						let win = nw.Window.get();
+						if (win !== null) {
+							win.moveTo(offset_x, offset_y);
+						}
+					}
+
+				}
+
+			}, 2000);
+
+			// XXX: Start Debug Flow
 			setTimeout(function() {
 
 				console.clear();
@@ -93,6 +115,7 @@
 				lychee.assimilate('./flow/scene-welcome.js');
 
 			}, 3000);
+
 
 		}.bind(this), 200);
 

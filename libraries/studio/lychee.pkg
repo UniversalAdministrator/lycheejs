@@ -70,6 +70,11 @@
 						"Sprite": [
 							"json"
 						]
+					},
+					"select": {
+						"Scene": [
+							"json"
+						]
 					}
 				},
 				"entity": {
@@ -294,6 +299,11 @@
 							"js"
 						],
 						"Sprite": [
+							"js"
+						]
+					},
+					"select": {
+						"Scene": [
 							"js"
 						]
 					}
