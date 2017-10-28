@@ -20,6 +20,11 @@ are listed in this specific order: `changed`, `removed`, `added`
 and `fixed`.
 
 
+## [2017-Q4] - UNRELEASED
+
+- Added: `lychee.blobof(template, blob)` to allow validation of deserializations without memory usage.
+
+
 ## [2017-Q3] - 2017-09-28
 
 - **Changed**: harvester.mod.Harvester supports proper git flow.

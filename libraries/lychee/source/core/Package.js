@@ -89,13 +89,13 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 				if (pointer !== null && pointer instanceof Array) {
 
-					let classpath = _resolve_root.call(this) + '/' + path.join('/');
+					let definition_path = _resolve_root.call(this) + '/' + path.join('/');
 
 					for (let po = 0, pol = pointer.length; po < pol; po++) {
 
 						let type = pointer[po];
 						if (type !== 'js') {
-							attachments[type] = classpath + '.' + type;
+							attachments[type] = definition_path + '.' + type;
 						}
 
 					}

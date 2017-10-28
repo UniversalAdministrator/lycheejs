@@ -7,6 +7,7 @@
 
 
 
+	const _BLOBOF_CACHE      = {};
 	const _INTERFACEOF_CACHE = {};
 
 
@@ -595,6 +596,63 @@
 
 		},
 
+		blobof: function(template, blob) {
+
+			template = template !== undefined ? template : null;
+			blob     = blob instanceof Object ? blob     : null;
+
+
+			if (template !== null && blob !== null) {
+
+				let tname    = template.displayName;
+				let bname    = blob.constructor || blob.reference || null;
+				let hashable = typeof tname === 'string' && typeof bname === 'string';
+				let hashmap  = _BLOBOF_CACHE;
+
+
+				// 0. Quick validation for identical constructors
+				if (hashable === true) {
+
+					if (hashmap[tname] !== undefined && hashmap[tname][bname] !== undefined) {
+
+						return hashmap[tname][bname];
+
+					} else if (tname === bname) {
+
+						if (hashmap[tname] === undefined) {
+							hashmap[tname] = {};
+						}
+
+						hashmap[tname][bname] = true;
+
+						return hashmap[tname][bname];
+
+					} else if (tname !== bname) {
+
+						let instance = lychee.deserialize(blob);
+						if (lychee.interfaceof(template, instance) === true) {
+
+							if (hashmap[tname] === undefined) {
+								hashmap[tname] = {};
+							}
+
+							hashmap[tname][bname] = true;
+
+							return hashmap[tname][bname];
+
+						}
+
+					}
+
+				}
+
+			}
+
+
+			return false;
+
+		},
+
 		interfaceof: function(template, instance) {
 
 			template = template !== undefined ? template : null;
@@ -736,8 +794,8 @@
 
 				} else if (typeof data.constructor === 'string' && data.arguments instanceof Array) {
 
-					let resolved_class = _resolve_reference.call(scope, data.constructor);
-					if (typeof resolved_class === 'function') {
+					let resolved_composite = _resolve_reference.call(scope, data.constructor);
+					if (typeof resolved_composite === 'function') {
 
 						let bindargs = [].splice.call(data.arguments, 0).map(function(value) {
 
@@ -760,13 +818,13 @@
 
 
 						bindargs.reverse();
-						bindargs.push(resolved_class);
+						bindargs.push(resolved_composite);
 						bindargs.reverse();
 
 
 						instance = new (
-							resolved_class.bind.apply(
-								resolved_class,
+							resolved_composite.bind.apply(
+								resolved_composite,
 								bindargs
 							)
 						)();
