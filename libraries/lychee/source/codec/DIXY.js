@@ -68,59 +68,6 @@ lychee.define('lychee.codec.DIXY').exports(function(lychee, global, attachments)
 			return this.__buffer;
 		},
 
-		pointer: function() {
-			return this.__index;
-		},
-
-		length: function() {
-			return this.__buffer.length;
-		},
-
-		read: function(bytes) {
-
-			let buffer = '';
-
-			buffer       += this.__buffer.substr(this.__index, bytes);
-			this.__index += bytes;
-
-			return buffer;
-
-		},
-
-		search: function(array) {
-
-			let bytes = Infinity;
-
-			for (let a = 0, al = array.length; a < al; a++) {
-
-				let token = array[a];
-				let size  = this.__buffer.indexOf(token, this.__index + 1) - this.__index;
-				if (size > -1 && size < bytes) {
-					bytes = size;
-				}
-
-			}
-
-
-			if (bytes === Infinity) {
-				return 0;
-			}
-
-
-			return bytes;
-
-		},
-
-		seek: function(bytes) {
-
-			if (bytes > 0) {
-				return this.__buffer.substr(this.__index, bytes);
-			} else {
-				return this.__buffer.substr(this.__index + bytes, Math.abs(bytes));
-			}
-
-		},
-
 		write: function(buffer) {
 
 			this.__buffer += buffer;
