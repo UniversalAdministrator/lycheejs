@@ -308,7 +308,7 @@ lychee.define('lychee.codec.DIXY').exports(function(lychee, global, attachments)
 
 		}
 
-        return chunk;
+        return _desanitize_string(chunk);
 
 	};
 
@@ -344,7 +344,7 @@ lychee.define('lychee.codec.DIXY').exports(function(lychee, global, attachments)
 			return {
 				indent: _decode_indent(line),
 				key:    null,
-				val:    chunk
+				val:    _desanitize_string(chunk)
 			};
 
 		}
