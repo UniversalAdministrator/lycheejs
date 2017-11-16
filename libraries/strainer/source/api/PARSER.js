@@ -512,16 +512,13 @@ lychee.define('strainer.api.PARSER').requires([
 			val.value = _detect_value(str);
 
 
+			let dictionary = [];
+
 			if (
 				val.chunk !== 'undefined'
 				&& val.chunk.includes('.') === false
 				&& val.value === undefined
 			) {
-
-				let dictionary = [];
-
-				// TODO: Add support for multiple
-				// types, values in dict entries
 
 				dictionary = _DICTIONARY.filter(function(other) {
 
@@ -552,28 +549,62 @@ lychee.define('strainer.api.PARSER').requires([
 				});
 
 
-				let entry = dictionary[0] || null;
-				if (entry !== null) {
+			} else if (
+				val.chunk !== 'undefined'
+				&& val.value === undefined
+			) {
 
-					if (entry.type !== undefined && entry.value !== undefined) {
+				dictionary = _DICTIONARY.filter(function(other) {
 
-						val.type  = entry.type;
-						val.value = entry.value;
+					if (val.chunk === other.chunk) {
 
-					} else if (entry.types !== undefined && entry.values !== undefined) {
+						if (other.type !== undefined) {
 
-						val.type  = entry.types[0];
-						val.value = entry.values[0];
+							if (val.type === 'undefined' || val.type === other.type) {
+								return true;
+							}
+
+						} else if (other.types !== undefined) {
+
+							if (val.type === 'undefined' || other.types.includes(val.type)) {
+								return true;
+							}
+
+						}
 
 					}
 
+					return false;
 
-					if (val.chunk !== entry.chunk) {
+				}).sort(function(a, b) {
+					if (a.chunk.length === b.chunk.length) return -1;
+					if (a.chunk.length !== b.chunk.length) return  1;
+					return 0;
+				});
 
-						if (lychee.debug === true) {
-							console.info('strainer.api.PARSER: Fuzzy guessing for "' + val.chunk + '" with "' + entry.chunk + '".');
-						}
+			}
 
+
+			let entry = dictionary[0] || null;
+			if (entry !== null) {
+
+				if (entry.type !== undefined && entry.value !== undefined) {
+
+					val.type  = entry.type;
+					val.value = entry.value;
+
+				} else if (entry.types !== undefined && entry.values !== undefined) {
+
+					val.type  = entry.types[0];
+					val.value = entry.values[0];
+
+				}
+
+
+				if (val.chunk !== entry.chunk) {
+
+					if (lychee.debug === true) {
+						console.info('strainer.api.PARSER: Fuzzy guessing for "' + val.chunk + '" with "' + entry.chunk + '".');
 					}
 
 				}

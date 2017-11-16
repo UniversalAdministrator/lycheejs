@@ -426,6 +426,11 @@
 		"value": 137
 	},
 	{
+		"chunk": "Date.now()",
+		"type": "Number",
+		"value": 1333333333337
+	},
+	{
 		"chunk": "Math.pow",
 		"type": "Number",
 		"value": 13.37
