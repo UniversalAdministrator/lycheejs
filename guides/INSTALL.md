@@ -113,8 +113,8 @@ The `lycheejs-strainer-fixer` command will show errors
 every time it could not understand your code, its meanings
 or its relations to other definitions.
 
-The output format of the `lycheejs-strainer-fixer` command
-is the following, where each line represents separate error:
+The output format of the `lycheejs-strainer-fixer` command is
+the following, where each line represents a separate error:
 
 ```bash
 /path/to/file.js:line:column: Error Message. [error-rule-id]

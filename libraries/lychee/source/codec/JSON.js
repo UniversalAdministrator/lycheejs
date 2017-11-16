@@ -55,19 +55,11 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 
 
-	const _Stream = function(buffer, mode) {
+	const _Stream = function(buffer) {
 
-		this.__buffer = typeof buffer === 'string'        ? buffer : '';
-		this.__mode   = lychee.enumof(_Stream.MODE, mode) ? mode   : 0;
-
+		this.__buffer = typeof buffer === 'string' ? buffer : '';
 		this.__index  = 0;
 
-	};
-
-
-	_Stream.MODE = {
-		read:  0,
-		write: 1
 	};
 
 
@@ -179,7 +171,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 			}
 
 
-		// 123,12.3: Integer or Float
+		// 123, 12.3: Integer or Float
 		} else if (typeof data === 'number') {
 
 			let type = 1;
@@ -284,7 +276,6 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 		let value  = undefined;
 		let seek   = '';
 		let size   = 0;
-		let tmp    = 0;
 		let errors = 0;
 		let check  = null;
 
@@ -318,15 +309,14 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 				value = NaN;
 
 
-			// 123: Number
-			} else if (seek === '-' || !isNaN(parseInt(seek, 10))) {
+			// 123, 12.3: Number
+			} else if (seek === '-' || isNaN(parseInt(seek, 10)) === false) {
 
 				size = stream.search([ ',', ']', '}' ]);
 
 				if (size > 0) {
 
-					tmp = stream.read(size);
-
+					let tmp = stream.read(size);
 					if (tmp.indexOf('.') !== -1) {
 						value = parseFloat(tmp, 10);
 					} else {
@@ -516,7 +506,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 			if (data !== null) {
 
-				let stream = new _Stream('', _Stream.MODE.write);
+				let stream = new _Stream('');
 
 				_encode(stream, data);
 
@@ -536,7 +526,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 			if (data !== null) {
 
-				let stream = new _Stream(data.toString('utf8'), _Stream.MODE.read);
+				let stream = new _Stream(data.toString('utf8'));
 				let object = _decode(stream);
 				if (object !== undefined) {
 					return object;

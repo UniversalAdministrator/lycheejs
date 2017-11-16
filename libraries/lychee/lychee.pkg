@@ -108,6 +108,9 @@
 				"BITON": [
 					"json"
 				],
+				"DIXY": [
+					"json"
+				],
 				"JSON": [
 					"json"
 				]
@@ -799,6 +802,9 @@
 					"js"
 				],
 				"BITON": [
+					"js"
+				],
+				"DIXY": [
 					"js"
 				],
 				"JSON": [
