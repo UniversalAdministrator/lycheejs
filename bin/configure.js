@@ -584,6 +584,8 @@
 			return value.startsWith('platform') && value.endsWith('bootstrap.js');
 		}).concat(_package_files(_PACKAGE).filter(function(value) {
 			return value.startsWith('platform') && value.endsWith('bootstrap.js') === false;
+		}).filter(function(value) {
+			return value.startsWith('platform') && value.endsWith('features.js') === false;
 		}).sort(function(a, b) {
 			if (a > b) return  1;
 			if (a < b) return -1;

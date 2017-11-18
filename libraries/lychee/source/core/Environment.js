@@ -211,21 +211,55 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		if (definition._supports !== null) {
 
-			supported = definition._supports.call(global, lychee, global);
+			let platform = definition._tags.platform || null;
+			if (platform !== null) {
 
-			// TODO: Port detector to new _FEATURES API
-			// let detector = _detect_features(Composite.__FEATURES || global);
-			// if (detector !== null) {
+				if (platform.includes('-')) {
 
-			// 	supported = definition._supports.call(detector, lychee, detector);
-			// 	features  = JSON.parse(JSON.stringify(detector));
-			// 	detector  = null;
+					let platform_major = platform.split('-')[0];
+					let detector_major = _detect_features(Composite._FEATURES[platform_major] || global);
+					if (detector_major !== null) {
+						supported      = definition._supports.call(detector_major, lychee, detector_major);
+						features       = JSON.parse(JSON.stringify(detector_major));
+						detector_major = null;
+					}
 
-			// } else {
+					if (supported === false) {
 
-			// 	supported = definition._supports.call(global, lychee, global);
+						let platform_minor = platform.split('-')[1];
+						let detector_minor = _detect_features(Composite._FEATURES[platform_minor] || global);
+						if (detector_minor !== null) {
 
-			// }
+							supported = definition._supports.call(detector_minor, lychee, detector_minor);
+
+							if (features instanceof Object) {
+								features = Object.assign(features, JSON.parse(JSON.stringify(detector_minor)));
+							} else {
+								features = JSON.parse(JSON.stringify(detector_minor));
+							}
+
+							detector_minor = null;
+
+						}
+
+					}
+
+				} else {
+
+					let detector = _detect_features(Composite._FEATURES[platform] || global);
+					if (detector !== null) {
+						supported = definition._supports.call(detector, lychee, detector);
+						features  = JSON.parse(JSON.stringify(detector));
+						detector  = null;
+					}
+
+				}
+
+			} else {
+
+				supported = definition._supports.call(global, lychee, global);
+
+			}
 
 		} else {
 

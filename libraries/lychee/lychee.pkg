@@ -1012,6 +1012,9 @@
 					"bootstrap": [
 						"js"
 					],
+					"features": [
+						"js"
+					],
 					"net": {
 						"Server": [
 							"js"
@@ -1051,6 +1054,9 @@
 					"bootstrap": [
 						"js"
 					],
+					"features": [
+						"js"
+					],
 					"net": {
 						"Server": [
 							"js"
@@ -1080,6 +1086,9 @@
 				"html-webview": {
 					"bootstrap": [
 						"js"
+					],
+					"features": [
+						"js"
 					]
 				},
 				"node": {
@@ -1099,6 +1108,9 @@
 						"js"
 					],
 					"bootstrap": [
+						"js"
+					],
+					"features": [
 						"js"
 					],
 					"net": {
@@ -1132,6 +1144,9 @@
 				},
 				"node-sdl": {
 					"bootstrap": [
+						"js"
+					],
+					"features": [
 						"js"
 					]
 				}
