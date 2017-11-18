@@ -22,7 +22,11 @@ and `fixed`.
 
 ## [2017-Q4] - UNRELEASED
 
+- **Added**: Platform-specific `feature.js` to allow API mockups that lychee.js Strainer can understand.
+- **Added**: lychee.js Strainer supports platform-specific APIs via feature detection.
 - Added: `lychee.blobof(template, blob)` to allow validation of deserializations without memory usage.
+- Added: lychee.codec.DIXY supports DIXY format with JSON-compatible data types.
+- Fixed: lychee.codec.BENCODE supports JSON-compatible data types.
 
 
 ## [2017-Q3] - 2017-09-28
