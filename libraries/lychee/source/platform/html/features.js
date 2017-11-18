@@ -28,10 +28,13 @@
 		id:        '',
 		className: '',
 		style:     {
+			position:        'static',
 			width:           1337,
 			height:          1337,
 			backgroundColor: '#000000',
-			transform: ''
+			pointerEvents:   'none',
+			transform:       '',
+			zIndex:          0
 		}
 	};
 
@@ -64,8 +67,17 @@
 
 	});
 
-	const _INPUT = Object.assign({}, _ELEMENT, { value: '' });
+	const _INPUT = {
 
+		oncancel:     function() {},
+		onchange:     function() {},
+		onclick:      function() {},
+		value:        '',
+
+		click:        function() {},
+		setAttribute: function(name, value) {}
+
+	};
 
 	const _FEATURES = {
 
@@ -89,7 +101,7 @@
 
 			createElement: function(type) {
 
-				if (type === 'a') {
+				if (type === 'a' || type === 'div') {
 					return _ELEMENT;
 				} else if (type === 'input') {
 					return _INPUT;
