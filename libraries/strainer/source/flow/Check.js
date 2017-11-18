@@ -78,8 +78,10 @@ lychee.define('strainer.flow.Check').requires([
 		let namespaces   = this.__namespaces;
 
 
-		this.configs.map(function(config) {
-			return config.buffer.header;
+		this.configs.filter(function(config) {
+			return config !== null;
+		}).map(function(config) {
+			return config.buffer.header || { requires: [], includes: [] };
 		}).forEach(function(header) {
 
 			if (header.requires.length > 0) {
@@ -163,9 +165,13 @@ lychee.define('strainer.flow.Check').requires([
 					let identifier = variable.value.reference;
 					let config     = this.configs.find(function(other) {
 
-						let buffer = other.buffer;
-						if (buffer !== null) {
-							return identifier === buffer.header.identifier;
+						if (other !== null) {
+
+							let buffer = other.buffer;
+							if (buffer !== null) {
+								return identifier === buffer.header.identifier;
+							}
+
 						}
 
 						return false;
@@ -357,7 +363,9 @@ lychee.define('strainer.flow.Check').requires([
 			files = files.map(function(value) {
 				return value.substr(1);
 			}).filter(function(value) {
-				return value.substr(-12) !== 'bootstrap.js';
+				return value.endsWith('bootstrap.js') === false;
+			}).filter(function(value) {
+				return value.endsWith('features.js') === false;
 			}).filter(function(value) {
 				return value.indexOf('__') === -1;
 			}).sort();
@@ -624,6 +632,15 @@ lychee.define('strainer.flow.Check').requires([
 					}
 
 
+					errors.push({
+						url:       asset.url,
+						rule:      'no-definition',
+						reference: null,
+						message:   'Invalid Definition (wrong API usage).',
+						line:      0,
+						column:    0
+					});
+
 					return null;
 
 				});
@@ -832,7 +849,9 @@ lychee.define('strainer.flow.Check').requires([
 				console.log('strainer: TRACE-API ' + project);
 
 
-				configs.forEach(function(config) {
+				configs.filter(function(config) {
+					return config !== null;
+				}).forEach(function(config) {
 
 					let header     = config.buffer.header;
 					let result     = config.buffer.result;
@@ -955,19 +974,23 @@ lychee.define('strainer.flow.Check').requires([
 
 			for (let c = 0, cl = configs.length; c < cl; c++) {
 
-				let config     = configs[c];
-				let identifier = config.buffer.header.identifier;
-				if (identifier !== null) {
+				let config = configs[c];
+				if (config !== null) {
 
-					let ns = identifier.split('.')[0];
-					if (
-						namespaces[ns] !== undefined
-						&& namespaces[ns] !== '.'
-					) {
+					let identifier = config.buffer.header.identifier;
+					if (identifier !== null) {
 
-						configs.splice(c, 1);
-						cl--;
-						c--;
+						let ns = identifier.split('.')[0];
+						if (
+							namespaces[ns] !== undefined
+							&& namespaces[ns] !== '.'
+						) {
+
+							configs.splice(c, 1);
+							cl--;
+							c--;
+
+						}
 
 					}
 
