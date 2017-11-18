@@ -5,17 +5,7 @@
 	};
 
 
-	Object.defineProperty(lychee.Environment._FEATURES, 'node-sdl', {
-
-		get: function() {
-			return _FEATURES;
-		},
-
-		set: function(value) {
-			return false;
-		}
-
-	});
+	lychee.Environment._FEATURES['node-sdl'] = _FEATURES;
 
 })(lychee, typeof global !== 'undefined' ? global : this);
 

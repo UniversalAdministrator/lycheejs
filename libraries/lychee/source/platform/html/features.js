@@ -44,7 +44,13 @@
 				top:  1337
 			};
 
-		},
+		}
+
+	};
+
+	const _CANVAS = Object.assign({}, _ELEMENT);
+
+	_CANVAS.prototype = Object.assign({}, _ELEMENT.prototype, {
 
 		getContext: function(context) {
 
@@ -56,7 +62,10 @@
 
 		}
 
-	};
+	});
+
+	const _INPUT = Object.assign({}, _ELEMENT, { value: '' });
+
 
 	const _FEATURES = {
 
@@ -66,26 +75,32 @@
 		CanvasRenderingContext2D: function() {},
 		FileReader:               function() {},
 		Storage:                  function() {},
-		WebSocket:                function() {},
+		WebSocket:                function(url, protocols) {},
 		XMLHttpRequest:           function() {},
 
-		addEventListener:      function() {},
-		clearInterval:         function() {},
-		clearTimeout:          function() {},
-		requestAnimationFrame: function() {},
-		setInterval:           function() {},
-		setTimeout:            function() {},
+		addEventListener:      function(event, callback, bubble) {},
+		clearInterval:         function(id) {},
+		clearTimeout:          function(id) {},
+		requestAnimationFrame: function(callback) {},
+		setInterval:           function(callback, delay) {},
+		setTimeout:            function(callback, delay) {},
 
 		document: {
+
 			createElement: function(type) {
 
-				if (type === 'canvas') {
+				if (type === 'a') {
 					return _ELEMENT;
+				} else if (type === 'input') {
+					return _INPUT;
+				} else if (type === 'canvas') {
+					return _CANVAS;
 				}
 
 				return null;
 
 			},
+
 			querySelectorAll: function(query) {
 
 				if (query === '.lychee-Renderer') {
@@ -96,7 +111,7 @@
 
 			},
 			body: {
-				appendChild: function() {}
+				appendChild: function(element) {}
 			}
 		},
 
@@ -105,9 +120,13 @@
 		},
 
 		localStorage: {
+			setItem: function(key, value) {},
+			getItem: function(key) {}
 		},
 
 		sessionStorage: {
+			setItem: function(key, value) {},
+			getItem: function(key) {}
 		}
 
 	};
@@ -115,17 +134,7 @@
 	_FEATURES.FileReader.prototype.readAsDataURL = function() {};
 
 
-	Object.defineProperty(lychee.Environment._FEATURES, 'html', {
-
-		get: function() {
-			return _FEATURES;
-		},
-
-		set: function(value) {
-			return false;
-		}
-
-	});
+	lychee.Environment._FEATURES['html'] = _FEATURES;
 
 })(lychee, typeof global !== 'undefined' ? global : this);
 

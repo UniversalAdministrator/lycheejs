@@ -4,13 +4,133 @@ lychee.define('strainer.api.PARSER').requires([
 ]).exports(function(lychee, global, attachments) {
 
 	const _DICTIONARY = attachments["json"].buffer;
+	const _FEATURES   = lychee.import('lychee.Environment')._FEATURES;
 	const _MURMUR     = lychee.import('lychee.crypto.MURMUR');
+	const _PLATFORMS  = [ 'html', 'node', 'html-nwjs', 'html-webview', 'node-sdl' ];
 
 
 
 	/*
 	 * HELPERS
 	 */
+
+	const _resolve_reference = function(identifier) {
+
+		let pointer = this;
+
+		let ns = identifier.split('.');
+		for (let n = 0, l = ns.length; n < l; n++) {
+
+			let name = ns[n];
+			if (name.includes('(') && name.includes(')')) {
+
+				let args = null;
+
+				try {
+
+					let str = name.substr(name.indexOf('('));
+					str  = str.split('\'').join('"');
+					args = JSON.parse('[' + str.substr(1, str.length - 2) + ']');
+
+				} catch (err) {
+					args = null;
+				}
+
+
+				name = name.substr(0, name.indexOf('('));
+
+
+				if (typeof pointer[name] === 'function' && args !== null) {
+
+					try {
+						pointer = pointer[name].apply(pointer, args);
+					} catch (err) {
+						pointer = null;
+					}
+
+					if (pointer === null) {
+						break;
+					}
+
+				} else {
+
+					pointer = null;
+					break;
+
+				}
+
+			} else if (pointer[name] !== undefined) {
+
+				pointer = pointer[name];
+
+			} else {
+
+				pointer = null;
+				break;
+
+			}
+
+		}
+
+		return pointer;
+
+	};
+
+	const _resolve_value = function(val) {
+
+        let value = {
+			chunk: 'undefined',
+			type:  'undefined',
+			value: val
+		};
+
+
+		if (val === undefined) {
+
+			value.chunk = 'undefined';
+			value.type  = 'undefined';
+
+		} else if (val === null) {
+
+			value.chunk = 'null';
+			value.type  = 'null';
+
+		} else if (typeof val === 'boolean') {
+
+			value.chunk = (val).toString();
+			value.type  = 'Boolean';
+
+		} else if (typeof val === 'number') {
+
+			value.chunk = (val).toString();
+			value.type  = 'Number';
+
+		} else if (typeof val === 'string') {
+
+			value.chunk = val;
+			value.type  = 'String';
+
+		} else if (typeof val === 'function') {
+
+			value.chunk = val.toString();
+			value.type  = 'Function';
+
+		} else if (val instanceof Array) {
+
+			value.chunk = JSON.stringify(val);
+			value.type  = 'Array';
+
+		} else if (val instanceof Object) {
+
+			value.chunk = JSON.stringify(val);
+			value.type  = 'Object';
+
+		}
+
+
+		return value;
+
+	};
 
 	const _get_chunk = function(str1, str2, code) {
 
@@ -548,6 +668,49 @@ lychee.define('strainer.api.PARSER').requires([
 					return 0;
 				});
 
+			} else if (
+				val.chunk !== 'undefined'
+				&& val.chunk.startsWith('global')
+				&& val.value === undefined
+			) {
+
+				let reference = val.chunk.split('.').slice(1).join('.');
+				let platform  = null;
+				let pointer   = null;
+
+				for (let p = 0, pl = _PLATFORMS.length; p < pl; p++) {
+
+					platform = _PLATFORMS[p];
+
+					if (_FEATURES[platform] !== undefined) {
+
+						pointer = _resolve_reference.call(_FEATURES[platform], reference);
+
+						if (pointer !== null) {
+							break;
+						}
+
+					}
+
+				}
+
+
+				if (pointer !== null) {
+
+					let resolved = _resolve_value(pointer);
+					if (resolved.type !== 'undefined') {
+
+						val.value = resolved.value;
+						val.type  = resolved.type;
+						val.chunk = resolved.chunk;
+
+					}
+
+				} else {
+
+					console.warn('strainer.api.PARSER: Could not resolve "' + reference + '" via feature detection.');
+
+				}
 
 			} else if (
 				val.chunk !== 'undefined'
