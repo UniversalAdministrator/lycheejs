@@ -513,10 +513,10 @@
 
 			let methods = [];
 
-			if (consol)  methods.push('console');
-			if (audio)   methods.push('Audio');
-			if (buffer)  methods.push('Buffer');
-			if (image)   methods.push('Image');
+			if (consol) methods.push('console');
+			if (audio)  methods.push('Audio');
+			if (buffer) methods.push('Buffer');
+			if (image)  methods.push('Image');
 
 			if (methods.length === 0) {
 				console.error('bootstrap.js: Supported methods are NONE');
@@ -812,8 +812,8 @@
 
 		this.baseline   = 0;
 		this.charset    = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
-		this.spacing    = 0;
 		this.kerning    = 0;
+		this.spacing    = 0;
 		this.lineheight = 1;
 
 		this.__buffer   = null;
@@ -887,7 +887,7 @@
 
 		measure: function(text) {
 
-			text = typeof text === 'string' ? text : null;
+			text = typeof text === 'string' ? text : '';
 
 
 			let buffer = this.__buffer;
@@ -1492,6 +1492,7 @@
 			if (typeof blob.buffer === 'string') {
 				this.buffer = new Buffer(blob.buffer.substr(22), 'base64');
 				this.__load = false;
+
 			}
 
 		},
@@ -1769,62 +1770,6 @@
 		}
 
 	};
-
-
-
-	/*
-	 * FEATURES
-	 */
-
-	const _FEATURES = {
-
-		require: function(id) {
-
-			if (id === 'child_process') return {};
-			if (id === 'fs')            return {};
-			if (id === 'http')          return {};
-			if (id === 'https')         return {};
-			if (id === 'net')           return {};
-			if (id === 'path')          return {};
-
-
-			throw new Error('Cannot find module \'' + id + '\'');
-
-		},
-
-		process: {
-			env: {
-				APPDATA: null,
-				HOME:    '/home/dev'
-			},
-			stdin: {
-				on: function() {}
-			},
-			stdout: {
-				on:    function() {},
-				write: function() {}
-			}
-		},
-
-		clearInterval: function() {},
-		clearTimeout:  function() {},
-		setInterval:   function() {},
-		setTimeout:    function() {}
-
-	};
-
-
-	Object.defineProperty(lychee.Environment, '__FEATURES', {
-
-		get: function() {
-			return _FEATURES;
-		},
-
-		set: function(value) {
-			return false;
-		}
-
-	});
 
 
 

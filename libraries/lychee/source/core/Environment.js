@@ -211,18 +211,21 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		if (definition._supports !== null) {
 
-			let detector = _detect_features(Composite.__FEATURES || global);
-			if (detector !== null) {
+			supported = definition._supports.call(global, lychee, global);
 
-				supported = definition._supports.call(detector, lychee, detector);
-				features  = JSON.parse(JSON.stringify(detector));
-				detector  = null;
+			// TODO: Port detector to new _FEATURES API
+			// let detector = _detect_features(Composite.__FEATURES || global);
+			// if (detector !== null) {
 
-			} else {
+			// 	supported = definition._supports.call(detector, lychee, detector);
+			// 	features  = JSON.parse(JSON.stringify(detector));
+			// 	detector  = null;
 
-				supported = definition._supports.call(global, lychee, global);
+			// } else {
 
-			}
+			// 	supported = definition._supports.call(global, lychee, global);
+
+			// }
 
 		} else {
 
@@ -903,8 +906,11 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 	};
 
 
-	Composite.__FEATURES  = null;
-	Composite.__FILENAME  = null;
+	// XXX: Injected by platform/<tag>/features.js
+	Composite._FEATURES = {};
+
+	// XXX: Injected by platform/<tag>/bootstrap.js
+	Composite.__FILENAME = null;
 
 
 	Composite.prototype = {

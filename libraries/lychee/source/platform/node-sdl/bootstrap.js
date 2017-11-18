@@ -31,18 +31,5 @@
 
 	})(global.process || {}, typeof __filename === 'string' ? __filename : '');
 
-
-
-	/*
-	 * FEATURES
-	 */
-
-	// XXX: This is an incremental platform of 'node'
-
-	const _FEATURES = {
-	};
-
-	Object.assign(lychee.Environment.__FEATURES, _FEATURES);
-
 })(lychee, global);
 

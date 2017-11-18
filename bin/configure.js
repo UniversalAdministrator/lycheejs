@@ -263,11 +263,13 @@
 		return files.map(function(value) {
 			return value.substr(1);
 		}).filter(function(value) {
-			return value.substr(0, 4) !== 'core' && value.substr(0, 8) !== 'platform';
+			return value.startsWith('core') === false;
+		}).filter(function(value) {
+			return value.startsWith('platform') === false;
 		}).map(function(value) {
 			return 'lychee.' + value.split('.')[0].split('/').join('.');
 		}).filter(function(value) {
-			return value.indexOf('__') === -1;
+			return value.includes('__') === false;
 		});
 
 	};
@@ -352,6 +354,7 @@
 				require(_path.resolve(_ROOT, './libraries/lychee/source/core/Definition.js'));
 				require(_path.resolve(_ROOT, './libraries/lychee/source/core/Environment.js'));
 				require(_path.resolve(_ROOT, './libraries/lychee/source/core/Package.js'));
+				require(_path.resolve(_ROOT, './libraries/lychee/source/platform/node/features.js'));
 				require(_path.resolve(_ROOT, './libraries/lychee/source/platform/node/bootstrap.js'));
 
 				lychee.envinit(null);
@@ -528,6 +531,31 @@
 		});
 
 
+		console.log('Injecting lychee.js Fertilizer Features');
+
+		let platforms = Object.keys(_PACKAGE.source.tags.platform);
+		if (platforms.length > 0) {
+
+			platforms.forEach(function(platform) {
+
+				let code = null;
+				let path = _path.resolve(_ROOT, './libraries/lychee/source/platform/' + platform + '/features.js');
+
+				try {
+					code = _fs.readFileSync(path, 'utf8');
+				} catch (err) {
+					code = null;
+				}
+
+				if (code !== null) {
+					_CORE += code;
+				}
+
+			});
+
+		}
+
+
 		if (errors === 0) {
 			console.info('SUCCESS');
 		} else {
@@ -550,15 +578,18 @@
 			return value.substr(0, 8) === 'platform' && value.substr(-3) !== '.js';
 		});
 		let bootstrap = {};
-		let files     = _package_files(_PACKAGE).filter(function(value) {
-			return value.substr(0, 8) === 'platform' && value.indexOf('bootstrap.js') !== -1;
+
+		// XXX: This makes sure bootstrap.js comes first, always
+		let files = _package_files(_PACKAGE).filter(function(value) {
+			return value.startsWith('platform') && value.endsWith('bootstrap.js');
 		}).concat(_package_files(_PACKAGE).filter(function(value) {
-			return value.substr(0, 8) === 'platform' && value.indexOf('bootstrap.js') === -1;
+			return value.startsWith('platform') && value.endsWith('bootstrap.js') === false;
 		}).sort(function(a, b) {
 			if (a > b) return  1;
 			if (a < b) return -1;
 			return 0;
 		}));
+
 		let platforms = Object.keys(_PACKAGE.source.tags.platform).filter(function(platform) {
 			return _PLATFORM !== null ? platform === _PLATFORM : true;
 		});

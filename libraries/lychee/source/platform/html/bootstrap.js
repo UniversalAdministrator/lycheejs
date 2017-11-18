@@ -648,7 +648,7 @@
 
 	const _clean_base64 = function(str) {
 
-		str = str.trim().replace(/[^+\/0-9A-z]/g, '');
+		str = str.trim().replace(/[^+/0-9A-z]/g, '');
 
 		while (str.length % 4 !== 0) {
 			str = str + '=';
@@ -2700,76 +2700,6 @@
 		}
 
 	};
-
-
-
-	/*
-	 * FEATURES
-	 */
-
-	const _ELEMENT = {
-		id:    '',
-		style: {
-			transform: ''
-		}
-	};
-
-	const _FEATURES = {
-
-		innerWidth:  1337,
-		innerHeight: 1337,
-
-		CanvasRenderingContext2D: function() {},
-		FileReader:               function() {},
-		Storage:                  function() {},
-		WebSocket:                function() {},
-		XMLHttpRequest:           function() {},
-
-		addEventListener:      function() {},
-		clearInterval:         function() {},
-		clearTimeout:          function() {},
-		requestAnimationFrame: function() {},
-		setInterval:           function() {},
-		setTimeout:            function() {},
-
-		document: {
-			createElement: function() {
-				return _ELEMENT;
-			},
-			querySelectorAll: function() {
-				return _ELEMENT;
-			},
-			body: {
-				appendChild: function() {}
-			}
-		},
-
-		location: {
-			href: 'file:///tmp/index.html'
-		},
-
-		localStorage: {
-		},
-
-		sessionStorage: {
-		}
-
-	};
-
-	_FEATURES.FileReader.prototype.readAsDataURL = function() {};
-
-
-	Object.defineProperty(lychee.Environment, '__FEATURES', {
-
-		get: function() {
-			return _FEATURES;
-		},
-
-		set: function(value) {
-			return false;
-		}
-
-	});
 
 
 

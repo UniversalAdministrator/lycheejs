@@ -80,33 +80,5 @@
 
 	};
 
-
-
-	/*
-	 * FEATURES
-	 */
-
-	// XXX: This is an incremental platform of 'html'
-
-	const _FEATURES = {
-
-		require: function(id) {
-
-			if (id === 'child_process') return {};
-			if (id === 'fs')            return {};
-			if (id === 'http')          return {};
-			if (id === 'https')         return {};
-			if (id === 'net')           return {};
-			if (id === 'path')          return {};
-
-
-			throw new Error('Cannot find module \'' + id + '\'');
-
-		}
-
-	};
-
-	Object.assign(lychee.Environment.__FEATURES, _FEATURES);
-
 })(this.lychee, this);
 

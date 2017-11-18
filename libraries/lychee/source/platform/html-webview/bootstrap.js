@@ -54,19 +54,5 @@
 
 	})(global.location || {}, (document.currentScript || {}).src || '');
 
-
-
-	/*
-	 * FEATURES
-	 */
-
-	// XXX: This is an incremental platform of 'html'
-
-	const _FEATURES = {
-
-	};
-
-	Object.assign(lychee.Environment.__FEATURES, _FEATURES);
-
 })(this.lychee, this);
 
