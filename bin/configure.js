@@ -531,7 +531,28 @@
 		});
 
 
+		if (errors === 0) {
+			console.info('SUCCESS');
+		} else {
+			console.error('FAILURE');
+			_process.exit(1);
+		}
+
+	})();
+
+
+
+	/*
+	 * 3: FEATURE DETECTION (SYNC)
+	 */
+
+	(function() {
+
+		let errors = 0;
+
+
 		console.log('Injecting lychee.js Fertilizer Features');
+
 
 		let platforms = Object.keys(_PACKAGE.source.tags.platform);
 		if (platforms.length > 0) {
@@ -545,6 +566,7 @@
 					code = _fs.readFileSync(path, 'utf8');
 				} catch (err) {
 					code = null;
+					errors++;
 				}
 
 				if (code !== null) {
@@ -568,7 +590,7 @@
 
 
 	/*
-	 * 2: PLATFORM GENERATION (ASYNC)
+	 * 4: PLATFORM GENERATION (ASYNC)
 	 */
 
 	(function() {
