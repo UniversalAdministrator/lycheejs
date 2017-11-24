@@ -110,7 +110,7 @@
 
 	// XXX: This is an incremental platform of 'html'
 
-	lychee.Environment._FEATURES['html-nwjs'] = _FEATURES;
+	lychee.FEATURES['html-nwjs'] = _FEATURES;
 
 })(lychee, typeof global !== 'undefined' ? global : this);
 

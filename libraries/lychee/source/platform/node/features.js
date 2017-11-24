@@ -108,7 +108,7 @@
 	};
 
 
-	lychee.Environment._FEATURES['node'] = _FEATURES;
+	lychee.FEATURES['node'] = _FEATURES;
 
 })(lychee, typeof global !== 'undefined' ? global : this);
 

@@ -432,7 +432,6 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 			}
 
-
 			return ready;
 
 		},
@@ -474,6 +473,31 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 
 			return false;
+
+		},
+
+		resolve: function(id, tags) {
+
+			id   = typeof id === 'string' ? id   : null;
+			tags = tags instanceof Object ? tags : null;
+
+
+			let filtered = [];
+
+			if (id !== null && this.isReady() === true) {
+
+				let candidates = _resolve_candidates.call(this, id, tags);
+				if (candidates.length > 0) {
+
+					for (let c = 0, cl = candidates.length; c < cl; c++) {
+						filtered.push(candidates[c]);
+					}
+
+				}
+
+			}
+
+			return filtered;
 
 		},
 

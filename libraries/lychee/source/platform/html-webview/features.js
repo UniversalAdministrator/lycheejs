@@ -5,7 +5,7 @@
 	};
 
 
-	lychee.Environment._FEATURES['html-webview'] = _FEATURES;
+	lychee.FEATURES['html-webview'] = _FEATURES;
 
 })(lychee, typeof global !== 'undefined' ? global : this);
 

@@ -146,7 +146,7 @@
 	_FEATURES.FileReader.prototype.readAsDataURL = function() {};
 
 
-	lychee.Environment._FEATURES['html'] = _FEATURES;
+	lychee.FEATURES['html'] = _FEATURES;
 
 })(lychee, typeof global !== 'undefined' ? global : this);
 

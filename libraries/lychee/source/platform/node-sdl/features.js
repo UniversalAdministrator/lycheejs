@@ -5,7 +5,7 @@
 	};
 
 
-	lychee.Environment._FEATURES['node-sdl'] = _FEATURES;
+	lychee.FEATURES['node-sdl'] = _FEATURES;
 
 })(lychee, typeof global !== 'undefined' ? global : this);
 

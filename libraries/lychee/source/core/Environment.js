@@ -217,7 +217,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 				if (platform.includes('-')) {
 
 					let platform_major = platform.split('-')[0];
-					let detector_major = _detect_features(Composite._FEATURES[platform_major] || global);
+					let detector_major = _detect_features(lychee.FEATURES[platform_major] || global);
 					if (detector_major !== null) {
 						supported      = definition._supports.call(detector_major, lychee, detector_major);
 						features       = JSON.parse(JSON.stringify(detector_major));
@@ -227,7 +227,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 					if (supported === false) {
 
 						let platform_minor = platform.split('-')[1];
-						let detector_minor = _detect_features(Composite._FEATURES[platform_minor] || global);
+						let detector_minor = _detect_features(lychee.FEATURES[platform_minor] || global);
 						if (detector_minor !== null) {
 
 							supported = definition._supports.call(detector_minor, lychee, detector_minor);
@@ -246,7 +246,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 				} else {
 
-					let detector = _detect_features(Composite._FEATURES[platform] || global);
+					let detector = _detect_features(lychee.FEATURES[platform] || global);
 					if (detector !== null) {
 						supported = definition._supports.call(detector, lychee, detector);
 						features  = JSON.parse(JSON.stringify(detector));
@@ -758,32 +758,42 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 		this.lychee              = {};
+		this.lychee.debug        = global.lychee.debug;
 		this.lychee.environment  = null;
 		this.lychee.ENVIRONMENTS = global.lychee.ENVIRONMENTS;
+		this.lychee.FEATURES     = global.lychee.FEATURES;
+		this.lychee.PLATFORMS    = global.lychee.PLATFORMS;
 		this.lychee.VERSION      = global.lychee.VERSION;
 		this.lychee.ROOT         = {};
 		this.lychee.ROOT.lychee  = global.lychee.ROOT.lychee;
 		this.lychee.ROOT.project = global.lychee.ROOT.project;
 
 		[
+			// core/lychee.js
 			'assignsafe',
 			'assignunlink',
-			'debug',
+			'blobof',
 			'diff',
 			'enumof',
 			'interfaceof',
 			'deserialize',
 			'serialize',
+
+			'assimilate',
 			'define',
 			'import',
 			'envinit',
 			'pkginit',
+			'inject',
 			'setEnvironment',
+
+			// core/<Identifier>.js
 			'Asset',
 			'Debugger',
 			'Definition',
 			'Environment',
 			'Package'
+
 		].forEach(function(identifier) {
 
 			that.lychee[identifier] = global.lychee[identifier];
@@ -939,9 +949,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	};
 
-
-	// XXX: Injected by platform/<tag>/features.js
-	Composite._FEATURES = {};
 
 	// XXX: Injected by platform/<tag>/bootstrap.js
 	Composite.__FILENAME = null;

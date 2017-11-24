@@ -543,6 +543,41 @@
 
 
 	/*
+	 * 3. PLATFORM DETECTION (SYNC)
+	 */
+
+	(function() {
+
+		let errors = 0;
+
+		console.log('Injecting lychee.js Fertilizer Platforms');
+
+
+		let platforms = Object.keys(_PACKAGE.source.tags.platform);
+		if (platforms.length > 0) {
+
+			_CORE += '\n';
+			_CORE += JSON.stringify(platforms) + '.forEach(function(platform) {\n';
+			_CORE += '\tif (lychee.PLATFORMS.includes(platform) === false) {\n';
+			_CORE += '\t\tlychee.PLATFORMS.push(platform);\n';
+			_CORE += '\t}\n';
+			_CORE += '});\n';
+			_CORE += '\n';
+
+		}
+
+		if (errors === 0) {
+			console.info('SUCCESS');
+		} else {
+			console.error('FAILURE');
+			_process.exit(1);
+		}
+
+	})();
+
+
+
+	/*
 	 * 3: FEATURE DETECTION (SYNC)
 	 */
 

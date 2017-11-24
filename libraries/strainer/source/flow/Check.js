@@ -8,14 +8,15 @@ lychee.define('strainer.flow.Check').requires([
 	'lychee.event.Flow'
 ]).exports(function(lychee, global, attachments) {
 
-	const _plugin = {
+	const _plugin    = {
 		API:    lychee.import('strainer.plugin.API'),
 		ESLINT: lychee.import('strainer.plugin.ESLINT')
 	};
-	const _Flow   = lychee.import('lychee.event.Flow');
-	const _Stash  = lychee.import('lychee.Stash');
-	const _PARSER = lychee.import('strainer.api.PARSER');
-	const _STASH  = new _Stash({
+	const _Flow      = lychee.import('lychee.event.Flow');
+	const _Stash     = lychee.import('lychee.Stash');
+	const _PARSER    = lychee.import('strainer.api.PARSER');
+	const _PLATFORMS = lychee.PLATFORMS;
+	const _STASH     = new _Stash({
 		type: _Stash.TYPE.persistent
 	});
 
@@ -53,32 +54,12 @@ lychee.define('strainer.flow.Check').requires([
 
 	};
 
-	const _get_knowledge_url = function(id, knowledge) {
-
-		let found = null;
-
-		for (let url in knowledge) {
-
-			let data = knowledge[url];
-			if (data.identifier === id) {
-				found = url;
-				break;
-			}
-
-		}
-
-		return found;
-
-	};
-
 	const _trace_dependencies = function() {
 
 		let configs      = this.configs;
 		let dependencies = [];
-		let namespaces   = this.__namespaces;
 
-
-		this.configs.filter(function(config) {
+		configs.filter(function(config) {
 			return config !== null;
 		}).map(function(config) {
 			return config.buffer.header || { requires: [], includes: [] };
@@ -88,12 +69,7 @@ lychee.define('strainer.flow.Check').requires([
 
 				header.requires.forEach(function(id) {
 
-					let ns = id.split('.').shift();
-
-					if (
-						dependencies.indexOf(id) === -1
-						&& namespaces[ns] !== '.'
-					) {
+					if (dependencies.indexOf(id) === -1) {
 						dependencies.push(id);
 					}
 
@@ -105,12 +81,7 @@ lychee.define('strainer.flow.Check').requires([
 
 				header.includes.forEach(function(id) {
 
-					let ns = id.split('.').shift();
-
-					if (
-						dependencies.indexOf(id) === -1
-						&& namespaces[ns] !== '.'
-					) {
+					if (dependencies.indexOf(id) === -1) {
 						dependencies.push(id);
 					}
 
@@ -398,9 +369,8 @@ lychee.define('strainer.flow.Check').requires([
 			type: _Stash.TYPE.persistent
 		});
 
-		this.__knowledges   = {};
-		this.__namespaces   = {};
-		this.__pkg          = null;
+		this.__pkg      = null;
+		this.__packages = {};
 
 
 		this.setSandbox(settings.sandbox);
@@ -658,45 +628,35 @@ lychee.define('strainer.flow.Check').requires([
 
 		this.bind('trace-pkgs', function(oncomplete) {
 
-			let errors       = this.errors;
-			let pkg          = this.__pkg;
-			let project      = this.settings.project;
-			let sandbox      = this.sandbox;
-			let stash        = this.stash;
+			let errors  = this.errors;
+			let pkg     = this.__pkg;
+			let project = this.settings.project;
+			let sandbox = this.sandbox;
 
-			if (pkg !== null && stash !== null) {
+			if (pkg !== null) {
 
 				console.log('strainer: TRACE-PKGS ' + project);
 
 
-				let knowledges = this.__knowledges;
-				let namespaces = this.__namespaces;
-
-				if (sandbox === '/libraries/lychee') {
-					namespaces['lychee'] = '.';
-				} else {
-					namespaces['lychee'] = '/libraries/lychee';
-				}
-
-
+				let packages     = this.__packages;
 				let environments = pkg.buffer.build.environments || null;
 				if (environments !== null) {
 
 					for (let id in environments) {
 
-						let packages = environments[id].packages || null;
-						if (packages !== null) {
+						let pkgs = environments[id].packages || null;
+						if (pkgs !== null) {
 
-							packages.forEach(function(raw) {
+							pkgs.forEach(function(raw) {
 
 								let ns  = raw[0];
-								let url = raw[1].substr(0, raw[1].length - 11);
+								let url = raw[1];
 
-								if (namespaces[ns] === undefined) {
+								if (packages[ns] === undefined) {
 
-									namespaces[ns] = url;
+									packages[ns] = new lychee.Package(ns, url);
 
-								} else if (namespaces[ns] !== url) {
+								} else if (packages[ns] !== url) {
 
 									errors.push({
 										url:     pkg.url,
@@ -717,40 +677,57 @@ lychee.define('strainer.flow.Check').requires([
 				}
 
 
-				let unloaded_knowledges = Object.values(namespaces).filter(function(val) {
-					return val !== '.';
-				}).map(function(val) {
-					return val + '/api/strainer.pkg';
-				});
+				if (packages['lychee'] === undefined) {
+					packages['lychee'] = new lychee.Package('lychee', '/libraries/lychee/lychee.pkg');
+				}
 
-				if (unloaded_knowledges.length > 0) {
 
-					stash.bind('batch', function(type, assets) {
+				let interval_end = Date.now() + 1000;
+				let interval_id  = setInterval(function() {
 
-						for (let ns in namespaces) {
+					let all_ready = true;
 
-							let prefix = namespaces[ns];
-							let asset  = assets.find(function(asset) {
-								return asset.url.startsWith(prefix);
-							}) || null;
+					for (let id in packages) {
 
-							if (asset !== null) {
-								knowledges[ns] = asset;
+						let is_ready = packages[id].isReady();
+						if (is_ready === false) {
+							all_ready = false;
+							break;
+						}
+
+					}
+
+
+					if (all_ready === true) {
+
+						clearInterval(interval_id);
+						oncomplete(true);
+
+					} else if (Date.now() > interval_end) {
+
+						for (let ns in packages) {
+
+							let pkg = packages[ns];
+							if (pkg.isReady() === false) {
+
+								errors.push({
+									url:     pkg.url,
+									rule:    'pkg-error',
+									line:    0,
+									column:  0,
+									message: 'Invalid Package "' + ns + '".'
+								});
+
 							}
 
 						}
 
+						clearInterval(interval_id);
 						oncomplete(true);
 
-					}, this, true);
+					}
 
-					stash.batch('read', unloaded_knowledges);
-
-				} else {
-
-					oncomplete(true);
-
-				}
+				}, 100);
 
 			} else {
 
@@ -763,44 +740,77 @@ lychee.define('strainer.flow.Check').requires([
 
 		this.bind('trace-deps', function(oncomplete) {
 
-			let knowledges = this.__knowledges;
-			let namespaces = this.__namespaces;
-			let project    = this.settings.project;
-			let stash      = this.stash;
+			let packages = this.__packages;
+			let project  = this.settings.project;
+			let stash    = this.stash;
 
 			if (stash !== null) {
 
-				let unknown_apis = _trace_dependencies.call(this);
-				if (unknown_apis.length > 0) {
+				let dependencies = _trace_dependencies.call(this);
+				if (dependencies.length > 0) {
 
-					console.log('strainer: TRACE-DEPS ' + project + ' (' + unknown_apis.length + ')');
+					console.log('strainer: TRACE-DEPS ' + project + ' (' + dependencies.length + ')');
 
 
-					let unloaded_apis = unknown_apis.map(function(id) {
+					let candidates = [];
 
-						let ns        = id.split('.')[0];
-						let knowledge = knowledges[ns] || null;
-						if (knowledge !== null && knowledge.buffer !== null) {
-							return _get_knowledge_url(id, knowledge.buffer);
+					dependencies.forEach(function(identifier) {
+
+						let ns  = identifier.split('.')[0];
+						let id  = identifier.split('.').slice(1).join('.');
+						let pkg = packages[ns] || null;
+						if (pkg !== null) {
+
+							let prefix = pkg.url.split('/').slice(0, -1).join('/');
+							let found = false;
+
+							let resolved = pkg.resolve(id, null);
+							if (resolved.length > 0) {
+								candidates.push(prefix + '/api/' + resolved[0] + '.json');
+								found = true;
+							}
+
+
+							if (found === false) {
+
+								resolved = pkg.resolve(id, {
+									platforms: _PLATFORMS
+								});
+
+								if (resolved.length > 0) {
+
+									resolved.forEach(function(path) {
+										candidates.push(prefix + '/api/' + path + '.json');
+									});
+
+								}
+
+							}
+
 						}
 
-						return null;
-
-					}).filter(function(url) {
-						return url !== null;
 					});
 
-					if (unloaded_apis.length > 0) {
+
+					if (candidates.length > 0) {
 
 						stash.bind('batch', function(type, assets) {
 
 							for (let a = 0, al = assets.length; a < al; a++) {
-								this.configs.push(assets[a]);
+
+								let asset = assets[a];
+								if (asset !== null && asset.buffer !== null) {
+									this.configs.push(asset);
+								}
+
 							}
 
 							setTimeout(function() {
 
-								let unknown_deps = _trace_dependencies.call(this);
+								let unknown_deps = _trace_dependencies.call(this).filter(function(dependency) {
+									return dependencies.includes(dependency) === false;
+								});
+
 								if (unknown_deps.length > 0) {
 
 									this.trigger('trace-deps', [ oncomplete ]);
@@ -815,7 +825,7 @@ lychee.define('strainer.flow.Check').requires([
 
 						}, this, true);
 
-						stash.batch('read', unloaded_apis);
+						stash.batch('read', candidates);
 
 					} else {
 
@@ -965,38 +975,32 @@ lychee.define('strainer.flow.Check').requires([
 
 		this.bind('clean-deps', function(oncomplete) {
 
-			let configs    = this.configs;
-			let namespaces = this.__namespaces;
-			let project    = this.settings.project;
+			let configs = this.configs;
+			let project = this.settings.project;
+			let sandbox = this.sandbox;
 
 
-			console.log('strainer: CLEAN-DEPS ' + project);
+			let cleaned_deps = 0;
 
 			for (let c = 0, cl = configs.length; c < cl; c++) {
 
 				let config = configs[c];
 				if (config !== null) {
 
-					let identifier = config.buffer.header.identifier;
-					if (identifier !== null) {
+					if (config.url.startsWith(sandbox) === false) {
 
-						let ns = identifier.split('.')[0];
-						if (
-							namespaces[ns] !== undefined
-							&& namespaces[ns] !== '.'
-						) {
-
-							configs.splice(c, 1);
-							cl--;
-							c--;
-
-						}
+						cleaned_deps++;
+						configs.splice(c, 1);
+						cl--;
+						c--;
 
 					}
 
 				}
 
 			}
+
+			console.log('strainer: CLEAN-DEPS ' + project + ' (' + cleaned_deps + ')');
 
 
 			oncomplete(true);

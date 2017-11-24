@@ -4,9 +4,9 @@ lychee.define('strainer.api.PARSER').requires([
 ]).exports(function(lychee, global, attachments) {
 
 	const _DICTIONARY = attachments["json"].buffer;
-	const _FEATURES   = lychee.import('lychee.Environment')._FEATURES;
+	const _FEATURES   = lychee.FEATURES;
 	const _MURMUR     = lychee.import('lychee.crypto.MURMUR');
-	const _PLATFORMS  = [ 'html', 'node', 'html-nwjs', 'html-webview', 'node-sdl' ];
+	const _PLATFORMS  = lychee.PLATFORMS;
 
 
 
