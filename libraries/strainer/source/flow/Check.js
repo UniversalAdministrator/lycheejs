@@ -651,12 +651,15 @@ lychee.define('strainer.flow.Check').requires([
 
 								let ns  = raw[0];
 								let url = raw[1];
+								if (url === './lychee.pkg') {
+									url = sandbox + '/lychee.pkg';
+								}
 
 								if (packages[ns] === undefined) {
 
 									packages[ns] = new lychee.Package(ns, url);
 
-								} else if (packages[ns] !== url) {
+								} else if (packages[ns].url !== url) {
 
 									errors.push({
 										url:     pkg.url,
