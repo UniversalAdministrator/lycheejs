@@ -1096,7 +1096,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 						return pkg.id === pkg_id;
 					}) || null;
 
-					if (pkg !== null && pkg.isReady() === true) {
+					if (pkg !== null && pkg.config !== null) {
 
 						let result = pkg.load(def_id, this.tags);
 						if (result === true) {

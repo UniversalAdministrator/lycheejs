@@ -690,10 +690,10 @@ lychee.define('strainer.flow.Check').requires([
 
 					let all_ready = true;
 
-					for (let id in packages) {
+					for (let ns in packages) {
 
-						let is_ready = packages[id].isReady();
-						if (is_ready === false) {
+						let pkg = packages[ns];
+						if (pkg.config === null) {
 							all_ready = false;
 							break;
 						}
@@ -711,7 +711,7 @@ lychee.define('strainer.flow.Check').requires([
 						for (let ns in packages) {
 
 							let pkg = packages[ns];
-							if (pkg.isReady() === false) {
+							if (pkg.config === null) {
 
 								errors.push({
 									url:     pkg.url,

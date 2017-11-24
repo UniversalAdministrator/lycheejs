@@ -27,10 +27,10 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 	const _resolve_path = function(candidate) {
 
-		let path = typeof candidate === 'string' ? candidate.split('/') : null;
+		let config = this.config;
+		let path   = typeof candidate === 'string' ? candidate.split('/') : null;
 
-
-		if (path !== null) {
+		if (config !== null && path !== null) {
 
 			let type = this.type;
 			if (type === 'export') {
@@ -38,7 +38,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 			}
 
 
-			let pointer = this.__config.buffer[type].files || null;
+			let pointer = config.buffer[type].files || null;
 			if (pointer !== null) {
 
 				for (let p = 0, pl = path.length; p < pl; p++) {
@@ -67,11 +67,13 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 	const _resolve_attachments = function(candidate) {
 
+		let config      = this.config;
 		let attachments = {};
 		let path        = candidate.split('/');
-		if (path.length > 0) {
 
-			let pointer = this.__config.buffer.source.files || null;
+		if (config !== null && path.length > 0) {
+
+			let pointer = config.buffer.source.files || null;
 			if (pointer !== null) {
 
 				for (let pa = 0, pal = path.length; pa < pal; pa++) {
@@ -159,7 +161,9 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 		value = typeof value === 'string' ? value : null;
 
 
-		if (tag !== null && value !== null) {
+		let config = this.config;
+
+		if (config !== null && tag !== null && value !== null) {
 
 			let type = this.type;
 			if (type === 'export') {
@@ -167,7 +171,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 			}
 
 
-			let pointer = this.__config.buffer[type].tags || null;
+			let pointer = config.buffer[type].tags || null;
 			if (pointer !== null) {
 
 				if (pointer[tag] instanceof Object) {
@@ -349,15 +353,15 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 		url = typeof url === 'string' ? url : null;
 
 
-		this.id   = id;
-		this.url  = null;
-		this.root = null;
-
+		this.id          = id;
+		this.config      = null;
 		this.environment = null;
+		this.root        = null;
+		this.url         = null;
 		this.type        = 'source';
 
+
 		this.__blacklist = {};
-		this.__config    = null;
 		this.__requests  = {};
 
 
@@ -372,22 +376,32 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 				this.root = tmp.join('/');
 				this.url  = url;
 
-				this.__config = new Config(this.url);
-				this.__config.onload = function(result) {
 
-					if (that.isReady() === false) {
-						result = false;
-					}
+				let config = new Config(this.url);
 
+				config.onload = function(result) {
 
-					if (result === true) {
+					let buffer = this.buffer || null;
+					if (
+						buffer !== null
+						&& buffer instanceof Object
+						&& buffer.source instanceof Object
+						&& buffer.build instanceof Object
+					) {
+
 						console.info('lychee.Package-' + that.id + ': Package at "' + this.url + '" ready.');
+
+						that.config = this;
+
 					} else {
+
 						console.error('lychee.Package-' + that.id + ': Package at "' + this.url + '" corrupt.');
+
 					}
 
 				};
-				this.__config.load();
+
+				config.load();
 
 			}
 
@@ -419,30 +433,15 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 		 * CUSTOM API
 		 */
 
-		isReady: function() {
-
-			let ready  = false;
-			let config = this.__config;
-
-			if (config !== null && config.buffer !== null) {
-
-				if (config.buffer.source instanceof Object && config.buffer.build instanceof Object) {
-					ready = true;
-				}
-
-			}
-
-			return ready;
-
-		},
-
 		load: function(id, tags) {
 
 			id   = typeof id === 'string' ? id   : null;
 			tags = tags instanceof Object ? tags : null;
 
 
-			if (id !== null && this.isReady() === true) {
+			let config = this.config;
+
+			if (id !== null && config !== null) {
 
 				let request = this.__requests[id] || null;
 				if (request === null) {
@@ -482,9 +481,10 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 			tags = tags instanceof Object ? tags : null;
 
 
+			let config   = this.config;
 			let filtered = [];
 
-			if (id !== null && this.isReady() === true) {
+			if (id !== null && config !== null) {
 
 				let candidates = _resolve_candidates.call(this, id, tags);
 				if (candidates.length > 0) {
