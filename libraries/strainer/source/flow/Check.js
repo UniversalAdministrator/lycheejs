@@ -274,7 +274,6 @@ lychee.define('strainer.flow.Check').requires([
 
 		let configs = this.configs;
 		let header  = config.buffer.header;
-		let memory  = config.buffer.memory;
 		let result  = config.buffer.result;
 
 
@@ -460,7 +459,11 @@ lychee.define('strainer.flow.Check').requires([
 					let eslint_report  = _plugin.ESLINT.check(asset);
 					let eslint_unfixed = _plugin.ESLINT.fix(asset, eslint_report);
 
-					if (eslint_unfixed.length > 0) {
+					if (eslint_report.length > 0 && eslint_unfixed.length === 0) {
+
+						return result;
+
+					} else if (eslint_unfixed.length > 0) {
 
 						eslint_unfixed.map(function(err) {
 
@@ -510,12 +513,10 @@ lychee.define('strainer.flow.Check').requires([
 				console.log('strainer: WRITE-ESLINT ' + project);
 
 
-				// let sandbox = this.sandbox;
 				let checks  = this.checks;
 				let codes   = this.codes.filter(function(code, c) {
 					return checks[c] !== null && checks[c].length === 0;
 				});
-
 
 				if (codes.length > 0) {
 
@@ -866,10 +867,8 @@ lychee.define('strainer.flow.Check').requires([
 					return config !== null;
 				}).forEach(function(config) {
 
-					let header     = config.buffer.header;
 					let result     = config.buffer.result;
 					let memory     = config.buffer.memory;
-
 					let methods    = result.methods    || {};
 					let properties = result.properties || {};
 					let scope      = properties;

@@ -78,7 +78,7 @@ lychee.define('strainer.api.PARSER').requires([
 
 	const _resolve_value = function(val) {
 
-        let value = {
+		let value = {
 			chunk: 'undefined',
 			type:  'undefined',
 			value: val

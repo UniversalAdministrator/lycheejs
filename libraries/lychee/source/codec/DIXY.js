@@ -308,7 +308,7 @@ lychee.define('lychee.codec.DIXY').exports(function(lychee, global, attachments)
 
 		}
 
-        return _desanitize_string(chunk);
+		return _desanitize_string(chunk);
 
 	};
 
@@ -373,7 +373,6 @@ lychee.define('lychee.codec.DIXY').exports(function(lychee, global, attachments)
 			let parents       = {};
 			let pointer       = root;
 			let last_indent   = 0;
-			let value         = null;
 			let multiline_key = null;
 
 			for (let l = 0, ll = lines.length; l < ll; l++) {

@@ -11,6 +11,13 @@ lychee.define('lychee.ai.neat.Gene').exports(function(lychee, global, attachment
 		this.enabled = true;
 		this.innovation = 0;
 
+
+		this.setInto(settings.into);
+		this.setOut(settings.out);
+		this.setWeight(settings.weight);
+		this.setEnabled(settings.enabled);
+		this.setInnovation(settings.innovation);
+
 		settings = null;
 
 	};
