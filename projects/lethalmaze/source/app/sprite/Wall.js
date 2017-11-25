@@ -1,5 +1,7 @@
 
-lychee.define('game.app.sprite.Wall').includes([
+lychee.define('game.app.sprite.Wall').requires([
+	'lychee.app.Entity'
+]).includes([
 	'lychee.app.Sprite'
 ]).exports(function(lychee, global, attachments) {
 
