@@ -1,5 +1,6 @@
 
 lychee.define('game.app.sprite.Portal').requires([
+	'lychee.app.Entity',
 	'lychee.effect.Sound',
 	'game.effect.Lightning'
 ]).includes([

@@ -19,7 +19,10 @@ lychee.define('fertilizer.template.html-nwjs.Application').includes([
 
 	const Composite = function(data) {
 
-		_Template.call(this, data);
+		let settings = Object.assign({}, data);
+
+
+		_Template.call(this, settings);
 
 
 		this.__config = lychee.deserialize(lychee.serialize(_TEMPLATES.config));
@@ -190,6 +193,9 @@ lychee.define('fertilizer.template.html-nwjs.Application').includes([
 			}
 
 		}, this);
+
+
+		settings = null;
 
 	};
 

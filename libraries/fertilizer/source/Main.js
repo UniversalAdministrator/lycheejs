@@ -1,5 +1,6 @@
 
 lychee.define('fertilizer.Main').requires([
+	'fertilizer.Template',
 	'lychee.Input',
 	'lychee.codec.JSON',
 	'fertilizer.data.Shell',

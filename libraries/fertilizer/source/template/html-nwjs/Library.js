@@ -14,7 +14,10 @@ lychee.define('fertilizer.template.html-nwjs.Library').includes([
 
 	const Composite = function(data) {
 
-		_Template.call(this, data);
+		let settings = Object.assign({}, data);
+
+
+		_Template.call(this, settings);
 
 
 		this.__index = lychee.deserialize(lychee.serialize(_TEMPLATE));
@@ -67,6 +70,9 @@ lychee.define('fertilizer.template.html-nwjs.Library').includes([
 			console.log('fertilizer: PACKAGE');
 			oncomplete(true);
 		}, this);
+
+
+		settings = null;
 
 	};
 

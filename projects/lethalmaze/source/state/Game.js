@@ -7,6 +7,7 @@ lychee.define('game.state.Game').requires([
 	'game.app.sprite.Item',
 	'game.app.sprite.Portal',
 	'game.app.sprite.Tank',
+	'game.app.sprite.Wall',
 	'game.data.LEVEL',
 	'game.effect.Explosion',
 	'game.effect.Lightning',

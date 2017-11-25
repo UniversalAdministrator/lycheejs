@@ -27,6 +27,9 @@ lychee.define('studio.ui.element.select.Scene').requires([
 
 		this.setValue(settings.value);
 
+
+		_Element.call(this, settings);
+
 		settings = null;
 
 	};

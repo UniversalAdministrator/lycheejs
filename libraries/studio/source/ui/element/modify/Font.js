@@ -3,6 +3,7 @@ lychee.define('studio.ui.element.modify.Font').requires([
 	'studio.codec.FONT',
 	// 'studio.ui.entity.input.Font',
 	'lychee.ui.entity.Input',
+	'studio.ui.entity.input.Font',
 	'lychee.ui.entity.Select',
 	'lychee.ui.entity.Slider'
 ]).includes([

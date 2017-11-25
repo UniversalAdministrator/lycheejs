@@ -1,5 +1,6 @@
 
 lychee.define('game.app.sprite.Tank').requires([
+	'lychee.app.Entity',
 	'lychee.effect.Position'
 ]).includes([
 	'lychee.app.Sprite'

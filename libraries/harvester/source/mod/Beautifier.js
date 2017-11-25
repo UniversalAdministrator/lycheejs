@@ -1,5 +1,6 @@
 
 lychee.define('harvester.mod.Beautifier').requires([
+	'harvester.data.Package',
 	'harvester.data.Project'
 ]).exports(function(lychee, global, attachments) {
 

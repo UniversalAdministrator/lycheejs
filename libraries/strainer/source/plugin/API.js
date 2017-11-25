@@ -97,9 +97,7 @@ lychee.define('strainer.plugin.API').requires([
 
 		'no-settings': function(err, report, code) {
 
-			let type  = report.header.type;
-			let chunk = [];
-
+			let type = report.header.type;
 			if (type === 'Composite') {
 
 				let i1 = code.indexOf('\n\tconst Composite =');
@@ -107,7 +105,7 @@ lychee.define('strainer.plugin.API').requires([
 
 				if (i1 !== -1 && i2 !== -1) {
 
-					chunk = code.substr(i1, i2 - i1 + 4).split('\n');
+					let chunk = code.substr(i1, i2 - i1 + 4).split('\n');
 					chunk.splice(2, 0, '\n\t\tlet settings = Object.assign({}, data);\n');
 					code = code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
 
@@ -124,9 +122,7 @@ lychee.define('strainer.plugin.API').requires([
 
 		'no-garbage': function(err, report, code) {
 
-			let type  = report.header.type;
-			let chunk = [];
-
+			let type = report.header.type;
 			if (type === 'Composite') {
 
 				let i1 = code.indexOf('\n\tconst Composite =');
@@ -134,7 +130,7 @@ lychee.define('strainer.plugin.API').requires([
 
 				if (i1 !== -1 && i2 !== -1) {
 
-					chunk = code.substr(i1, i2 - i1 + 4).split('\n');
+					let chunk = code.substr(i1, i2 - i1 + 4).split('\n');
 					chunk.splice(chunk.length - 1, 0, '\n\t\tsettings = null;\n');
 					code = code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
 
@@ -163,9 +159,8 @@ lychee.define('strainer.plugin.API').requires([
 
 					if (i1 !== -1 && i2 !== -1) {
 
-						chunk = code.substr(i1, i2 - i1 + 4).split('\n');
-
-						let i3 = chunk.findIndex(function(line) {
+						let chunk = code.substr(i1, i2 - i1 + 4).split('\n');
+						let i3    = chunk.findIndex(function(line) {
 							return line.includes('settings = null');
 						});
 
