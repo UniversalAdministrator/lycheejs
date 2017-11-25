@@ -123,14 +123,72 @@ lychee.define('strainer.plugin.API').requires([
 		},
 
 		'no-garbage': function(err, report, code) {
-			// Missing settings = null; in constructor
-			// XXX: processed before no-constructor-call
+
+			let type  = report.header.type;
+			let chunk = [];
+
+			if (type === 'Composite') {
+
+				let i1 = code.indexOf('\n\tconst Composite =');
+				let i2 = code.indexOf('\n\t};', i1);
+
+				if (i1 !== -1 && i2 !== -1) {
+
+					chunk = code.substr(i1, i2 - i1 + 4).split('\n');
+					chunk.splice(chunk.length - 1, 0, '\n\t\tsettings = null;\n');
+					code = code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
+
+					return code;
+
+				}
+
+			}
+
+
 			return null;
+
 		},
 
 		'no-constructor-call': function(err, report, code) {
-			// Missing <err.reference>.call(this, settings) in constructor
+
+			let type = report.header.type;
+			if (type === 'Composite') {
+
+				let name  = err.reference;
+				let entry = report.memory[name] || null;
+				if (entry !== null) {
+
+					let i1 = code.indexOf('\n\tconst Composite =');
+					let i2 = code.indexOf('\n\t};', i1);
+
+					if (i1 !== -1 && i2 !== -1) {
+
+						chunk = code.substr(i1, i2 - i1 + 4).split('\n');
+
+						let i3 = chunk.findIndex(function(line) {
+							return line.includes('settings = null');
+						});
+
+						if (i3 !== -1) {
+							chunk.splice(i3, 0, '\t\t' + name + '.call(this, settings);\n');
+						} else {
+							chunk.splice(chunk.length - 1, 0, '\n\t\t' + name + '.call(this, settings);\n');
+						}
+
+
+						code = code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
+
+						return code;
+
+					}
+
+				}
+
+			}
+
+
 			return null;
+
 		},
 
 		'no-deserialize': function(err, report, code) {
