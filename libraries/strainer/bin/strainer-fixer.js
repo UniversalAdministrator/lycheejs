@@ -19,6 +19,11 @@ const _print_help = function() {
 	console.log('                                                                 ');
 	console.log('Usage: lycheejs-strainer-fixer [File]                            ');
 	console.log('                                                                 ');
+	console.log('                                                                 ');
+	console.log('Available Flags:                                                 ');
+	console.log('                                                                 ');
+	console.log('   --debug          Debug Mode with debug messages               ');
+	console.log('                                                                 ');
 	console.log('Examples:                                                        ');
 	console.log('                                                                 ');
 	console.log('    # cwd has to be /opt/lycheejs                                ');
@@ -33,20 +38,25 @@ const _bootup = function(settings) {
 	// console log/info/warn or pretty
 	// color codes, so strip them out.
 
-	console.log   = function() {};
-	console.info  = function() {};
-	console.warn  = function() {};
-	console.error = function() {
 
-		let al   = arguments.length;
-		let args = [];
-		for (let a = 0; a < al; a++) {
-			args.push(arguments[a]);
-		}
+	if (settings.debug === false) {
 
-		process.stdout.write(args.join(' ') + '\n');
+		console.log   = function() {};
+		console.info  = function() {};
+		console.warn  = function() {};
+		console.error = function() {
 
-	};
+			let al   = arguments.length;
+			let args = [];
+			for (let a = 0; a < al; a++) {
+				args.push(arguments[a]);
+			}
+
+			process.stdout.write(args.join(' ') + '\n');
+
+		};
+
+	}
 
 
 	let environment = new lychee.Environment({
@@ -151,8 +161,13 @@ const _SETTINGS = (function() {
 	let settings = {
 		cwd:     _CWD,
 		file:    null,
-		project: null
+		project: null,
+		debug:   false
 	};
+
+
+	let debug_flag = args.find(val => /--([debug]{5})/g.test(val));
+
 
 	let file = args[0];
 	if (file !== undefined) {
@@ -216,6 +231,11 @@ const _SETTINGS = (function() {
 	}
 
 
+	if (debug_flag !== undefined) {
+		settings.debug = true;
+	}
+
+
 	return settings;
 
 })();
@@ -236,6 +256,7 @@ const _SETTINGS = (function() {
 
 		_bootup({
 			cwd:     settings.cwd,
+			debug:   settings.debug === true,
 			file:    settings.file,
 			project: settings.project
 		});

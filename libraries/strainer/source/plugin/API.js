@@ -40,11 +40,17 @@ lychee.define('strainer.plugin.API').requires([
 							chunk.splice(1, 0, '\t\'' + ref + '\'');
 						}
 
-						code = code.substr(0, i1 + 9) + chunk.join('\n') + code.substr(i2 + 2);
+						return code.substr(0, i1 + 9) + chunk.join('\n') + code.substr(i2 + 2);
 
+					}
 
-						return code;
+				} else {
 
+					i1 = code.indexOf('lychee.define(');
+					i2 = code.indexOf(')', i1);
+
+					if (i1 !== -1 && i2 !== -1 && i2 < i3) {
+						return code.substr(0, i2 + 1) + '.requires([\n\t\'' + ref + '\'\n])' + code.substr(i2 + 1);
 					}
 
 				}
@@ -79,10 +85,27 @@ lychee.define('strainer.plugin.API').requires([
 							chunk.splice(1, 0, '\t\'' + ref + '\'');
 						}
 
-						code = code.substr(0, i1 + 9) + chunk.join('\n') + code.substr(i2 + 2);
+						return code.substr(0, i1 + 9) + chunk.join('\n') + code.substr(i2 + 2);
 
+					}
 
-						return code;
+				} else {
+
+					i1 = code.indexOf('requires([');
+					i2 = code.indexOf('\n])', i1);
+
+					if (i1 !== -1 && i2 !== -1 && i2 < i3) {
+
+						return code.substr(0, i2 + 3) + '.includes([\n\t\'' + ref + '\'\n])' + code.substr(i2 + 3);
+
+					} else {
+
+						i1 = code.indexOf('lychee.define(');
+						i2 = code.indexOf(')', i1);
+
+						if (i1 !== -1 && i2 !== -1 && i2 < i3) {
+							return code.substr(0, i2 + 1) + '.includes([\n\t\'' + ref + '\'\n])' + code.substr(i2 + 1);
+						}
 
 					}
 
@@ -106,10 +129,10 @@ lychee.define('strainer.plugin.API').requires([
 				if (i1 !== -1 && i2 !== -1) {
 
 					let chunk = code.substr(i1, i2 - i1 + 4).split('\n');
-					chunk.splice(2, 0, '\n\t\tlet settings = Object.assign({}, data);\n');
-					code = code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
 
-					return code;
+					chunk.splice(2, 0, '\n\t\tlet settings = Object.assign({}, data);\n');
+
+					return code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
 
 				}
 
@@ -131,10 +154,10 @@ lychee.define('strainer.plugin.API').requires([
 				if (i1 !== -1 && i2 !== -1) {
 
 					let chunk = code.substr(i1, i2 - i1 + 4).split('\n');
-					chunk.splice(chunk.length - 1, 0, '\n\t\tsettings = null;\n');
-					code = code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
 
-					return code;
+					chunk.splice(chunk.length - 1, 0, '\n\t\tsettings = null;\n');
+
+					return code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
 
 				}
 
@@ -171,9 +194,7 @@ lychee.define('strainer.plugin.API').requires([
 						}
 
 
-						code = code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
-
-						return code;
+						return code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
 
 					}
 
@@ -243,22 +264,21 @@ lychee.define('strainer.plugin.API').requires([
 				let i1 = code.indexOf('\n\tComposite.prototype = {\n');
 				let i2 = code.indexOf('\n\t};', i1);
 				if (i1 !== -1 && i2 !== -1) {
-					code = code.substr(0, i1 + 26) + inject + code.substr(i1 + 26);
+					return code.substr(0, i1 + 26) + inject + code.substr(i1 + 26);
 				}
-
-				return code;
 
 			} else if (type === 'Module') {
 
 				let i1 = code.indexOf('\n\tconst Module = {\n');
 				let i2 = code.indexOf('\n\t};', i1);
 				if (i1 !== -1 && i2 !== -1) {
-					code = code.substr(0, i1 + 26) + inject + code.substr(i1 + 26);
+					return code.substr(0, i1 + 26) + inject + code.substr(i1 + 26);
 				}
 
-				return code;
-
 			}
+
+
+			return null;
 
 		},
 
@@ -355,30 +375,26 @@ lychee.define('strainer.plugin.API').requires([
 						let i21 = code.indexOf('\n\t\t}\n', i2);
 
 						if (i20 !== -1) {
-							code = code.substr(0, i20 + 6) + inject + code.substr(i20 + 6);
+							return code.substr(0, i20 + 6) + inject + code.substr(i20 + 6);
 						} else if (i21 !== -1) {
-							code = code.substr(0, i21 + 4) + ',\n' + inject + code.substr(i21 + 5);
+							return code.substr(0, i21 + 4) + ',\n' + inject + code.substr(i21 + 5);
 						}
 
 					} else if (i3 !== -1) {
-						code = code.substr(0, i3 + 38) + inject + code.substr(i3 + 38);
+						return code.substr(0, i3 + 38) + inject + code.substr(i3 + 38);
 					} else {
-						code = code.substr(0, i1 + 26) + inject + code.substr(i1 + 26);
+						return code.substr(0, i1 + 26) + inject + code.substr(i1 + 26);
 					}
 
 				}
-
-				return code;
 
 			} else if (type === 'Module') {
 
 				let i1 = code.indexOf('\n\tconst Module = {\n');
 				let i2 = code.indexOf('\n\t};', i1);
 				if (i1 !== -1 && i2 !== -1) {
-					code = code.substr(0, i1 + 26) + inject + code.substr(i1 + 26);
+					return code.substr(0, i1 + 26) + inject + code.substr(i1 + 26);
 				}
-
-				return code;
 
 			}
 
