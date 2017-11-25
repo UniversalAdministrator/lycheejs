@@ -197,6 +197,10 @@ lychee.define('strainer.plugin.ESLINT').tags({
 		},
 
 		'no-unused-vars': function(line, err) {
+			return line;
+		},
+
+		'no-unused-vars__OLD': function(line, err) {
 
 			let i1 = line.indexOf('let');
 			let i2 = line.indexOf('const');
@@ -353,8 +357,9 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 			if (report !== null) {
 
-				let code  = asset.buffer.toString('utf8').split('\n');
-				let range = [ 0 ];
+				let code     = asset.buffer.toString('utf8').split('\n');
+				let modified = false;
+				let range    = [ 0 ];
 
 				code.forEach(function(chunk, c) {
 					range[c + 1] = range[c] + chunk.length + 1;
@@ -398,8 +403,10 @@ lychee.define('strainer.plugin.ESLINT').tags({
 							prev_l    = l;
 						}
 
-
-						code[l] = tmp2;
+						if (tmp1 !== tmp2) {
+							code[l]  = tmp2;
+							modified = true;
+						}
 
 					} else {
 
@@ -410,7 +417,10 @@ lychee.define('strainer.plugin.ESLINT').tags({
 				});
 
 
-				asset.buffer = new Buffer(code.join('\n'), 'utf8');
+				if (modified === true) {
+					asset.buffer    = new Buffer(code.join('\n'), 'utf8');
+					asset._MODIFIED = true;
+				}
 
 			}
 

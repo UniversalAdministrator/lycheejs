@@ -18,18 +18,108 @@ lychee.define('strainer.plugin.API').requires([
 	const _FIXES   = {
 
 		'no-requires': function(err, report, code) {
-			// Missing requires(whatever) for lychee.import(whatever);
+
+			let name  = err.reference;
+			let entry = report.memory[name] || null;
+			if (entry !== null) {
+
+				let ref = entry.value.reference;
+				let i1  = code.indexOf('requires([');
+				let i2  = code.indexOf('\n])', i1);
+				let i3  = code.indexOf('exports(function(lychee, global, attachments) {\n');
+
+				if (i1 !== -1 && i2 !== -1 && i3 !== -1 && i1 < i3) {
+
+					let tmp1 = code.substr(i1 + 9, i2 - i1 - 7);
+					if (tmp1.length > 0 && tmp1.startsWith('[') && tmp1.endsWith(']')) {
+
+						let chunk = tmp1.split('\n');
+						if (chunk.length > 2) {
+							chunk.splice(1, 0, '\t\'' + ref + '\',');
+						} else {
+							chunk.splice(1, 0, '\t\'' + ref + '\'');
+						}
+
+						code = code.substr(0, i1 + 9) + chunk.join('\n') + code.substr(i2 + 2);
+
+
+						return code;
+
+					}
+
+				}
+
+			}
+
+
 			return null;
+
 		},
 
 		'no-includes': function(err, report, code) {
-			// Missing includes(whatever) for lychee.import(whatever);
+
+			let name  = err.reference;
+			let entry = report.memory[name] || null;
+			if (entry !== null) {
+
+				let ref = entry.value.reference;
+				let i1  = code.indexOf('includes([');
+				let i2  = code.indexOf('\n])', i1);
+				let i3  = code.indexOf('exports(function(lychee, global, attachments) {\n');
+
+				if (i1 !== -1 && i2 !== -1 && i3 !== -1 && i1 < i3) {
+
+					let tmp1 = code.substr(i1 + 9, i2 - i1 - 7);
+					if (tmp1.length > 0 && tmp1.startsWith('[') && tmp1.endsWith(']')) {
+
+						let chunk = tmp1.split('\n');
+						if (chunk.length > 2) {
+							chunk.splice(1, 0, '\t\'' + ref + '\',');
+						} else {
+							chunk.splice(1, 0, '\t\'' + ref + '\'');
+						}
+
+						code = code.substr(0, i1 + 9) + chunk.join('\n') + code.substr(i2 + 2);
+
+
+						return code;
+
+					}
+
+				}
+
+			}
+
+
 			return null;
+
 		},
 
 		'no-settings': function(err, report, code) {
-			// Missing let settings = Object.assign({}, data); in constructor
+
+			let type  = report.header.type;
+			let chunk = [];
+
+			if (type === 'Composite') {
+
+				let i1 = code.indexOf('\n\tconst Composite =');
+				let i2 = code.indexOf('\n\t};', i1);
+
+				if (i1 !== -1 && i2 !== -1) {
+
+					chunk = code.substr(i1, i2 - i1 + 4).split('\n');
+					chunk.splice(2, 0, '\n\t\tlet settings = Object.assign({}, data);\n');
+					code = code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
+
+					return code;
+
+				}
+
+			}
+
+
 			return null;
+
 		},
 
 		'no-garbage': function(err, report, code) {
@@ -423,7 +513,8 @@ lychee.define('strainer.plugin.API').requires([
 
 			if (asset !== null && report !== null) {
 
-				let code = asset.buffer.toString('utf8');
+				let code     = asset.buffer.toString('utf8');
+				let modified = false;
 
 
 				report.errors.forEach(function(err) {
@@ -435,7 +526,8 @@ lychee.define('strainer.plugin.API').requires([
 
 						let result = fix(err, report, code);
 						if (result !== null) {
-							code = result;
+							code     = result;
+							modified = true;
 						} else {
 							filtered.push(err);
 						}
@@ -449,7 +541,10 @@ lychee.define('strainer.plugin.API').requires([
 				});
 
 
-				asset.buffer = new Buffer(code, 'utf8');
+				if (modified === true) {
+					asset.buffer    = new Buffer(code, 'utf8');
+					asset._MODIFIED = true;
+				}
 
 			}
 

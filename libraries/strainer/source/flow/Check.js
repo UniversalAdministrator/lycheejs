@@ -503,51 +503,6 @@ lychee.define('strainer.flow.Check').requires([
 
 		}, this);
 
-		this.bind('write-eslint', function(oncomplete) {
-
-			let project = this.settings.project;
-			let stash   = this.stash;
-
-			if (project !== null && stash !== null) {
-
-				console.log('strainer: WRITE-ESLINT ' + project);
-
-
-				let checks  = this.checks;
-				let codes   = this.codes.filter(function(code, c) {
-					return checks[c] !== null && checks[c].length === 0;
-				});
-
-				if (codes.length > 0) {
-
-					stash.bind('batch', function(type, assets) {
-
-						if (assets.length === codes.length) {
-							oncomplete(true);
-						} else {
-							oncomplete(false);
-						}
-
-					}, this, true);
-
-					stash.batch('write', codes.map(function(code) {
-						return code.url;
-					}), codes);
-
-				} else {
-
-					oncomplete(true);
-
-				}
-
-			} else {
-
-				oncomplete(false);
-
-			}
-
-		}, this);
-
 		this.bind('check-api', function(oncomplete) {
 
 			let api     = _plugin.API || null;
@@ -564,7 +519,6 @@ lychee.define('strainer.flow.Check').requires([
 					let result      = [];
 					let api_report  = _plugin.API.check(asset);
 					let api_unfixed = _plugin.API.fix(asset, api_report);
-
 
 					if (api_report !== null) {
 
@@ -1009,6 +963,51 @@ lychee.define('strainer.flow.Check').requires([
 
 		}, this);
 
+		this.bind('write-codes', function(oncomplete) {
+
+			let project = this.settings.project;
+			let stash   = this.stash;
+
+			if (project !== null && stash !== null) {
+
+				console.log('strainer: WRITE-CODES ' + project);
+
+
+				let checks  = this.checks;
+				let codes   = this.codes.filter(function(code, c) {
+					return code._MODIFIED === true;
+				});
+
+				if (codes.length > 0) {
+
+					stash.bind('batch', function(type, assets) {
+
+						if (assets.length === codes.length) {
+							oncomplete(true);
+						} else {
+							oncomplete(false);
+						}
+
+					}, this, true);
+
+					stash.batch('write', codes.map(function(code) {
+						return code.url;
+					}), codes);
+
+				} else {
+
+					oncomplete(true);
+
+				}
+
+			} else {
+
+				oncomplete(false);
+
+			}
+
+		}, this);
+
 		this.bind('write-api', function(oncomplete) {
 
 			let project = this.settings.project;
@@ -1147,7 +1146,7 @@ lychee.define('strainer.flow.Check').requires([
 		this.then('trace-api');
 		this.then('clean-deps');
 
-		this.then('write-eslint');
+		this.then('write-codes');
 		this.then('write-api');
 		this.then('write-pkg');
 

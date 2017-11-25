@@ -186,7 +186,6 @@ lychee.define('strainer.api.Definition').requires([
 
 		}
 
-
 	};
 
 	const _parse_includes = function(includes, stream, errors) {
