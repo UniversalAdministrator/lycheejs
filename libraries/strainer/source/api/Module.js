@@ -468,9 +468,10 @@ lychee.define('strainer.api.Module').requires([
 
 		},
 
-		check: function(asset) {
+		check: function(asset, header) {
 
-			asset = _validate_asset(asset) === true ? asset : null;
+			asset  = _validate_asset(asset) === true ? asset  : null;
+			header = header instanceof Object        ? header : {};
 
 
 			let errors = [];
@@ -510,23 +511,34 @@ lychee.define('strainer.api.Module').requires([
 				}
 
 
-				if (
-					result.methods['serialize'] === undefined
-					|| result.methods['deserialize'] === undefined
-				) {
+				for (let name in memory) {
 
-					if (result.methods['serialize'] === undefined) {
+					let entry = memory[name];
+					if (entry.type === 'lychee.Definition') {
 
-						errors.push({
-							url:       null,
-							rule:      'no-serialize',
-							reference: 'serialize',
-							message:   'No "serialize()" method.',
-							line:      ref.line,
-							column:    ref.column
-						});
+						let id = entry.value.reference;
+						if (header.requires.includes(id) === false) {
+
+							errors.push({
+								url:       null,
+								rule:      'no-requires',
+								reference: name,
+								message:   'Invalid Definition (missing requires() entry for "' + id + '").',
+								line:      0,
+								column:    0
+							});
+
+						}
 
 					}
+
+				}
+
+
+				if (
+					result.methods['deserialize'] === undefined
+					|| result.methods['serialize'] === undefined
+				) {
 
 					if (result.methods['deserialize'] === undefined) {
 
@@ -535,6 +547,19 @@ lychee.define('strainer.api.Module').requires([
 							rule:      'no-deserialize',
 							reference: 'deserialize',
 							message:   'No "deserialize()" method.',
+							line:      ref.line,
+							column:    ref.column
+						});
+
+					}
+
+					if (result.methods['serialize'] === undefined) {
+
+						errors.push({
+							url:       null,
+							rule:      'no-serialize',
+							reference: 'serialize',
+							message:   'No "serialize()" method.',
 							line:      ref.line,
 							column:    ref.column
 						});

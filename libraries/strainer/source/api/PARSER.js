@@ -280,7 +280,24 @@ lychee.define('strainer.api.PARSER').requires([
 
 			} else if (str.startsWith('lychee.import') || str.startsWith('_lychee.import')) {
 
-				type = 'lychee.Definition';
+				let tmp = str.split(/lychee.import\('([A-Za-z0-9_.]+)'\)/g);
+				if (tmp.length === 3) {
+
+					let name = tmp[1].split('.');
+					let last = name[name.length - 1];
+					if (last.charAt(0).toUpperCase() === last.charAt(0)) {
+
+						if (name.length > 1) {
+							type = 'lychee.Definition';
+						} else {
+							type = last;
+						}
+
+					} else {
+						type = 'lychee.Namespace';
+					}
+
+				}
 
 			} else if (str.startsWith('lychee.interfaceof') || str.startsWith('_lychee.interfaceof')) {
 

@@ -27,12 +27,16 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 
 	const Composite = function(data) {
 
+		let settings = Object.assign({}, data);
+
 		// this.genes   = [];
 		this.fitness = 0;
 		this.adjustFitness = 0;
 		// this.network = {};
 		// this.maxneuron = 0;
 		this.globalRank = 0;
+
+		settings = null;
 
 	};
 

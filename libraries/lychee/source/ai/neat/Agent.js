@@ -1,5 +1,6 @@
 
 lychee.define('lychee.ai.neat.Agent').requires([
+	'lychee.ai.neat.Brain',
 	'lychee.ai.neat.Genome'
 ]).includes([
 	'lychee.ai.Agent'
