@@ -24,6 +24,7 @@ and `fixed`.
 
 - **Added**: Platform-specific `feature.js` to allow feature detection that lychee.js Strainer understands.
 - **Added**: lychee.js Strainer supports platform-specific APIs via feature detection.
+- Added: lychee.js Strainer supports autofixes for lychee.Definition syntax.
 - Added: lychee.FEATURES represents feature detection.
 - Added: lychee.PLATFORMS represents supported platforms.
 - Added: `lychee.blobof(template, blob)` allows validation of deserializations without memory usage.
