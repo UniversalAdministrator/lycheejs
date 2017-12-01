@@ -27,7 +27,7 @@ lychee.define('strainer.api.Core').requires([
 		let i2  = stream.indexOf('\n', i1);
 		let tmp = stream.substr(0, i2).trim();
 
-		if (tmp.includes(' = ') && tmp.endsWith('function(global) {')) {
+		if (tmp.includes(' = ') && tmp.endsWith('(function(global) {')) {
 
 			let tmp1 = tmp.split(/lychee\.([A-Za-z]+)\s=(.*)/g);
 			if (tmp1.length > 1) {
@@ -37,15 +37,19 @@ lychee.define('strainer.api.Core').requires([
 					result.identifier = 'lychee.' + id;
 				}
 
+			} else if (tmp === 'lychee = (function(global) {') {
+
+				result.identifier = 'lychee';
+
 			}
 
 		} else {
 
 			errors.push({
 				url:       null,
-				rule:      'no-identifier',
+				rule:      'no-define',
 				reference: null,
-				message:   'Invalid Definition identifier.',
+				message:   'Invalid Definition (missing "<lychee.Definition> = (function(global) {})()").',
 				line:      0,
 				column:    0
 			});
@@ -94,45 +98,6 @@ lychee.define('strainer.api.Core').requires([
 				let first  = stream.trim().split('\n')[0];
 
 				_parse_identifier(result, stream, errors);
-
-
-				let check1 = first.endsWith('(function(global) {');
-				let check2 = errors.find(function(other) {
-					return other.rule === 'no-identifier';
-				}) || null;
-
-
-				if (check1 === true) {
-
-					if (check2 !== null) {
-
-						let name = asset.url.split('/').pop();
-						if (name.endsWith('.js')) {
-							name = name.substr(0, name.length - 3);
-						}
-
-						if (name.charAt(0) === name.charAt(0).toUpperCase()) {
-							result.identifier = 'lychee.' + name;
-						} else {
-							result.identifier = name;
-						}
-
-						errors.splice(errors.indexOf(check2), 1);
-
-					}
-
-				} else {
-
-					errors.push({
-						url:       null,
-						rule:      'no-core',
-						reference: null,
-						message:   'Invalid core Definition (no sandboxed global).',
-						line:      0,
-						column:    0
-					});
-
-				}
 
 			}
 

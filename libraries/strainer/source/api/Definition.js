@@ -71,17 +71,6 @@ lychee.define('strainer.api.Definition').requires([
 
 			}
 
-		} else {
-
-			errors.push({
-				url:       null,
-				rule:      'no-identifier',
-				reference: null,
-				message:   'Invalid Definition identifier.',
-				line:      0,
-				column:    0
-			});
-
 		}
 
 	};
@@ -266,11 +255,34 @@ lychee.define('strainer.api.Definition').requires([
 				// XXX: exports are unnecessary
 				// _parse_exports(result.exports, stream, errors);
 
+
 				let i1 = stream.indexOf('lychee.define(');
 				let i2 = stream.indexOf('exports(function(lychee, global, attachments) {\n', i1);
 
-				if (i1 === -1 || i2 === -1) {
-					errors.push(_create_error('no-definition', 'Invalid Definition (wrong API usage).'));
+				if (i1 === -1) {
+
+					errors.push({
+						url:       null,
+						rule:      'no-define',
+						reference: null,
+						message:   'Invalid Definition (missing define()).',
+						line:      0,
+						column:    0
+					});
+
+				}
+
+				if (i2 === -1) {
+
+					errors.push({
+						url:       null,
+						rule:      'no-exports',
+						reference: null,
+						message:   'Invalid Definition (missing exports()).',
+						line:      0,
+						column:    0
+					});
+
 				}
 
 

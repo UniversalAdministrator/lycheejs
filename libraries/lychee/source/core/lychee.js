@@ -1,8 +1,8 @@
 
-(function(global) {
+lychee = (function(global) {
 
 	if (typeof lychee !== 'undefined') {
-		return;
+		return lychee;
 	}
 
 

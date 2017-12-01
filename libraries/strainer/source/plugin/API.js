@@ -14,8 +14,168 @@ lychee.define('strainer.plugin.API').requires([
 		Definition: lychee.import('strainer.api.Definition'),
 		Module:     lychee.import('strainer.api.Module')
 	};
+
+
+
+	/*
+	 * FIXES
+	 */
+
+	const _split_chunk = function(code, search, offset) {
+
+		let index = code.indexOf(search, offset);
+		if (index !== -1) {
+
+			let chunk0 = code.substr(0, index + search.length);
+			let chunk1 = code.substr(index + search.length);
+
+			return [ chunk0, chunk1 ];
+
+		}
+
+
+		return null;
+
+	};
+
 	const _TAB_STR = new Array(128).fill('\t').join('');
 	const _FIXES   = {
+
+		'no-define': function(err, report, code) {
+
+			let url = err.url || null;
+			if (url !== null) {
+
+				let tmp = err.url.split('/');
+				if (tmp.length > 3) {
+
+					let type = tmp[1];
+					if (type === 'libraries') {
+
+						let folder = tmp[3];
+						if (folder === 'source') {
+
+							let is_platform = tmp[4] === 'platform';
+							if (is_platform === true) {
+
+								let platform = tmp[5];
+								let name     = [ tmp[2] ].concat(tmp.slice(6));
+
+								let check = name[name.length - 1].indexOf('.');
+								if (check !== -1) {
+									name[name.length - 1] = name[name.length - 1].substr(0, check);
+								}
+
+								return '\nlychee.define(\'' + name.join('.') + '\').tags({\n\t\'platform\': \'' + platform + '\'\n});\n' + code.trim() + '\n';
+
+							} else {
+
+								let name  = [ tmp[2] ].concat(tmp.slice(4));
+								let check = name[name.length - 1].indexOf('.');
+								if (check !== -1) {
+									name[name.length - 1] = name[name.length - 1].substr(0, check);
+								}
+
+								return '\nlychee.define(\'' + name.join('.') + '\');\n' + code.trim() + '\n';
+
+							}
+
+
+						} else {
+
+							// XXX: Ignore this error in other folders
+							return code;
+
+						}
+
+					} else if (type === 'projects') {
+
+						let folder = tmp[3];
+						if (folder === 'source') {
+
+							let is_platform = tmp[4] === 'platform';
+							if (is_platform === true) {
+
+								let platform = tmp[5];
+								let name     = [ 'app' ].concat(tmp.slice(6));
+
+								let check = name[name.length - 1].indexOf('.');
+								if (check !== -1) {
+									name[name.length - 1] = name[name.length - 1].substr(0, check);
+								}
+
+								return '\nlychee.define(\'' + name.join('.') + '\').tags({\n\t\'platform\': \'' + platform + '\'\n});\n' + code.trim() + '\n';
+
+							} else {
+
+								let name  = [ 'app' ].concat(tmp.slice(4));
+								let check = name[name.length - 1].indexOf('.');
+								if (check !== -1) {
+									name[name.length - 1] = name[name.length - 1].substr(0, check);
+								}
+
+								return '\nlychee.define(\'' + name.join('.') + '\');\n' + code.trim() + '\n';
+
+							}
+
+						} else {
+
+							// XXX: Ignore this error in other folders
+							return code;
+
+						}
+
+					}
+
+				}
+
+			}
+
+
+			return null;
+
+		},
+
+		'no-exports': function(err, report, code) {
+
+			let i1 = code.indexOf('lychee.define(');
+			let i2 = code.indexOf('tags({');
+			let i3 = code.indexOf('attaches({');
+			let i4 = code.indexOf('requires([');
+			let i5 = code.indexOf('includes([');
+			let i6 = code.indexOf('supports(function(lychee, global) {');
+			let i7 = code.indexOf('exports(function(lychee, global, attachments) {');
+
+			if (i7 === -1) {
+
+				let chunk = null;
+
+				if (i6 !== -1) {
+					chunk = _split_chunk(code, '})', i6);
+				} else if (i5 !== -1) {
+					chunk = _split_chunk(code, '])', i5);
+				} else if (i4 !== -1) {
+					chunk = _split_chunk(code, '])', i4);
+				} else if (i3 !== -1) {
+					chunk = _split_chunk(code, '})', i3);
+				} else if (i2 !== -1) {
+					chunk = _split_chunk(code, '})', i2);
+				} else if (i1 !== -1) {
+					chunk = _split_chunk(code, ')',  i1);
+				}
+
+
+				if (chunk !== null) {
+					return chunk[0] + '.exports(function(lychee, global, attachments) {\n\n\n})' + chunk[1];
+				}
+
+
+			}
+
+
+			return null;
+
+		},
 
 		'no-requires': function(err, report, code) {
 
@@ -507,6 +667,11 @@ lychee.define('strainer.plugin.API').requires([
 					header = _api['Definition'].check(asset);
 				} else if (is_core === true) {
 					header = _api['Core'].check(asset);
+				} else {
+
+					// XXX: autofix assumes lychee.Definition
+					header = _api['Definition'].check(asset);
+
 				}
 
 
@@ -520,7 +685,29 @@ lychee.define('strainer.plugin.API').requires([
 
 
 				if (api !== null) {
+
 					report = api.check(asset, header.result);
+
+				} else {
+
+					// XXX: autofix assumes lychee.Definition
+					report = {
+						errors: [],
+						memory: {},
+						result: {
+							constructor: {
+								body:       null,
+								hash:       null,
+								parameters: []
+							},
+							settings:    {},
+							properties:  {},
+							enums:       {},
+							events:      {},
+							methods:     {}
+						}
+					};
+
 				}
 
 
@@ -536,6 +723,15 @@ lychee.define('strainer.plugin.API').requires([
 						report.errors = errors;
 
 					}
+
+
+					report.errors.forEach(function(err) {
+
+						if (err.url === null) {
+							err.url = asset.url;
+						}
+
+					});
 
 
 					if (is_callback === true) {

@@ -524,17 +524,7 @@ lychee.define('strainer.flow.Check').requires([
 
 						if (api_unfixed.length > 0) {
 
-							api_unfixed.map(function(err) {
-
-								return {
-									url:     asset.url,
-									rule:    err.rule    || 'api-error',
-									line:    err.line    || 0,
-									column:  err.column  || 0,
-									message: err.message || ''
-								};
-
-							}).forEach(function(err) {
+							api_unfixed.forEach(function(err) {
 
 								result.push(err);
 								errors.push(err);
@@ -546,25 +536,20 @@ lychee.define('strainer.flow.Check').requires([
 						}
 
 
-						let url    = asset.url.replace(/source/, 'api').replace(/\.js$/, '.json');
-						let config = new lychee.Asset(url, 'json', true);
-						if (config !== null) {
-							config.buffer = api_report;
-						}
+						if (asset.url.includes('/source/')) {
 
-						return config;
+							let url    = asset.url.replace(/source/, 'api').replace(/\.js$/, '.json');
+							let config = new lychee.Asset(url, 'json', true);
+							if (config !== null) {
+								config.buffer = api_report;
+							}
+
+							return config;
+
+						}
 
 					}
 
-
-					errors.push({
-						url:       asset.url,
-						rule:      'no-definition',
-						reference: null,
-						message:   'Invalid Definition (wrong API usage).',
-						line:      0,
-						column:    0
-					});
 
 					return null;
 
