@@ -53,6 +53,7 @@ lychee.define('strainer.plugin.ESLINT').tags({
 		'no-trailing-spaces':    _auto_fix,
 		'no-var':                _auto_fix,
 		'object-curly-spacing':  _auto_fix,
+		'semi':                  _auto_fix,
 		'semi-spacing':          _auto_fix,
 		'space-before-blocks':   _auto_fix,
 		'space-in-parens':       _auto_fix,
