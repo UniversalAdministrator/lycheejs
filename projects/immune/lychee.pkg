@@ -36,7 +36,8 @@
 					"json"
 				]
 			}
-		}
+		},
+		"tags": {}
 	},
 	"build": {
 		"environments": {
@@ -97,6 +98,10 @@
 				"profile": {}
 			}
 		},
+		"files": {},
+		"tags": {}
+	},
+	"review": {
 		"files": {},
 		"tags": {}
 	},

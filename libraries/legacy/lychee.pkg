@@ -19,10 +19,19 @@
 					}
 				}
 			}
+		},
+		"tags": {
+			"platform": {
+				"html": "platform/html"
+			}
 		}
 	},
 	"build": {
 		"environments": {},
+		"files": {},
+		"tags": {}
+	},
+	"review": {
 		"files": {},
 		"tags": {}
 	},

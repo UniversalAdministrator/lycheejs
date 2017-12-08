@@ -1,0 +1,82 @@
+{
+	"header": {
+		"identifier": "app.net.Server",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"app.net.remote.Ping"
+		],
+		"includes": [
+			"lychee.net.Server"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Ping": {
+			"chunk": "lychee.import('app.net.remote.Ping')",
+			"type": "lychee.Definition",
+			"value": {
+				"reference": "app.net.remote.Ping",
+				"arguments": []
+			}
+		},
+		"_Server": {
+			"chunk": "lychee.import('lychee.net.Server')",
+			"type": "lychee.Definition",
+			"value": {
+				"reference": "lychee.net.Server",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"body": "function(data) {\n\n\t\tlet settings = Object.assign({\n\t\t}, data);\n\n\n\t\t_Server.call(this, settings);\n\n\t\tsettings = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('connect', function(remote) {\n\n\t\t\tconsole.log('app.net.Server: Remote connected (' + remote.id + ')');\n\n\t\t\tremote.addService(new _Ping(remote));\n\n\t\t}, this);\n\n\t\tthis.bind('disconnect', function(remote) {\n\n\t\t\tconsole.log('app.net.Server: Remote disconnected (' + remote.id + ')');\n\n\t\t}, this);\n\n\n\t\tthis.connect();\n\n\t}",
+			"hash": "f614260a",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"settings": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"body": "function(blob) {}",
+				"chunk": "function(blob) {",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"body": "function() {\n\n\t\t\tlet data = _Server.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'app.net.Server';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"chunk": "\t\tserialize: function() {",
+				"hash": "e8690751",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "_Server.prototype.serialize.call(this)",
+						"type": "undefined"
+					}
+				]
+			}
+		}
+	}
+}

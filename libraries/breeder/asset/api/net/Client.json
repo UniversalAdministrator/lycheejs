@@ -1,0 +1,83 @@
+{
+	"header": {
+		"identifier": "app.net.Client",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"app.net.client.Ping"
+		],
+		"includes": [
+			"lychee.net.Client"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Client": {
+			"chunk": "lychee.import('lychee.net.Client')",
+			"type": "lychee.Definition",
+			"value": {
+				"reference": "lychee.net.Client",
+				"arguments": []
+			}
+		},
+		"_Ping": {
+			"chunk": "lychee.import('app.net.client.Ping')",
+			"type": "lychee.Definition",
+			"value": {
+				"reference": "app.net.client.Ping",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"body": "function(data) {\n\n\t\tlet settings = Object.assign({\n\t\t\treconnect: 10000\n\t\t}, data);\n\n\n\t\t_Client.call(this, settings);\n\n\t\tsettings = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('connect', function() {\n\n\t\t\tthis.addService(new _Ping(this));\n\n\t\t\tif (lychee.debug === true) {\n\t\t\t\tconsole.log('app.net.Client: Remote connected');\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('disconnect', function(code) {\n\n\t\t\tif (lychee.debug === true) {\n\t\t\t\tconsole.log('app.net.Client: Remote disconnected (' + code + ')');\n\t\t\t}\n\n\t\t}, this);\n\n\n\t\tthis.connect();\n\n\t}",
+			"hash": "a2a3ac69",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"settings": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"body": "function(blob) {}",
+				"chunk": "function(blob) {",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"body": "function() {\n\n\t\t\tlet data = _Client.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'app.net.Client';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"chunk": "\t\tserialize: function() {",
+				"hash": "ee7286ce",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

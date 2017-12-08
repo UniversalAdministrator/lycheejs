@@ -92,6 +92,10 @@
 		},
 		"files": {}
 	},
+	"review": {
+		"files": {},
+		"tags": {}
+	},
 	"source": {
 		"environments": {},
 		"files": {

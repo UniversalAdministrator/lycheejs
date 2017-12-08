@@ -567,6 +567,13 @@
 					"json"
 				]
 			}
+		},
+		"tags": {
+			"platform": {
+				"html": "platform/html",
+				"html-nwjs": "platform/html-nwjs",
+				"node": "platform/node"
+			}
 		}
 	},
 	"build": {
@@ -677,6 +684,10 @@
 				]
 			}
 		},
+		"tags": {}
+	},
+	"review": {
+		"files": {},
 		"tags": {}
 	},
 	"source": {

@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 	<!-- BOOTSTRAP -->
 	<script src="/libraries/lychee/build/html/core.js"></script>
@@ -24,7 +24,7 @@
 			-moz-user-select: none;
 			-ms-user-select: none;
 			-webkit-user-select: none;
-		} 
+		}
 	</style>
 
 </head>
@@ -41,4 +41,4 @@
 	})(lychee, typeof global !== 'undefined' ? global : this);
 	</script>
 </body>
-</html>    
+</html>

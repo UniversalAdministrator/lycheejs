@@ -27,7 +27,8 @@
 					"json"
 				]
 			}
-		}
+		},
+		"tags": {}
 	},
 	"build": {
 		"environments": {
@@ -114,6 +115,10 @@
 				}
 			}
 		},
+		"files": {},
+		"tags": {}
+	},
+	"review": {
 		"files": {},
 		"tags": {}
 	},

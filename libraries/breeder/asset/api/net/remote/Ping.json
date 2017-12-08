@@ -1,0 +1,85 @@
+{
+	"header": {
+		"identifier": "app.net.remote.Ping",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.net.Service"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Service": {
+			"chunk": "lychee.import('lychee.net.Service')",
+			"type": "lychee.Definition",
+			"value": {
+				"reference": "lychee.net.Service",
+				"arguments": []
+			}
+		},
+		"_on_ping": {
+			"body": "function(data) {\n\n\t\tif (this.tunnel !== null) {\n\n\t\t\tthis.tunnel.send({\n\t\t\t\tping: data.ping,\n\t\t\t\tpong: Date.now()\n\t\t\t}, {\n\t\t\t\tid:    this.id,\n\t\t\t\tevent: 'pong'\n\t\t\t});\n\n\t\t}\n\n\t}",
+			"hash": "2f6fe605",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"body": "function(remote) {\n\n\t\t_Service.call(this, 'ping', remote, _Service.TYPE.remote);\n\n\n\t\tthis.bind('ping', _on_ping, this);\n\n\t}",
+			"hash": "a6a8830e",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "remote",
+					"type": "undefined"
+				}
+			]
+		},
+		"settings": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"body": "function(blob) {}",
+				"chunk": "function(blob) {",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"body": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'app.net.remote.Ping';\n\t\t\tdata['arguments']   = [ null ];\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"chunk": "\t\tserialize: function() {",
+				"hash": "95a3e834",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

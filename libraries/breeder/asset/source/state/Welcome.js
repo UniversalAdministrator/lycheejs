@@ -1,11 +1,11 @@
 
-lychee.define('app.state.Welcome').includes([
-	'lychee.ui.State'
-]).requires([
+lychee.define('app.state.Welcome').requires([
 	'lychee.ui.Blueprint',
 	'lychee.ui.Element',
 	'lychee.ui.Layer',
 	'lychee.ui.entity.Text'
+]).includes([
+	'lychee.ui.State'
 ]).exports(function(lychee, global, attachments) {
 
 	const _State = lychee.import('lychee.ui.State');
@@ -17,7 +17,7 @@ lychee.define('app.state.Welcome').includes([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(main) {
+	const Composite = function(main) {
 
 		_State.call(this, main);
 

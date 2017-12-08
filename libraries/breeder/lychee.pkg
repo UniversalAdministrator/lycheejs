@@ -7,7 +7,8 @@
 			"Template": [
 				"json"
 			]
-		}
+		},
+		"tags": {}
 	},
 	"build": {
 		"environments": {
@@ -56,6 +57,10 @@
 				}
 			}
 		},
+		"tags": {}
+	},
+	"review": {
+		"files": {},
 		"tags": {}
 	},
 	"source": {

@@ -1,0 +1,100 @@
+{
+	"header": {
+		"identifier": "app.Main",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"app.net.Client",
+			"app.net.Server",
+			"app.state.Welcome"
+		],
+		"includes": [
+			"lychee.app.Main"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_app": {
+			"chunk": "lychee.import('app')",
+			"type": "lychee.Namespace",
+			"value": {
+				"reference": "app",
+				"arguments": []
+			}
+		},
+		"_Main": {
+			"chunk": "lychee.import('lychee.app.Main')",
+			"type": "lychee.Definition",
+			"value": {
+				"reference": "lychee.app.Main",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"body": "function(data) {\n\n\t\tlet settings = Object.assign({\n\n\t\t\tinput: {\n\t\t\t\tdelay:       0,\n\t\t\t\tkey:         true,\n\t\t\t\tkeymodifier: false,\n\t\t\t\tscroll:      true,\n\t\t\t\tswipe:       true,\n\t\t\t\ttouch:       true\n\t\t\t},\n\n\t\t\tjukebox: {\n\t\t\t\tmusic: true,\n\t\t\t\tsound: true\n\t\t\t},\n\n\t\t\trenderer: {\n\t\t\t\tid:     'app',\n\t\t\t\twidth:  null,\n\t\t\t\theight: null\n\t\t\t},\n\n\t\t\tviewport: {\n\t\t\t\tfullscreen: false\n\t\t\t}\n\n\t\t}, data);\n\n\n\t\t_Main.call(this, settings);\n\n\t\tsettings = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('load', function(oncomplete) {\n\n\t\t\tthis.settings.appclient = this.settings.client;\n\t\t\tthis.settings.client    = null;\n\n\t\t\tthis.settings.appserver = this.settings.server;\n\t\t\tthis.settings.server    = null;\n\n\t\t\toncomplete(true);\n\n\t\t}, this, true);\n\n\t\tthis.bind('init', function() {\n\n\t\t\tlet appclient = this.settings.appclient || null;\n\t\t\tif (appclient !== null) {\n\t\t\t\tthis.client = new _app.net.Client(appclient);\n\t\t\t}\n\n\t\t\tlet appserver = this.settings.appserver || null;\n\t\t\tif (appserver !== null) {\n\t\t\t\tthis.server = new _app.net.Server(appserver);\n\t\t\t}\n\n\n\t\t\tthis.setState('welcome', new _app.state.Welcome(this));\n\n\n\t\t\tthis.changeState('welcome', 'welcome');\n\n\t\t}, this, true);\n\n\t}",
+			"hash": "a69b8fee",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"settings": {},
+		"properties": {
+			"client": {
+				"chunk": "this.client = new _app.net.Client(appclient);",
+				"value": {
+					"chunk": "new _app.net.Client(appclient)",
+					"type": "_app.net.Client"
+				}
+			},
+			"server": {
+				"chunk": "this.server = new _app.net.Server(appserver);",
+				"value": {
+					"chunk": "new _app.net.Server(appserver)",
+					"type": "_app.net.Server"
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"body": "function(blob) {}",
+				"chunk": "function(blob) {",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"body": "function() {\n\n\t\t\tlet data = _Main.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'app.Main';\n\n\n\t\t\tlet settings = data['arguments'][0] || {};\n\t\t\tlet blob     = data['blob'] || {};\n\n\n\t\t\tif (this.settings.appclient !== null) settings.client = this.defaults.client;\n\t\t\tif (this.settings.appserver !== null) settings.server = this.defaults.server;\n\n\n\t\t\tdata['arguments'][0] = settings;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"chunk": "\t\tserialize: function() {",
+				"hash": "556bf572",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

@@ -39,7 +39,8 @@
 					]
 				}
 			}
-		}
+		},
+		"tags": {}
 	},
 	"build": {
 		"environments": {
@@ -79,6 +80,10 @@
 				"variant": "application"
 			}
 		},
+		"files": {},
+		"tags": {}
+	},
+	"review": {
 		"files": {},
 		"tags": {}
 	},

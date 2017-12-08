@@ -1,0 +1,104 @@
+{
+	"header": {
+		"identifier": "app.net.client.Ping",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.net.Service"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Service": {
+			"chunk": "lychee.import('lychee.net.Service')",
+			"type": "lychee.Definition",
+			"value": {
+				"reference": "lychee.net.Service",
+				"arguments": []
+			}
+		},
+		"_on_pong": {
+			"body": "function(data) {\n\n\t\tdata.pung = Date.now();\n\n\t\tlet ping = (data.pong - data.ping).toFixed(0);\n\t\tlet pong = (data.pung - data.pong).toFixed(0);\n\n\n\t\tthis.trigger('statistics', [ ping, pong ]);\n\n\t}",
+			"hash": "5130d0e6",
+			"parameters": [
+				{
+					"chunk": "Date.now()",
+					"name": "data",
+					"type": "Number",
+					"value": 1333333333337
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"body": "function(client) {\n\n\t\t_Service.call(this, 'ping', client, _Service.TYPE.client);\n\n\n\t\tthis.bind('pong', _on_pong, this);\n\n\t}",
+			"hash": "9c3f5054",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "client",
+					"type": "undefined"
+				}
+			]
+		},
+		"settings": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"body": "function(blob) {}",
+				"chunk": "function(blob) {",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"body": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'app.net.client.Ping';\n\t\t\tdata['arguments']   = [ '#MAIN.client' ];\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"chunk": "\t\tserialize: function() {",
+				"hash": "e453ff4b",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"ping": {
+				"body": "function() {\n\n\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\tthis.tunnel.send({\n\t\t\t\t\tping: Date.now()\n\t\t\t\t}, {\n\t\t\t\t\tid:    this.id,\n\t\t\t\t\tevent: 'ping'\n\t\t\t\t});\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"chunk": "\t\tping: function() {",
+				"hash": "563aa121",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

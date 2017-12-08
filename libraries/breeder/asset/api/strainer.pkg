@@ -1,0 +1,129 @@
+{
+	"/projects/boilerplate/api/Main.json": {
+		"identifier": "app.Main",
+		"timestamp": 1512767788363,
+		"knowledge": {
+			"settings": [],
+			"properties": [
+				"client",
+				"server"
+			],
+			"enums": [],
+			"events": [],
+			"methods": [
+				[
+					"deserialize",
+					"cf6d9c5f"
+				],
+				[
+					"serialize",
+					"556bf572"
+				]
+			]
+		}
+	},
+	"/projects/boilerplate/api/net/Client.json": {
+		"identifier": "app.net.Client",
+		"timestamp": 1512767863344,
+		"knowledge": {
+			"settings": [],
+			"properties": [],
+			"enums": [],
+			"events": [],
+			"methods": [
+				[
+					"deserialize",
+					"cf6d9c5f"
+				],
+				[
+					"serialize",
+					"ee7286ce"
+				]
+			]
+		}
+	},
+	"/projects/boilerplate/api/net/Server.json": {
+		"identifier": "app.net.Server",
+		"timestamp": 1512767908406,
+		"knowledge": {
+			"settings": [],
+			"properties": [],
+			"enums": [],
+			"events": [],
+			"methods": [
+				[
+					"deserialize",
+					"cf6d9c5f"
+				],
+				[
+					"serialize",
+					"e8690751"
+				]
+			]
+		}
+	},
+	"/projects/boilerplate/api/net/client/Ping.json": {
+		"identifier": "app.net.client.Ping",
+		"timestamp": 1512767863344,
+		"knowledge": {
+			"settings": [],
+			"properties": [],
+			"enums": [],
+			"events": [],
+			"methods": [
+				[
+					"deserialize",
+					"cf6d9c5f"
+				],
+				[
+					"serialize",
+					"e453ff4b"
+				],
+				[
+					"ping",
+					"563aa121"
+				]
+			]
+		}
+	},
+	"/projects/boilerplate/api/net/remote/Ping.json": {
+		"identifier": "app.net.remote.Ping",
+		"timestamp": 1512767908406,
+		"knowledge": {
+			"settings": [],
+			"properties": [],
+			"enums": [],
+			"events": [],
+			"methods": [
+				[
+					"deserialize",
+					"cf6d9c5f"
+				],
+				[
+					"serialize",
+					"95a3e834"
+				]
+			]
+		}
+	},
+	"/projects/boilerplate/api/state/Welcome.json": {
+		"identifier": "app.state.Welcome",
+		"timestamp": 1512767945433,
+		"knowledge": {
+			"settings": [],
+			"properties": [],
+			"enums": [],
+			"events": [],
+			"methods": [
+				[
+					"serialize",
+					"471e35c4"
+				],
+				[
+					"deserialize",
+					"b00262b4"
+				]
+			]
+		}
+	}
+}

@@ -85,6 +85,12 @@
 					}
 				}
 			}
+		},
+		"tags": {
+			"platform": {
+				"html": "platform/html",
+				"node": "platform/node"
+			}
 		}
 	},
 	"build": {
@@ -224,6 +230,10 @@
 				}
 			}
 		},
+		"tags": {}
+	},
+	"review": {
+		"files": {},
 		"tags": {}
 	},
 	"source": {

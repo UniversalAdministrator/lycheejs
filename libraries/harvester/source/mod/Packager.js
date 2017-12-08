@@ -101,31 +101,39 @@ lychee.define('harvester.mod.Packager').requires([
 		if (json === null)                      json        = {};
 		if (typeof json.api    === 'undefined') json.api    = {};
 		if (typeof json.build  === 'undefined') json.build  = {};
+		if (typeof json.review === 'undefined') json.review = {};
 		if (typeof json.source === 'undefined') json.source = {};
 
 		json.api.files    = {};
 		json.build.files  = {};
+		json.review.files = {};
 		json.source.files = {};
 
 		_walk_directory.call(project.filesystem, tmp, '/api');
 		_walk_directory.call(project.filesystem, tmp, '/build');
+		_walk_directory.call(project.filesystem, tmp, '/review');
 		_walk_directory.call(project.filesystem, tmp, '/source');
 
 		json.api.files    = tmp.api    || {};
 		json.build.files  = tmp.build  || {};
+		json.review.files = tmp.review || {};
 		json.source.files = tmp.source || {};
 
 		json.api.files    = _sort_recursive(json.api.files);
 		json.build.files  = _sort_recursive(json.build.files);
+		json.review.files = _sort_recursive(json.review.files);
 		json.source.files = _sort_recursive(json.source.files);
 
+		json.api.tags     = _walk_tags(json.api.files);
 		json.build.tags   = _walk_tags(json.build.files);
+		json.review.tags  = _walk_tags(json.review.files);
 		json.source.tags  = _walk_tags(json.source.files);
 
 
 		return {
 			api:    json.api,
 			build:  json.build,
+			review: json.review,
 			source: json.source
 		};
 
@@ -192,7 +200,7 @@ lychee.define('harvester.mod.Packager').requires([
 					ext        = attachment.split('.').pop();
 				}
 
-				if (/(msc|snd|js|json|fnt|png|md|tpl)$/.test(ext) || path.substr(0, 7) === '/source') {
+				if (/(msc|snd|js|json|fnt|png|md|tpl)$/.test(ext)) {
 
 					if (pointer[identifier] instanceof Array) {
 

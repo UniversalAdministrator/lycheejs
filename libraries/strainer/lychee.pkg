@@ -46,6 +46,11 @@
 					"json"
 				]
 			}
+		},
+		"tags": {
+			"platform": {
+				"node": "platform/node"
+			}
 		}
 	},
 	"build": {
@@ -101,6 +106,10 @@
 				}
 			}
 		},
+		"tags": {}
+	},
+	"review": {
+		"files": {},
 		"tags": {}
 	},
 	"source": {

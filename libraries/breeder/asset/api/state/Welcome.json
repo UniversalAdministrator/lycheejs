@@ -1,0 +1,82 @@
+{
+	"header": {
+		"identifier": "app.state.Welcome",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.ui.Blueprint",
+			"lychee.ui.Element",
+			"lychee.ui.Layer",
+			"lychee.ui.entity.Text"
+		],
+		"includes": [
+			"lychee.ui.State"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_State": {
+			"chunk": "lychee.import('lychee.ui.State')",
+			"type": "lychee.Definition",
+			"value": {
+				"reference": "lychee.ui.State",
+				"arguments": []
+			}
+		},
+		"_BLOB": {
+			"chunk": "attachments[\"json\"].buffer",
+			"type": "undefined"
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"body": "function(main) {\n\n\t\t_State.call(this, main);\n\n\n\t\tthis.deserialize(_BLOB);\n\n\t}",
+			"hash": "f21bc9a8",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "main",
+					"type": "undefined"
+				}
+			]
+		},
+		"settings": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"serialize": {
+				"body": "function() {\n\n\t\t\tlet data = _State.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'app.state.Welcome';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"chunk": "\t\tserialize: function() {",
+				"hash": "471e35c4",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.app.State',\n\t\t\t\t'arguments':   [ settings ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"deserialize": {
+				"body": "function(blob) {\n\n\t\t\t_State.prototype.deserialize.call(this, blob);\n\n\n\t\t\tlet menu = this.query('ui > menu');\n\t\t\tif (menu !== null) {\n\n\t\t\t\tmenu.setHelpers([\n\t\t\t\t\t'refresh'\n\t\t\t\t]);\n\n\t\t\t\tthis.query('ui > welcome > dialog').bind('change', function(value) {\n\t\t\t\t\tmenu.setValue(value);\n\t\t\t\t\tmenu.trigger('change', [ value ]);\n\t\t\t\t}, this);\n\n\t\t\t}\n\n\t\t}",
+				"chunk": "\t\tdeserialize: function(blob) {",
+				"hash": "b00262b4",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			}
+		}
+	}
+}

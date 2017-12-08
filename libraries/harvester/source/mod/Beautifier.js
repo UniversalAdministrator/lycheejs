@@ -40,6 +40,12 @@ lychee.define('harvester.mod.Beautifier').requires([
 		let files = [];
 
 
+		// _walk_directory.call(project.filesystem, '/bin', files);
+		// _walk_directory.call(project.filesystem, '/api', files);
+		// _walk_directory.call(project.filesystem, '/asset', files);
+		// _walk_directory.call(project.filesystem, '/build', files);
+
+		_walk_directory.call(project.filesystem, '/review', files);
 		_walk_directory.call(project.filesystem, '/source', files);
 
 
