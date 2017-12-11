@@ -46,6 +46,11 @@ lychee.define('strainer.plugin.API').requires([
 			let url = err.url || null;
 			if (url !== null) {
 
+				if (url.endsWith('/bootstrap.js') || url.endsWith('/features.js')) {
+					return code;
+				}
+
+
 				let tmp = err.url.split('/');
 				if (tmp.length > 3) {
 
@@ -137,6 +142,16 @@ lychee.define('strainer.plugin.API').requires([
 		},
 
 		'no-exports': function(err, report, code) {
+
+			let url = err.url;
+			if (url !== null) {
+
+				if (url.endsWith('/bootstrap.js') || url.endsWith('/features.js')) {
+					return code;
+				}
+
+			}
+
 
 			let i1 = code.indexOf('lychee.define(');
 			let i2 = code.indexOf('tags({');
