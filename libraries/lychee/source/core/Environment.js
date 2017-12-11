@@ -1644,7 +1644,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		setTimeout: function(timeout) {
 
-			timeout = typeof timeout === 'number' ? timeout : null;
+			timeout = typeof timeout === 'number' ? (timeout | 0) : null;
 
 
 			if (timeout !== null) {

@@ -1017,7 +1017,7 @@ lychee = (function(global) {
 			} else {
 
 				console.warn('lychee.define: Invalid identifier');
-				console.info('lychee.define: Use lychee.define(id).exports(closure)');
+				console.info('lychee.define: Use lychee.define(id).exports(function(lychee, global, attachments) {})');
 
 			}
 
@@ -1067,6 +1067,11 @@ lychee = (function(global) {
 
 
 				return instance;
+
+			} else {
+
+				console.warn('lychee.import: Invalid reference');
+				console.info('lychee.import: Use lychee.import(reference)');
 
 			}
 
@@ -1250,6 +1255,8 @@ lychee = (function(global) {
 
 		inject: function(environment) {
 
+			let message = environment !== null;
+
 			environment = environment instanceof lychee.Environment ? environment : null;
 
 
@@ -1283,6 +1290,11 @@ lychee = (function(global) {
 					console.info('lychee.inject: Use lychee.setEnvironment(env) before using lychee.inject(other).');
 
 				}
+
+			} else if (message === true) {
+
+				console.warn('lychee.inject: Invalid environment');
+				console.info('lychee.inject: Use lychee.inject(env) where env is a lychee.Environment instance');
 
 			}
 
