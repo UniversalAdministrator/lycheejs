@@ -50,7 +50,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			if (definition !== null) {
 
-				let dependencies = _resolve_definition.call(this, definition);
+				let dependencies = _resolve_dependencies.call(this, definition);
 				if (dependencies.length > 0) {
 
 					for (let d = 0, dl = dependencies.length; d < dl; d++) {
@@ -68,7 +68,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 				} else {
 
-					_export_definition.call(this, definition);
+					definition.export(this.global);
 
 					ready.splice(r, 1);
 					rl--;
@@ -336,7 +336,34 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	};
 
-	const _resolve_definition = function(definition) {
+	const _resolve = function(identifier) {
+
+		let pointer = this;
+		let path    = identifier.split('.');
+
+		for (let p = 0, pl = path.length; p < pl; p++) {
+
+			let name = path[p];
+
+			if (pointer[name] !== undefined) {
+
+				pointer = pointer[name];
+
+			} else if (pointer[name] === undefined) {
+
+				pointer = null;
+				break;
+
+			}
+
+		}
+
+
+		return pointer;
+
+	};
+
+	const _resolve_dependencies = function(definition) {
 
 		let dependencies = [];
 
@@ -345,7 +372,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			for (let i = 0, il = definition._includes.length; i < il; i++) {
 
 				let inc   = definition._includes[i];
-				let check = _get_composite.call(this.global, inc);
+				let check = _resolve.call(this.global, inc);
 				if (check === null) {
 					dependencies.push(inc);
 				}
@@ -355,7 +382,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			for (let r = 0, rl = definition._requires.length; r < rl; r++) {
 
 				let req   = definition._requires[r];
-				let check = _get_composite.call(this.global, req);
+				let check = _resolve.call(this.global, req);
 				if (check === null) {
 					dependencies.push(req);
 				}
@@ -365,57 +392,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		}
 
 		return dependencies;
-
-	};
-
-	const _export_definition = function(definition) {
-
-		if (_get_composite.call(this.global, definition.id) === null) {
-
-			definition.export(this.global);
-
-			return true;
-
-		}
-
-
-		return false;
-
-	};
-
-	const _get_composite = function(identifier) {
-
-		let id = identifier.split('.').pop();
-
-		let pointer = _get_namespace.call(this, identifier);
-		if (pointer[id] !== undefined) {
-			return pointer;
-		}
-
-
-		return null;
-
-	};
-
-	const _get_namespace = function(identifier) {
-
-		let pointer = this;
-
-		let ns = identifier.split('.'); ns.pop();
-		for (let n = 0, l = ns.length; n < l; n++) {
-
-			let name = ns[n];
-
-			if (pointer[name] === undefined) {
-				pointer[name] = {};
-			}
-
-			pointer = pointer[name];
-
-		}
-
-
-		return pointer;
 
 	};
 
@@ -1127,7 +1103,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 									let identifier = assimilations[a];
 									let definition = that.definitions[identifier] || null;
 									if (definition !== null) {
-										_export_definition.call(that, definition);
+										definition.export(that.global);
 									}
 
 								}
