@@ -1,14 +1,90 @@
 
 lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition : (function(global) {
 
-	const lychee    = global.lychee;
-	const _Debugger = lychee.Debugger;
+	const lychee = global.lychee;
 
 
 
 	/*
 	 * HELPERS
 	 */
+
+	const _create_detector = function(source) {
+
+		if (source === null) {
+			return source;
+		}
+
+
+		if (typeof Proxy !== 'undefined') {
+
+			let clone = {};
+			let proxy = new Proxy(clone, {
+
+				get: function(target, name) {
+
+					// XXX: Remove this and console will crash the program
+					if (name === 'splice') return undefined;
+
+
+					if (target[name] === undefined) {
+
+						let type = typeof source[name];
+						if (/boolean|number|string|function/g.test(type)) {
+							target[name] = source[name];
+						} else if (/object/g.test(type)) {
+							target[name] = _create_detector(source[name]);
+						} else if (/undefined/g.test(type)) {
+							target[name] = undefined;
+						}
+
+
+						if (target[name] === undefined) {
+							console.error('lychee.Definition: Unknown feature (data type) "' + name + '" in features.js');
+						}
+
+					}
+
+
+					return target[name];
+
+				}
+
+			});
+
+
+			proxy.toJSON = function() {
+
+				let data = {};
+
+				Object.keys(clone).forEach(function(key) {
+
+					if (/toJSON/g.test(key) === false) {
+
+						let type = typeof clone[key];
+						if (/boolean|number|string|function/g.test(type)) {
+							data[key] = type;
+						} else if (/object/g.test(type)) {
+							data[key] = clone[key];
+						}
+
+					}
+
+				});
+
+				return data;
+
+			};
+
+
+			return proxy;
+
+		}
+
+
+		return source;
+
+	};
 
 	const _fuzz_asset = function(type) {
 
@@ -366,6 +442,113 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 		},
 
+		check: function(target) {
+
+			target = target instanceof Object ? target : {};
+
+
+			let features  = null;
+			let supported = true;
+			let tagged    = true;
+
+
+			for (let key in this._tags) {
+
+				let tag = this._tags[key];
+				let val = target[key] || null;
+				if (val instanceof Array) {
+
+					if (val.includes(tag) === false) {
+						tagged = false;
+						break;
+					}
+
+				} else if (typeof val === 'string') {
+
+					if (val !== tag) {
+						tagged = false;
+						break;
+					}
+
+				}
+
+			}
+
+
+			if (this._supports !== null) {
+
+				supported = false;
+
+
+				let platform = this._tags.platform || null;
+				if (platform !== null) {
+
+					if (platform.includes('-') === true) {
+
+						let platform_major = platform.split('-')[0];
+						let platform_minor = platform.split('-')[1];
+
+						let detector = _create_detector(lychee.FEATURES[platform_major] || null);
+						if (detector !== null) {
+							supported = this._supports.call(detector, lychee, detector);
+							features  = JSON.parse(JSON.stringify(detector));
+							detector  = null;
+						}
+
+						if (supported === false) {
+
+							detector = _create_detector(lychee.FEATURES[platform_minor] || null);
+
+							if (detector !== null) {
+
+								supported = this._supports.call(detector, lychee, detector);
+
+								if (features instanceof Object) {
+									features = Object.assign(features, JSON.parse(JSON.stringify(detector)));
+								} else {
+									features = JSON.parse(JSON.stringify(detector));
+								}
+
+								detector = null;
+
+							} else {
+
+								supported = this._supports.call(global, lychee, global);
+
+							}
+
+						}
+
+					} else {
+
+						let detector = _create_detector(lychee.FEATURES[platform] || null);
+						if (detector !== null) {
+							supported = this._supports.call(detector, lychee, detector);
+							features  = JSON.parse(JSON.stringify(detector));
+							detector  = null;
+						} else {
+							supported = this._supports.call(global, lychee, global);
+						}
+
+					}
+
+				} else {
+
+					supported = this._supports.call(global, lychee, global);
+
+				}
+
+			}
+
+
+			return {
+				features:  features,
+				supported: supported,
+				tagged:    tagged
+			};
+
+		},
+
 		export: function(sandbox) {
 
 			sandbox = sandbox !== undefined ? sandbox : global;
@@ -404,7 +587,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 							) || null;
 
 						} catch (err) {
-							_Debugger.report(null, err, this);
+							lychee.Debugger.report(null, err, this);
 						}
 
 

@@ -101,76 +101,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 	 * HELPERS
 	 */
 
-	const _detect_features = function(source) {
-
-		if (typeof Proxy === 'undefined') {
-			return source;
-		}
-
-
-		let clone = {};
-		let proxy = new Proxy(clone, {
-
-			get: function(target, name) {
-
-				// XXX: Remove this and console will crash your program
-				if (name === 'splice') return undefined;
-
-
-				if (target[name] === undefined) {
-
-					let type = typeof source[name];
-					if (/boolean|number|string|function/g.test(type)) {
-						target[name] = source[name];
-					} else if (/object/g.test(type)) {
-						target[name] = _detect_features(source[name]);
-					} else if (/undefined/g.test(type)) {
-						target[name] = undefined;
-					}
-
-
-					if (target[name] === undefined) {
-						console.error('lychee.Environment: Unknown feature (data type) "' + name + '" in bootstrap.js');
-					}
-
-				}
-
-
-				return target[name];
-
-			}
-
-		});
-
-
-		proxy.toJSON = function() {
-
-			let data = {};
-
-			Object.keys(clone).forEach(function(key) {
-
-				if (/toJSON/g.test(key) === false) {
-
-					let type = typeof clone[key];
-					if (/boolean|number|string|function/g.test(type)) {
-						data[key] = type;
-					} else if (/object/g.test(type)) {
-						data[key] = clone[key];
-					}
-
-				}
-
-			});
-
-			return data;
-
-		};
-
-
-		return proxy;
-
-	};
-
 	const _inject_features = function(source, features) {
 
 		let target = this;
@@ -199,135 +129,39 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	const _validate_definition = function(definition) {
 
-		if (!(definition instanceof lychee.Definition)) {
-			return false;
-		}
+		if (definition instanceof lychee.Definition) {
+
+			let check = definition.check(this.tags);
+			let type  = this.type;
 
 
-		let features  = null;
-		let sandbox   = this.sandbox;
-		let supported = false;
+			if (check.features !== null) {
 
-
-		if (definition._supports !== null) {
-
-			let platform = definition._tags.platform || null;
-			if (platform !== null) {
-
-				if (platform.includes('-')) {
-
-					let platform_major = platform.split('-')[0];
-					let detector_major = _detect_features(lychee.FEATURES[platform_major] || global);
-					if (detector_major !== null) {
-						supported      = definition._supports.call(detector_major, lychee, detector_major);
-						features       = JSON.parse(JSON.stringify(detector_major));
-						detector_major = null;
-					}
-
-					if (supported === false) {
-
-						let platform_minor = platform.split('-')[1];
-						let detector_minor = _detect_features(lychee.FEATURES[platform_minor] || global);
-						if (detector_minor !== null) {
-
-							supported = definition._supports.call(detector_minor, lychee, detector_minor);
-
-							if (features instanceof Object) {
-								features = Object.assign(features, JSON.parse(JSON.stringify(detector_minor)));
-							} else {
-								features = JSON.parse(JSON.stringify(detector_minor));
-							}
-
-							detector_minor = null;
-
-						}
-
-					}
-
-				} else {
-
-					let detector = _detect_features(lychee.FEATURES[platform] || global);
-					if (detector !== null) {
-						supported = definition._supports.call(detector, lychee, detector);
-						features  = JSON.parse(JSON.stringify(detector));
-						detector  = null;
-					}
-
+				if (type === 'source' || type === 'export') {
+					this.__features = lychee.assignunlink(this.__features, check.features);
 				}
 
-			} else {
-
-				supported = definition._supports.call(global, lychee, global);
-
-			}
-
-		} else {
-
-			supported = true;
-
-		}
-
-
-		let tagged = true;
-
-		if (Object.keys(definition._tags).length > 0) {
-
-			for (let tag in definition._tags) {
-
-				let value = definition._tags[tag];
-				let tags  = this.tags[tag] || null;
-				if (tags instanceof Array) {
-
-					if (tags.indexOf(value) === -1) {
-
-						tagged = false;
-						break;
-
-					}
-
-				}
-
-			}
-
-		}
-
-
-		let type = this.type;
-		if (type === 'build') {
-
-			if (features !== null && sandbox === true) {
-				_inject_features.call(this.global, global, features);
-			}
-
-			return tagged;
-
-		} else if (type === 'export') {
-
-			if (features !== null) {
-
-				this.__features = lychee.assignunlink(this.__features, features);
-
+				let sandbox = this.sandbox;
 				if (sandbox === true) {
-					_inject_features.call(this.global, global, features);
+					_inject_features.call(this.global, global, check.features);
 				}
 
 			}
 
-			return tagged;
 
-		} else if (type === 'source') {
+			if (type === 'build') {
 
-			if (features !== null) {
+				return check.tagged;
 
-				this.__features = lychee.assignunlink(this.__features, features);
+			} else if (type === 'export') {
 
-				if (sandbox === true) {
-					_inject_features.call(this.global, global, features);
-				}
+				return check.tagged;
+
+			} else if (type === 'source') {
+
+				return check.supported && check.tagged;
 
 			}
-
-			return supported && tagged;
 
 		}
 
