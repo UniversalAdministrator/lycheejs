@@ -1,7 +1,8 @@
 
 lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition : (function(global) {
 
-	const lychee = global.lychee;
+	const lychee    = global.lychee;
+	const _Debugger = lychee.Debugger;
 
 
 
@@ -89,6 +90,47 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 		}
 
 		return found;
+
+	};
+
+	const _resolve = function(identifier) {
+
+		let pointer   = this;
+		let namespace = identifier.split('.');
+		let id        = namespace.pop();
+
+		for (let n = 0, nl = namespace.length; n < nl; n++) {
+
+			let name = namespace[n];
+
+			if (pointer[name] === undefined) {
+				pointer[name] = {};
+			}
+
+			pointer = pointer[name];
+
+		}
+
+
+		let check = id.toLowerCase();
+		if (check === id) {
+
+			if (pointer[id] === undefined) {
+				pointer[id] = {};
+			}
+
+			return pointer[id];
+
+		} else {
+
+			if (pointer[id] !== undefined) {
+				return pointer[id];
+			}
+
+		}
+
+
+		return null;
 
 	};
 
@@ -321,6 +363,234 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 
 			return this;
+
+		},
+
+		export: function(scope) {
+
+			scope = scope !== undefined ? scope : global;
+
+
+			let check = _resolve.call(scope, this.id);
+			if (check === null) {
+
+				let id        = this.id;
+				let namespace = _resolve.call(scope, id.split('.').slice(0, -1).join('.'));
+				let name      = id.split('.').pop();
+
+				if (namespace === null) {
+					console.log(namespace, id);
+				}
+
+				if (this._exports !== null) {
+
+					let includes = this._includes.map(function(id) {
+						return _resolve.call(scope, id);
+					});
+
+					let requires = this._requires.map(function(id) {
+						return _resolve.call(scope, id);
+					});
+
+
+					if (includes.includes(null) === false && requires.includes(null) === false) {
+
+						let template = null;
+
+						try {
+
+							template = this._exports.call(
+								this._exports,
+								scope.lychee,
+								scope,
+								this._attaches
+							) || null;
+
+						} catch (err) {
+							_Debugger.report(null, err, this);
+						}
+
+
+						if (template !== null) {
+
+							if (includes.length > 0) {
+
+								let own_enums   = null;
+								let own_methods = null;
+								let own_keys    = Object.keys(template);
+								let own_proto   = template.prototype;
+
+
+								if (own_keys.length > 0) {
+
+									own_enums = {};
+
+									for (let ok = 0, okl = own_keys.length; ok < okl; ok++) {
+
+										let own_key = own_keys[ok];
+										if (own_key === own_key.toUpperCase()) {
+											own_enums[own_key] = template[own_key];
+										}
+
+									}
+
+									if (Object.keys(own_enums).length === 0) {
+										own_enums = null;
+									}
+
+								}
+
+
+								if (own_proto instanceof Object) {
+
+									own_methods = {};
+
+									for (let own_method in own_proto) {
+										own_methods[own_method] = own_proto[own_method];
+									}
+
+									if (Object.keys(own_methods).length === 0) {
+										own_methods = null;
+									}
+
+								}
+
+
+								Object.defineProperty(namespace, name, {
+									value:        template,
+									writable:     false,
+									enumerable:   true,
+									configurable: false
+								});
+
+								namespace[name].displayName = id;
+								namespace[name].prototype   = {};
+
+
+								let tpl_enums   = {};
+								let tpl_methods = [ namespace[name].prototype ];
+
+
+								for (let i = 0, il = includes.length; i < il; i++) {
+
+									let include  = includes[i];
+									let inc_keys = Object.keys(include);
+									if (inc_keys.length > 0) {
+
+										for (let ik = 0, ikl = inc_keys.length; ik < ikl; ik++) {
+
+											let inc_key = inc_keys[ik];
+											if (inc_key === inc_key.toUpperCase()) {
+												tpl_enums[inc_key] = include[inc_key];
+											}
+
+										}
+
+									}
+
+									tpl_methods.push(include.prototype);
+
+								}
+
+
+								if (own_enums !== null) {
+
+									for (let e in own_enums) {
+										tpl_enums[e] = own_enums[e];
+									}
+
+								}
+
+								if (own_methods !== null) {
+									tpl_methods.push(own_methods);
+								}
+
+								for (let e in tpl_enums) {
+									namespace[name][e] = tpl_enums[e];
+								}
+
+
+								Object.assign.apply(lychee, tpl_methods);
+								namespace[name].prototype.displayName = id;
+
+								Object.freeze(namespace[name].prototype);
+
+
+								return true;
+
+							} else {
+
+								namespace[name]             = template;
+								namespace[name].displayName = id;
+
+
+								if (template instanceof Object) {
+									Object.freeze(namespace[name]);
+								}
+
+								if (namespace[name].prototype instanceof Object) {
+									namespace[name].prototype.displayName = id;
+									Object.freeze(namespace[name].prototype);
+								}
+
+
+								return true;
+
+							}
+
+						} else {
+
+							namespace[name]                       = function() {};
+							namespace[name].displayName           = id;
+							namespace[name].prototype             = {};
+							namespace[name].prototype.displayName = id;
+
+							Object.freeze(namespace[name].prototype);
+
+							console.error('lychee.Definition: Invalid Definition "' + id + '", it is replaced with a Dummy Composite');
+
+
+							return true;
+
+						}
+
+					} else {
+
+						let invalid_includes = this._includes.filter(function(id, i) {
+							return includes[i] === null;
+						});
+
+						if (invalid_includes.length > 0) {
+
+							for (let i = 0, il = invalid_includes.length; i < il; i++) {
+								let tmp = invalid_includes[i];
+								console.error('lychee.Definition: Invalid Inclusion of "' + tmp + '" in "' + id + '".');
+							}
+
+						}
+
+
+						let invalid_requires = this._requires.filter(function(id, r) {
+							return requires[r] === null;
+						});
+
+						if (invalid_requires.length > 0) {
+
+							for (let i = 0, il = invalid_requires.length; i < il; i++) {
+								let tmp = invalid_requires[i];
+								console.error('lychee.Definition: Invalid Requirement of "' + tmp + '" in "' + id + '".');
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+
+			return false;
 
 		},
 
