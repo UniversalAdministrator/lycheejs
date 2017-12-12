@@ -366,30 +366,27 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 		},
 
-		export: function(scope) {
+		export: function(sandbox) {
 
-			scope = scope !== undefined ? scope : global;
+			sandbox = sandbox !== undefined ? sandbox : global;
 
 
-			let check = _resolve.call(scope, this.id);
+			let check = _resolve.call(sandbox, this.id);
 			if (check === null) {
 
+				let console   = sandbox.console || global.console;
 				let id        = this.id;
-				let namespace = _resolve.call(scope, id.split('.').slice(0, -1).join('.'));
+				let namespace = _resolve.call(sandbox, id.split('.').slice(0, -1).join('.'));
 				let name      = id.split('.').pop();
-
-				if (namespace === null) {
-					console.log(namespace, id);
-				}
 
 				if (this._exports !== null) {
 
 					let includes = this._includes.map(function(id) {
-						return _resolve.call(scope, id);
+						return _resolve.call(sandbox, id);
 					});
 
 					let requires = this._requires.map(function(id) {
-						return _resolve.call(scope, id);
+						return _resolve.call(sandbox, id);
 					});
 
 
@@ -401,8 +398,8 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 							template = this._exports.call(
 								this._exports,
-								scope.lychee,
-								scope,
+								sandbox.lychee,
+								sandbox,
 								this._attaches
 							) || null;
 
@@ -587,10 +584,13 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 				}
 
+
+				return false;
+
 			}
 
 
-			return false;
+			return true;
 
 		},
 

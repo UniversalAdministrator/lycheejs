@@ -22,7 +22,7 @@ and `fixed`.
 
 ## [2017-Q4] - UNRELEASED
 
-- **Changed**: lychee.Definition has `export(scope)` method and is now independent of lychee.Environment.
+- **Changed**: lychee.Definition has `export(sandbox)` method to be independent of lychee.Environment.
 - **Added**: Platform-specific `feature.js` to allow feature detection that lychee.js Strainer understands.
 - **Added**: lychee.js Strainer supports platform-specific APIs via feature detection.
 - Added: lychee.js Strainer supports autofixes for lychee.Definition syntax.
