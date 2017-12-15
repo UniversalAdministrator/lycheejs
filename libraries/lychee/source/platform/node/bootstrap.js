@@ -1777,7 +1777,8 @@
 	 * EXPORTS
 	 */
 
-	// global.Buffer  = Buffer; // Not necessary, node.js data type
+	// XXX: Buffer is node data type
+	// global.Buffer  = Buffer;
 	global.Config  = Config;
 	global.Font    = Font;
 	global.Music   = Music;
@@ -1787,7 +1788,7 @@
 	global.require = require;
 
 
-	Object.defineProperty(lychee.Environment, '__FILENAME', {
+	Object.defineProperty(lychee.Environment, '_FILENAME', {
 
 		get: function() {
 

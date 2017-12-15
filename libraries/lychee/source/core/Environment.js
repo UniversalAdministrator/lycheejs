@@ -540,7 +540,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 	// XXX: Injected by platform/<tag>/bootstrap.js
-	Composite.__FILENAME = null;
+	Composite._FILENAME = null;
 
 
 	Composite.prototype = {
@@ -718,7 +718,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			if (definition !== null) {
 
-				let filename = Composite.__FILENAME || null;
+				let filename = Composite._FILENAME || null;
 				if (inject === false && filename !== null) {
 
 					let old_pkg_id = definition.id.split('.')[0];

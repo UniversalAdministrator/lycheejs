@@ -1,8 +1,9 @@
 
 (function(lychee, global) {
 
-	let _filename = null;
-	let _protocol = null;
+	const _document = global.document;
+	let _filename   = null;
+	let _protocol   = null;
 
 
 
@@ -64,7 +65,7 @@
 
 		}
 
-	})(global.location || {}, (document.currentScript || {}).src || '');
+	})(global.location || {}, (_document.currentScript || {}).src || '');
 
 
 
@@ -2549,7 +2550,7 @@
 			_filename = stuff.url;
 
 
-			let tmp = document.createElement('script');
+			let tmp = _document.createElement('script');
 
 			tmp._filename = stuff.url;
 			tmp.async     = true;
@@ -2559,7 +2560,7 @@
 				callback.call(stuff, true);
 
 				// XXX: Don't move, it's causing serious bugs in Blink
-				document.body.removeChild(this);
+				_document.body.removeChild(this);
 
 			};
 			tmp.onerror = function() {
@@ -2567,7 +2568,7 @@
 				callback.call(stuff, false);
 
 				// XXX: Don't move, it's causing serious bugs in Blink
-				document.body.removeChild(this);
+				_document.body.removeChild(this);
 
 			};
 
@@ -2579,7 +2580,7 @@
 				tmp.src = path;
 			}
 
-			document.body.appendChild(tmp);
+			_document.body.appendChild(tmp);
 
 		} else {
 
@@ -2716,12 +2717,12 @@
 	global.Stuff   = Stuff;
 
 
-	Object.defineProperty(lychee.Environment, '__FILENAME', {
+	Object.defineProperty(lychee.Environment, '_FILENAME', {
 
 		get: function() {
 
-			if (document.currentScript) {
-				return document.currentScript._filename;
+			if (_document.currentScript) {
+				return _document.currentScript._filename;
 			} else if (_filename !== null) {
 				return _filename;
 			}

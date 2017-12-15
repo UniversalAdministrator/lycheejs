@@ -65,7 +65,7 @@
 
 		}
 
-	})(global.location || {}, (document.currentScript || {}).src || '');
+	})(global.location || {}, (global.document.currentScript || {}).src || '');
 
 
 	Buffer.isBuffer = function(buffer) {
