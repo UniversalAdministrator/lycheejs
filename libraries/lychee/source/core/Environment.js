@@ -352,10 +352,10 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		this.lychee.ENVIRONMENTS = global.lychee.ENVIRONMENTS;
 		this.lychee.FEATURES     = global.lychee.FEATURES;
 		this.lychee.PLATFORMS    = global.lychee.PLATFORMS;
-		this.lychee.VERSION      = global.lychee.VERSION;
 		this.lychee.ROOT         = {};
 		this.lychee.ROOT.lychee  = global.lychee.ROOT.lychee;
 		this.lychee.ROOT.project = global.lychee.ROOT.project;
+		this.lychee.VERSION      = global.lychee.VERSION;
 
 		[
 			// core/lychee.js
