@@ -2,7 +2,6 @@
 (function(lychee, global) {
 
 	const _document = global.document;
-	let _filename   = null;
 	let _protocol   = null;
 
 
@@ -2547,9 +2546,6 @@
 		let type = stuff.url.split('/').pop().split('.').pop();
 		if (type === 'js' && stuff.__ignore === false) {
 
-			_filename = stuff.url;
-
-
 			let tmp = _document.createElement('script');
 
 			tmp._filename = stuff.url;
@@ -2717,14 +2713,13 @@
 	global.Stuff   = Stuff;
 
 
-	Object.defineProperty(lychee.Environment, '_FILENAME', {
+	Object.defineProperty(lychee, 'FILENAME', {
 
 		get: function() {
 
-			if (_document.currentScript) {
-				return _document.currentScript._filename;
-			} else if (_filename !== null) {
-				return _filename;
+			let script = _document.currentScript || null;
+			if (script !== null) {
+				return script._filename;
 			}
 
 			return null;

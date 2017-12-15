@@ -415,6 +415,7 @@ lychee = (function(global) {
 
 		ENVIRONMENTS: {},
 		FEATURES:     {},
+		FILENAME:     null,
 		PLATFORMS:    [],
 
 		ROOT: {
@@ -984,7 +985,8 @@ lychee = (function(global) {
 
 				let that       = this;
 				let definition = new lychee.Definition({
-					id: identifier
+					id:  identifier,
+					url: lychee.FILENAME || null
 				});
 
 

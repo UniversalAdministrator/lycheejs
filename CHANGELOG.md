@@ -27,6 +27,7 @@ and `fixed`.
 - **Added**: lychee.js Strainer supports platform-specific APIs via feature detection.
 - Added: lychee.js Strainer supports autofixes for lychee.Definition syntax.
 - Added: lychee.FEATURES represents feature detection.
+- Added: lychee.FILENAME represents current definition url.
 - Added: lychee.PLATFORMS represents supported platforms.
 - Added: `lychee.blobof(template, blob)` allows validation of deserializations without memory usage.
 - Added: lychee.codec.DIXY supports DIXY format with JSON-compatible data types.

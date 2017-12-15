@@ -1788,7 +1788,7 @@
 	global.require = require;
 
 
-	Object.defineProperty(lychee.Environment, '_FILENAME', {
+	Object.defineProperty(lychee, 'FILENAME', {
 
 		get: function() {
 

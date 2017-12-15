@@ -351,6 +351,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		this.lychee.environment  = null;
 		this.lychee.ENVIRONMENTS = global.lychee.ENVIRONMENTS;
 		this.lychee.FEATURES     = global.lychee.FEATURES;
+		this.lychee.FILENAME     = global.lychee.FILENAME;
 		this.lychee.PLATFORMS    = global.lychee.PLATFORMS;
 		this.lychee.ROOT         = {};
 		this.lychee.ROOT.lychee  = global.lychee.ROOT.lychee;
@@ -539,10 +540,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 	};
 
 
-	// XXX: Injected by platform/<tag>/bootstrap.js
-	Composite._FILENAME = null;
-
-
 	Composite.prototype = {
 
 		/*
@@ -718,8 +715,8 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			if (definition !== null) {
 
-				let filename = Composite._FILENAME || null;
-				if (inject === false && filename !== null) {
+				let url = definition.url || null;
+				if (url !== null && inject === false) {
 
 					let old_pkg_id = definition.id.split('.')[0];
 					let new_pkg_id = null;
@@ -727,7 +724,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 					for (let p = 0, pl = this.packages.length; p < pl; p++) {
 
 						let root = this.packages[p].root;
-						if (filename.substr(0, root.length) === root) {
+						if (url.substr(0, root.length) === root) {
 							new_pkg_id = this.packages[p].id;
 							break;
 						}
