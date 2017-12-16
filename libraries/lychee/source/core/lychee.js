@@ -361,6 +361,7 @@ lychee = (function(global) {
 	 */
 
 	let _environment = null;
+	let _simulation  = null;
 
 	const _bootstrap_environment = function() {
 
@@ -375,6 +376,26 @@ lychee = (function(global) {
 
 		if (this.environment === null) {
 			this.setEnvironment(_environment);
+		}
+
+	};
+
+	const _bootstrap_simulation = function() {
+
+		_bootstrap_environment.call(this);
+
+
+		if (_simulation === null) {
+
+			_simulation = new lychee.Simulation({
+				environment: this.environment
+			});
+
+		}
+
+
+		if (this.simulation === null) {
+			this.setSimulation(_simulation);
 		}
 
 	};
@@ -412,6 +433,7 @@ lychee = (function(global) {
 		debug: true,
 
 		environment: _environment,
+		simulation:  _simulation,
 
 		ENVIRONMENTS: {},
 		FEATURES:     {},
@@ -1321,6 +1343,28 @@ lychee = (function(global) {
 
 				this.environment = _environment;
 				this.debug       = this.environment.debug;
+
+			}
+
+
+			return false;
+
+		},
+
+		setSimulation: function(simulation) {
+
+			simulation = simulation instanceof lychee.Simulation ? simulation : null;
+
+
+			if (simulation !== null) {
+
+				this.simulation = simulation;
+
+				return true;
+
+			} else {
+
+				this.simulation = _simulation;
 
 			}
 

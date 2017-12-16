@@ -131,6 +131,9 @@
 				"Package": [
 					"json"
 				],
+				"Specification": [
+					"json"
+				],
 				"lychee": [
 					"json"
 				]
@@ -836,6 +839,9 @@
 					"js"
 				],
 				"Package": [
+					"js"
+				],
+				"Specification": [
 					"js"
 				],
 				"lychee": [

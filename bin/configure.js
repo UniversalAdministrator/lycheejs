@@ -354,6 +354,8 @@
 				require(_path.resolve(_ROOT, './libraries/lychee/source/core/Definition.js'));
 				require(_path.resolve(_ROOT, './libraries/lychee/source/core/Environment.js'));
 				require(_path.resolve(_ROOT, './libraries/lychee/source/core/Package.js'));
+				require(_path.resolve(_ROOT, './libraries/lychee/source/core/Simulation.js'));
+				require(_path.resolve(_ROOT, './libraries/lychee/source/core/Specification.js'));
 				require(_path.resolve(_ROOT, './libraries/lychee/source/platform/node/features.js'));
 				require(_path.resolve(_ROOT, './libraries/lychee/source/platform/node/bootstrap.js'));
 

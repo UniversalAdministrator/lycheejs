@@ -222,7 +222,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 
 		this.id  = '';
-		this.url = settings.url || lychee.FILENAME || null;
+		this.url = lychee.FILENAME || null;
 
 		this._attaches = {
 			'json':  _fuzz_asset.call(this, 'json'),
@@ -241,6 +241,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 
 		this.setId(settings.id);
+		this.setUrl(settings.url);
 
 
 		settings = null;
@@ -384,11 +385,11 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			if (id !== null) {
 
-				if (/\./.test(id)) {
+				if (id.includes('.') && /^([A-Za-z0-9-.]+)$/g.test(id)) {
 
 					this.id = id;
 
-				} else if (/^([A-Za-z0-9-]+)/g.test(id)) {
+				} else if (/^([A-Za-z0-9-]+)$/g.test(id)) {
 
 					this.id = 'lychee.' + id;
 
@@ -409,6 +410,24 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 				}
 
+
+				return true;
+
+			}
+
+
+			return false;
+
+		},
+
+		setUrl: function(url) {
+
+			url = typeof url === 'string' ? url : null;
+
+
+			if (url !== null) {
+
+				this.url = url;
 
 				return true;
 

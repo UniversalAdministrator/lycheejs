@@ -349,6 +349,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		this.lychee              = {};
 		this.lychee.debug        = global.lychee.debug;
 		this.lychee.environment  = null;
+		this.lychee.simulation   = null;
 		this.lychee.ENVIRONMENTS = global.lychee.ENVIRONMENTS;
 		this.lychee.FEATURES     = global.lychee.FEATURES;
 		this.lychee.FILENAME     = global.lychee.FILENAME;
@@ -376,13 +377,16 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			'pkginit',
 			'inject',
 			'setEnvironment',
+			'setSimulation',
 
 			// core/<Identifier>.js
 			'Asset',
 			'Debugger',
 			'Definition',
 			'Environment',
-			'Package'
+			'Package',
+			'Simulation',
+			'Specification'
 
 		].forEach(function(identifier) {
 
