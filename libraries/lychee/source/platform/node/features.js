@@ -58,7 +58,7 @@
 		removeAllListeners: function(event) {},
 		setKeepAlive:       function(flag, delay) {},
 		setNoDelay:         function(flag) {},
-		setTimeout:         function(delay) {},
+		setTimeout:         function(delay) {}
 	};
 
 

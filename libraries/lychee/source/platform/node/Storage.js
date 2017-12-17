@@ -1,5 +1,5 @@
 
-lychee.define('Storage').tags({
+lychee.define('lychee.Storage').tags({
 	platform: 'node'
 }).includes([
 	'lychee.event.Emitter'

@@ -1,5 +1,5 @@
 
-lychee.define('Renderer').tags({
+lychee.define('lychee.Renderer').tags({
 	platform: 'html'
 }).supports(function(lychee, global) {
 

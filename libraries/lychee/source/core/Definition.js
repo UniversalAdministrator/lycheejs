@@ -391,12 +391,6 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 					return true;
 
-				} else if (/^([A-Za-z0-9-]+)$/g.test(id)) {
-
-					this.id = 'lychee.' + id;
-
-					return true;
-
 				} else {
 
 					let fuzzed = _fuzz_id.call(this);

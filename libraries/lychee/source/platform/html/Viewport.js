@@ -1,5 +1,5 @@
 
-lychee.define('Viewport').tags({
+lychee.define('lychee.Viewport').tags({
 	platform: 'html'
 }).includes([
 	'lychee.event.Emitter'

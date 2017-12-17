@@ -1,5 +1,5 @@
 
-lychee.define('Stash').tags({
+lychee.define('lychee.Stash').tags({
 	platform: 'node'
 }).includes([
 	'lychee.event.Emitter'

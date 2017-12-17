@@ -1,5 +1,5 @@
 
-lychee.define('Input').tags({
+lychee.define('lychee.Input').tags({
 	platform: 'node'
 }).includes([
 	'lychee.event.Emitter'

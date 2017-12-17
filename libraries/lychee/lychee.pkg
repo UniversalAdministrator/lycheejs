@@ -131,6 +131,9 @@
 				"Package": [
 					"json"
 				],
+				"Simulation": [
+					"json"
+				],
 				"Specification": [
 					"json"
 				],
@@ -690,7 +693,13 @@
 		"tags": {}
 	},
 	"review": {
-		"files": {},
+		"files": {
+			"core": {
+				"Definition": [
+					"js"
+				]
+			}
+		},
 		"tags": {}
 	},
 	"source": {
@@ -839,6 +848,9 @@
 					"js"
 				],
 				"Package": [
+					"js"
+				],
+				"Simulation": [
 					"js"
 				],
 				"Specification": [
