@@ -325,7 +325,8 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 			let settings = {};
 
 
-			if (this.id !== '') settings.id = this.id;
+			if (this.id !== '')  settings.id  = this.id;
+			if (this.url !== '') settings.url = this.url;
 
 
 			if (Object.keys(this._attaches).length > 0) {
