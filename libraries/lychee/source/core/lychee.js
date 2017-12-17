@@ -1327,6 +1327,45 @@ lychee = (function(global) {
 
 		},
 
+		specify: function(identifier) {
+
+			identifier = typeof identifier === 'string' ? identifier : null;
+
+
+			if (identifier !== null) {
+
+				_bootstrap_simulation.call(this);
+
+
+				let that          = this;
+				let specification = new lychee.Specification({
+					id:  identifier,
+					url: lychee.FILENAME || null
+				});
+
+
+				specification.exports = function(callback) {
+
+					lychee.Specification.prototype.exports.call(this, callback);
+					that.simulation.define(this, false);
+
+				};
+
+
+				return specification;
+
+			} else {
+
+				console.warn('lychee.specify: Invalid identifier');
+				console.info('lychee.specify: Use lychee.specify(id).exports(function(lychee, global, simulation) {})');
+
+			}
+
+
+			return null;
+
+		},
+
 		setEnvironment: function(environment) {
 
 			environment = environment instanceof lychee.Environment ? environment : null;

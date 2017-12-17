@@ -389,9 +389,13 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 					this.id = id;
 
+					return true;
+
 				} else if (/^([A-Za-z0-9-]+)$/g.test(id)) {
 
 					this.id = 'lychee.' + id;
+
+					return true;
 
 				} else {
 
@@ -402,6 +406,8 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 						console.warn('lychee.Definition: Injecting Identifier "' + fuzzed + '" (' + this.url + ')');
 
+						return true;
+
 					} else {
 
 						console.error('lychee.Definition: Invalid Identifier "' + id + '" (' + this.url + ')');
@@ -409,9 +415,6 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 					}
 
 				}
-
-
-				return true;
 
 			}
 
