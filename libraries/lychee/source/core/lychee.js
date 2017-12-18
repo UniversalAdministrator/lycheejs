@@ -1143,12 +1143,11 @@ lychee = (function(global) {
 				code += '}\n';
 				code += '\n\n';
 
+				code += 'let lychee = sandbox.lychee;\n';
 
-				code += [ 'lychee' ].concat(environment.packages.map(function(pkg) {
-					return pkg.id;
-				})).map(function(lib) {
-					return 'let ' + lib + ' = sandbox.' + lib + ';';
-				}).join('\n');
+				for (let pid in environment.packages) {
+					code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
+				}
 
 				code += '\n\n';
 				code += 'sandbox.MAIN = new ' + environment.build + '(' + JSON.stringify(env_profile) + ');\n';
@@ -1226,11 +1225,11 @@ lychee = (function(global) {
 								code += '}\n';
 								code += '\n\n';
 
-								code += [ 'lychee' ].concat(env_settings.packages.map(function(pkg) {
-									return pkg.id;
-								})).map(function(lib) {
-									return 'let ' + lib + ' = sandbox.' + lib + ';';
-								}).join('\n');
+								code += 'let lychee = sandbox.lychee;\n';
+
+								for (let pid in env_settings.packages) {
+									code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
+								}
 
 								code += '\n\n';
 								code += 'sandbox.MAIN = new ' + env_settings.build + '(' + JSON.stringify(env_profile) + ');\n';

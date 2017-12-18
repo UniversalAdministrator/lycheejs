@@ -62,12 +62,9 @@
 			"node-sdl/dist": {
 				"build": "fertilizer.Main",
 				"debug": false,
-				"packages": [
-					[
-						"fertilizer",
-						"./lychee.pkg"
-					]
-				],
+				"packages": {
+					"fertilizer": "./lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [
@@ -80,12 +77,9 @@
 			"node/dist": {
 				"build": "fertilizer.Main",
 				"debug": false,
-				"packages": [
-					[
-						"fertilizer",
-						"./lychee.pkg"
-					]
-				],
+				"packages": {
+					"fertilizer": "./lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [

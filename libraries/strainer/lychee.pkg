@@ -58,12 +58,9 @@
 			"node-sdl/dist": {
 				"build": "strainer.Main",
 				"debug": false,
-				"packages": [
-					[
-						"strainer",
-						"./lychee.pkg"
-					]
-				],
+				"packages": {
+					"strainer": "./lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [
@@ -75,12 +72,9 @@
 			"node/dist": {
 				"build": "strainer.Main",
 				"debug": false,
-				"packages": [
-					[
-						"strainer",
-						"./lychee.pkg"
-					]
-				],
+				"packages": {
+					"strainer": "./lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [

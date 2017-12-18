@@ -80,30 +80,23 @@ lychee.define('fertilizer.Main').requires([
 
 				if (platform !== null && /application|library/g.test(variant)) {
 
-					if (settings.packages instanceof Array) {
+					if (settings.packages instanceof Object) {
 
-						settings.packages = settings.packages.map(function(pkg) {
+						for (let pid in settings.packages) {
 
-							let id   = pkg[0];
-							let path = pkg[1];
-							if (path.substr(0, 2) === './') {
-								path = project + '/' + path.substr(2);
+							let url = settings.packages[pid];
+							if (url.startsWith('./')) {
+								settings.packages[pid] = project + '/' + url.substr(2);
 							}
 
-
-							return [ id, path ];
-
-						});
+						}
 
 					}
 
 
 					let that           = this;
 					let environment    = new _lychee.Environment(settings);
-					let fertilizer_pkg = environment.packages.filter(function(pkg) {
-						return pkg.id === 'fertilizer';
-					})[0] || null;
-
+					let fertilizer_pkg = environment.packages['fertilizer'] || null;
 					if (fertilizer_pkg !== null) {
 
 						for (let id in _lychee.environment.definitions) {
@@ -121,14 +114,14 @@ lychee.define('fertilizer.Main').requires([
 
 						if (sandbox !== null) {
 
-							// IMPORTANT: Don't use Environment's imperative API here!
+							// XXX: Don't use Environment's imperative API here!
 							// Environment identifier is /libraries/lychee/main instead of /libraries/lychee/html/main
 
 							environment.id       = project + '/' + identifier.split('/').pop();
 							environment.type     = 'build';
 							environment.debug    = that.defaults.settings.debug;
 							environment.sandbox  = that.defaults.settings.sandbox;
-							environment.packages = [];
+							environment.packages = {};
 
 
 							_lychee.setEnvironment(null);
@@ -176,6 +169,8 @@ lychee.define('fertilizer.Main').requires([
 			} else {
 
 				console.error('fertilizer: FAILURE ("' + project + ' | ' + identifier + '") at "load" event');
+				console.error('fertilizer: Invalid settings via CLI');
+
 				this.destroy(1);
 
 

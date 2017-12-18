@@ -147,10 +147,10 @@ const _bootup = function(settings) {
 		sandbox:  true,
 		build:    'harvester.Main',
 		timeout:  5000,
-		packages: [
-			new lychee.Package('lychee',    '/libraries/lychee/lychee.pkg'),
-			new lychee.Package('harvester', '/libraries/harvester/lychee.pkg')
-		],
+		packages: {
+			'lychee':    '/libraries/lychee/lychee.pkg',
+			'harvester': '/libraries/harvester/lychee.pkg'
+		},
 		tags:     {
 			platform: [ 'node' ]
 		}

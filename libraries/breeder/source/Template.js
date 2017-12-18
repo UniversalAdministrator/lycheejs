@@ -297,10 +297,10 @@ lychee.define('breeder.Template').requires([
 								}
 
 								tmp.variant  = 'application';
-								tmp.packages = [
-									[ 'fork', './lychee.pkg' ],
-									[ 'app',  library + '/lychee.pkg' ]
-								];
+								tmp.packages = {
+									'fork': './lychee.pkg',
+									'app':  library + '/lychee.pkg'
+								};
 
 							}
 
@@ -334,10 +334,10 @@ lychee.define('breeder.Template').requires([
 								let tmp = environments[identifier];
 
 								tmp.variant  = 'library';
-								tmp.packages = [
-									[ 'fork', './lychee.pkg' ],
-									[ 'app',  library + '/lychee.pkg' ]
-								];
+								tmp.packages = {
+									'fork': './lychee.pkg',
+									'app':  library + '/lychee.pkg'
+								};
 
 							}
 

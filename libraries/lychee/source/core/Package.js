@@ -335,65 +335,29 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(id, url) {
+	const Composite = function(data) {
 
-		id  = typeof id === 'string'  ? id  : 'app';
-		url = typeof url === 'string' ? url : null;
+		let settings = Object.assign({}, data);
 
 
-		this.id          = id;
+		this.id          = 'app';
 		this.config      = null;
 		this.environment = null;
 		this.root        = null;
 		this.url         = null;
 		this.type        = 'source';
 
-
 		this.__blacklist = {};
 		this.__requests  = {};
 
 
-		if (url !== null) {
+		this.setId(settings.id);
+		this.setUrl(settings.url);
 
-			let that = this;
-			let tmp  = url.split('/');
+		this.setEnvironment(settings.environment);
+		this.setType(settings.type);
 
-			let file = tmp.pop();
-			if (file === 'lychee.pkg') {
-
-				this.root = tmp.join('/');
-				this.url  = url;
-
-
-				let config = new Config(this.url);
-
-				config.onload = function(result) {
-
-					let buffer = this.buffer || null;
-					if (
-						buffer !== null
-						&& buffer instanceof Object
-						&& buffer.source instanceof Object
-						&& buffer.build instanceof Object
-					) {
-
-						console.info('lychee.Package-' + that.id + ': Package at "' + this.url + '" ready.');
-
-						that.config = this;
-
-					} else {
-
-						console.error('lychee.Package-' + that.id + ': Package at "' + this.url + '" corrupt.');
-
-					}
-
-				};
-
-				config.load();
-
-			}
-
-		}
+		settings = null;
 
 	};
 
@@ -404,13 +368,34 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 		 * ENTITY API
 		 */
 
-		// deserialize: function(blob) {},
+		deserialize: function(blob) {
+
+			if (blob.config instanceof Object) {
+				this.config = lychee.deserialize(blob.config);
+			}
+
+		},
 
 		serialize: function() {
 
+			let blob     = {};
+			let settings = {};
+
+
+			if (this.id !== '')         settings.id   = this.id;
+			if (this.type !== 'source') settings.type = this.type;
+			if (this.url !== '')        settings.url  = this.url;
+
+
+			if (this.config !== null) {
+				blob.config = lychee.serialize(this.config);
+			}
+
+
 			return {
 				'constructor': 'lychee.Package',
-				'arguments':   [ this.id, this.url ]
+				'arguments':   [ settings ],
+				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 
 		},
@@ -486,6 +471,71 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 			}
 
 			return filtered;
+
+		},
+
+		setId: function(identifier) {
+
+			identifier = typeof identifier === 'string' ? identifier : null;
+
+
+			if (identifier !== null && /^([a-z]+)$/g.test(identifier)) {
+
+				this.id = identifier;
+
+				return true;
+
+			}
+
+
+			return false;
+
+		},
+
+		setUrl: function(url) {
+
+			url = typeof url === 'string' ? url : null;
+
+
+			if (url !== null && url.endsWith('/lychee.pkg')) {
+
+				this.config = null;
+				this.root   = url.split('/').slice(0, -1).join('/');
+				this.url    = url;
+
+
+				let that   = this;
+				let config = new Config(url);
+
+				config.onload = function(result) {
+
+					let buffer = this.buffer || null;
+					if (
+						buffer !== null
+						&& buffer instanceof Object
+						&& buffer.build instanceof Object
+						&& buffer.review instanceof Object
+						&& buffer.source instanceof Object
+					) {
+
+						console.info('lychee.Package-' + that.id + ': Package at "' + this.url + '" ready.');
+
+						that.config = this;
+
+					} else {
+
+						console.error('lychee.Package-' + that.id + ': Package at "' + this.url + '" corrupt.');
+
+					}
+
+				};
+
+				config.load();
+
+			}
+
+
+			return false;
 
 		},
 

@@ -4,12 +4,9 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 	const _DEFAULT_SETTINGS = {
 		"build": "app.Main",
 		"debug": false,
-		"packages": [
-			[
-				"app",
-				"./lychee.pkg"
-			]
-		],
+		"packages": {
+			"app": "./lychee.pkg"
+		},
 		"sandbox": false,
 		"tags": {
 			"platform": []
@@ -80,15 +77,14 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 				let settings  = lychee.assignunlink({}, _DEFAULT_SETTINGS);
 				let build     = this.__build;
+				let namespace = build.split('.')[0];
 				let packages  = this.__packages;
 				let platforms = [];
 
-				let found = this.__packages.find(function(other) {
-					return other[0] === build.split('.')[0];
-				}) || null;
 
-				if (found === null) {
-					packages.push([ build.split('.')[0], './lychee.pkg' ]);
+				let pkg = packages[namespace] || null;
+				if (pkg === null) {
+					packages[namespace] = './lychee.pkg';
 				}
 
 
@@ -157,22 +153,17 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 			if (settings instanceof Object) {
 
-				if (settings.packages instanceof Array) {
+				if (settings.packages instanceof Object) {
 
-					settings.packages.forEach(function(pkg) {
+					for (let pid in settings.packages) {
 
-						let pkg_id  = pkg[0];
-						let pkg_url = pkg[1];
-
-						let found = this.__packages.find(function(other) {
-							return other[0] === pkg_id;
-						}) || null;
-
-						if (found === null) {
-							this.__packages.push([ pkg_id, pkg_url ]);
+						let url = settings.packages[pid];
+						let pkg = this.__packages[pid] || null;
+						if (pkg === null) {
+							this.__packages[pid] = url;
 						}
 
-					}.bind(this));
+					}
 
 				}
 
@@ -192,8 +183,8 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 			this.__build = id === 'dist' ? 'app.DIST' : 'app.Main';
 		}
 
-		if (this.__packages.length === 0) {
-			this.__packages.push([ 'app', './lychee.pkg' ]);
+		if (Object.keys(this.__packages).length === 0) {
+			this.__packages['app'] = './lychee.pkg';
 		}
 
 	};
@@ -222,7 +213,7 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 		this.__harvester = new Stuff(this.identifier + '/harvester.js', true);
 		this.__build     = null;
-		this.__packages  = [];
+		this.__packages  = {};
 
 
 		settings = null;

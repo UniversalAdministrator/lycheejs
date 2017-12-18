@@ -47,12 +47,9 @@
 			"html-nwjs/main": {
 				"build": "game.Main",
 				"debug": false,
-				"packages": [
-					[
-						"game",
-						"./lychee.pkg"
-					]
-				],
+				"packages": {
+					"game": "./lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [
@@ -65,12 +62,9 @@
 			"html/main": {
 				"build": "game.Main",
 				"debug": false,
-				"packages": [
-					[
-						"game",
-						"./lychee.pkg"
-					]
-				],
+				"packages": {
+					"game": "./lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [

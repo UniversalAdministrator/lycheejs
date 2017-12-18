@@ -585,19 +585,22 @@ lychee.define('strainer.flow.Check').requires([
 					for (let id in environments) {
 
 						let pkgs = environments[id].packages || null;
-						if (pkgs !== null) {
+						if (pkgs instanceof Object) {
 
-							pkgs.forEach(function(raw) {
+							for (let ns in pkgs) {
 
-								let ns  = raw[0];
-								let url = raw[1];
+								let url = pkgs[ns];
 								if (url === './lychee.pkg') {
 									url = sandbox + '/lychee.pkg';
 								}
 
+
 								if (packages[ns] === undefined) {
 
-									packages[ns] = new lychee.Package(ns, url);
+									packages[ns] = new lychee.Package({
+										id:  ns,
+										url: url
+									});
 
 								} else if (packages[ns].url !== url) {
 
@@ -611,7 +614,7 @@ lychee.define('strainer.flow.Check').requires([
 
 								}
 
-							});
+							}
 
 						}
 
@@ -621,7 +624,10 @@ lychee.define('strainer.flow.Check').requires([
 
 
 				if (packages['lychee'] === undefined) {
-					packages['lychee'] = new lychee.Package('lychee', '/libraries/lychee/lychee.pkg');
+					packages['lychee'] = new lychee.Package({
+						id:  'lychee',
+						url: '/libraries/lychee/lychee.pkg'
+					});
 				}
 
 
@@ -705,7 +711,7 @@ lychee.define('strainer.flow.Check').requires([
 						if (pkg !== null) {
 
 							let prefix = pkg.url.split('/').slice(0, -1).join('/');
-							let found = false;
+							let found  = false;
 
 							let resolved = pkg.resolve(id, null);
 							if (resolved.length > 0) {

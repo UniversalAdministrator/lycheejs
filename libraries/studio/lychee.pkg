@@ -98,16 +98,10 @@
 			"html-nwjs/main": {
 				"build": "studio.Main",
 				"debug": false,
-				"packages": [
-					[
-						"studio",
-						"./lychee.pkg"
-					],
-					[
-						"harvester",
-						"/libraries/harvester/lychee.pkg"
-					]
-				],
+				"packages": {
+					"studio": "./lychee.pkg",
+					"harvester": "/libraries/harvester/lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [
@@ -124,16 +118,10 @@
 			"html/dist": {
 				"build": "studio.Main",
 				"debug": false,
-				"packages": [
-					[
-						"studio",
-						"./lychee.pkg"
-					],
-					[
-						"harvester",
-						"/libraries/harvester/lychee.pkg"
-					]
-				],
+				"packages": {
+					"studio": "./lychee.pkg",
+					"harvester": "/libraries/harvester/lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [
@@ -145,16 +133,10 @@
 			"html/main": {
 				"build": "studio.Main",
 				"debug": false,
-				"packages": [
-					[
-						"studio",
-						"./lychee.pkg"
-					],
-					[
-						"harvester",
-						"/libraries/harvester/lychee.pkg"
-					]
-				],
+				"packages": {
+					"studio": "./lychee.pkg",
+					"harvester": "/libraries/harvester/lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [
@@ -170,16 +152,10 @@
 			"node/dist": {
 				"build": "studio.Main",
 				"debug": false,
-				"packages": [
-					[
-						"studio",
-						"./lychee.pkg"
-					],
-					[
-						"harvester",
-						"/libraries/harvester/lychee.pkg"
-					]
-				],
+				"packages": {
+					"studio": "./lychee.pkg",
+					"harvester": "/libraries/harvester/lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [
@@ -191,16 +167,10 @@
 			"node/main": {
 				"build": "studio.Main",
 				"debug": false,
-				"packages": [
-					[
-						"studio",
-						"./lychee.pkg"
-					],
-					[
-						"harvester",
-						"/libraries/harvester/lychee.pkg"
-					]
-				],
+				"packages": {
+					"studio": "./lychee.pkg",
+					"harvester": "/libraries/harvester/lychee.pkg"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [

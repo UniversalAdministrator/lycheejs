@@ -109,10 +109,10 @@ const _bootup = function(settings) {
 		sandbox:  settings.debug === true ? false : true,
 		build:    'strainer.Main',
 		timeout:  5000,
-		packages: [
-			new lychee.Package('lychee',   '/libraries/lychee/lychee.pkg'),
-			new lychee.Package('strainer', '/libraries/strainer/lychee.pkg')
-		],
+		packages: {
+			'lychee':   '/libraries/lychee/lychee.pkg',
+			'strainer': '/libraries/strainer/lychee.pkg'
+		},
 		tags:     {
 			platform: [ 'node' ]
 		}

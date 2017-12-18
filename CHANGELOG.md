@@ -22,9 +22,11 @@ and `fixed`.
 
 ## [2017-Q4] - UNRELEASED
 
+- **Changed**: lychee.pkg environment settings changes to `{ packages: { namespace: url }}`.
 - **Changed**: lychee.Definition has `export(sandbox)` method to be independent of lychee.Environment.
 - **Added**: Platform-specific `feature.js` to allow feature detection that lychee.js Strainer understands.
 - **Added**: lychee.js Strainer supports platform-specific APIs via feature detection.
+- Changed: lychee.Package supports Composite syntax.
 - Added: lychee.js Strainer supports autofixes for lychee.Definition syntax.
 - Added: lychee.FEATURES represents feature detection.
 - Added: lychee.FILENAME represents current definition url.

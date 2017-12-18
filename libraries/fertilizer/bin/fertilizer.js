@@ -123,10 +123,10 @@ const _bootup = function(settings) {
 		sandbox:  settings.debug === true ? false : settings.sandbox === true,
 		build:    'fertilizer.Main',
 		timeout:  5000,
-		packages: [
-			new lychee.Package('lychee',     '/libraries/lychee/lychee.pkg'),
-			new lychee.Package('fertilizer', '/libraries/fertilizer/lychee.pkg')
-		],
+		packages: {
+			'lychee':     '/libraries/lychee/lychee.pkg',
+			'fertilizer': '/libraries/fertilizer/lychee.pkg'
+		},
 		tags:     {
 			platform: [ 'node' ]
 		}

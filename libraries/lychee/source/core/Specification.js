@@ -15,28 +15,22 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 
 		if (this.url !== null) {
 
-			let packages = lychee.environment.packages.filter(function(pkg) {
-				return pkg.type === 'source';
-			}).map(function(pkg) {
+			let namespace = null;
 
-				return {
-					id:  pkg.id,
-					url: pkg.url.split('/').slice(0, -1).join('/')
-				};
+			for (let pid in lychee.environment.packages) {
 
-			});
+				let pkg = lychee.environment.packages[pid];
+				if (this.url.startsWith(pkg.url)) {
+					namespace = pkg.id;
+				}
 
-
-			let url = this.url;
-			let ns  = url.split('/');
-			let pkg = packages.find(function(pkg) {
-				return url.substr(0, pkg.url.length) === pkg.url;
-			}) || null;
+			}
 
 
-			if (pkg !== null) {
+			if (namespace !== null) {
 
 				let id    = '';
+				let ns    = this.url.split('/');
 				let tmp_i = ns.indexOf('review');
 				let tmp_s = ns[ns.length - 1];
 
@@ -48,8 +42,7 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 					id = ns.slice(tmp_i + 1).join('.');
 				}
 
-
-				found = pkg.id + '.' + id;
+				found = namespace + '.' + id;
 
 			}
 
@@ -120,7 +113,6 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 
 		this.setId(settings.id);
 		this.setUrl(settings.url);
-
 
 		settings = null;
 
