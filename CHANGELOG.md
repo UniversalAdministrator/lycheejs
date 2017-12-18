@@ -20,7 +20,7 @@ are listed in this specific order: `changed`, `removed`, `added`
 and `fixed`.
 
 
-## [2017-Q4] - UNRELEASED
+## [2017-Q4] - 2017-12-20
 
 - **Changed**: lychee.pkg environment settings changes to `{ packages: { namespace: url }}`.
 - **Changed**: lychee.Definition has `export(sandbox)` method to be independent of lychee.Environment.
@@ -168,7 +168,8 @@ and `fixed`.
 
 # GIT CHANGELOG
 
-- [Unreleased](https://github.com/Artificial-Engineering/lycheejs/compare/2017-Q3...HEAD)
+- [Unreleased](https://github.com/Artificial-Engineering/lycheejs/compare/2017-Q4...HEAD)
+- [2017-Q4](https://github.com/Artificial-Engineering/lycheejs/compare/2017-Q3...2017-Q4)
 - [2017-Q3](https://github.com/Artificial-Engineering/lycheejs/compare/2017-Q2...2017-Q3)
 - [2017-Q2](https://github.com/Artificial-Engineering/lycheejs/compare/2017-Q1...2017-Q2)
 - [2017-Q1](https://github.com/Artificial-Engineering/lycheejs/compare/2016-Q4...2017-Q1)

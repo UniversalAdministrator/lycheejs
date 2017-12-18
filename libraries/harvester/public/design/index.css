@@ -35,12 +35,14 @@ body > article {
 body > article div {
 	margin: 16px 0px;
 	text-align: center;
+	vertical-align: middle;
 }
 
 body > article div button,
 body > article div a.button {
 	width: 160px;
 	margin: 0px 16px;
+	vertical-align: middle;
 }
 
 body > article hr {
