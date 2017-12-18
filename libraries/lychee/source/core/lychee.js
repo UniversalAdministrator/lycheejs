@@ -1145,8 +1145,17 @@ lychee = (function(global) {
 
 				code += 'let lychee = sandbox.lychee;\n';
 
-				for (let pid in environment.packages) {
-					code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
+				let packages = environment.packages;
+				if (packages instanceof Object && Array.isArray(packages) === false) {
+
+					for (let pid in packages) {
+
+						if (/$([a-z]+)/g.test(pid)) {
+							code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
+						}
+
+					}
+
 				}
 
 				code += '\n\n';
@@ -1227,8 +1236,13 @@ lychee = (function(global) {
 
 								code += 'let lychee = sandbox.lychee;\n';
 
-								for (let pid in env_settings.packages) {
-									code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
+								let packages = env_settings.packages;
+								if (packages instanceof Object && !(packages instanceof Array)) {
+
+									for (let pid in packages) {
+										code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
+									}
+
 								}
 
 								code += '\n\n';

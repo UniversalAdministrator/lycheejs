@@ -43,6 +43,11 @@ lychee.define('harvester.mod.Server').tags({
 	 * HELPERS
 	 */
 
+	const _MESSAGE = {
+		prefixes: [ '(I)', '(W)', '(E)' ],
+		consoles: [ console.info, console.warn, console.error ]
+	};
+
 	const _report_error = function(text) {
 
 		let lines   = text.split('\n');
@@ -228,13 +233,15 @@ lychee.define('harvester.mod.Server').tags({
 
 					}).map(function(message) {
 
-						if (message.charAt(0) === '\u001b') {
-							message = message.substr(12);
+						let prefix = '\u001b[41m\u001b[97m';
+						let suffix = '\u001b[39m\u001b[49m\u001b[0m';
 
-							if (message.charAt(message.length - 1) === 'm') {
-								message = message.substr(0, message.length - 12);
-							}
+						if (message.startsWith(prefix)) {
+							message = message.substr(prefix.length);
+						}
 
+						if (message.endsWith(suffix)) {
+							message = message.substr(0, message.length - suffix.length);
 						}
 
 						return message;
@@ -251,17 +258,22 @@ lychee.define('harvester.mod.Server').tags({
 
 						lines.forEach(function(message) {
 
-							let type = message.trim().substr(0, 3);
-							let line = message.trim().substr(3).trim();
+							let prefix = message.trim().substr(0, 3);
+							let index  = _MESSAGE.prefixes.indexOf(prefix);
+							if (index !== -1) {
 
-							if (type === '(I)') {
-								console.info('                      ' + line);
-							} else if (type === '(W)') {
-								console.warn('                      ' + line);
-							} else if (type === '(E)') {
-								console.error('                      ' + line);
-							} else {
-								console.error('                      ' + message.trim());
+								let tmp = message.trim().substr(3).trim();
+								if (tmp.length > 0) {
+									_MESSAGE.consoles[index].call(console, '                      ' + tmp);
+								}
+
+							} else if (index === -1) {
+
+								let tmp = message.trim();
+								if (tmp.length > 0) {
+									console.error('                      ' + tmp);
+								}
+
 							}
 
 						});
