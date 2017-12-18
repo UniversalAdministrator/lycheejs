@@ -7,6 +7,8 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 	let _client      = null;
 	let _environment = null;
+	let _error_trace = Error.prepareStackTrace;
+
 
 	const _bootstrap_environment = function() {
 
@@ -65,9 +67,14 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 	const _report_error = function(environment, data) {
 
-		let info = 'Report from ' + data.file + '#L' + data.line + ' in ' + data.method;
-		let main = environment.global.MAIN || null;
+		let info1 = 'Report from ' + data.file + '#L' + data.line + ' in ' + data.method;
+		let info2 = data.message.trim();
+		let info3 = data.stacktrace.map(function(callsite) {
+			return callsite.file + '#L' + callsite.line + ' in ' + callsite.method;
+		}).join('\n');
 
+
+		let main = environment.global.MAIN || null;
 		if (main !== null) {
 
 			let client = main.client || null;
@@ -75,7 +82,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 				let service = client.getService('debugger');
 				if (service !== null) {
-					service.report('lychee.Debugger: ' + info, data);
+					service.report('lychee.Debugger: ' + info1, data);
 				}
 
 			}
@@ -83,9 +90,19 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 		}
 
 
-		console.error('lychee.Debugger: ' + info);
-		console.error('lychee.Debugger: ' + data.message.trim());
+		console.error('lychee.Debugger: ' + info1);
 
+		if (info2.length > 0) {
+			console.error('lychee.Debugger: ' + info2);
+		}
+
+		if (info3.length > 0) {
+
+			info3.split('\n').forEach(function(line) {
+				console.error('lychee.Debugger: ' + line);
+			});
+
+		}
 	};
 
 
@@ -140,7 +157,6 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 		report: function(environment, error, referer) {
 
-
 			_bootstrap_environment();
 
 
@@ -171,77 +187,155 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 					file:        null,
 					line:        null,
 					method:      null,
-					type:        error.toString().split(':')[0],
-					message:     error.message
+					type:        null,
+					message:     error.message || '',
+					stacktrace:  []
 				};
 
 
 				if (typeof error.stack === 'string') {
 
-					let callsite = error.stack.split('\n')[0].trim();
-					if (callsite.charAt(0) === '/') {
+					let header = error.stack.trim().split('\n')[0].trim();
+					let check1 = header.split(':')[0].trim();
+					let check2 = header.split(':').slice(1).join(':').trim();
 
-						data.file = callsite.split(':')[0];
-						data.line = callsite.split(':')[1] || '';
+					if (/^(ReferenceError|SyntaxError)$/g.test(check1)) {
+						data.type    = check1;
+						data.message = check2;
+					}
 
-					} else {
 
-						callsite = error.stack.split('\n').find(function(val) {
-							return val.trim().substr(0, 2) === 'at';
-						});
+					let stacktrace = error.stack.trim().split('\n').map(function(raw) {
 
-						if (typeof callsite === 'string') {
+						let method = null;
+						let file   = null;
+						let line   = null;
 
-							let tmp1 = callsite.trim().split(' ');
-							let tmp2 = tmp1[2] || '';
+						let chunk = raw.trim();
+						if (chunk.startsWith('at')) {
 
-							if (tmp2.charAt(0) === '(')               tmp2 = tmp2.substr(1);
-							if (tmp2.charAt(tmp2.length - 1) === ')') tmp2 = tmp2.substr(0, tmp2.length - 1);
+							let tmp1 = chunk.substr(2).trim().split(' ');
+							if (tmp1.length === 2) {
 
-							// XXX: Thanks, Blink. Thanks -_-
-							if (tmp2.substr(0, 4) === 'http') {
-								tmp2 = '/' + tmp2.split('/').slice(3).join('/');
+								method = tmp1[0].trim();
+
+								if (tmp1[1].startsWith('(')) tmp1[1] = tmp1[1].substr(1).trim();
+								if (tmp1[1].endsWith(')'))   tmp1[1] = tmp1[1].substr(0, tmp1[1].length - 1).trim();
+
+								let tmp2 = tmp1[1].split(':');
+								if (tmp2.length === 3) {
+									file = tmp2[0];
+									line = tmp2[1];
+								} else if (tmp2.length === 2) {
+									file = tmp2[0];
+									line = tmp2[1];
+								} else if (tmp2.length === 1) {
+									file = tmp2[0];
+								}
+
 							}
 
-							let tmp3 = tmp2.split(':');
-
-							data.file   = tmp3[0];
-							data.line   = tmp3[1];
-							data.code   = '';
-							data.method = tmp1[1];
-
 						}
+
+
+						// XXX: Clean out host on html or html-webview platform
+						if (
+							file !== null
+							&& (
+								file.startsWith('http://')
+								|| file.startsWith('https://')
+							)
+						) {
+							file = '/' + file.split('/').slice(3).join('/');
+						}
+
+
+						return {
+							method: method,
+							file:   file,
+							line:   line
+						};
+
+					}).filter(function(callsite) {
+
+						if (
+							callsite.method === null
+							&& callsite.file === null
+							&& callsite.line === null
+						) {
+							return false;
+						}
+
+						return true;
+
+					});
+
+
+					if (stacktrace.length > 0) {
+
+						let callsite = stacktrace[0];
+
+						data.method     = callsite.method;
+						data.file       = callsite.file;
+						data.line       = callsite.line;
+						data.stacktrace = stacktrace;
 
 					}
 
 				} else if (typeof Error.captureStackTrace === 'function') {
 
-					let orig = Error.prepareStackTrace;
+					console.log('capture manually');
 
 					Error.prepareStackTrace = function(err, stack) {
 						return stack;
 					};
-					Error.captureStackTrace(new Error());
+					Error.captureStackTrace(error);
+					Error.prepareStackTrace = _error_trace;
 
 
-					let stack    = [].slice.call(error.stack);
-					let callsite = stack.shift();
-					let FILTER   = [ 'module.js', 'vm.js', 'internal/module.js' ];
+					let stacktrace = Array.from(error.stack).map(function(frame) {
 
-					while (callsite !== undefined && FILTER.indexOf(callsite.getFileName()) !== -1) {
-						callsite = stack.shift();
+						let method = frame.getFunctionName() || frame.getMethodName() || null;
+						if (method !== null) {
+
+							let type = frame.getTypeName() || null;
+							if (type !== null) {
+								method = type + '.' + method;
+							}
+
+						}
+
+						return {
+							file:   frame.getFileName()   || null,
+							line:   frame.getLineNumber() || null,
+							method: method
+						};
+
+					}).filter(function(callsite) {
+
+						if (
+							callsite.method === null
+							&& callsite.file === null
+							&& callsite.line === null
+						) {
+							return false;
+						}
+
+						return true;
+
+					});
+
+
+					if (stacktrace.length > 0) {
+
+						let callsite = stacktrace[0];
+
+						data.file       = callsite.file;
+						data.line       = callsite.line;
+						data.method     = callsite.method;
+						data.stacktrace = stacktrace;
+
 					}
-
-					if (callsite !== undefined) {
-
-						data.file   = callsite.getFileName();
-						data.line   = callsite.getLineNumber();
-						data.code   = '' + (callsite.getFunction() || '').toString();
-						data.method = callsite.getFunctionName() || callsite.getMethodName();
-
-					}
-
-					Error.prepareStackTrace = orig;
 
 				}
 
