@@ -207,9 +207,9 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 					let stacktrace = error.stack.trim().split('\n').map(function(raw) {
 
-						let method = null;
 						let file   = null;
 						let line   = null;
+						let method = null;
 
 						let chunk = raw.trim();
 						if (chunk.startsWith('at')) {
@@ -221,6 +221,44 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 								if (tmp1[1].startsWith('(')) tmp1[1] = tmp1[1].substr(1).trim();
 								if (tmp1[1].endsWith(')'))   tmp1[1] = tmp1[1].substr(0, tmp1[1].length - 1).trim();
+
+								let check = tmp1[1];
+								if (check.startsWith('http://') || check.startsWith('https://')) {
+									tmp1[1] = '/' + check.split('/').slice(3).join('/');
+								} else if (check.startsWith('file://')) {
+									tmp1[1] = tmp1[1].substr(7);
+								}
+
+
+								let tmp2 = tmp1[1].split(':');
+								if (tmp2.length === 3) {
+									file = tmp2[0];
+									line = tmp2[1];
+								} else if (tmp2.length === 2) {
+									file = tmp2[0];
+									line = tmp2[1];
+								} else if (tmp2.length === 1) {
+									file = tmp2[0];
+								}
+
+							}
+
+						} else if (chunk.includes('@')) {
+
+							let tmp1 = chunk.split('@');
+							if (tmp1.length === 2) {
+
+								if (tmp1[0] !== '') {
+									method = tmp1[0];
+								}
+
+								let check = tmp1[1];
+								if (check.startsWith('http://') || check.startsWith('https://')) {
+									tmp1[1] = '/' + check.split('/').slice(3).join('/');
+								} else if (check.startsWith('file://')) {
+									tmp1[1] = tmp1[1].substr(7);
+								}
+
 
 								let tmp2 = tmp1[1].split(':');
 								if (tmp2.length === 3) {
@@ -238,15 +276,21 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 						}
 
 
-						// XXX: Clean out host on html or html-webview platform
-						if (
-							file !== null
-							&& (
-								file.startsWith('http://')
-								|| file.startsWith('https://')
-							)
-						) {
-							file = '/' + file.split('/').slice(3).join('/');
+						if (file !== null) {
+
+							if (file.startsWith('/opt/lycheejs')) {
+								file = file.substr(13);
+							}
+
+						}
+
+						if (line !== null) {
+
+							let num = parseInt(line, 10);
+							if (!isNaN(num)) {
+								line = num;
+							}
+
 						}
 
 
@@ -284,8 +328,6 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 				} else if (typeof Error.captureStackTrace === 'function') {
 
-					console.log('capture manually');
-
 					Error.prepareStackTrace = function(err, stack) {
 						return stack;
 					};
@@ -295,7 +337,11 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 					let stacktrace = Array.from(error.stack).map(function(frame) {
 
+						let file   = frame.getFileName()     || null;
+						let line   = frame.getLineNumber()   || null;
 						let method = frame.getFunctionName() || frame.getMethodName() || null;
+
+
 						if (method !== null) {
 
 							let type = frame.getTypeName() || null;
@@ -305,9 +351,14 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 						}
 
+						if (file !== null && file.startsWith('/opt/lycheejs')) {
+							file = file.substr(13);
+						}
+
+
 						return {
-							file:   frame.getFileName()   || null,
-							line:   frame.getLineNumber() || null,
+							file:   file,
+							line:   line,
 							method: method
 						};
 
