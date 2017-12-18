@@ -511,7 +511,12 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		// Alternative API for lychee.pkg
 
-		if (settings.packages instanceof Object) {
+		if (settings.packages instanceof Array) {
+
+			this.global.console.error('lychee-Environment (' + this.id + '): Invalid Packages');
+			delete settings.packages;
+
+		} else if (settings.packages instanceof Object) {
 
 			for (let pid in settings.packages) {
 

@@ -585,7 +585,17 @@ lychee.define('strainer.flow.Check').requires([
 					for (let id in environments) {
 
 						let pkgs = environments[id].packages || null;
-						if (pkgs instanceof Object) {
+						if (pkgs instanceof Array) {
+
+							errors.push({
+								url:     pkg.url,
+								rule:    'pkg-error',
+								line:    0,
+								column:  0,
+								message: 'Invalid settings for Environment "' + id + '" (Invalid packages).'
+							});
+
+						} else if (pkgs instanceof Object) {
 
 							for (let ns in pkgs) {
 
@@ -609,7 +619,7 @@ lychee.define('strainer.flow.Check').requires([
 										rule:    'pkg-error',
 										line:    0,
 										column:  0,
-										message: 'Package "' + ns + '" in environment "' + id + '" has wrong url "' + url + '".'
+										message: 'Invalid settings for Package "' + ns + '" in Environment "' + id + '" (Invalid url).'
 									});
 
 								}
