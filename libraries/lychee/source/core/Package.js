@@ -12,14 +12,14 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 		let root = this.root;
 		let type = this.type;
-		if (type === 'source') {
-			root += '/source';
-		} else if (type === 'export') {
-			root += '/source';
-		} else if (type === 'build') {
-			root += '/build';
-		}
 
+		if (type === 'build') {
+			root += '/build';
+		} else if (type === 'review') {
+			root += '/review';
+		} else if (type === 'source') {
+			root += '/source';
+		}
 
 		return root;
 
@@ -32,13 +32,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 		if (config !== null && path !== null) {
 
-			let type = this.type;
-			if (type === 'export') {
-				type = 'source';
-			}
-
-
-			let pointer = config.buffer[type].files || null;
+			let pointer = config.buffer[this.type].files || null;
 			if (pointer !== null) {
 
 				for (let p = 0, pl = path.length; p < pl; p++) {
@@ -165,13 +159,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 		if (config !== null && tag !== null && value !== null) {
 
-			let type = this.type;
-			if (type === 'export') {
-				type = 'source';
-			}
-
-
-			let pointer = config.buffer[type].tags || null;
+			let pointer = config.buffer[this.type].tags || null;
 			if (pointer !== null) {
 
 				if (pointer[tag] instanceof Object) {
@@ -526,7 +514,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 			if (type !== null) {
 
-				if (type === 'source' || type === 'export' || type === 'build') {
+				if (/^(build|review|source)$/g.test(type)) {
 
 					this.type = type;
 

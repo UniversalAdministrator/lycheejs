@@ -321,8 +321,8 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 		serialize: function() {
 
-			let blob     = {};
 			let settings = {};
+			let blob     = {};
 
 
 			if (this.id !== '')  settings.id  = this.id;

@@ -164,8 +164,8 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 
 		serialize: function() {
 
-			let blob     = {};
 			let settings = {};
+			let blob     = {};
 
 
 			if (this.id !== '')  settings.id  = this.id;
@@ -263,10 +263,8 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 
 				if (requires.includes(null) === false) {
 
-					let template = null;
-
 					try {
-						template = this._exports.call(
+						this._exports.call(
 							this._exports,
 							sandbox.lychee,
 							sandbox
@@ -274,6 +272,9 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 					} catch (err) {
 						lychee.Debugger.report(null, err, this);
 					}
+
+
+					return true;
 
 				} else {
 

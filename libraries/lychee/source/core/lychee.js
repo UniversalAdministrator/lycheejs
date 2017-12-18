@@ -1347,7 +1347,7 @@ lychee = (function(global) {
 				specification.exports = function(callback) {
 
 					lychee.Specification.prototype.exports.call(this, callback);
-					that.simulation.define(this, false);
+					that.simulation.specify(this, false);
 
 				};
 
