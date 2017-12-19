@@ -121,9 +121,7 @@ lychee.define('breeder.Template').requires([
 
 				if (chunk.startsWith('lychee.inject(')) {
 					index.inject = c;
-				} else if (chunk.startsWith('lychee.envinit(') && index.inject === -1) {
-					index.inject = c - 1;
-				} else if (chunk.startsWith('lychee.pkginit(') && index.inject === -1) {
+				} else if (chunk.startsWith('lychee.init(') && index.inject === -1) {
 					index.inject = c - 1;
 				}
 

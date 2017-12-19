@@ -1181,6 +1181,7 @@ lychee = (function(global) {
 
 
 			_bootstrap_environment.call(this);
+			_bootstrap_simulation.call(this);
 
 
 			if (environment !== null && settings !== null) {
@@ -1214,7 +1215,7 @@ lychee = (function(global) {
 
 					code += '\n\n';
 					code += 'if (sandbox === null) {\n';
-					code += '\tconsole.error("lychee: envinit() failed.");\n';
+					code += '\tconsole.error("lychee: init() failed.");\n';
 					code += '\treturn;\n';
 					code += '}\n';
 					code += '\n\n';
@@ -1270,12 +1271,11 @@ lychee = (function(global) {
 
 		},
 
-		envinit: function(environment, profile) {
+		inject: function(environment) {
 
 			let message = environment !== null;
 
 			environment = environment instanceof lychee.Environment ? environment : null;
-			profile     = profile instanceof Object                 ? profile     : {};
 
 
 			_bootstrap_environment.call(this);
@@ -1283,67 +1283,36 @@ lychee = (function(global) {
 
 			if (environment !== null) {
 
-				let code        = '\n';
-				let id          = (lychee.ROOT.project || '').substr((lychee.ROOT.lychee || '').length) + '/custom';
-				let env_profile = Object.assign({}, environment.profile, profile);
+				if (this.environment !== null) {
 
+					let that = this;
 
-				if (environment.id.startsWith('lychee-Environment-')) {
-					environment.setId(id);
-				}
-
-
-				if (_environment !== null) {
-
-					Object.values(_environment.definitions).forEach(function(definition) {
-						environment.define(definition, true);
+					Object.values(environment.definitions).forEach(function(definition) {
+						that.environment.define(definition, true);
 					});
 
-				}
+					let build_old = this.environment.definitions[this.environment.target] || null;
+					let build_new = environment.definitions[environment.target]           || null;
 
-
-				code += '\n\n';
-				code += 'if (sandbox === null) {\n';
-				code += '\tconsole.error("lychee: envinit() failed.");\n';
-				code += '\treturn;\n';
-				code += '}\n';
-				code += '\n\n';
-
-				code += 'let lychee = sandbox.lychee;\n';
-
-				let packages = environment.packages;
-				if (packages instanceof Object && Array.isArray(packages) === false) {
-
-					for (let pid in packages) {
-
-						if (/$([a-z]+)/g.test(pid)) {
-							code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
-						}
-
+					if (build_old === null && build_new !== null) {
+						this.environment.target = environment.target;
+						this.environment.type   = environment.type;
 					}
 
-				}
 
-				code += '\n\n';
-				code += 'sandbox.MAIN = new ' + environment.target + '(' + JSON.stringify(env_profile) + ');\n';
-				code += '\n\n';
-				code += 'if (typeof sandbox.MAIN.init === \'function\') {\n';
-				code += '\tsandbox.MAIN.init();\n';
-				code += '}\n';
-
-
-				lychee.setEnvironment(environment);
-
-
-				let result = environment.init(new Function('sandbox', code));
-				if (result === true) {
 					return true;
+
+				} else {
+
+					console.warn('lychee.inject: Invalid default environment for injection.');
+					console.info('lychee.inject: Use lychee.setEnvironment(env) before using lychee.inject(other).');
+
 				}
 
 			} else if (message === true) {
 
-				console.warn('lychee.envinit: Invalid environment');
-				console.info('lychee.envinit: Use lychee.envinit(env, profile) where env is a lychee.Environment instance');
+				console.warn('lychee.inject: Invalid environment');
+				console.info('lychee.inject: Use lychee.inject(env) where env is a lychee.Environment instance');
 
 			}
 
@@ -1413,161 +1382,6 @@ lychee = (function(global) {
 					return true;
 
 				}
-
-			}
-
-
-			return false;
-
-		},
-
-		pkginit: function(identifier, settings) {
-
-			identifier = typeof identifier === 'string' ? identifier : null;
-			settings   = settings instanceof Object     ? settings   : null;
-
-
-			_bootstrap_environment.call(this);
-
-
-			if (identifier !== null) {
-
-				let config = new Config('./lychee.pkg');
-
-				config.onload = function() {
-
-					let buffer = this.buffer || null;
-					if (buffer instanceof Object) {
-
-						if (buffer.build instanceof Object && buffer.build.environments instanceof Object) {
-
-							let data = buffer.build.environments[identifier] || null;
-							if (data instanceof Object) {
-
-								settings = lychee.assignunlink({
-									id: lychee.ROOT.project + '/' + identifier.split('/').pop()
-								}, JSON.parse(JSON.stringify(data)), settings);
-
-
-								let code        = '\n';
-								let profile     = settings.profile || {};
-								let environment = new lychee.Environment(settings);
-
-
-								if (_environment !== null) {
-
-									Object.values(_environment.definitions).forEach(function(definition) {
-										environment.define(definition, true);
-									});
-
-								}
-
-
-								code += '\n\n';
-								code += 'if (sandbox === null) {\n';
-								code += '\tconsole.error("lychee: pkginit() failed.");\n';
-								code += '\treturn;\n';
-								code += '}\n';
-								code += '\n\n';
-
-								code += 'let lychee = sandbox.lychee;\n';
-
-								let packages = settings.packages;
-								if (packages instanceof Object && !(packages instanceof Array)) {
-
-									for (let pid in packages) {
-										code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
-									}
-
-								}
-
-								code += '\n\n';
-								code += 'sandbox.MAIN = new ' + settings.target + '(' + JSON.stringify(profile) + ');\n';
-								code += '\n\n';
-								code += 'if (typeof sandbox.MAIN.init === \'function\') {\n';
-								code += '\tsandbox.MAIN.init();\n';
-								code += '}\n';
-
-
-								lychee.setEnvironment(environment);
-								environment.init(new Function('sandbox', code));
-
-							} else {
-
-								console.warn('lychee.pkginit: Invalid settings for "' + identifier + '" in lychee.pkg.');
-								console.info('lychee.pkginit: Insert settings at "/build/environments/' + identifier + '" in lychee.pkg.');
-
-							}
-
-						} else {
-
-							console.warn('lychee.pkginit: Invalid package at "' + this.url + '".');
-							console.info('lychee.pkginit: Replace lychee.pkg with the one from "/projects/boilerplate".');
-
-						}
-
-					} else {
-
-						console.warn('lychee.pkginit: Invalid package at "' + this.url + '".');
-						console.info('lychee.pkginit: Replace lychee.pkg with the one from "/projects/boilerplate".');
-
-					}
-
-				};
-
-				config.load();
-
-				return true;
-
-			}
-
-
-			return false;
-
-		},
-
-		inject: function(environment) {
-
-			let message = environment !== null;
-
-			environment = environment instanceof lychee.Environment ? environment : null;
-
-
-			_bootstrap_environment.call(this);
-
-
-			if (environment !== null) {
-
-				if (this.environment !== null) {
-
-					let that = this;
-
-					Object.values(environment.definitions).forEach(function(definition) {
-						that.environment.define(definition, true);
-					});
-
-					let build_old = this.environment.definitions[this.environment.target] || null;
-					let build_new = environment.definitions[environment.target]           || null;
-
-					if (build_old === null && build_new !== null) {
-						this.environment.target = environment.target;
-						this.environment.type   = environment.type;
-					}
-
-
-					return true;
-
-				} else {
-
-					console.warn('lychee.inject: Invalid default environment for injection.');
-					console.info('lychee.inject: Use lychee.setEnvironment(env) before using lychee.inject(other).');
-
-				}
-
-			} else if (message === true) {
-
-				console.warn('lychee.inject: Invalid environment');
-				console.info('lychee.inject: Use lychee.inject(env) where env is a lychee.Environment instance');
 
 			}
 

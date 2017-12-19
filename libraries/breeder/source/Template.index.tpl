@@ -11,19 +11,8 @@
 	<script src="/libraries/lychee/build/html/core.js"></script>
 
 	<style>
-		body {
-			margin: 0;
-			padding: 0;
-			overflow: hidden;
-		}
-		
 		.lychee-Renderer {
-			display: block;
 			margin: 0 auto;
-			user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			-webkit-user-select: none;
 		}
 	</style>
 
@@ -32,10 +21,18 @@
 	<script>
 	(function(lychee, global) {
 
-		lychee.pkginit('html/main', {
-			debug:   false,
-			sandbox: false
-		}, {
+		lychee.pkg('build', 'html/main', function(environment, profile) {
+
+			if (environment !== null) {
+
+				lychee.init(environment, {
+					debug:   false,
+					sandbox: false,
+					profile: profile
+				});
+
+			}
+
 		});
 
 	})(lychee, typeof global !== 'undefined' ? global : this);

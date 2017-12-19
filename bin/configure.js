@@ -359,7 +359,7 @@
 				require(_path.resolve(_ROOT, './libraries/lychee/source/platform/node/features.js'));
 				require(_path.resolve(_ROOT, './libraries/lychee/source/platform/node/bootstrap.js'));
 
-				lychee.envinit(null);
+				lychee.init(null);
 
 			} catch (err) {
 

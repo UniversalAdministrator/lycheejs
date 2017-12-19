@@ -6,7 +6,11 @@ require('./core.js')(__dirname);
 
 	let environment = lychee.deserialize(${blob});
 	if (environment !== null) {
-		lychee.envinit(environment, ${profile});
+
+		lychee.init(environment, {
+			profile: ${profile}
+		});
+
 	}
 
 })(lychee, typeof global !== 'undefined' ? global : this);

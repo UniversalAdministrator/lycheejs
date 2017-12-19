@@ -14,16 +14,25 @@ require(_ROOT + '/libraries/lychee/build/node/core.js')(__dirname);
 
 (function(lychee, global) {
 
-	lychee.pkginit('node/main', {
-		debug:   false,
-		sandbox: false
-	}, {
-		renderer: null,
-		client:   null,
-		server:   {
-			host: _HOST,
-			port: _PORT
+	lychee.pkg('build', 'node/main', function(environment, profile) {
+
+		if (environment !== null) {
+
+			lychee.init(environment, {
+				debug:   false,
+				sandbox: false,
+				profile: {
+					renderer: null,
+					client:   null,
+					server:   {
+						host: _HOST,
+						port: _PORT
+					}
+				}
+			});
+
 		}
+
 	});
 
 })(lychee, typeof global !== 'undefined' ? global : this);
