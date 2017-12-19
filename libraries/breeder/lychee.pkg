@@ -52,7 +52,7 @@
 		}
 	},
 	"review": {
-		"simulations": {}
+		"environments": {}
 	},
 	"source": {
 		"environments": {},
@@ -69,7 +69,6 @@
 				"json",
 				"main.tpl"
 			]
-		},
-		"simulations": {}
+		}
 	}
 }

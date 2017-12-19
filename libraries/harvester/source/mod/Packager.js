@@ -106,21 +106,17 @@ lychee.define('harvester.mod.Packager').requires([
 		if (typeof json.build.environments === 'undefined')  json.build.environments  = {};
 		if (typeof json.build.files === 'undefined')         json.build.files         = {};
 		if (typeof json.review === 'undefined')              json.review              = {};
-		if (typeof json.review.simulations === 'undefined')  json.review.simulations  = {};
+		if (typeof json.review.environments === 'undefined') json.review.environments = {};
 		if (typeof json.review.files === 'undefined')        json.review.files        = {};
 		if (typeof json.source === 'undefined')              json.source              = {};
 		if (typeof json.source.environments === 'undefined') json.source.environments = {};
-		if (typeof json.source.simulations === 'undefined')  json.source.simulations  = {};
 		if (typeof json.source.files === 'undefined')        json.source.files        = {};
 		if (typeof json.source.tags === 'undefined')         json.source.tags         = {};
 
 
 		if (typeof json.api.environments !== 'undefined')    delete json.api.environments;
-		if (typeof json.api.simulations !== 'undefined')     delete json.api.simulations;
 		if (typeof json.api.tags !== 'undefined')            delete json.api.tags;
-		if (typeof json.build.simulations !== 'undefined')   delete json.build.simulations;
 		if (typeof json.build.tags !== 'undefined')          delete json.build.tags;
-		if (typeof json.review.environments !== 'undefined') delete json.review.environments;
 		if (typeof json.review.tags !== 'undefined')         delete json.review.tags;
 
 

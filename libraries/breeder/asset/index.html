@@ -21,9 +21,18 @@
 	<script>
 	(function(lychee, global) {
 
-		lychee.pkginit('html/main', {
-			debug:   false,
-			sandbox: false
+		lychee.pkg('build', 'html/main', function(environment, profile) {
+
+			if (environment !== null) {
+
+				lychee.init(environment, {
+					debug:   false,
+					sandbox: false,
+					profile: profile
+				});
+
+			}
+
 		});
 
 	})(lychee, typeof global !== 'undefined' ? global : this);

@@ -97,7 +97,7 @@
 		}
 	},
 	"review": {
-		"simulations": {}
+		"environments": {}
 	},
 	"source": {
 		"environments": {},
@@ -153,7 +153,6 @@
 					"js"
 				]
 			}
-		},
-		"simulations": {}
+		}
 	}
 }

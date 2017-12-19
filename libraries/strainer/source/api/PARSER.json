@@ -249,6 +249,20 @@
 		]
 	},
 	{
+		"chunk": "_validate_environment(environment)",
+		"types": [ "lychee.Environment", "lychee.Simulation" ],
+		"values": [
+			{
+				"constructor": "lychee.Environment",
+				"arguments": []
+			},
+			{
+				"constructor": "lychee.Simulation",
+				"arguments": []
+			}
+		]
+	},
+	{
 		"chunk": "entity",
 		"types": [ "lychee.app.Entity", "lychee.ui.Entity" ],
 		"values": [

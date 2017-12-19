@@ -454,6 +454,19 @@ lychee = (function(global) {
 
 	};
 
+	const _validate_environment = function(environment) {
+
+		if (environment instanceof lychee.Environment) {
+			return true;
+		} else if (environment instanceof lychee.Simulation) {
+			return true;
+		}
+
+
+		return false;
+
+	};
+
 	const _resolve_reference = function(identifier) {
 
 		let pointer = this;
@@ -1158,6 +1171,105 @@ lychee = (function(global) {
 
 		},
 
+		init: function(environment, settings, callback) {
+
+			let message = environment !== null;
+
+			environment = _validate_environment(environment) === true ? environment : null;
+			settings    = settings instanceof Object                  ? settings    : null;
+			callback    = callback instanceof Function                ? callback    : null;
+
+
+			_bootstrap_environment.call(this);
+
+
+			if (environment !== null && settings !== null) {
+
+				if (environment.id.startsWith('lychee-Environment-')) {
+					environment.setId((lychee.ROOT.project || '').substr((lychee.ROOT.lychee || '').length) + '/custom');
+				}
+
+				if (_environment !== null) {
+
+					Object.values(_environment.definitions).forEach(function(definition) {
+						environment.define(definition, true);
+					});
+
+				}
+
+				for (let id in settings) {
+
+					let method = 'set' + id.charAt(0).toUpperCase() + id.substr(1);
+					if (typeof environment[method] === 'function') {
+						environment[method](settings[id]);
+					}
+
+				}
+
+
+				if (callback === null) {
+
+					let code    = '';
+					let profile = settings.profile || {};
+
+					code += '\n\n';
+					code += 'if (sandbox === null) {\n';
+					code += '\tconsole.error("lychee: envinit() failed.");\n';
+					code += '\treturn;\n';
+					code += '}\n';
+					code += '\n\n';
+					code += 'let lychee = sandbox.lychee;\n';
+
+					let packages = environment.packages;
+					if (packages instanceof Object && Array.isArray(packages) === false) {
+
+						for (let pid in packages) {
+
+							if (pid !== 'lychee' && /$([a-z]+)/g.test(pid)) {
+								code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
+							}
+
+						}
+
+					}
+
+					code += '\n\n';
+					code += 'sandbox.MAIN = new ' + environment.target + '(' + JSON.stringify(profile) + ');\n';
+					code += '\n\n';
+					code += 'if (typeof sandbox.MAIN.init === \'function\') {\n';
+					code += '\tsandbox.MAIN.init();\n';
+					code += '}\n';
+
+					callback = new Function('sandbox', code);
+
+				}
+
+
+				if (environment instanceof lychee.Environment) {
+					lychee.setEnvironment(environment);
+				} else if (environment instanceof lychee.Simulation) {
+					lychee.setEnvironment(environment.environment);
+					lychee.setSimulation(environment);
+				}
+
+
+				environment.init(callback);
+
+
+				return true;
+
+			} else if (message === true) {
+
+				console.warn('lychee.init: Invalid environment');
+				console.info('lychee.init: Use lychee.init(env, settings, callback) where env can be a lychee.Environment or lychee.Simulation instance.');
+
+			}
+
+
+			return false;
+
+		},
+
 		envinit: function(environment, profile) {
 
 			let message = environment !== null;
@@ -1232,6 +1344,75 @@ lychee = (function(global) {
 
 				console.warn('lychee.envinit: Invalid environment');
 				console.info('lychee.envinit: Use lychee.envinit(env, profile) where env is a lychee.Environment instance');
+
+			}
+
+
+			return false;
+
+		},
+
+		pkg: function(type, id, callback) {
+
+			type     = typeof type === 'string'     ? type       : null;
+			id       = typeof id === 'string'       ? id         : null;
+			callback = callback instanceof Function ? callback   : null;
+
+
+			if (id !== null && type !== null && callback !== null) {
+
+				if (/^(build|review|source)$/g.test(type)) {
+
+					let config = new Config('./lychee.pkg');
+
+					config.onload = function() {
+
+						let buffer = this.buffer || null;
+						if (buffer instanceof Object) {
+
+							let settings = buffer[type].environments[id] || null;
+							if (settings instanceof Object) {
+
+								let environment = null;
+								let profile     = settings.profile || null;
+
+								if (profile !== null) {
+									delete settings.profile;
+								}
+
+								if (type === 'build' || type === 'source') {
+									environment = new lychee.Environment(JSON.parse(JSON.stringify(settings)));
+								} else if (type === 'review') {
+									environment = new lychee.Simulation(JSON.parse(JSON.stringify(settings)));
+								}
+
+								callback(environment, profile);
+
+							} else {
+
+								console.warn('lychee.pkg: Invalid settings for "' + id + '" in lychee.pkg.');
+								console.info('lychee.pkg: Insert settings at "/' + type + '/environments/' + id + '" in lychee.pkg.');
+
+								callback(null, null);
+
+							}
+
+						} else {
+
+							console.warn('lychee.pkg: Invalid package at "' + this.url + '".');
+							console.info('lychee.pkg: Replace lychee.pkg with the one from "/projects/boilerplate".');
+
+							callback(null, null);
+
+						}
+
+					};
+
+					config.load();
+
+					return true;
+
+				}
 
 			}
 

@@ -126,7 +126,7 @@
 		}
 	},
 	"review": {
-		"simulations": {}
+		"environments": {}
 	},
 	"source": {
 		"environments": {},
@@ -205,7 +205,6 @@
 				}
 			}
 		},
-		"tags": {},
-		"simulations": {}
+		"tags": {}
 	}
 }

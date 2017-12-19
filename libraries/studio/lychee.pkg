@@ -196,7 +196,7 @@
 		}
 	},
 	"review": {
-		"simulations": {}
+		"environments": {}
 	},
 	"source": {
 		"environments": {},
@@ -295,7 +295,6 @@
 				"html": "platform/html",
 				"node": "platform/node"
 			}
-		},
-		"simulations": {}
+		}
 	}
 }

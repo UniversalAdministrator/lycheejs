@@ -203,7 +203,7 @@
 		}
 	},
 	"review": {
-		"simulations": {}
+		"environments": {}
 	},
 	"source": {
 		"environments": {},
@@ -323,7 +323,6 @@
 			"platform": {
 				"node": "platform/node"
 			}
-		},
-		"simulations": {}
+		}
 	}
 }
