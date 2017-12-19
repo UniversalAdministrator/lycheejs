@@ -265,7 +265,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			}
 
 
-			if (str.substr(0, 5) === '\n(E)\t') {
+			if (str.startsWith('\n(E)\t')) {
 				_std_err += str;
 			} else {
 				_std_out += str;
@@ -741,7 +741,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 						let pkg  = packages[pid];
 						let root = pkg.root;
 
-						if (url.substr(0, pkg.root.length) === pkg.root) {
+						if (url.startsWith(pkg.root)) {
 							new_pkg_id = pkg.id;
 						}
 
@@ -773,7 +773,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 						for (let i = 0, il = definition._includes.length; i < il; i++) {
 
 							let inc = definition._includes[i];
-							if (inc.substr(0, old_pkg_id.length) === old_pkg_id) {
+							if (inc.startsWith(old_pkg_id)) {
 								definition._includes[i] = new_pkg_id + inc.substr(old_pkg_id.length);
 							}
 
@@ -782,7 +782,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 						for (let r = 0, rl = definition._requires.length; r < rl; r++) {
 
 							let req = definition._requires[r];
-							if (req.substr(0, old_pkg_id.length) === old_pkg_id) {
+							if (req.startsWith(old_pkg_id)) {
 								definition._requires[r] = new_pkg_id + req.substr(old_pkg_id.length);
 							}
 

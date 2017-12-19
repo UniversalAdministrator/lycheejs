@@ -372,9 +372,9 @@ lychee.define('lychee.Storage').tags({
 			let blob     = (data['blob'] || {});
 
 
-			if (this.id.substr(0, 15) !== 'lychee-Storage-') settings.id    = this.id;
-			if (Object.keys(this.model).length !== 0)        settings.model = this.model;
-			if (this.type !== Composite.TYPE.persistent)     settings.type  = this.type;
+			if (this.id.startsWith('lychee-Storage-') === false) settings.id    = this.id;
+			if (Object.keys(this.model).length !== 0)            settings.model = this.model;
+			if (this.type !== Composite.TYPE.persistent)         settings.type  = this.type;
 
 
 			if (Object.keys(this.__objects).length > 0) {

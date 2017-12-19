@@ -47,7 +47,7 @@ lychee.Asset = typeof lychee.Asset !== 'undefined' ? lychee.Asset : (function(gl
 
 			if (type === null) {
 
-				if (url.substr(0, 5) === 'data:') {
+				if (url.startsWith('data:')) {
 					type = url.split(';')[0].split('/').pop();
 				} else {
 					type = url.split('/').pop().split('.').pop();
@@ -59,7 +59,7 @@ lychee.Asset = typeof lychee.Asset !== 'undefined' ? lychee.Asset : (function(gl
 			let construct = _resolve_constructor(type);
 			if (construct !== null) {
 
-				if (url.substr(0, 5) === 'data:') {
+				if (url.startsWith('data:')) {
 
 					asset = new construct('/tmp/Asset.' + type, ignore);
 					asset.deserialize({

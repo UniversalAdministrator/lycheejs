@@ -46,7 +46,7 @@ lychee.define('breeder.Template').requires([
 
 			chunk = code[c].trim();
 
-			if (chunk.substr(0, 7) === '<script') {
+			if (chunk.startsWith('<script')) {
 
 				tpl_s = '\t<script src="/libraries/';
 				tpl_c = '\t<script src="${injection}"></script>';
@@ -58,7 +58,7 @@ lychee.define('breeder.Template').requires([
 
 				break;
 
-			} else if (chunk.substr(0, 8) === 'require(') {
+			} else if (chunk.startsWith('require(')) {
 
 				tpl_s = 'require(\'/opt/lycheejs/libraries/';
 				tpl_c = 'require(\'/opt/lycheejs/${injection}\');';
@@ -98,7 +98,7 @@ lychee.define('breeder.Template').requires([
 				tmp   = tmp_s.trim();
 
 
-				if (chunk.substr(0, tmp.length) === tmp) {
+				if (chunk.startsWith(tmp)) {
 					index.include = c;
 				}
 
@@ -119,11 +119,11 @@ lychee.define('breeder.Template').requires([
 				chunk = code[c].trim();
 
 
-				if (chunk.substr(0, 14) === 'lychee.inject(') {
+				if (chunk.startsWith('lychee.inject(')) {
 					index.inject = c;
-				} else if (chunk.substr(0, 15) === 'lychee.envinit(' && index.inject === -1) {
+				} else if (chunk.startsWith('lychee.envinit(') && index.inject === -1) {
 					index.inject = c - 1;
-				} else if (chunk.substr(0, 15) === 'lychee.pkginit(' && index.inject === -1) {
+				} else if (chunk.startsWith('lychee.pkginit(') && index.inject === -1) {
 					index.inject = c - 1;
 				}
 

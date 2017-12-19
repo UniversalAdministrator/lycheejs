@@ -88,7 +88,7 @@ lychee.define('lychee.ui.entity.Download').tags({
 
 			} else {
 
-				if (url.substr(0, 5) === 'data:') {
+				if (url.startsWith('data:')) {
 					name = mime.name + '.' + mime.ext;
 				}
 

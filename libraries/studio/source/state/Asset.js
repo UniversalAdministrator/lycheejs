@@ -112,11 +112,10 @@ lychee.define('studio.state.Asset').requires([
 		let that    = this;
 		let project = this.main.project;
 		let path    = project.identifier + '/source/' + value;
-		let ext     = value.split('.').pop();
 		let ns      = value.split('/')[0];
 
 
-		if (ext === 'fnt') {
+		if (value.endsWith('.fnt')) {
 
 			let asset = new Font(path);
 
@@ -126,28 +125,12 @@ lychee.define('studio.state.Asset').requires([
 
 			asset.load();
 
-		} else if (ext === 'png' || (ext === 'json' && /^(app|entity|sprite|ui)$/g.test(ns))) {
+		} else if (value.endsWith('.png')) {
 
-			let tmp   = path.split('.');
 			let asset = {
-				texture: null,
-				config:  null
+				texture: new Texture(path),
+				config:  new Config(path.replace('.png', '.json'))
 			};
-
-			if (ext === 'png') {
-
-				tmp[tmp.length - 1] = 'json';
-				asset.texture = new Texture(path);
-				asset.config  = new Config(tmp.join('.'));
-
-			} else if (ext === 'json') {
-
-				tmp[tmp.length - 1] = 'png';
-				asset.texture = new Texture(tmp.join('.'));
-				asset.config  = new Config(path);
-
-			}
-
 
 			asset.texture.onload = function() {
 
@@ -161,17 +144,55 @@ lychee.define('studio.state.Asset').requires([
 
 			asset.texture.load();
 
-		} else if (ext === 'json') {
+		} else if (value.endsWith('.json') && /^(app|entity|sprite|ui)$/g.test(ns)) {
 
-			// TODO: Config support
+			let tmp   = path.split('.');
+			let asset = {
+				texture: new Texture(path.replace('.json', '.png')),
+				config:  new Config(path)
+			};
 
-		} else if (ext === 'msc') {
+			asset.texture.onload = function() {
 
-			// TODO: Music support
+				asset.config.onload = function() {
+					_update_view.call(that, 'Sprite', asset);
+				};
 
-		} else if (ext === 'snd') {
+				asset.config.load();
 
-			// TODO: Sound support
+			};
+
+			asset.texture.load();
+
+		} else if (value.endsWith('.json')) {
+
+			let asset = new Config(path);
+
+			asset.onload = function(result) {
+				_update_view.call(that, 'Config', asset);
+			}.bind(this);
+
+			asset.load();
+
+		} else if (value.endsWith('.msc')) {
+
+			let asset = new Music(path);
+
+			asset.onload = function(result) {
+				_update_view.call(that, 'Music', asset);
+			}.bind(this);
+
+			asset.load();
+
+		} else if (value.endsWith('.snd')) {
+
+			let asset = new Sound(path);
+
+			asset.onload = function(result) {
+				_update_view.call(that, 'Music', asset);
+			}.bind(this);
+
+			asset.load();
 
 		}
 

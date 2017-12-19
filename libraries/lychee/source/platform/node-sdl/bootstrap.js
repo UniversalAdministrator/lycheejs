@@ -20,7 +20,7 @@
 
 
 		let tmp2 = selfpath.split('/').slice(0, 3).join('/');
-		if (tmp2.substr(0, 13) === '/opt/lycheejs') {
+		if (tmp2.startsWith('/opt/lycheejs')) {
 			lychee.ROOT.lychee = tmp2;
 		}
 

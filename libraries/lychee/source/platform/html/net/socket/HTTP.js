@@ -75,7 +75,7 @@ lychee.define('lychee.net.socket.HTTP').tags({
 				let key = line.substr(0, i1).trim().toLowerCase();
 				let val = line.substr(i1 + 1).trim();
 
-				if (key.substr(0, 2) === 'x-') {
+				if (key.startsWith('x-')) {
 					headers['@' + key.substr(2)] = val;
 				} else if (key.length > 0) {
 					headers[key.toLowerCase()] = val;
@@ -244,7 +244,6 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 
 			let that     = this;
-			// let url      = /:/g.test(host) ? ('http://[' + host + ']:' + port) : ('http://' + host + ':' + port);
 			let protocol = null;
 
 
@@ -303,7 +302,6 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 					// XXX: HTML XHR does not support Buffer data
 					let chunk = protocol.send(payload, headers, binary);
-					// let enc   = binary === true ? 'binary' : 'utf8';
 
 
 					// XXX: Web XHR does not support halfopen Sockets

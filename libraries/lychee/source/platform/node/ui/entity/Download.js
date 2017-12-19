@@ -92,7 +92,7 @@ lychee.define('lychee.ui.entity.Download').tags({
 				let blob = new Buffer(data.blob.buffer, 'base64');
 				let path = _HOME + '/' + name + '.' + mime.ext;
 
-				if (url.substr(0, 5) === 'data:') {
+				if (url.startsWith('data:')) {
 					path = _HOME + '/' + mime.name + '.' + mime.ext;
 				}
 

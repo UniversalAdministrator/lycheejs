@@ -313,7 +313,7 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 			this.__harvester.onload = function(result) {
 
 				let line = (this.buffer || '').split('\n')[0];
-				if (line.substr(0, 2) === '#!') {
+				if (line.startsWith('#!')) {
 					that.setHarvester(true);
 				} else {
 					that.setHarvester(false);

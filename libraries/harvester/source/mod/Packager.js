@@ -185,7 +185,7 @@ lychee.define('harvester.mod.Packager').requires([
 		let name = path.split('/').pop();
 
 		let info = this.info(path);
-		if (info !== null && name.substr(0, 1) !== '.') {
+		if (info !== null && name.startsWith('.') === false) {
 
 			if (info.type === 'file') {
 

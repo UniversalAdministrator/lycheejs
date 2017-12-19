@@ -76,7 +76,7 @@ lychee.define('legacy.Renderer').tags({
 		raw_css  = raw_css.split('\n').map(function(line) {
 
 			let tmp = line.trim();
-			if (tmp.substr(0, 6) === ':host(') {
+			if (tmp.startsWith(':host(')) {
 
 				let i3 = tmp.indexOf(')', 6);
 				let i4 = tmp.indexOf(' ', 6);
@@ -85,7 +85,7 @@ lychee.define('legacy.Renderer').tags({
 					return identifier + tmp.substr(6, i3 - 6) + tmp.substr(i3 + 1);
 				}
 
-			} else if (tmp.substr(0, 5) === ':host') {
+			} else if (tmp.startsWith(':host')) {
 				return identifier + tmp.substr(5);
 			} else if (tmp.indexOf(':host') !== -1) {
 				return tmp.split(':host').join(identifier);
@@ -97,7 +97,7 @@ lychee.define('legacy.Renderer').tags({
 		}).map(function(line) {
 
 			let tmp = line.trim();
-			if (tmp.substr(0, 9) === '::content') {
+			if (tmp.startsWith('::content')) {
 				return identifier + ' content ' + tmp.substr(9);
 			} else if (tmp.indexOf(' ::content') !== -1) {
 				return tmp.split(' ::content').join(' content');

@@ -291,7 +291,7 @@ lychee.define('harvester.data.Git').tags({
 					}
 
 					let real = _path.relative(cwd, root);
-					if (real.substr(0, 2) !== '..') {
+					if (real.startsWith('..') === false) {
 
 						let handle = _child_process.spawnSync('git', [
 							'checkout',

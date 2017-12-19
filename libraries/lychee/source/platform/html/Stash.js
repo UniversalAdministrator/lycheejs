@@ -101,7 +101,7 @@ lychee.define('lychee.Stash').tags({
 			_PERSISTENT.write = function(id, asset) {
 
 				let path = lychee.environment.resolve(id);
-				if (path.substr(0, lychee.ROOT.project.length) === lychee.ROOT.project) {
+				if (path.startsWith(lychee.ROOT.project)) {
 
 					if (asset !== null) {
 
@@ -447,8 +447,8 @@ lychee.define('lychee.Stash').tags({
 			let blob     = (data['blob'] || {});
 
 
-			if (this.id.substr(0, 13) !== 'lychee-Stash-') settings.id   = this.id;
-			if (this.type !== Composite.TYPE.persistent)   settings.type = this.type;
+			if (this.id.startsWith('lychee-Stash-') === false) settings.id   = this.id;
+			if (this.type !== Composite.TYPE.persistent)       settings.type = this.type;
 
 
 			if (Object.keys(this.__assets).length > 0) {

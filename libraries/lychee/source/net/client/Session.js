@@ -113,12 +113,12 @@ lychee.define('lychee.net.client.Session').includes([
 			let blob     = (data['blob'] || {});
 
 
-			if (this.autoadmin !== true)              settings.autoadmin = this.autoadmin;
-			if (this.autolock !== true)               settings.autolock  = this.autolock;
-			if (this.autostart !== true)              settings.autostart = this.autostart;
-			if (this.max !== 4)                       settings.max       = this.max;
-			if (this.min !== 2)                       settings.min       = this.min;
-			if (this.sid.substr(0, 8) !== 'session-') settings.sid       = this.sid;
+			if (this.autoadmin !== true)                   settings.autoadmin = this.autoadmin;
+			if (this.autolock !== true)                    settings.autolock  = this.autolock;
+			if (this.autostart !== true)                   settings.autostart = this.autostart;
+			if (this.max !== 4)                            settings.max       = this.max;
+			if (this.min !== 2)                            settings.min       = this.min;
+			if (this.sid.startsWith('session-') === false) settings.sid       = this.sid;
 
 
 			if (this.admin !== false) blob.admin = this.admin;

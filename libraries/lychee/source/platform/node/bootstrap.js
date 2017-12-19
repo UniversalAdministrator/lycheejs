@@ -20,7 +20,7 @@
 
 
 		let tmp2 = selfpath.split('/').slice(0, 3).join('/');
-		if (tmp2.substr(0, 13) === '/opt/lycheejs') {
+		if (tmp2.startsWith('/opt/lycheejs')) {
 			lychee.ROOT.lychee = tmp2;
 		}
 
@@ -1472,7 +1472,7 @@
 		this.__load = true;
 
 
-		if (url !== null && url.substr(0, 10) !== 'data:image') {
+		if (url !== null && url.startsWith('data:image') === false) {
 
 			if (_TEXTURE_CACHE[url] !== undefined) {
 				_clone_texture(_TEXTURE_CACHE[url], this);
@@ -1530,9 +1530,9 @@
 
 
 			let url = this.url;
-			if (url.substr(0, 5) === 'data:') {
+			if (url.startsWith('data:')) {
 
-				if (url.substr(0, 15) === 'data:image/png;') {
+				if (url.startsWith('data:image/png;')) {
 
 					let b64data = url.substr(15, url.length - 15);
 					this.buffer = new Buffer(b64data, 'base64');
@@ -1560,7 +1560,7 @@
 
 			} else {
 
-				if (url.split('.').pop() === 'png') {
+				if (url.endsWith('.png')) {
 
 					_load_asset({
 						url:      url,
@@ -1630,13 +1630,13 @@
 
 	const _execute_stuff = function(callback, stuff) {
 
-		let type = stuff.url.split('/').pop().split('.').pop();
-		if (type === 'js' && stuff.__ignore === false) {
+		let url = stuff.url;
+		if (url.endsWith('.js') && stuff.__ignore === false) {
 
-			_filename = stuff.url;
+			_filename = url;
 
 
-			let cid = lychee.environment.resolve(stuff.url);
+			let cid = lychee.environment.resolve(url);
 			if (require.cache[cid] !== undefined) {
 				delete require.cache[cid];
 			}
@@ -1703,11 +1703,10 @@
 		serialize: function() {
 
 			let blob = {};
-			let type = this.url.split('/').pop().split('.').pop();
 			let mime = 'application/octet-stream';
 
 
-			if (type === 'js') {
+			if (this.url.endsWith('.js')) {
 				mime = 'application/javascript';
 			}
 

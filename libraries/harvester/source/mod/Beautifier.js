@@ -59,12 +59,11 @@ lychee.define('harvester.mod.Beautifier').requires([
 		let name = path.split('/').pop();
 
 		let info = this.info(path);
-		if (info !== null && name.substr(0, 1) !== '.') {
+		if (info !== null && name.startsWith('.') === false) {
 
 			if (info.type === 'file') {
 
-				let ext = name.split('.').pop();
-				if (ext === 'json') {
+				if (name.endsWith('.json')) {
 					cache.push(path);
 				}
 
@@ -145,7 +144,7 @@ lychee.define('harvester.mod.Beautifier').requires([
 					if (files.length > 0) {
 
 						files.filter(function(path) {
-							return path.split('.').pop() === 'json';
+							return path.endsWith('.json');
 						}).forEach(function(path) {
 							_beautify_json(project, path);
 						});

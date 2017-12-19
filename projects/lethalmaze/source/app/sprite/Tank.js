@@ -98,7 +98,6 @@ lychee.define('game.app.sprite.Tank').requires([
 
 
 			let settings = data['arguments'][0] || {};
-			// let blob     = data['blob'] || {};
 
 
 			if (this.ammo !== 16)         settings.ammo      = this.ammo;

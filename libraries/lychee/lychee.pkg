@@ -319,6 +319,9 @@
 					"Viewport": [
 						"json"
 					],
+					"bootstrap": [
+						"json"
+					],
 					"net": {
 						"Server": [
 							"json"
@@ -377,6 +380,11 @@
 						}
 					}
 				},
+				"html-webview": {
+					"bootstrap": [
+						"json"
+					]
+				},
 				"node": {
 					"Input": [
 						"json"
@@ -391,6 +399,9 @@
 						"json"
 					],
 					"Viewport": [
+						"json"
+					],
+					"bootstrap": [
 						"json"
 					],
 					"net": {
@@ -419,6 +430,11 @@
 							]
 						}
 					}
+				},
+				"node-sdl": {
+					"bootstrap": [
+						"json"
+					]
 				}
 			},
 			"policy": {
@@ -578,7 +594,9 @@
 			"platform": {
 				"html": "platform/html",
 				"html-nwjs": "platform/html-nwjs",
-				"node": "platform/node"
+				"html-webview": "platform/html-webview",
+				"node": "platform/node",
+				"node-sdl": "platform/node-sdl"
 			}
 		}
 	},

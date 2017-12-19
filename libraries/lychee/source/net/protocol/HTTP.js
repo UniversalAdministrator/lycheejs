@@ -175,7 +175,7 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 				}
 
 
-				if (url.substr(0, 5) === '/api/') {
+				if (url.startsWith('/api/')) {
 
 					let tmp3 = [];
 
@@ -203,7 +203,7 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 
 				}
 
-			} else if (tmp.substr(0, 4) === 'HTTP') {
+			} else if (tmp.startsWith('HTTP')) {
 
 				if (/[0-9]{3}/g.test(tmp) === true) {
 					chunk.headers['status'] = tmp.split(' ')[1];
@@ -240,7 +240,7 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 
 					chunk.headers[key] = val;
 
-				} else if (key.substr(0, 2) === 'x-') {
+				} else if (key.startsWith('x-')) {
 
 					chunk.headers['@' + key.substr(2)] = val;
 

@@ -289,6 +289,33 @@ lychee = (function(global) {
 
 	}
 
+	if (typeof String.prototype.endsWith !== 'function') {
+
+		String.prototype.endsWith = function(search/*, from */) {
+
+			if (this === null || this === undefined) {
+				throw new TypeError('String.prototype.endsWith called on null or undefined');
+			}
+
+
+			let value  = (this).toString();
+			let from   = arguments.length >= 2 ? (arguments[1] | 0) : value.length;
+			let tmp    = String(search);
+			let length = tmp.length >>> 0;
+
+
+			let chunk = value.substr(0, from - length);
+			if (chunk === tmp) {
+				return true;
+			}
+
+
+			return false;
+
+		};
+
+	}
+
 	if (typeof String.prototype.replaceObject !== 'function') {
 
 		String.prototype.replaceObject = function(object) {
@@ -341,6 +368,33 @@ lychee = (function(global) {
 
 
 			return clone;
+
+		};
+
+	}
+
+	if (typeof String.prototype.startsWith !== 'function') {
+
+		String.prototype.startsWith = function(search/*, from */) {
+
+			if (this === null || this === undefined) {
+				throw new TypeError('String.prototype.startsWith called on null or undefined');
+			}
+
+
+			let value  = (this).toString();
+			let from   = arguments.length >= 2 ? (arguments[1] | 0) : 0;
+			let tmp    = String(search);
+			let length = tmp.length >>> 0;
+
+
+			let chunk = value.substr(from, length);
+			if (chunk === tmp) {
+				return true;
+			}
+
+
+			return false;
 
 		};
 
@@ -1122,7 +1176,7 @@ lychee = (function(global) {
 				let env_profile = Object.assign({}, environment.profile, profile);
 
 
-				if (environment.id.substr(0, 19) === 'lychee-Environment-') {
+				if (environment.id.startsWith('lychee-Environment-')) {
 					environment.setId(id);
 				}
 

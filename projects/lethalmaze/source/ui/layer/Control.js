@@ -152,7 +152,6 @@ lychee.define('game.ui.layer.Control').requires([
 
 			let entity = null;
 			let x1     = -1 / 2 * this.width;
-			// let y1     = -1/2 * this.height;
 			let x2     =  1 / 2 * this.width;
 			let y2     =  1 / 2 * this.height;
 
@@ -188,7 +187,7 @@ lychee.define('game.ui.layer.Control').requires([
 				button.trigger('key', args);
 				button.trigger('blur');
 
-			} else if (key.match(/w|a|s|d/g) || key.substr(0, 5) === 'arrow') {
+			} else if (key.match(/w|a|s|d/g) || key.startsWith('arrow')) {
 
 				let joystick = this.getEntity('@joystick');
 

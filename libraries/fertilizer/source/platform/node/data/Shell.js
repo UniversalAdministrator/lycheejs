@@ -93,14 +93,13 @@ lychee.define('fertilizer.data.Shell').tags({
 				let args = command.split(' ').slice(1);
 				let cmd  = command.split(' ')[0];
 				let file = _ROOT + (cmd.charAt(0) !== '/' ? '/' : '') + cmd;
-				let ext  = file.split('.').pop();
 				let path = file.split('/').slice(0, -1).join('/');
-				if (path.split('/').pop() === 'bin') {
+				if (path.endsWith('/bin')) {
 					path = path.split('/').slice(0, -1).join('/');
 				}
 
 
-				if (ext === 'js') {
+				if (file.endsWith('.js')) {
 
 					args.reverse();
 					args.push(file);
@@ -173,7 +172,7 @@ lychee.define('fertilizer.data.Shell').tags({
 				let out = context.stdout.trim();
 				let err = context.stderr.trim();
 
-				if (cmd.substr(0, dir.length) === dir) {
+				if (cmd.startsWith(dir)) {
 					cmd = '.' + cmd.substr(dir.length);
 				}
 

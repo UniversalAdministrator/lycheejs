@@ -141,7 +141,6 @@ lychee.define('game.state.Game').requires([
 				if (renderer !== null) {
 
 					let camera = this.camera;
-					// let width  = renderer.width;
 					let height = renderer.height;
 
 

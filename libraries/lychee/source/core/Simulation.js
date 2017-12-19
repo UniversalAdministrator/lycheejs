@@ -173,7 +173,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 						let pkg  = packages[pid];
 						let root = pkg.root;
 
-						if (url.substr(0, pkg.root.length) === pkg.root) {
+						if (url.startsWith(pkg.root)) {
 							new_pkg_id = pkg.id;
 						}
 
@@ -200,7 +200,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 						for (let r = 0, rl = specification._requires.length; r < rl; r++) {
 
 							let req = specification._requires[r];
-							if (req.substr(0, old_pkg_id.length) === old_pkg_id) {
+							if (req.startsWith(old_pkg_id)) {
 								specification._requires[r] = new_pkg_id + req.substr(old_pkg_id.length);
 							}
 

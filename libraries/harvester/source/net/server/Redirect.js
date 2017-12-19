@@ -77,7 +77,7 @@ lychee.define('harvester.net.server.Redirect').exports(function(lychee, global, 
 
 
 			// Multi-project mode /projects/*
-			} else if (url.substr(0, 9) === '/projects') {
+			} else if (url.startsWith('/projects')) {
 
 				let identifier = url.split('/').slice(0, 3).join('/');
 				let project    = lychee.import('MAIN')._projects[identifier] || null;

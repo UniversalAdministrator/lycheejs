@@ -61,7 +61,7 @@ lychee.define('harvester.net.server.File').requires([
 		};
 
 
-		if (mime.type.substr(0, 4) === 'text') {
+		if (mime.type.startsWith('text')) {
 			headers['content-type'] = mime.type + '; charset=utf-8';
 		}
 
@@ -123,7 +123,7 @@ lychee.define('harvester.net.server.File').requires([
 
 
 			// Multi-library mode /libraries/*
-			} else if (url.substr(0, 10) === '/libraries') {
+			} else if (url.startsWith('/libraries')) {
 
 				identifier = url.split('/').slice(0, 3).join('/');
 				path       = '/' + url.split('/').slice(3).join('/');
@@ -131,7 +131,7 @@ lychee.define('harvester.net.server.File').requires([
 
 
 			// Multi-project mode /projects/*
-			} else if (url.substr(0, 9) === '/projects') {
+			} else if (url.startsWith('/projects')) {
 
 				identifier = url.split('/').slice(0, 3).join('/');
 				path       = '/' + url.split('/').slice(3).join('/');
