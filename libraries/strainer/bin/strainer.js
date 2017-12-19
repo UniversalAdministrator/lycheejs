@@ -107,7 +107,7 @@ const _bootup = function(settings) {
 		id:       'strainer',
 		debug:    settings.debug === true,
 		sandbox:  settings.debug === true ? false : true,
-		build:    'strainer.Main',
+		target:   'strainer.Main',
 		timeout:  5000,
 		packages: {
 			'lychee':   '/libraries/lychee/lychee.pkg',

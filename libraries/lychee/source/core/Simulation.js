@@ -45,7 +45,15 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 		this.timeout        = 10000;
 
 		this.__cache    = {
-			assimilations: {}
+			active:        false,
+			assimilations: [],
+			start:         0,
+			end:           0,
+			retries:       0,
+			timeout:       0,
+			load:          [],
+			ready:         [],
+			track:         []
 		};
 		this.__packages = {};
 

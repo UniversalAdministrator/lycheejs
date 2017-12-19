@@ -1213,7 +1213,7 @@ lychee = (function(global) {
 				}
 
 				code += '\n\n';
-				code += 'sandbox.MAIN = new ' + environment.build + '(' + JSON.stringify(env_profile) + ');\n';
+				code += 'sandbox.MAIN = new ' + environment.target + '(' + JSON.stringify(env_profile) + ');\n';
 				code += '\n\n';
 				code += 'if (typeof sandbox.MAIN.init === \'function\') {\n';
 				code += '\tsandbox.MAIN.init();\n';
@@ -1300,7 +1300,7 @@ lychee = (function(global) {
 								}
 
 								code += '\n\n';
-								code += 'sandbox.MAIN = new ' + env_settings.build + '(' + JSON.stringify(env_profile) + ');\n';
+								code += 'sandbox.MAIN = new ' + env_settings.target + '(' + JSON.stringify(env_profile) + ');\n';
 								code += '\n\n';
 								code += 'if (typeof sandbox.MAIN.init === \'function\') {\n';
 								code += '\tsandbox.MAIN.init();\n';
@@ -1364,12 +1364,12 @@ lychee = (function(global) {
 						that.environment.define(definition, true);
 					});
 
-					let build_old = this.environment.definitions[this.environment.build] || null;
-					let build_new = environment.definitions[environment.build]           || null;
+					let build_old = this.environment.definitions[this.environment.target] || null;
+					let build_new = environment.definitions[environment.target]           || null;
 
 					if (build_old === null && build_new !== null) {
-						this.environment.build = environment.build;
-						this.environment.type  = environment.type;
+						this.environment.target = environment.target;
+						this.environment.type   = environment.type;
 					}
 
 

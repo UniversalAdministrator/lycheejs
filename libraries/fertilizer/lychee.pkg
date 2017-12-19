@@ -1,5 +1,6 @@
 {
 	"api": {
+		"tags": {},
 		"files": {
 			"Main": [
 				"json"
@@ -50,17 +51,11 @@
 					]
 				}
 			}
-		},
-		"tags": {
-			"platform": {
-				"node": "platform/node"
-			}
 		}
 	},
 	"build": {
 		"environments": {
 			"node-sdl/dist": {
-				"build": "fertilizer.Main",
 				"debug": false,
 				"packages": {
 					"fertilizer": "./lychee.pkg"
@@ -72,10 +67,10 @@
 						"node"
 					]
 				},
+				"target": "fertilizer.Main",
 				"variant": "library"
 			},
 			"node/dist": {
-				"build": "fertilizer.Main",
 				"debug": false,
 				"packages": {
 					"fertilizer": "./lychee.pkg"
@@ -86,6 +81,7 @@
 						"node"
 					]
 				},
+				"target": "fertilizer.Main",
 				"variant": "library"
 			}
 		},
@@ -101,8 +97,8 @@
 		"tags": {}
 	},
 	"review": {
-		"files": {},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	},
 	"source": {
 		"environments": {},
@@ -175,6 +171,7 @@
 					]
 				}
 			}
-		}
+		},
+		"simulations": {}
 	}
 }

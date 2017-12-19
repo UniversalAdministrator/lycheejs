@@ -1,5 +1,6 @@
 {
 	"api": {
+		"tags": {},
 		"files": {
 			"Main": [
 				"json"
@@ -27,16 +28,17 @@
 					"json"
 				]
 			}
-		},
-		"tags": {}
+		}
 	},
 	"build": {
 		"environments": {
 			"html-nwjs/main": {
-				"build": "app.Main",
 				"debug": false,
 				"packages": {
 					"app": "./lychee.pkg"
+				},
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/boilerplate"
 				},
 				"sandbox": false,
 				"tags": {
@@ -45,16 +47,16 @@
 						"html"
 					]
 				},
-				"variant": "application",
-				"profile": {
-					"client": "/api/server/connect?identifier=/projects/boilerplate"
-				}
+				"target": "app.Main",
+				"variant": "application"
 			},
 			"html-webview/main": {
-				"build": "app.Main",
 				"debug": false,
 				"packages": {
 					"app": "./lychee.pkg"
+				},
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/boilerplate"
 				},
 				"sandbox": false,
 				"tags": {
@@ -63,16 +65,16 @@
 						"html"
 					]
 				},
-				"variant": "application",
-				"profile": {
-					"client": "/api/server/connect?identifier=/projects/boilerplate"
-				}
+				"target": "app.Main",
+				"variant": "application"
 			},
 			"html/main": {
-				"build": "app.Main",
 				"debug": false,
 				"packages": {
 					"app": "./lychee.pkg"
+				},
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/boilerplate"
 				},
 				"sandbox": false,
 				"tags": {
@@ -80,16 +82,16 @@
 						"html"
 					]
 				},
-				"variant": "application",
-				"profile": {
-					"client": "/api/server/connect?identifier=/projects/boilerplate"
-				}
+				"target": "app.Main",
+				"variant": "application"
 			},
 			"node/main": {
-				"build": "app.Main",
 				"debug": false,
 				"packages": {
 					"app": "./lychee.pkg"
+				},
+				"profile": {
+					"client": null
 				},
 				"sandbox": false,
 				"tags": {
@@ -97,18 +99,15 @@
 						"node"
 					]
 				},
-				"variant": "application",
-				"profile": {
-					"client": null
-				}
+				"target": "app.Main",
+				"variant": "application"
 			}
 		},
-		"files": {},
 		"tags": {}
 	},
 	"review": {
-		"files": {},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	},
 	"source": {
 		"environments": {},
@@ -141,6 +140,7 @@
 				]
 			}
 		},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	}
 }

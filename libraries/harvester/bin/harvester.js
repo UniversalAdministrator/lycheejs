@@ -145,7 +145,7 @@ const _bootup = function(settings) {
 		id:       'harvester',
 		debug:    settings.debug === true,
 		sandbox:  true,
-		build:    'harvester.Main',
+		target:   'harvester.Main',
 		timeout:  5000,
 		packages: {
 			'lychee':    '/libraries/lychee/lychee.pkg',

@@ -61,9 +61,9 @@
 				]
 			},
 			"deserialize": {
-				"body": "function(blob) {\n\n\t\t\t_State.prototype.deserialize.call(this, blob);\n\n\n\t\t\tlet menu = this.query('ui > menu');\n\t\t\tif (menu !== null) {\n\n\t\t\t\tmenu.setHelpers([\n\t\t\t\t\t'refresh'\n\t\t\t\t]);\n\n\t\t\t\tthis.query('ui > welcome > dialog').bind('change', function(value) {\n\t\t\t\t\tmenu.setValue(value);\n\t\t\t\t\tmenu.trigger('change', [ value ]);\n\t\t\t\t}, this);\n\n\t\t\t}\n\n\t\t}",
+				"body": "function(blob) {\n\n\t\t\t_State.prototype.deserialize.call(this, blob);\n\n\n\t\t\tlet menu = this.query('ui > menu');\n\t\t\tif (menu !== null) {\n\n\t\t\t\tmenu.setHelpers([\n\t\t\t\t\t'refresh'\n\t\t\t\t]);\n\n\n\t\t\t\tthis.query('ui > welcome > dialog').bind('change', function(value) {\n\t\t\t\t\tmenu.setValue(value);\n\t\t\t\t\tmenu.trigger('change', [ value ]);\n\t\t\t\t}, this);\n\n\t\t\t}\n\n\t\t}",
 				"chunk": "\t\tdeserialize: function(blob) {",
-				"hash": "b00262b4",
+				"hash": "0966ebbb",
 				"parameters": [
 					{
 						"chunk": null,

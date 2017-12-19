@@ -1,5 +1,6 @@
 {
 	"api": {
+		"tags": {},
 		"files": {
 			"Main": [
 				"json"
@@ -74,16 +75,17 @@
 					]
 				}
 			}
-		},
-		"tags": {}
+		}
 	},
 	"build": {
 		"environments": {
 			"html-nwjs/main": {
-				"build": "game.Main",
 				"debug": false,
 				"packages": {
 					"game": "./lychee.pkg"
+				},
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/lethalmaze"
 				},
 				"sandbox": false,
 				"tags": {
@@ -92,16 +94,16 @@
 						"html"
 					]
 				},
-				"variant": "application",
-				"profile": {
-					"client": "/api/server/connect?identifier=/projects/lethalmaze"
-				}
+				"target": "game.Main",
+				"variant": "application"
 			},
 			"html-webview/main": {
-				"build": "game.Main",
 				"debug": false,
 				"packages": {
 					"game": "./lychee.pkg"
+				},
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/lethalmaze"
 				},
 				"sandbox": false,
 				"tags": {
@@ -110,16 +112,16 @@
 						"html"
 					]
 				},
-				"variant": "application",
-				"profile": {
-					"client": "/api/server/connect?identifier=/projects/lethalmaze"
-				}
+				"target": "game.Main",
+				"variant": "application"
 			},
 			"html/main": {
-				"build": "game.Main",
 				"debug": false,
 				"packages": {
 					"game": "./lychee.pkg"
+				},
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/lethalmaze"
 				},
 				"sandbox": false,
 				"tags": {
@@ -127,13 +129,10 @@
 						"html"
 					]
 				},
-				"variant": "application",
-				"profile": {
-					"client": "/api/server/connect?identifier=/projects/lethalmaze"
-				}
+				"target": "game.Main",
+				"variant": "application"
 			},
 			"node/main": {
-				"build": "game.Main",
 				"debug": false,
 				"packages": {
 					"game": "./lychee.pkg"
@@ -144,15 +143,15 @@
 						"node"
 					]
 				},
+				"target": "game.Main",
 				"variant": "application"
 			}
 		},
-		"files": {},
 		"tags": {}
 	},
 	"review": {
-		"files": {},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	},
 	"source": {
 		"environments": {},
@@ -257,6 +256,7 @@
 				}
 			}
 		},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	}
 }

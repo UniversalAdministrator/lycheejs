@@ -1,5 +1,6 @@
 {
 	"api": {
+		"tags": {},
 		"files": {
 			"Fixer": [
 				"json"
@@ -46,17 +47,11 @@
 					"json"
 				]
 			}
-		},
-		"tags": {
-			"platform": {
-				"node": "platform/node"
-			}
 		}
 	},
 	"build": {
 		"environments": {
 			"node-sdl/dist": {
-				"build": "strainer.Main",
 				"debug": false,
 				"packages": {
 					"strainer": "./lychee.pkg"
@@ -67,10 +62,10 @@
 						"node"
 					]
 				},
+				"target": "strainer.Main",
 				"variant": "library"
 			},
 			"node/dist": {
-				"build": "strainer.Main",
 				"debug": false,
 				"packages": {
 					"strainer": "./lychee.pkg"
@@ -81,6 +76,7 @@
 						"node"
 					]
 				},
+				"target": "strainer.Main",
 				"variant": "library"
 			}
 		},
@@ -103,8 +99,8 @@
 		"tags": {}
 	},
 	"review": {
-		"files": {},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	},
 	"source": {
 		"environments": {},
@@ -160,6 +156,7 @@
 					"js"
 				]
 			}
-		}
+		},
+		"simulations": {}
 	}
 }

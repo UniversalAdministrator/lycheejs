@@ -11,7 +11,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 	 * EVENTS
 	 */
 
-	const _export_loop = function(cache) {
+	const _build_loop = function(cache) {
 
 		let that  = this;
 		let load  = cache.load;
@@ -95,6 +95,46 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	};
 
+	const _on_build_success = function(cache, callback) {
+
+		if (this.debug === true) {
+			this.global.console.info('lychee-Environment (' + this.id + '): BUILD END (' + (cache.end - cache.start) + 'ms)');
+		}
+
+
+		try {
+			callback.call(this.global, this.global);
+		} catch (err) {
+			lychee.Debugger.report(this, err, null);
+		}
+
+	};
+
+	const _on_build_timeout = function(cache, callback) {
+
+		if (this.debug === true) {
+			this.global.console.warn('lychee-Environment (' + this.id + '): BUILD TIMEOUT (' + (cache.end - cache.start) + 'ms)');
+		}
+
+
+		// XXX: Always show Dependency Errors
+		if (cache.load.length > 0) {
+
+			this.global.console.error('lychee-Environment (' + this.id + '): Invalid Dependencies\n' + cache.load.map(function(value, index) {
+				return '\t - ' + value + ' (required by ' + cache.track[index] + ')';
+			}).join('\n'));
+
+		}
+
+
+		try {
+			callback.call(this.global, null);
+		} catch (err) {
+			lychee.Debugger.report(this, err, null);
+		}
+
+	};
+
 
 
 	/*
@@ -103,21 +143,22 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	const _inject_features = function(source, features) {
 
-		let target = this;
+		let that = this;
 
 		Object.keys(features).forEach(function(key) {
 
 			let type = features[key];
 			if (/boolean|number|string|function/g.test(type)) {
 
-				target[key] = source[key];
+				that[key] = source[key];
 
 			} else if (typeof type === 'object') {
 
 				if (typeof source[key] === 'object') {
 
-					target[key] = source[key];
-					_inject_features.call(target[key], source[key], type);
+					that[key] = source[key];
+
+					_inject_features.call(that[key], source[key], type);
 
 				}
 
@@ -485,13 +526,13 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 		this.id          = 'lychee-Environment-' + _id++;
-		this.build       = 'app.Main';
 		this.debug       = true;
 		this.definitions = {};
 		this.global      = global !== undefined ? global : {};
 		this.packages    = {};
 		this.sandbox     = false;
 		this.tags        = {};
+		this.target      = 'app.Main';
 		this.timeout     = 10000;
 		this.type        = 'source';
 
@@ -546,8 +587,8 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		this.setTimeout(settings.timeout);
 
 		// Needs this.packages to be ready
+		this.setTarget(settings.target);
 		this.setType(settings.type);
-		this.setBuild(settings.build);
 
 
 		settings = null;
@@ -576,22 +617,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 				this.__features = features;
 			}
 
-			if (blob.packages instanceof Object) {
-
-				let packages = {};
-
-				for (let pid in blob.packages) {
-					packages[pid] = lychee.deserialize(blob.packages[pid]);
-				}
-
-				this.setPackages(packages);
-
-				// This is a dirty hack which is allowed here
-				this.setType(blob.type);
-				this.setBuild(blob.build);
-
-			}
-
 			if (blob.global instanceof Object) {
 
 				this.global = new _Sandbox(blob.global.arguments[0]);
@@ -610,13 +635,23 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			let blob     = {};
 
 
-			if (this.id !== '')            settings.id      = this.id;
-			if (this.build !== 'app.Main') settings.build   = this.build;
-			if (this.debug !== true)       settings.debug   = this.debug;
-			if (this.sandbox !== false)    settings.sandbox = this.sandbox;
-			if (this.timeout !== 10000)    settings.timeout = this.timeout;
-			if (this.type !== 'source')    settings.type    = this.type;
+			if (this.id !== '')             settings.id      = this.id;
+			if (this.debug !== true)        settings.debug   = this.debug;
+			if (this.sandbox !== false)     settings.sandbox = this.sandbox;
+			if (this.timeout !== 10000)     settings.timeout = this.timeout;
+			if (this.target !== 'app.Main') settings.target  = this.target;
+			if (this.type !== 'source')     settings.type    = this.type;
 
+
+			if (Object.keys(this.packages).length > 0) {
+
+				settings.packages = {};
+
+				for (let pid in this.packages) {
+					settings.packages[pid] = this.packages[pid].url;
+				}
+
+			}
 
 			if (Object.keys(this.tags).length > 0) {
 
@@ -628,6 +663,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			}
 
+
 			if (Object.keys(this.definitions).length > 0) {
 
 				blob.definitions = {};
@@ -638,23 +674,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			}
 
-
 			if (Object.keys(this.__features).length > 0) blob.features = lychee.serialize(this.__features);
-
-			if (Object.keys(this.packages).length > 0) {
-
-				blob.packages = {};
-
-				for (let pid in this.packages) {
-					blob.packages[pid] = lychee.serialize(this.packages[pid]);
-				}
-
-
-				// This is a dirty hack which is allowed here
-				blob.type  = this.type;
-				blob.build = this.build;
-
-			}
 
 			if (this.sandbox === true) {
 				blob.global = this.global.serialize();
@@ -832,80 +852,39 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			}
 
 
-			let build = this.build;
-			let cache = this.__cache;
-			let that  = this;
+			let target = this.target;
+			let cache  = this.__cache;
+			let that   = this;
 
-			if (build !== null && cache.active === false) {
+			if (target !== null && cache.active === false) {
 
-				let result = this.load(build);
+				let result = this.load(target);
 				if (result === true) {
 
 					if (this.debug === true) {
-						this.global.console.log('lychee-Environment (' + this.id + '): BUILD START ("' + this.build + '")');
+						this.global.console.info('lychee-Environment (' + this.id + '): BUILD START ("' + target + '")');
 					}
 
 
 					cache.start   = Date.now();
 					cache.timeout = Date.now() + this.timeout;
-					cache.load    = [ build ];
+					cache.load    = [ target ];
 					cache.ready   = [];
 					cache.active  = true;
 
 
-					let onbuildtimeout = function() {
-
-						if (this.debug === true) {
-							this.global.console.log('lychee-Environment (' + this.id + '): BUILD TIMEOUT (' + (cache.end - cache.start) + 'ms)');
-						}
-
-
-						// XXX: Always show Dependency Errors
-						if (cache.load.length > 0) {
-
-							this.global.console.error('lychee-Environment (' + this.id + '): Invalid Dependencies\n' + cache.load.map(function(value, index) {
-								return '\t - ' + value + ' (required by ' + cache.track[index] + ')';
-							}).join('\n'));
-
-						}
-
-
-						try {
-							callback.call(this.global, null);
-						} catch (err) {
-							lychee.Debugger.report(this, err, null);
-						}
-
-					};
-
-					let onbuildsuccess = function() {
-
-						if (this.debug === true) {
-							this.global.console.log('lychee-Environment (' + this.id + '): BUILD END (' + (cache.end - cache.start) + 'ms)');
-						}
-
-
-						try {
-							callback.call(this.global, this.global);
-						} catch (err) {
-							lychee.Debugger.report(this, err, null);
-						}
-
-					};
-
-
-					let intervalId = setInterval(function() {
+					let interval = setInterval(function() {
 
 						let cache = that.__cache;
 						if (cache.active === true) {
 
-							_export_loop.call(that, cache);
+							_build_loop.call(that, cache);
 
 						} else if (cache.active === false) {
 
-							if (intervalId !== null) {
-								clearInterval(intervalId);
-								intervalId = null;
+							if (interval !== null) {
+								clearInterval(interval);
+								interval = null;
 							}
 
 
@@ -929,9 +908,9 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 							if (cache.end > cache.timeout) {
-								onbuildtimeout.call(that);
+								_on_build_timeout.call(that, cache, callback);
 							} else {
-								onbuildsuccess.call(that);
+								_on_build_success.call(that, cache, callback);
 							}
 
 						}
@@ -946,7 +925,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 					if (cache.retries < 3) {
 
 						if (this.debug === true) {
-							this.global.console.warn('lychee-Environment (' + this.id + '): Package not ready, retrying in 100ms ...');
+							this.global.console.warn('lychee-Environment (' + this.id + '): Package for "' + target + '" not ready, retrying in 100ms ...');
 						}
 
 						setTimeout(function() {
@@ -955,7 +934,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 					} else {
 
-						this.global.console.error('lychee-Environment (' + this.id + '): Invalid Dependencies\n\t - ' + build + ' (build target)');
+						this.global.console.error('lychee-Environment (' + this.id + '): Invalid Dependencies\n\t - ' + target + ' (build target)');
 
 
 						try {
@@ -1013,41 +992,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			}
 
 			return tmp.join('/');
-
-		},
-
-		setBuild: function(identifier) {
-
-			identifier = typeof identifier === 'string' ? identifier : null;
-
-
-			if (identifier !== null) {
-
-				let type = this.type;
-				if (type === 'build') {
-
-					this.build = identifier;
-
-					return true;
-
-				} else {
-
-					let pid = identifier.split('.')[0];
-					let pkg = this.packages[pid] || null;
-					if (pkg !== null) {
-
-						this.build = identifier;
-
-						return true;
-
-					}
-
-				}
-
-			}
-
-
-			return false;
 
 		},
 
@@ -1258,6 +1202,41 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 				this.timeout = timeout;
 
 				return true;
+
+			}
+
+
+			return false;
+
+		},
+
+		setTarget: function(identifier) {
+
+			identifier = typeof identifier === 'string' ? identifier : null;
+
+
+			if (identifier !== null) {
+
+				let type = this.type;
+				if (type === 'build') {
+
+					this.target = identifier;
+
+					return true;
+
+				} else {
+
+					let pid = identifier.split('.')[0];
+					let pkg = this.packages[pid] || null;
+					if (pkg !== null) {
+
+						this.target = identifier;
+
+						return true;
+
+					}
+
+				}
 
 			}
 

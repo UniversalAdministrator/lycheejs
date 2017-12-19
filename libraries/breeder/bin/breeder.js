@@ -116,7 +116,7 @@ const _bootup = function(settings) {
 		id:       'breeder',
 		debug:    settings.debug === true,
 		sandbox:  settings.debug === true ? false : true,
-		build:    'breeder.Main',
+		target:   'breeder.Main',
 		timeout:  5000,
 		packages: {
 			'lychee':     '/libraries/lychee/lychee.pkg',

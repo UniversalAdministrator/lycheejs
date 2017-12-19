@@ -2,7 +2,6 @@
 lychee.define('studio.data.Project').exports(function(lychee, global, attachments) {
 
 	const _DEFAULT_SETTINGS = {
-		"build": "app.Main",
 		"debug": false,
 		"packages": {
 			"app": "./lychee.pkg"
@@ -11,6 +10,7 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 		"tags": {
 			"platform": []
 		},
+		"target": "app.Main",
 		"variant": "application",
 		"profile": {}
 	};
@@ -75,11 +75,11 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 			if (environments[platform + '/' + id] === undefined) {
 
-				let settings  = lychee.assignunlink({}, _DEFAULT_SETTINGS);
-				let build     = this.__build;
-				let namespace = build.split('.')[0];
+				let namespace = this.__target.split('.')[0];
 				let packages  = this.__packages;
 				let platforms = [];
+				let settings  = lychee.assignunlink({}, _DEFAULT_SETTINGS);
+				let target    = this.__target;
 
 
 				let pkg = packages[namespace] || null;
@@ -102,9 +102,9 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 				if (id === 'main') {
 
-					settings.build         = build;
 					settings.packages      = packages;
 					settings.tags.platform = platforms;
+					settings.target        = target;
 					settings.variant       = 'application';
 					settings.profile       = {
 						client: platform !== 'node' ? '/api/server/connect?identifier=' + this.identifier : null
@@ -112,9 +112,9 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 				} else {
 
-					settings.build         = build;
 					settings.packages      = packages;
 					settings.tags.platform = platforms;
+					settings.target        = target;
 					settings.variant       = 'library';
 					settings.profile       = null;
 
@@ -169,7 +169,7 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 
 				this.platforms[platform] = true;
-				this.__build             = settings.build || null;
+				this.__target            = settings.target || null;
 
 			} else {
 
@@ -179,8 +179,8 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 
 		}
 
-		if (this.__build === null) {
-			this.__build = id === 'dist' ? 'app.DIST' : 'app.Main';
+		if (this.__target === null) {
+			this.__target = id === 'dist' ? 'app.DIST' : 'app.Main';
 		}
 
 		if (Object.keys(this.__packages).length === 0) {
@@ -212,8 +212,8 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 		};
 
 		this.__harvester = new Stuff(this.identifier + '/harvester.js', true);
-		this.__build     = null;
 		this.__packages  = {};
+		this.__target    = null;
 
 
 		settings = null;

@@ -41,8 +41,24 @@ lychee.define('harvester.data.Package').exports(function(lychee, global, attachm
 			} else {
 
 				json.build = {
-					environments: {},
-					files:        {}
+					simulations: {},
+					files:       {}
+				};
+
+			}
+
+
+			if (json.review instanceof Object) {
+
+				if (json.review.files instanceof Object) {
+					_walk_directory(this.review, json.review.files, '');
+				}
+
+			} else {
+
+				json.review = {
+					simulations: {},
+					files:       {}
 				};
 
 			}
@@ -58,6 +74,7 @@ lychee.define('harvester.data.Package').exports(function(lychee, global, attachm
 
 				json.source = {
 					environments: {},
+					simulations:  {},
 					files:        {},
 					tags:         {}
 				};
@@ -124,6 +141,7 @@ lychee.define('harvester.data.Package').exports(function(lychee, global, attachm
 
 		this.api    = [];
 		this.build  = [];
+		this.review = [];
 		this.source = [];
 		this.json   = {};
 

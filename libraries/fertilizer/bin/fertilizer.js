@@ -121,7 +121,7 @@ const _bootup = function(settings) {
 		id:       'fertilizer',
 		debug:    settings.debug === true,
 		sandbox:  settings.debug === true ? false : settings.sandbox === true,
-		build:    'fertilizer.Main',
+		target:   'fertilizer.Main',
 		timeout:  5000,
 		packages: {
 			'lychee':     '/libraries/lychee/lychee.pkg',

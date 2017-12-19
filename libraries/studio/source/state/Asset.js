@@ -146,7 +146,6 @@ lychee.define('studio.state.Asset').requires([
 
 		} else if (value.endsWith('.json') && /^(app|entity|sprite|ui)$/g.test(ns)) {
 
-			let tmp   = path.split('.');
 			let asset = {
 				texture: new Texture(path.replace('.json', '.png')),
 				config:  new Config(path)

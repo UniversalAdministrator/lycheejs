@@ -63,7 +63,7 @@ const _bootup = function(settings) {
 		id:       'strainer',
 		debug:    false,
 		sandbox:  true,
-		build:    'strainer.Fixer',
+		target:   'strainer.Fixer',
 		timeout:  5000,
 		packages: {
 			'lychee':   '/libraries/lychee/lychee.pkg',

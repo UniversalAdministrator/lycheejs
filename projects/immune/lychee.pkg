@@ -1,5 +1,6 @@
 {
 	"api": {
+		"tags": {},
 		"files": {
 			"Main": [
 				"json"
@@ -36,17 +37,16 @@
 					"json"
 				]
 			}
-		},
-		"tags": {}
+		}
 	},
 	"build": {
 		"environments": {
 			"html-nwjs/main": {
-				"build": "game.Main",
 				"debug": false,
 				"packages": {
 					"game": "./lychee.pkg"
 				},
+				"profile": {},
 				"sandbox": false,
 				"tags": {
 					"platform": [
@@ -54,15 +54,15 @@
 						"html"
 					]
 				},
-				"variant": "application",
-				"profile": {}
+				"target": "game.Main",
+				"variant": "application"
 			},
 			"html-webview/main": {
-				"build": "game.Main",
 				"debug": false,
 				"packages": {
 					"game": "./lychee.pkg"
 				},
+				"profile": {},
 				"sandbox": false,
 				"tags": {
 					"platform": [
@@ -70,31 +70,30 @@
 						"html"
 					]
 				},
-				"variant": "application",
-				"profile": {}
+				"target": "game.Main",
+				"variant": "application"
 			},
 			"html/main": {
-				"build": "game.Main",
 				"debug": false,
 				"packages": {
 					"game": "./lychee.pkg"
 				},
+				"profile": {},
 				"sandbox": false,
 				"tags": {
 					"platform": [
 						"html"
 					]
 				},
-				"variant": "application",
-				"profile": {}
+				"target": "game.Main",
+				"variant": "application"
 			}
 		},
-		"files": {},
 		"tags": {}
 	},
 	"review": {
-		"files": {},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	},
 	"source": {
 		"environments": {},
@@ -141,6 +140,7 @@
 				]
 			}
 		},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	}
 }

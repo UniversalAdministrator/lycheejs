@@ -319,9 +319,6 @@
 					"Viewport": [
 						"json"
 					],
-					"bootstrap": [
-						"json"
-					],
 					"net": {
 						"Server": [
 							"json"
@@ -356,6 +353,9 @@
 					"Storage": [
 						"json"
 					],
+					"features": [
+						"json"
+					],
 					"net": {
 						"Server": [
 							"json"
@@ -380,11 +380,6 @@
 						}
 					}
 				},
-				"html-webview": {
-					"bootstrap": [
-						"json"
-					]
-				},
 				"node": {
 					"Input": [
 						"json"
@@ -399,9 +394,6 @@
 						"json"
 					],
 					"Viewport": [
-						"json"
-					],
-					"bootstrap": [
 						"json"
 					],
 					"net": {
@@ -430,11 +422,6 @@
 							]
 						}
 					}
-				},
-				"node-sdl": {
-					"bootstrap": [
-						"json"
-					]
 				}
 			},
 			"policy": {
@@ -590,34 +577,11 @@
 				]
 			}
 		},
-		"tags": {
-			"platform": {
-				"html": "platform/html",
-				"html-nwjs": "platform/html-nwjs",
-				"html-webview": "platform/html-webview",
-				"node": "platform/node",
-				"node-sdl": "platform/node-sdl"
-			}
-		}
+		"tags": {}
 	},
 	"build": {
 		"environments": {
-			"html/dist": {
-				"build": "lychee.DIST",
-				"debug": false,
-				"packages": {
-					"lychee": "./lychee.pkg"
-				},
-				"sandbox": false,
-				"tags": {
-					"platform": [
-						"html"
-					]
-				},
-				"variant": "library"
-			},
 			"html-nwjs/dist": {
-				"build": "lychee.DIST",
 				"debug": false,
 				"packages": {
 					"lychee": "./lychee.pkg"
@@ -629,10 +593,10 @@
 						"html"
 					]
 				},
+				"target": "lychee.DIST",
 				"variant": "library"
 			},
 			"html-webview/dist": {
-				"build": "lychee.DIST",
 				"debug": false,
 				"packages": {
 					"lychee": "./lychee.pkg"
@@ -644,10 +608,10 @@
 						"html"
 					]
 				},
+				"target": "lychee.DIST",
 				"variant": "library"
 			},
-			"node/dist": {
-				"build": "lychee.DIST",
+			"html/dist": {
 				"debug": false,
 				"packages": {
 					"lychee": "./lychee.pkg"
@@ -655,13 +619,13 @@
 				"sandbox": false,
 				"tags": {
 					"platform": [
-						"node"
+						"html"
 					]
 				},
+				"target": "lychee.DIST",
 				"variant": "library"
 			},
 			"node-sdl/dist": {
-				"build": "lychee.DIST",
 				"debug": false,
 				"packages": {
 					"lychee": "./lychee.pkg"
@@ -673,6 +637,21 @@
 						"node"
 					]
 				},
+				"target": "lychee.DIST",
+				"variant": "library"
+			},
+			"node/dist": {
+				"debug": false,
+				"packages": {
+					"lychee": "./lychee.pkg"
+				},
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"node"
+					]
+				},
+				"target": "lychee.DIST",
 				"variant": "library"
 			}
 		},
@@ -733,7 +712,8 @@
 				]
 			}
 		},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	},
 	"source": {
 		"environments": {},
@@ -1381,6 +1361,7 @@
 					"js"
 				]
 			}
-		}
+		},
+		"simulations": {}
 	}
 }

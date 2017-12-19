@@ -1,5 +1,6 @@
 {
 	"api": {
+		"tags": {},
 		"files": {
 			"Main": [
 				"json"
@@ -29,13 +30,11 @@
 					]
 				}
 			}
-		},
-		"tags": {}
+		}
 	},
 	"build": {
 		"environments": {
 			"html-nwjs/main": {
-				"build": "game.Main",
 				"debug": false,
 				"packages": {
 					"game": "./lychee.pkg"
@@ -47,10 +46,10 @@
 						"html"
 					]
 				},
+				"target": "game.Main",
 				"variant": "application"
 			},
 			"html/main": {
-				"build": "game.Main",
 				"debug": false,
 				"packages": {
 					"game": "./lychee.pkg"
@@ -61,15 +60,15 @@
 						"html"
 					]
 				},
+				"target": "game.Main",
 				"variant": "application"
 			}
 		},
-		"files": {},
 		"tags": {}
 	},
 	"review": {
-		"files": {},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	},
 	"source": {
 		"environments": {},
@@ -117,6 +116,7 @@
 				}
 			}
 		},
-		"tags": {}
+		"tags": {},
+		"simulations": {}
 	}
 }
