@@ -36,6 +36,12 @@ lychee.define('lychee.Renderer').tags({
 
 	};
 
+
+
+	/*
+	 * STRUCTS
+	 */
+
 	const _Buffer = function(width, height) {
 
 		this.width  = typeof width === 'number'  ? width  : 1;

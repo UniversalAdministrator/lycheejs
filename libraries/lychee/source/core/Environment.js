@@ -13,28 +13,24 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	const _build_loop = function(cache) {
 
-		let that  = this;
-		let load  = cache.load;
-		let ready = cache.ready;
-		let track = cache.track;
-
-		let identifier, definition;
+		let load        = cache.load;
+		let required_by = cache.required_by;
+		let trace       = cache.trace;
 
 
 		for (let l = 0, ll = load.length; l < ll; l++) {
 
-			identifier = load[l];
-			definition = this.definitions[identifier] || null;
-
-
+			let identifier = load[l];
+			let definition = this.definitions[identifier] || null;
 			if (definition !== null) {
 
-				if (ready.indexOf(identifier) === -1) {
-					ready.push(identifier);
+				if (trace.indexOf(identifier) === -1) {
+					trace.push(identifier);
 				}
 
+				required_by.splice(l, 1);
 				load.splice(l, 1);
-				track.splice(l, 1);
+
 				ll--;
 				l--;
 
@@ -43,11 +39,10 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		}
 
 
-		for (let r = 0, rl = ready.length; r < rl; r++) {
+		for (let t = 0, tl = trace.length; t < tl; t++) {
 
-			identifier = ready[r];
-			definition = this.definitions[identifier] || null;
-
+			let identifier = trace[t];
+			let definition = this.definitions[identifier] || null;
 			if (definition !== null) {
 
 				let dependencies = _resolve_dependencies.call(this, definition);
@@ -56,11 +51,12 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 					for (let d = 0, dl = dependencies.length; d < dl; d++) {
 
 						let dependency = dependencies[d];
-						if (load.indexOf(dependency) === -1 && ready.indexOf(dependency) === -1) {
+						if (load.indexOf(dependency) === -1 && trace.indexOf(dependency) === -1) {
 
-							that.load(dependency);
+							required_by.push(identifier);
+
+							this.load(dependency);
 							load.push(dependency);
-							track.push(identifier);
 
 						}
 
@@ -70,9 +66,9 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 					definition.export(this.global);
 
-					ready.splice(r, 1);
-					rl--;
-					r--;
+					trace.splice(t, 1);
+					tl--;
+					t--;
 
 				}
 
@@ -81,7 +77,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		}
 
 
-		if (load.length === 0 && ready.length === 0) {
+		if (load.length === 0 && trace.length === 0) {
 
 			cache.active = false;
 
@@ -121,7 +117,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		if (cache.load.length > 0) {
 
 			this.global.console.error('lychee-Environment (' + this.id + '): Invalid Dependencies\n' + cache.load.map(function(value, index) {
-				return '\t - ' + value + ' (required by ' + cache.track[index] + ')';
+				return '\t - ' + value + ' (required by ' + cache.required_by[index] + ')';
 			}).join('\n'));
 
 		}
@@ -221,18 +217,13 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			let name = path[p];
 
 			if (pointer[name] !== undefined) {
-
 				pointer = pointer[name];
-
 			} else if (pointer[name] === undefined) {
-
 				pointer = null;
 				break;
-
 			}
 
 		}
-
 
 		return pointer;
 
@@ -590,8 +581,8 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			retries:       0,
 			timeout:       0,
 			load:          [],
-			ready:         [],
-			track:         []
+			trace:         [],
+			required_by:   []
 		};
 		this.__features = {};
 
@@ -898,9 +889,8 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			}
 
 
-			let target = this.target;
 			let cache  = this.__cache;
-			let that   = this;
+			let target = this.target;
 
 			if (target !== null && cache.active === false) {
 
@@ -912,19 +902,20 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 					}
 
 
-					cache.start   = Date.now();
-					cache.timeout = Date.now() + this.timeout;
-					cache.load    = [ target ];
-					cache.ready   = [];
-					cache.active  = true;
+					cache.start       = Date.now();
+					cache.timeout     = Date.now() + this.timeout;
+					cache.load        = [ target ];
+					cache.trace       = [];
+					cache.required_by = [];
+					cache.active      = true;
 
 
 					let interval = setInterval(function() {
 
-						let cache = that.__cache;
+						let cache = this.__cache;
 						if (cache.active === true) {
 
-							_build_loop.call(that, cache);
+							_build_loop.call(this, cache);
 
 						} else if (cache.active === false) {
 
@@ -940,9 +931,9 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 								for (let a = 0, al = assimilations.length; a < al; a++) {
 
 									let identifier = assimilations[a];
-									let definition = that.definitions[identifier] || null;
+									let definition = this.definitions[identifier] || null;
 									if (definition !== null) {
-										definition.export(that.global);
+										definition.export(this.global);
 									}
 
 								}
@@ -954,14 +945,14 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 							if (cache.end > cache.timeout) {
-								_on_build_timeout.call(that, cache, callback);
+								_on_build_timeout.call(this, cache, callback);
 							} else {
-								_on_build_success.call(that, cache, callback);
+								_on_build_success.call(this, cache, callback);
 							}
 
 						}
 
-					}, (1000 / 60) | 0);
+					}.bind(this), (1000 / 60) | 0);
 
 				} else {
 
@@ -975,12 +966,12 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 						}
 
 						setTimeout(function() {
-							that.init(callback);
-						}, 100);
+							this.init(callback);
+						}.bind(this), 100);
 
 					} else {
 
-						this.global.console.error('lychee-Environment (' + this.id + '): Invalid Dependencies\n\t - ' + target + ' (build target)');
+						this.global.console.error('lychee-Environment (' + this.id + '): Invalid Dependencies\n\t - ' + target + ' (target)');
 
 
 						try {

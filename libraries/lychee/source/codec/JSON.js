@@ -55,6 +55,10 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 
 
+	/*
+	 * STRUCTS
+	 */
+
 	const _Stream = function(buffer) {
 
 		this.__buffer = typeof buffer === 'string' ? buffer : '';

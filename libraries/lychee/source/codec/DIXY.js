@@ -54,6 +54,10 @@ lychee.define('lychee.codec.DIXY').exports(function(lychee, global, attachments)
 
 
 
+	/*
+	 * STRUCTS
+	 */
+
 	const _Stream = function(buffer) {
 
 		this.__buffer = typeof buffer === 'string' ? buffer : '';

@@ -10,7 +10,7 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 	const _Stuff      = lychee.import('Stuff');
 
 
-	sandbox.add('id', 12, function(expect, await) {
+	sandbox.describe('id', 12, function(expect, await) {
 
 		let id1 = 'foo.Bar';
 		let id2 = 'foo.bar.Qux';
@@ -36,7 +36,7 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 
 	});
 
-	sandbox.add('url', 17, function(expect, await) {
+	sandbox.describe('url', 17, function(expect, await) {
 
 		let prefix = lychee.environment.packages.find(function(pkg) {
 			return pkg.id === 'sandbox';
@@ -72,7 +72,7 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 	});
 
 
-	sandbox.add('attaches()', 6, function(expect, await) {
+	sandbox.describe('attaches()', 6, function(expect, await) {
 
 		let definition = new lychee.Definition({
 			id: 'Dummy'

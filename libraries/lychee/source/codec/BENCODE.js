@@ -41,6 +41,12 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 	};
 
+
+
+	/*
+	 * STRUCTS
+	 */
+
 	const _Stream = function(buffer) {
 
 		this.__buffer = typeof buffer === 'string' ? buffer : '';

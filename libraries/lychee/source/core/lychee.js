@@ -1186,16 +1186,27 @@ lychee = (function(global) {
 
 			if (environment !== null && settings !== null) {
 
-				if (environment.id.startsWith('lychee-Environment-')) {
-					environment.setId((lychee.ROOT.project || '').substr((lychee.ROOT.lychee || '').length) + '/custom');
-				}
-
 				if (_environment !== null) {
 
-					Object.values(_environment.definitions).forEach(function(definition) {
-						environment.define(definition, true);
-					});
+					if (environment instanceof lychee.Environment) {
 
+						Object.values(_environment.definitions).forEach(function(definition) {
+							environment.define(definition, true);
+						});
+
+					} else if (environment instanceof lychee.Simulation) {
+
+						Object.values(_environment.definitions).forEach(function(definition) {
+							environment.environment.define(definition, true);
+						});
+
+					}
+
+				}
+
+
+				if (environment.id.startsWith('lychee-Environment-')) {
+					environment.setId((lychee.ROOT.project || '').substr((lychee.ROOT.lychee || '').length) + '/custom');
 				}
 
 				for (let id in settings) {
@@ -1208,53 +1219,90 @@ lychee = (function(global) {
 				}
 
 
-				if (callback === null) {
+				if (environment instanceof lychee.Environment) {
 
-					let code    = '';
-					let profile = settings.profile || {};
+					if (callback === null) {
 
-					code += '\n\n';
-					code += 'if (sandbox === null) {\n';
-					code += '\tconsole.error("lychee: init() failed.");\n';
-					code += '\treturn;\n';
-					code += '}\n';
-					code += '\n\n';
-					code += 'let lychee = sandbox.lychee;\n';
+						let code    = '';
+						let profile = settings.profile || {};
 
-					let packages = environment.packages;
-					if (packages instanceof Object && Array.isArray(packages) === false) {
+						code += '\n\n';
+						code += 'if (sandbox === null) {\n';
+						code += '\tconsole.error(\'lychee: environment.init() failed.\');\n';
+						code += '\treturn;\n';
+						code += '}\n';
+						code += '\n\n';
+						code += 'let lychee = sandbox.lychee;\n';
 
-						for (let pid in packages) {
+						let packages = environment.packages;
+						if (packages instanceof Object && Array.isArray(packages) === false) {
 
-							if (pid !== 'lychee' && /$([a-z]+)/g.test(pid)) {
-								code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
+							for (let pid in packages) {
+
+								if (pid !== 'lychee' && /$([a-z]+)/g.test(pid)) {
+									code += 'let ' + pid + ' = sandbox.' + pid + ';\n';
+								}
+
 							}
 
 						}
 
+						code += '\n\n';
+						code += 'sandbox.MAIN = new ' + environment.target + '(' + JSON.stringify(profile) + ');\n';
+						code += '\n\n';
+						code += 'if (typeof sandbox.MAIN.init === \'function\') {\n';
+						code += '\tsandbox.MAIN.init();\n';
+						code += '}\n';
+
+						callback = new Function('sandbox', code);
+
 					}
 
-					code += '\n\n';
-					code += 'sandbox.MAIN = new ' + environment.target + '(' + JSON.stringify(profile) + ');\n';
-					code += '\n\n';
-					code += 'if (typeof sandbox.MAIN.init === \'function\') {\n';
-					code += '\tsandbox.MAIN.init();\n';
-					code += '}\n';
 
-					callback = new Function('sandbox', code);
-
-				}
-
-
-				if (environment instanceof lychee.Environment) {
 					lychee.setEnvironment(environment);
+					environment.init(callback);
+
 				} else if (environment instanceof lychee.Simulation) {
-					lychee.setEnvironment(environment.environment);
-					lychee.setSimulation(environment);
+
+					let simulation  = environment;
+					let environment = simulation.environment;
+
+
+					if (callback === null) {
+
+						let code = '';
+
+						code += '\n\n';
+						code += 'if (sandbox_sim === null) {\n';
+						code += '\tconsole.error(\'lychee: simulation.init() failed.\');\n';
+						code += '\treturn;\n';
+						code += '}\n';
+						code += '\n\n';
+						code += 'console.info(\'lychee: simulation.init() succeeded.\');\n';
+
+						callback = new Function('sandbox_sim', code);
+
+					}
+
+
+					lychee.setEnvironment(environment);
+
+					environment.init(function(sandbox) {
+
+						if (sandbox === null) {
+							console.error('lychee: environment.init() failed.');
+							return;
+						}
+
+
+						console.info('lychee: environment.init() succeeded.');
+
+						lychee.setSimulation(simulation);
+						simulation.init(callback);
+
+					});
+
 				}
-
-
-				environment.init(callback);
 
 
 				return true;

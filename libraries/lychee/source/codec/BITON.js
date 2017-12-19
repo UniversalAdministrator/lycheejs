@@ -105,6 +105,10 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 
 
+	/*
+	 * STRUCTS
+	 */
+
 	const _Stream = function(buffer, mode) {
 
 		this.__buffer    = typeof buffer === 'string' ? buffer : '';
