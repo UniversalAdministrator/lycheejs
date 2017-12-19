@@ -24,6 +24,9 @@ and `fixed`.
 
 - **Changed**: lychee.pkg environment settings changes to `{ packages: { namespace: url }}`.
 - **Changed**: lychee.Definition has `export(sandbox)` method to be independent of lychee.Environment.
+- **Removed**: `lychee.pkginit()` and `lychee.envinit()`.
+- **Added**: `lychee.pkg(type, id, callback)` to ease up reusage of package-defined environments.
+- **Added**: `lychee.init(env, settings, callback)` to ease up initialization process.
 - **Added**: Platform-specific `feature.js` to allow feature detection that lychee.js Strainer understands.
 - **Added**: lychee.js Strainer supports platform-specific APIs via feature detection.
 - Changed: lychee.Package supports Composite syntax.
@@ -31,6 +34,7 @@ and `fixed`.
 - Added: lychee.FEATURES represents feature detection.
 - Added: lychee.FILENAME represents current definition url.
 - Added: lychee.PLATFORMS represents supported platforms.
+- Added: lychee.Specification and lychee.Simulation to allow integration tests per-environment-sandbox.
 - Added: `lychee.blobof(template, blob)` allows validation of deserializations without memory usage.
 - Added: lychee.codec.DIXY supports DIXY format with JSON-compatible data types.
 - Fixed: lychee.codec.BENCODE supports JSON-compatible data types.
