@@ -81,12 +81,11 @@
 		"files": {}
 	},
 	"review": {
-		"simulations": {},
-		"files": {},
+		"environments": {},
+		"files": {}
 	},
 	"source": {
 		"environments": {},
-		"simulations": {},
 		"files": {
 			"Main": [
 				"js"

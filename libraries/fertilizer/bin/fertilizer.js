@@ -117,77 +117,57 @@ const _bootup = function(settings) {
 
 	console.info('BOOTUP (' + process.pid + ')');
 
-	let environment = new lychee.Environment({
-		id:       'fertilizer',
-		debug:    settings.debug === true,
-		sandbox:  settings.debug === true ? false : settings.sandbox === true,
-		target:   'fertilizer.Main',
-		timeout:  5000,
-		packages: {
-			'lychee':     '/libraries/lychee/lychee.pkg',
-			'fertilizer': '/libraries/fertilizer/lychee.pkg'
-		},
-		tags:     {
-			platform: [ 'node' ]
-		}
-	});
+
+	lychee.ROOT.project = lychee.ROOT.lychee + '/libraries/fertilizer';
+
+	lychee.pkg('build', 'node/main', function(environment) {
+
+		lychee.init(environment, {
+			debug:   settings.debug === true,
+			sandbox: settings.debug === true ? false : settings.sandbox === true
+		}, function(sandbox) {
+
+			if (sandbox !== null) {
+
+				let lychee     = sandbox.lychee;
+				let fertilizer = sandbox.fertilizer;
 
 
-	lychee.setEnvironment(environment);
+				// Show more debug messages
+				lychee.debug = true;
 
 
-	environment.init(function(sandbox) {
+				// This allows using #MAIN in JSON files
+				sandbox.MAIN = new fertilizer.Main(settings);
+				sandbox.MAIN.bind('destroy', function(code) {
+					process.exit(code);
+				});
 
-		if (sandbox !== null) {
-
-			let lychee     = sandbox.lychee;
-			let fertilizer = sandbox.fertilizer;
-
-
-			// Show more debug messages
-			lychee.debug = true;
+				sandbox.MAIN.init();
 
 
-			// This allows using #MAIN in JSON files
-			sandbox.MAIN = new fertilizer.Main(settings);
-			sandbox.MAIN.bind('destroy', function(code) {
-				process.exit(code);
-			});
+				const _on_process_error = function() {
+					sandbox.MAIN.destroy();
+					process.exit(1);
+				};
 
-			sandbox.MAIN.init();
+				process.on('SIGHUP',  _on_process_error);
+				process.on('SIGINT',  _on_process_error);
+				process.on('SIGQUIT', _on_process_error);
+				process.on('SIGABRT', _on_process_error);
+				process.on('SIGTERM', _on_process_error);
+				process.on('error',   _on_process_error);
+				process.on('exit',    function() {});
 
+			} else {
 
-			const _on_process_error = function() {
-				sandbox.MAIN.destroy();
+				console.error('BOOTUP FAILURE');
+
 				process.exit(1);
-			};
 
-			process.on('SIGHUP',  _on_process_error);
-			process.on('SIGINT',  _on_process_error);
-			process.on('SIGQUIT', _on_process_error);
-			process.on('SIGABRT', _on_process_error);
-			process.on('SIGTERM', _on_process_error);
-			process.on('error',   _on_process_error);
-			process.on('exit',    function() {});
+			}
 
-
-			new lychee.Input({
-				key:         true,
-				keymodifier: true
-			}).bind('escape', function() {
-
-				console.warn('fertilizer: [ESC] pressed, exiting ...');
-				sandbox.MAIN.destroy();
-
-			}, this);
-
-		} else {
-
-			console.error('BOOTUP FAILURE');
-
-			process.exit(1);
-
-		}
+		});
 
 	});
 

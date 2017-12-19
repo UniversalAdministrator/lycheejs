@@ -77,6 +77,34 @@
 				},
 				"target": "strainer.Main",
 				"variant": "library"
+			},
+			"node/fixer": {
+				"debug": false,
+				"packages": {
+					"strainer": "./lychee.pkg"
+				},
+				"sandbox": true,
+				"tags": {
+					"platform": [
+						"node"
+					]
+				},
+				"target": "strainer.Fixer",
+				"variant": "application"
+			},
+			"node/main": {
+				"debug": false,
+				"packages": {
+					"strainer": "./lychee.pkg"
+				},
+				"sandbox": true,
+				"tags": {
+					"platform": [
+						"node"
+					]
+				},
+				"target": "strainer.Main",
+				"variant": "application"
 			}
 		},
 		"files": {

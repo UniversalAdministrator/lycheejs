@@ -38,7 +38,6 @@ const _bootup = function(settings) {
 	// console log/info/warn or pretty
 	// color codes, so strip them out.
 
-
 	if (settings.debug === false) {
 
 		console.log   = function() {};
@@ -59,71 +58,51 @@ const _bootup = function(settings) {
 	}
 
 
-	let environment = new lychee.Environment({
-		id:       'strainer',
-		debug:    false,
-		sandbox:  true,
-		target:   'strainer.Fixer',
-		timeout:  5000,
-		packages: {
-			'lychee':   '/libraries/lychee/lychee.pkg',
-			'strainer': '/libraries/strainer/lychee.pkg'
-		},
-		tags:     {
-			platform: [ 'node' ]
-		}
-	});
+	lychee.ROOT.project = lychee.ROOT.lychee + '/libraries/strainer';
+
+	lychee.pkg('build', 'node/fixer', function(environment) {
+
+		lychee.init(environment, {
+			debug:   false,
+			sandbox: true
+		}, function(sandbox) {
+
+			if (sandbox !== null) {
+
+				let lychee   = sandbox.lychee;
+				let strainer = sandbox.strainer;
 
 
-	lychee.setEnvironment(environment);
+				// This allows using #MAIN in JSON files
+				sandbox.MAIN = new strainer.Fixer(settings);
+
+				sandbox.MAIN.bind('destroy', function(code) {
+					process.exit(code);
+				});
+
+				sandbox.MAIN.init();
 
 
-	environment.init(function(sandbox) {
+				const _on_process_error = function() {
+					sandbox.MAIN.destroy();
+					process.exit(1);
+				};
 
-		if (sandbox !== null) {
+				process.on('SIGHUP',  _on_process_error);
+				process.on('SIGINT',  _on_process_error);
+				process.on('SIGQUIT', _on_process_error);
+				process.on('SIGABRT', _on_process_error);
+				process.on('SIGTERM', _on_process_error);
+				process.on('error',   _on_process_error);
+				process.on('exit',    function() {});
 
-			let lychee   = sandbox.lychee;
-			let strainer = sandbox.strainer;
+			} else {
 
-
-			// This allows using #MAIN in JSON files
-			sandbox.MAIN = new strainer.Fixer(settings);
-
-			sandbox.MAIN.bind('destroy', function(code) {
-				process.exit(code);
-			});
-
-			sandbox.MAIN.init();
-
-
-			const _on_process_error = function() {
-				sandbox.MAIN.destroy();
 				process.exit(1);
-			};
 
-			process.on('SIGHUP',  _on_process_error);
-			process.on('SIGINT',  _on_process_error);
-			process.on('SIGQUIT', _on_process_error);
-			process.on('SIGABRT', _on_process_error);
-			process.on('SIGTERM', _on_process_error);
-			process.on('error',   _on_process_error);
-			process.on('exit',    function() {});
+			}
 
-
-			new lychee.Input({
-				key:         true,
-				keymodifier: true
-			}).bind('escape', function() {
-
-				sandbox.MAIN.destroy();
-
-			}, this);
-
-		} else {
-
-			process.exit(1);
-
-		}
+		});
 
 	});
 

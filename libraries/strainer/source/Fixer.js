@@ -1,6 +1,5 @@
 
 lychee.define('strainer.Fixer').requires([
-	'lychee.Input',
 	'strainer.flow.Check'
 ]).includes([
 	'lychee.event.Emitter'
@@ -8,7 +7,6 @@ lychee.define('strainer.Fixer').requires([
 
 	const _lychee  = lychee.import('lychee');
 	const _Emitter = lychee.import('lychee.event.Emitter');
-	const _Input   = lychee.import('lychee.Input');
 	const _flow    = lychee.import('strainer.flow');
 
 

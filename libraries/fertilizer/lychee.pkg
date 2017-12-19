@@ -82,6 +82,20 @@
 				},
 				"target": "fertilizer.Main",
 				"variant": "library"
+			},
+			"node/main": {
+				"debug": false,
+				"packages": {
+					"fertilizer": "./lychee.pkg"
+				},
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"node"
+					]
+				},
+				"target": "fertilizer.Main",
+				"variant": "application"
 			}
 		},
 		"files": {

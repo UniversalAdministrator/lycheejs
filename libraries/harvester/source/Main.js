@@ -1,6 +1,5 @@
 
 lychee.define('harvester.Main').requires([
-	'lychee.Input',
 	'harvester.net.Admin',
 	'harvester.net.Server',
 	'harvester.Watcher'

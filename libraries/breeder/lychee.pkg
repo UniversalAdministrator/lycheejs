@@ -14,7 +14,8 @@
 			"node-sdl/dist": {
 				"debug": false,
 				"packages": {
-					"breeder": "./lychee.pkg"
+					"breeder": "./lychee.pkg",
+					"fertilizer": "/libraries/fertilizer/lychee.pkg"
 				},
 				"sandbox": false,
 				"tags": {
@@ -29,7 +30,8 @@
 			"node/dist": {
 				"debug": false,
 				"packages": {
-					"breeder": "./lychee.pkg"
+					"breeder": "./lychee.pkg",
+					"fertilizer": "/libraries/fertilizer/lychee.pkg"
 				},
 				"sandbox": false,
 				"tags": {
@@ -39,6 +41,21 @@
 				},
 				"target": "breeder.Main",
 				"variant": "library"
+			},
+			"node/main": {
+				"debug": false,
+				"packages": {
+					"breeder": "./lychee.pkg",
+					"fertilizer": "/libraries/fertilizer/lychee.pkg"
+				},
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"node"
+					]
+				},
+				"target": "breeder.Main",
+				"variant": "application"
 			}
 		},
 		"files": {

@@ -76,17 +76,17 @@ const _print_help = function() {
 	console.log('                                                   ');
 	console.log('    init, fork, pull, push                         ');
 	console.log('                                                   ');
-	console.log('Available Libraries:                                ');
-	console.log('                                                    ');
+	console.log('Available Libraries:                               ');
+	console.log('                                                   ');
 	libraries.forEach(function(library) {
-		let diff = ('                                                ').substr(library.length);
+		let diff = ('                                               ').substr(library.length);
 		console.log('    ' + library + diff);
 	});
-	console.log('                                                    ');
-	console.log('Available Projects:                                 ');
-	console.log('                                                    ');
+	console.log('                                                   ');
+	console.log('Available Projects:                                ');
+	console.log('                                                   ');
 	projects.forEach(function(project) {
-		let diff = ('                                                ').substr(project.length);
+		let diff = ('                                               ').substr(project.length);
 		console.log('    ' + project + diff);
 	});
 	console.log('                                                   ');
@@ -112,79 +112,58 @@ const _bootup = function(settings) {
 
 	console.info('BOOTUP (' + process.pid + ')');
 
-	let environment = new lychee.Environment({
-		id:       'breeder',
-		debug:    settings.debug === true,
-		sandbox:  settings.debug === true ? false : true,
-		target:   'breeder.Main',
-		timeout:  5000,
-		packages: {
-			'lychee':     '/libraries/lychee/lychee.pkg',
-			'fertilizer': '/libraries/fertilizer/lychee.pkg',
-			'breeder':    '/libraries/breeder/lychee.pkg'
-		},
-		tags:     {
-			platform: [ 'node' ]
-		}
-	});
+
+	lychee.ROOT.project = lychee.ROOT.lychee + '/libraries/breeder';
+
+	lychee.pkg('build', 'node/main', function(environment) {
+
+		lychee.init(environment, {
+			debug:   settings.debug === true,
+			sandbox: settings.debug === true ? false : true
+		}, function(sandbox) {
+
+			if (sandbox !== null) {
+
+				let lychee  = sandbox.lychee;
+				let breeder = sandbox.breeder;
 
 
-	lychee.setEnvironment(environment);
+				// Show less debug messages
+				lychee.debug = true;
 
 
-	environment.init(function(sandbox) {
+				// This allows using #MAIN in JSON files
+				sandbox.MAIN = new breeder.Main(settings);
 
-		if (sandbox !== null) {
+				sandbox.MAIN.bind('destroy', function() {
+					process.exit(0);
+				});
 
-			let lychee  = sandbox.lychee;
-			let breeder = sandbox.breeder;
-
-
-			// Show less debug messages
-			lychee.debug = true;
+				sandbox.MAIN.init();
 
 
-			// This allows using #MAIN in JSON files
-			sandbox.MAIN = new breeder.Main(settings);
+				const _on_process_error = function() {
+					sandbox.MAIN.destroy();
+					process.exit(1);
+				};
 
-			sandbox.MAIN.bind('destroy', function() {
-				process.exit(0);
-			});
+				process.on('SIGHUP',  _on_process_error);
+				process.on('SIGINT',  _on_process_error);
+				process.on('SIGQUIT', _on_process_error);
+				process.on('SIGABRT', _on_process_error);
+				process.on('SIGTERM', _on_process_error);
+				process.on('error',   _on_process_error);
+				process.on('exit',    function() {});
 
-			sandbox.MAIN.init();
+			} else {
 
+				console.error('BOOTUP FAILURE');
 
-			const _on_process_error = function() {
-				sandbox.MAIN.destroy();
 				process.exit(1);
-			};
 
-			process.on('SIGHUP',  _on_process_error);
-			process.on('SIGINT',  _on_process_error);
-			process.on('SIGQUIT', _on_process_error);
-			process.on('SIGABRT', _on_process_error);
-			process.on('SIGTERM', _on_process_error);
-			process.on('error',   _on_process_error);
-			process.on('exit',    function() {});
+			}
 
-
-			new lychee.Input({
-				key:         true,
-				keymodifier: true
-			}).bind('escape', function() {
-
-				console.warn('breeder: [ESC] pressed, exiting ...');
-				sandbox.MAIN.destroy();
-
-			}, this);
-
-		} else {
-
-			console.error('BOOTUP FAILURE');
-
-			process.exit(1);
-
-		}
+		});
 
 	});
 

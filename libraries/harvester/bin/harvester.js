@@ -54,36 +54,35 @@ const _print_help = function() {
 		.map(val => val.substr(0, val.indexOf('.json')));
 
 
-	console.log('                                                            ');
+	console.log('                                                       ');
 	console.info('lychee.js ' + lychee.VERSION + ' Harvester');
-	console.log('                                                            ');
-	console.log('Usage: lycheejs-harvester [Action] [Profile] [Flag]         ');
-	console.log('                                                            ');
-	console.log('                                                            ');
-	console.log('Available Actions:                                          ');
-	console.log('                                                            ');
-	console.log('   start, status, stop                                      ');
-	console.log('                                                            ');
-	console.log('Available Profiles:                                         ');
-	console.log('                                                            ');
+	console.log('                                                       ');
+	console.log('Usage: lycheejs-harvester [Action] [Profile] [Flag]    ');
+	console.log('                                                       ');
+	console.log('                                                       ');
+	console.log('Available Actions:                                     ');
+	console.log('                                                       ');
+	console.log('   start, status, stop                                 ');
+	console.log('                                                       ');
+	console.log('Available Profiles:                                    ');
+	console.log('                                                       ');
 	profiles.forEach(function(profile) {
-		let diff = ('                                                        ').substr(profile.length);
+		let diff = ('                                                   ').substr(profile.length);
 		console.log('    ' + profile + diff);
 	});
-	console.log('                                                            ');
-	console.log('Available Flags:                                            ');
-	console.log('                                                            ');
-	console.log('   --debug          Debug Mode with debug messages          ');
-	console.log('   --sandbox        Sandbox Mode without software bots      ');
-	console.log('                                                            ');
-	console.log('Examples:                                                   ');
-	console.log('                                                            ');
-	console.log('    lycheejs-harvester start development;                   ');
-	console.log('    lycheejs-harvester status;                              ');
-	console.log('    lycheejs-harvester stop;                                ');
-	console.log('    lycheejs-harvester start development --sandbox;         ');
-	console.log('    lycheejs-harvester start --sandbox /libraries/studio; ');
-	console.log('                                                            ');
+	console.log('                                                       ');
+	console.log('Available Flags:                                       ');
+	console.log('                                                       ');
+	console.log('   --debug          Debug Mode with debug messages     ');
+	console.log('   --sandbox        Sandbox Mode without software bots ');
+	console.log('                                                       ');
+	console.log('Examples:                                              ');
+	console.log('                                                       ');
+	console.log('    lycheejs-harvester start development;              ');
+	console.log('    lycheejs-harvester status;                         ');
+	console.log('    lycheejs-harvester stop;                           ');
+	console.log('    lycheejs-harvester start development --sandbox;    ');
+	console.log('                                                       ');
 
 };
 
@@ -141,84 +140,64 @@ const _bootup = function(settings) {
 
 	console.info('BOOTUP (' + process.pid + ')');
 
-	let environment = new lychee.Environment({
-		id:       'harvester',
-		debug:    settings.debug === true,
-		sandbox:  true,
-		target:   'harvester.Main',
-		timeout:  5000,
-		packages: {
-			'lychee':    '/libraries/lychee/lychee.pkg',
-			'harvester': '/libraries/harvester/lychee.pkg'
-		},
-		tags:     {
-			platform: [ 'node' ]
-		}
-	});
+
+	lychee.ROOT.project = lychee.ROOT.lychee + '/libraries/harvester';
+
+	lychee.pkg('build', 'node/main', function(environment) {
+
+		lychee.init(environment, {
+			debug:   settings.debug === true,
+			sandbox: true
+		}, function(sandbox) {
+
+			lychee.ROOT.project = lychee.ROOT.lychee;
+
+			if (sandbox !== null) {
+
+				let lychee    = sandbox.lychee;
+				let harvester = sandbox.harvester;
 
 
-	lychee.setEnvironment(environment);
+				// Show more debug messages
+				lychee.debug = true;
 
 
-	environment.init(function(sandbox) {
+				// This allows using #MAIN in JSON files
+				sandbox.MAIN = new harvester.Main(settings);
+				sandbox.MAIN.bind('destroy', function(code) {
+					process.exit(0);
+				});
 
-		if (sandbox !== null) {
-
-			let lychee    = sandbox.lychee;
-			let harvester = sandbox.harvester;
-
-
-			// Show more debug messages
-			lychee.debug = true;
+				sandbox.MAIN.init();
+				_write_pid();
 
 
-			// This allows using #MAIN in JSON files
-			sandbox.MAIN = new harvester.Main(settings);
-			sandbox.MAIN.bind('destroy', function(code) {
-				process.exit(0);
-			});
-
-			sandbox.MAIN.init();
-			_write_pid();
+				const _on_process_error = function() {
+					_clear_pid();
+					sandbox.MAIN.destroy();
+					process.exit(1);
+				};
 
 
-			const _on_process_error = function() {
+				process.on('SIGHUP',  _on_process_error);
+				process.on('SIGINT',  _on_process_error);
+				process.on('SIGQUIT', _on_process_error);
+				process.on('SIGABRT', _on_process_error);
+				process.on('SIGTERM', _on_process_error);
+				process.on('error',   _on_process_error);
+				process.on('exit',    function() {});
+
+			} else {
+
+				console.error('BOOTUP FAILURE');
+
 				_clear_pid();
-				sandbox.MAIN.destroy();
+
 				process.exit(1);
-			};
 
+			}
 
-			process.on('SIGHUP',  _on_process_error);
-			process.on('SIGINT',  _on_process_error);
-			process.on('SIGQUIT', _on_process_error);
-			process.on('SIGABRT', _on_process_error);
-			process.on('SIGTERM', _on_process_error);
-			process.on('error',   _on_process_error);
-			process.on('exit',    function() {});
-
-
-			new lychee.Input({
-				key:         true,
-				keymodifier: true
-			}).bind('escape', function() {
-
-				console.warn('harvester: [ESC] pressed, exiting ...');
-
-				_clear_pid();
-				sandbox.MAIN.destroy();
-
-			}, this);
-
-		} else {
-
-			console.error('BOOTUP FAILURE');
-
-			_clear_pid();
-
-			process.exit(1);
-
-		}
+		});
 
 	});
 

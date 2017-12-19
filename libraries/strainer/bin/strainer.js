@@ -103,74 +103,54 @@ const _bootup = function(settings) {
 
 	console.info('BOOTUP (' + process.pid + ')');
 
-	let environment = new lychee.Environment({
-		id:       'strainer',
-		debug:    settings.debug === true,
-		sandbox:  settings.debug === true ? false : true,
-		target:   'strainer.Main',
-		timeout:  5000,
-		packages: {
-			'lychee':   '/libraries/lychee/lychee.pkg',
-			'strainer': '/libraries/strainer/lychee.pkg'
-		},
-		tags:     {
-			platform: [ 'node' ]
-		}
-	});
+
+	lychee.ROOT.project = lychee.ROOT.lychee + '/libraries/strainer';
+
+	lychee.pkg('build', 'node/main', function(environment) {
+
+		lychee.init(environment, {
+			debug:   settings.debug === true,
+			sandbox: settings.debug === true ? false : true
+		}, function(sandbox) {
+
+			if (sandbox !== null) {
+
+				let lychee   = sandbox.lychee;
+				let strainer = sandbox.strainer;
 
 
-	lychee.setEnvironment(environment);
+				// This allows using #MAIN in JSON files
+				sandbox.MAIN = new strainer.Main(settings);
+
+				sandbox.MAIN.bind('destroy', function(code) {
+					process.exit(code);
+				});
+
+				sandbox.MAIN.init();
 
 
-	environment.init(function(sandbox) {
+				const _on_process_error = function() {
+					sandbox.MAIN.destroy();
+					process.exit(1);
+				};
 
-		if (sandbox !== null) {
+				process.on('SIGHUP',  _on_process_error);
+				process.on('SIGINT',  _on_process_error);
+				process.on('SIGQUIT', _on_process_error);
+				process.on('SIGABRT', _on_process_error);
+				process.on('SIGTERM', _on_process_error);
+				process.on('error',   _on_process_error);
+				process.on('exit',    function() {});
 
-			let lychee   = sandbox.lychee;
-			let strainer = sandbox.strainer;
+			} else {
 
+				console.error('BOOTUP FAILURE');
 
-			// This allows using #MAIN in JSON files
-			sandbox.MAIN = new strainer.Main(settings);
-
-			sandbox.MAIN.bind('destroy', function(code) {
-				process.exit(code);
-			});
-
-			sandbox.MAIN.init();
-
-
-			const _on_process_error = function() {
-				sandbox.MAIN.destroy();
 				process.exit(1);
-			};
 
-			process.on('SIGHUP',  _on_process_error);
-			process.on('SIGINT',  _on_process_error);
-			process.on('SIGQUIT', _on_process_error);
-			process.on('SIGABRT', _on_process_error);
-			process.on('SIGTERM', _on_process_error);
-			process.on('error',   _on_process_error);
-			process.on('exit',    function() {});
+			}
 
-
-			new lychee.Input({
-				key:         true,
-				keymodifier: true
-			}).bind('escape', function() {
-
-				console.warn('strainer: [ESC] pressed, exiting ...');
-				sandbox.MAIN.destroy();
-
-			}, this);
-
-		} else {
-
-			console.error('BOOTUP FAILURE');
-
-			process.exit(1);
-
-		}
+		});
 
 	});
 

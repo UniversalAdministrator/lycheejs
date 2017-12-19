@@ -38,35 +38,8 @@ lychee.define('harvester.net.server.Redirect').exports(function(lychee, global, 
 			let url    = headers['url'];
 
 
-			// Single-project mode
-			if (lychee.ROOT.lychee !== lychee.ROOT.project) {
-
-				let identifier = lychee.ROOT.project;
-				let project    = lychee.import('MAIN')._projects[identifier] || null;
-				if (project !== null) {
-
-					let path = url;
-					if (path === '' || path === '/') {
-
-						let info = project.filesystem.info('/index.html');
-						if (info !== null) {
-
-							tunnel.send('', {
-								'status':   '301 Moved Permanently',
-								'location': '/index.html'
-							});
-
-							return true;
-
-						}
-
-					}
-
-				}
-
-
 			// Multi-project mode /index.html
-			} else if (url === '/') {
+			if (url === '/') {
 
 				tunnel.send('SHIT', {
 					'status':   '301 Moved Permanently',

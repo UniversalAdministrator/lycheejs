@@ -50,7 +50,7 @@ lychee.define('breeder.Template').requires([
 
 				tpl_s = '\t<script src="/libraries/';
 				tpl_c = '\t<script src="${injection}"></script>';
-				tpl_i = '\t\tlychee.inject(lychee.ENVIRONMENTS[\'${identifier}\']);';
+				tpl_i = '\t\t\t\tlychee.inject(lychee.ENVIRONMENTS[\'${identifier}\']);\n';
 
 				injections = injections.filter(function(injection) {
 					return injection.split('/')[4] === 'html';
@@ -60,9 +60,9 @@ lychee.define('breeder.Template').requires([
 
 			} else if (chunk.startsWith('require(')) {
 
-				tpl_s = 'require(\'/opt/lycheejs/libraries/';
-				tpl_c = 'require(\'/opt/lycheejs/${injection}\');';
-				tpl_i = '\tlychee.inject(lychee.ENVIRONMENTS[\'${identifier}\']);';
+				tpl_s = 'require(_ROOT + \'/libraries/';
+				tpl_c = 'require(_ROOT + \'${injection}\');';
+				tpl_i = '\t\t\tlychee.inject(lychee.ENVIRONMENTS[\'${identifier}\']);\n';
 
 				injections = injections.filter(function(injection) {
 					return injection.split('/')[4] === 'node';
@@ -400,8 +400,7 @@ lychee.define('breeder.Template').requires([
 						return /lychee\.pkg/g.test(asset.url);
 					}) || null;
 
-
-					if (main.length > 0 && pkg !== null) {
+					if (main.length > 0 && pkg !== null && pkg.buffer !== null) {
 
 						let platforms = [];
 
@@ -506,7 +505,6 @@ lychee.define('breeder.Template').requires([
 					if (tmp.buffer !== null) {
 
 						console.log('breeder: PULL-INJECT ' + tmp.url);
-
 
 						tmp.buffer = _inject(tmp.buffer, injections);
 
