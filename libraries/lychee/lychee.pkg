@@ -353,9 +353,6 @@
 					"Storage": [
 						"json"
 					],
-					"features": [
-						"json"
-					],
 					"net": {
 						"Server": [
 							"json"
@@ -576,8 +573,7 @@
 					"json"
 				]
 			}
-		},
-		"tags": {}
+		}
 	},
 	"build": {
 		"environments": {
@@ -701,8 +697,7 @@
 					"js"
 				]
 			}
-		},
-		"tags": {}
+		}
 	},
 	"review": {
 		"files": {
@@ -712,7 +707,6 @@
 				]
 			}
 		},
-		"tags": {},
 		"simulations": {}
 	},
 	"source": {

@@ -1,6 +1,5 @@
 {
 	"api": {
-		"tags": {},
 		"files": {
 			"Main": [
 				"json"
@@ -63,11 +62,9 @@
 				"target": "game.Main",
 				"variant": "application"
 			}
-		},
-		"tags": {}
+		}
 	},
 	"review": {
-		"tags": {},
 		"simulations": {}
 	},
 	"source": {

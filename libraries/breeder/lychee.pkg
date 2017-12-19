@@ -1,6 +1,5 @@
 {
 	"api": {
-		"tags": {},
 		"files": {
 			"Main": [
 				"json"
@@ -50,11 +49,9 @@
 					]
 				}
 			}
-		},
-		"tags": {}
+		}
 	},
 	"review": {
-		"tags": {},
 		"simulations": {}
 	},
 	"source": {

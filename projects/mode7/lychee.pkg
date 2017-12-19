@@ -1,6 +1,5 @@
 {
 	"api": {
-		"tags": {},
 		"files": {
 			"Camera": [
 				"json"
@@ -80,11 +79,9 @@
 				"type": "folder",
 				"variant": "application"
 			}
-		},
-		"tags": {}
+		}
 	},
 	"review": {
-		"tags": {},
 		"simulations": {}
 	},
 	"source": {

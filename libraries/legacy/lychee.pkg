@@ -1,6 +1,5 @@
 {
 	"api": {
-		"tags": {},
 		"files": {
 			"platform": {
 				"html": {
@@ -23,11 +22,9 @@
 		}
 	},
 	"build": {
-		"environments": {},
-		"tags": {}
+		"environments": {}
 	},
 	"review": {
-		"tags": {},
 		"simulations": {}
 	},
 	"source": {

@@ -115,6 +115,15 @@ lychee.define('harvester.mod.Packager').requires([
 		if (typeof json.source.tags === 'undefined')         json.source.tags         = {};
 
 
+		if (typeof json.api.environments !== 'undefined')    delete json.api.environments;
+		if (typeof json.api.simulations !== 'undefined')     delete json.api.simulations;
+		if (typeof json.api.tags !== 'undefined')            delete json.api.tags;
+		if (typeof json.build.simulations !== 'undefined')   delete json.build.simulations;
+		if (typeof json.build.tags !== 'undefined')          delete json.build.tags;
+		if (typeof json.review.environments !== 'undefined') delete json.review.environments;
+		if (typeof json.review.tags !== 'undefined')         delete json.review.tags;
+
+
 		json.api.files = {};
 		_walk_directory.call(project.filesystem, tmp, '/api');
 		json.api.files = _sort_recursive(tmp.api);

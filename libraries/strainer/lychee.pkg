@@ -1,6 +1,5 @@
 {
 	"api": {
-		"tags": {},
 		"files": {
 			"Fixer": [
 				"json"
@@ -95,11 +94,9 @@
 					]
 				}
 			}
-		},
-		"tags": {}
+		}
 	},
 	"review": {
-		"tags": {},
 		"simulations": {}
 	},
 	"source": {

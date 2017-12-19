@@ -51,6 +51,39 @@ lychee.define('lychee.Renderer').tags({
 	 * HELPERS
 	 */
 
+	const _VENDORS = [ 'moz', 'ms', 'o', 'webkit' ];
+	const _fix_css = function() {
+
+		let found = null;
+		let style = this.__canvas.style;
+
+		for (let v = 0, vl = _VENDORS.length; v < vl; v++) {
+
+			let vendor = _VENDORS[v];
+			if (vendor + 'UserSelect' in style) {
+				found = vendor;
+				break;
+			}
+
+		}
+
+		if (found !== null) {
+			style[found + 'UserSelect'] = 'none';
+		} else {
+			style['userSelect'] = 'none';
+		}
+
+		style['display'] = 'block';
+
+
+		if (_body !== null) {
+			_body.style['margin']   = '0px';
+			_body.style['padding']  = '0px';
+			_body.style['overflow'] = 'hidden';
+		}
+
+	};
+
 	const _Buffer = function(width, height) {
 
 		this.width  = typeof width === 'number'  ? width  : 1;
@@ -106,9 +139,12 @@ lychee.define('lychee.Renderer').tags({
 		this.__canvas.className = 'lychee-Renderer';
 		this.__ctx              = this.__canvas.getContext('2d');
 
+
 		if (_body !== null) {
 			_body.appendChild(this.__canvas);
 		}
+
+		_fix_css.call(this);
 
 
 		this.setAlpha(settings.alpha);

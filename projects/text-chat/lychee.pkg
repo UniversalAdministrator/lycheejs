@@ -1,6 +1,5 @@
 {
 	"api": {
-		"tags": {},
 		"files": {
 			"Main": [
 				"json"
@@ -85,11 +84,9 @@
 				"target": "app.Main",
 				"variant": "application"
 			}
-		},
-		"tags": {}
+		}
 	},
 	"review": {
-		"tags": {},
 		"simulations": {}
 	},
 	"source": {

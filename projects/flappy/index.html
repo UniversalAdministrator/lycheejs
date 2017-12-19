@@ -12,19 +12,11 @@
 
 	<style>
 		body {
-			margin: 0;
-			padding: 0;
 			background: #222222;
-			overflow: hidden;
 		}
-		
+
 		.lychee-Renderer {
-			display: block;
 			margin: 32px auto;
-			user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			-webkit-user-select: none;
 		}
 	</style>
 
@@ -36,7 +28,6 @@
 		lychee.pkginit('html/main', {
 			debug:   false,
 			sandbox: false
-		}, {
 		});
 
 	})(lychee, typeof global !== 'undefined' ? global : this);

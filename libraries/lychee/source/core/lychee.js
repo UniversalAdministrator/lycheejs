@@ -1240,11 +1240,10 @@ lychee = (function(global) {
 
 		},
 
-		pkginit: function(identifier, settings, profile) {
+		pkginit: function(identifier, settings) {
 
 			identifier = typeof identifier === 'string' ? identifier : null;
-			settings   = settings instanceof Object     ? settings   : {};
-			profile    = profile instanceof Object      ? profile    : {};
+			settings   = settings instanceof Object     ? settings   : null;
 
 
 			_bootstrap_environment.call(this);
@@ -1264,12 +1263,14 @@ lychee = (function(global) {
 							let data = buffer.build.environments[identifier] || null;
 							if (data instanceof Object) {
 
-								let code         = '\n';
-								let env_settings = Object.assign({
+								settings = lychee.assignunlink({
 									id: lychee.ROOT.project + '/' + identifier.split('/').pop()
-								}, data, settings);
-								let env_profile  = Object.assign({}, data.profile, profile);
-								let environment  = new lychee.Environment(env_settings);
+								}, JSON.parse(JSON.stringify(data)), settings);
+
+
+								let code        = '\n';
+								let profile     = settings.profile || {};
+								let environment = new lychee.Environment(settings);
 
 
 								if (_environment !== null) {
@@ -1290,7 +1291,7 @@ lychee = (function(global) {
 
 								code += 'let lychee = sandbox.lychee;\n';
 
-								let packages = env_settings.packages;
+								let packages = settings.packages;
 								if (packages instanceof Object && !(packages instanceof Array)) {
 
 									for (let pid in packages) {
@@ -1300,7 +1301,7 @@ lychee = (function(global) {
 								}
 
 								code += '\n\n';
-								code += 'sandbox.MAIN = new ' + env_settings.target + '(' + JSON.stringify(env_profile) + ');\n';
+								code += 'sandbox.MAIN = new ' + settings.target + '(' + JSON.stringify(profile) + ');\n';
 								code += '\n\n';
 								code += 'if (typeof sandbox.MAIN.init === \'function\') {\n';
 								code += '\tsandbox.MAIN.init();\n';

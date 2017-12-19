@@ -16,13 +16,14 @@ require(_ROOT + '/libraries/lychee/build/node/core.js')(__dirname);
 
 	lychee.pkginit('node/main', {
 		debug:   false,
-		sandbox: false
-	}, {
-		renderer: null,
-		client:   null,
-		server:   {
-			host: _HOST,
-			port: _PORT
+		sandbox: false,
+		profile: {
+			renderer: null,
+			client:   null,
+			server:   {
+				host: _HOST,
+				port: _PORT
+			}
 		}
 	});
 
