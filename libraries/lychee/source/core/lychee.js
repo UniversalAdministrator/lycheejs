@@ -512,7 +512,7 @@ lychee = (function(global) {
 			project: null
 		},
 
-		VERSION: "2017-Q3",
+		VERSION: "2017-Q4",
 
 
 
