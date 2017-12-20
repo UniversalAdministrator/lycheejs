@@ -54,84 +54,80 @@ lychee.define('strainer.plugin.API').requires([
 				}
 
 
-				let tmp = err.url.split('/');
+				let tmp = url.split('/');
 				if (tmp.length > 3) {
 
-					let type = tmp[1];
-					if (type === 'libraries') {
+					let type   = tmp[1];
+					let folder = tmp[3];
 
-						let folder = tmp[3];
-						if (folder === 'source') {
+					if (folder === 'source') {
 
-							let is_platform = tmp[4] === 'platform';
-							if (is_platform === true) {
+						let is_platform = tmp[4] === 'platform';
+						if (is_platform === true) {
 
-								let platform = tmp[5];
-								let name     = [ tmp[2] ].concat(tmp.slice(6));
+							let platform = tmp[5];
+							let name     = [ type === 'libraries' ? tmp[2] : 'app' ].concat(tmp.slice(6));
 
-								let check = name[name.length - 1].indexOf('.');
-								if (check !== -1) {
-									name[name.length - 1] = name[name.length - 1].substr(0, check);
-								}
-
-								return '\nlychee.define(\'' + name.join('.') + '\').tags({\n\t\'platform\': \'' + platform + '\'\n});\n' + code.trim() + '\n';
-
-							} else {
-
-								let name  = [ tmp[2] ].concat(tmp.slice(4));
-								let check = name[name.length - 1].indexOf('.');
-								if (check !== -1) {
-									name[name.length - 1] = name[name.length - 1].substr(0, check);
-								}
-
-								return '\nlychee.define(\'' + name.join('.') + '\');\n' + code.trim() + '\n';
-
+							let check = name[name.length - 1].indexOf('.');
+							if (check !== -1) {
+								name[name.length - 1] = name[name.length - 1].substr(0, check);
 							}
 
+							return '\nlychee.define(\'' + name.join('.') + '\').tags({\n\t\'platform\': \'' + platform + '\'\n});\n' + code.trim() + '\n';
 
 						} else {
 
-							// XXX: Ignore this error in other folders
-							return code;
-
-						}
-
-					} else if (type === 'projects') {
-
-						let folder = tmp[3];
-						if (folder === 'source') {
-
-							let is_platform = tmp[4] === 'platform';
-							if (is_platform === true) {
-
-								let platform = tmp[5];
-								let name     = [ 'app' ].concat(tmp.slice(6));
-
-								let check = name[name.length - 1].indexOf('.');
-								if (check !== -1) {
-									name[name.length - 1] = name[name.length - 1].substr(0, check);
-								}
-
-								return '\nlychee.define(\'' + name.join('.') + '\').tags({\n\t\'platform\': \'' + platform + '\'\n});\n' + code.trim() + '\n';
-
-							} else {
-
-								let name  = [ 'app' ].concat(tmp.slice(4));
-								let check = name[name.length - 1].indexOf('.');
-								if (check !== -1) {
-									name[name.length - 1] = name[name.length - 1].substr(0, check);
-								}
-
-								return '\nlychee.define(\'' + name.join('.') + '\');\n' + code.trim() + '\n';
-
+							let name  = [ type === 'libraries' ? tmp[2] : 'app' ].concat(tmp.slice(4));
+							let check = name[name.length - 1].indexOf('.');
+							if (check !== -1) {
+								name[name.length - 1] = name[name.length - 1].substr(0, check);
 							}
 
-						} else {
-
-							// XXX: Ignore this error in other folders
-							return code;
+							return '\nlychee.define(\'' + name.join('.') + '\');\n' + code.trim() + '\n';
 
 						}
+
+					} else {
+
+						// XXX: Ignore this error in other folders
+						return code;
+
+					}
+
+				}
+
+			}
+
+
+			return null;
+
+		},
+
+		'no-specify': function(err, report, code) {
+
+			let url = err.url || null;
+			if (url !== null) {
+
+				let tmp = url.split('/');
+				if (tmp.length > 3) {
+
+					let type   = tmp[1];
+					let folder = tmp[3];
+
+					if (folder === 'review') {
+
+						let name  = [ type === 'libraries' ? tmp[2] : 'app' ].concat(tmp.slice(4));
+						let check = name[name.length - 1].indexOf('.');
+						if (check !== -1) {
+							name[name.length - 1] = name[name.length - 1].substr(0, check);
+						}
+
+						return '\nlychee.specify(\'' + name.join('.') + '\');\n' + code.trim() + '\n';
+
+					} else {
+
+						// XXX: Ignore this error in other folders
+						return code;
 
 					}
 
@@ -154,40 +150,72 @@ lychee.define('strainer.plugin.API').requires([
 					return code;
 				}
 
-			}
 
+				let tmp = err.url.split('/');
+				if (tmp.length > 3) {
 
-			let i1 = code.indexOf('lychee.define(');
-			let i2 = code.indexOf('tags({');
-			let i3 = code.indexOf('attaches({');
-			let i4 = code.indexOf('requires([');
-			let i5 = code.indexOf('includes([');
-			let i6 = code.indexOf('supports(function(lychee, global) {');
-			let i7 = code.indexOf('exports(function(lychee, global, attachments) {');
+					let type   = tmp[1];
+					let folder = tmp[3];
 
-			if (i7 === -1) {
+					if (folder === 'source') {
 
-				let chunk = null;
+						let i1 = code.indexOf('lychee.define(');
+						let i2 = code.indexOf('tags({');
+						let i3 = code.indexOf('attaches({');
+						let i4 = code.indexOf('requires([');
+						let i5 = code.indexOf('includes([');
+						let i6 = code.indexOf('supports(function(lychee, global) {');
+						let i7 = code.indexOf('exports(function(lychee, global, attachments) {');
 
-				if (i6 !== -1) {
-					chunk = _split_chunk(code, '})', i6);
-				} else if (i5 !== -1) {
-					chunk = _split_chunk(code, '])', i5);
-				} else if (i4 !== -1) {
-					chunk = _split_chunk(code, '])', i4);
-				} else if (i3 !== -1) {
-					chunk = _split_chunk(code, '})', i3);
-				} else if (i2 !== -1) {
-					chunk = _split_chunk(code, '})', i2);
-				} else if (i1 !== -1) {
-					chunk = _split_chunk(code, ')',  i1);
+						if (i7 === -1) {
+
+							let chunk = null;
+
+							if (i6 !== -1) {
+								chunk = _split_chunk(code, '})', i6);
+							} else if (i5 !== -1) {
+								chunk = _split_chunk(code, '])', i5);
+							} else if (i4 !== -1) {
+								chunk = _split_chunk(code, '])', i4);
+							} else if (i3 !== -1) {
+								chunk = _split_chunk(code, '})', i3);
+							} else if (i2 !== -1) {
+								chunk = _split_chunk(code, '})', i2);
+							} else if (i1 !== -1) {
+								chunk = _split_chunk(code, ')',  i1);
+							}
+
+							if (chunk !== null) {
+								return chunk[0] + '.exports(function(lychee, global, attachments) {\n\n\n})' + chunk[1];
+							}
+
+						}
+
+					} else if (folder === 'review') {
+
+						let i1 = code.indexOf('lychee.specify(');
+						let i2 = code.indexOf('requires([');
+						let i3 = code.indexOf('exports(function(lychee, sandbox) {');
+
+						if (i3 === -1) {
+
+							let chunk = null;
+
+							if (i2 !== -1) {
+								chunk = _split_chunk(code, '])', i2);
+							} else if (i1 !== -1) {
+								chunk = _split_chunk(code, ')',  i1);
+							}
+
+							if (chunk !== null) {
+								return chunk[0] + '.exports(function(lychee, sandbox) {\n\n\n})' + chunk[1];
+							}
+
+						}
+
+					}
+
 				}
-
-
-				if (chunk !== null) {
-					return chunk[0] + '.exports(function(lychee, global, attachments) {\n\n\n})' + chunk[1];
-				}
-
 
 			}
 
