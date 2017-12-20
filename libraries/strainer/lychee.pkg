@@ -25,6 +25,9 @@
 				],
 				"PARSER": [
 					"json"
+				],
+				"Specification": [
+					"json"
 				]
 			},
 			"flow": {
@@ -160,6 +163,9 @@
 				"PARSER": [
 					"js",
 					"json"
+				],
+				"Specification": [
+					"js"
 				]
 			},
 			"flow": {

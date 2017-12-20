@@ -4,15 +4,17 @@ lychee.define('strainer.plugin.API').requires([
 	'strainer.api.Composite',
 	'strainer.api.Core',
 	'strainer.api.Definition',
-	'strainer.api.Module'
+	'strainer.api.Module',
+	'strainer.api.Specification'
 ]).exports(function(lychee, global, attachments) {
 
-	const _api     = {
-		Callback:   lychee.import('strainer.api.Callback'),
-		Composite:  lychee.import('strainer.api.Composite'),
-		Core:       lychee.import('strainer.api.Core'),
-		Definition: lychee.import('strainer.api.Definition'),
-		Module:     lychee.import('strainer.api.Module')
+	const _api = {
+		Callback:      lychee.import('strainer.api.Callback'),
+		Composite:     lychee.import('strainer.api.Composite'),
+		Core:          lychee.import('strainer.api.Core'),
+		Definition:    lychee.import('strainer.api.Definition'),
+		Module:        lychee.import('strainer.api.Module'),
+		Specification: lychee.import('strainer.api.Specification')
 	};
 
 
@@ -665,11 +667,12 @@ lychee.define('strainer.plugin.API').requires([
 				let first  = stream.trim().split('\n')[0];
 
 
-				let is_core       = asset.url.startsWith('/libraries/lychee/source/core') && first.endsWith('(function(global) {');
-				let is_definition = stream.trim().startsWith('lychee.define(');
-				let is_callback   = stream.lastIndexOf('return Callback;')  > 0;
-				let is_composite  = stream.lastIndexOf('return Composite;') > 0;
-				let is_module     = stream.lastIndexOf('return Module;')    > 0;
+				let is_core          = asset.url.startsWith('/libraries/lychee/source/core') && first.endsWith('(function(global) {');
+				let is_definition    = first.startsWith('lychee.define(');
+				let is_specification = first.startsWith('lychee.specify(');
+				let is_callback      = stream.lastIndexOf('return Callback;')  > 0;
+				let is_composite     = stream.lastIndexOf('return Composite;') > 0;
+				let is_module        = stream.lastIndexOf('return Module;')    > 0;
 
 
 				// XXX: Well, yeah. Above algorithm will crash itself
@@ -682,12 +685,22 @@ lychee.define('strainer.plugin.API').requires([
 
 				if (is_definition === true) {
 					header = _api['Definition'].check(asset);
+				} else if (is_specification === true) {
+					header = _api['Specification'].check(asset);
 				} else if (is_core === true) {
 					header = _api['Core'].check(asset);
 				} else {
 
-					// XXX: autofix assumes lychee.Definition
-					header = _api['Definition'].check(asset);
+					if (asset.url.includes('/review/')) {
+						header = _api['Specification'].check(asset);
+					} else if (asset.url.includes('/source/')) {
+						header = _api['Definition'].check(asset);
+					} else {
+
+						// XXX: autofix assumes lychee.Definition syntax
+						header = _api['Definition'].check(asset);
+
+					}
 
 				}
 
