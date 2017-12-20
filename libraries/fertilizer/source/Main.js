@@ -83,7 +83,7 @@ lychee.define('fertilizer.Main').requires([
 						for (let pid in settings.packages) {
 
 							let url = settings.packages[pid];
-							if (url.startsWith('./')) {
+							if (typeof url === 'string' && url.startsWith('./')) {
 								settings.packages[pid] = project + '/' + url.substr(2);
 							}
 
