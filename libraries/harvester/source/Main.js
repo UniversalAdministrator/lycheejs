@@ -308,7 +308,6 @@ lychee.define('harvester.Main').requires([
 
 			let filtered = [];
 
-
 			let server = this.server;
 			if (server !== null) {
 
