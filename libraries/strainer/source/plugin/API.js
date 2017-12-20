@@ -46,7 +46,8 @@ lychee.define('strainer.plugin.API').requires([
 			let url = err.url || null;
 			if (url !== null) {
 
-				if (url.endsWith('/bootstrap.js') || url.endsWith('/features.js')) {
+				let filename = url.split('/').pop();
+				if (/^(bootstrap|features|harvester)\.js$/g.test(filename)) {
 					return code;
 				}
 
@@ -146,7 +147,8 @@ lychee.define('strainer.plugin.API').requires([
 			let url = err.url;
 			if (url !== null) {
 
-				if (url.endsWith('/bootstrap.js') || url.endsWith('/features.js')) {
+				let filename = url.split('/').pop();
+				if (/^(bootstrap|features|harvester)\.js$/g.test(filename)) {
 					return code;
 				}
 
