@@ -149,6 +149,7 @@ lychee.define('strainer.api.PARSER').requires([
 
 		let type = 'undefined';
 
+
 		if (str === 'undefined') {
 			type = 'undefined';
 		} else if (str === '-Infinity' || str === 'Infinity') {
@@ -1299,6 +1300,8 @@ lychee.define('strainer.api.PARSER').requires([
 				}
 
 
+				let result = false;
+
 				// XXX: Following algorithm crashes itself
 				if (
 					!line.includes('line.includes(')
@@ -1316,7 +1319,13 @@ lychee.define('strainer.api.PARSER').requires([
 							&& !line.includes('}, function')
 							&& line !== '}, {'
 						) {
+
+							if (line.startsWith('return ')) {
+								result = true;
+							}
+
 							nest_level++;
+
 						}
 
 					}
@@ -1350,12 +1359,12 @@ lychee.define('strainer.api.PARSER').requires([
 				}
 
 
-				if (nest_level === 0 && line.includes('return ')) {
-					return true;
+				if (result === false && nest_level === 0 && line.includes('return ')) {
+					result = true;
 				}
 
 
-				return false;
+				return result;
 
 			}).map(function(line) {
 
