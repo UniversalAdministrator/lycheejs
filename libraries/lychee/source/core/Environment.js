@@ -624,8 +624,10 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		this.setTimeout(settings.timeout);
 
 		// Needs this.packages to be ready
-		this.setTarget(settings.target);
 		this.setType(settings.type);
+
+		// Needs this.type to be ready
+		this.setTarget(settings.target);
 
 
 		settings = null;
