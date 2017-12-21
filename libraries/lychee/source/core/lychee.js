@@ -1117,6 +1117,29 @@ lychee = (function(global) {
 
 		},
 
+		export: function(reference, sandbox) {
+
+			reference = typeof reference === 'string' ? reference : null;
+			sandbox   = sandbox !== undefined         ? sandbox   : global;
+
+
+			if (reference !== null && sandbox !== null) {
+
+				_bootstrap_environment.call(this);
+
+
+				let definition = this.environment.definitions[reference] || null;
+				if (definition !== null) {
+					return definition.export(sandbox);
+				}
+
+			}
+
+
+			return false;
+
+		},
+
 		import: function(reference) {
 
 			reference = typeof reference === 'string' ? reference : null;
