@@ -149,7 +149,6 @@ lychee.define('strainer.api.PARSER').requires([
 
 		let type = 'undefined';
 
-
 		if (str === 'undefined') {
 			type = 'undefined';
 		} else if (str === '-Infinity' || str === 'Infinity') {
@@ -170,6 +169,8 @@ lychee.define('strainer.api.PARSER').requires([
 			type = 'Enum';
 		} else if (str.startsWith('new Composite')) {
 			type = 'Composite';
+		} else if (str.startsWith('new Promise')) {
+			type = 'Promise';
 		} else if (str.startsWith('new ')) {
 
 			let tmp = str.substr(4);
@@ -410,6 +411,8 @@ lychee.define('strainer.api.PARSER').requires([
 		} else if (str.startsWith('Composite.')) {
 			value = str;
 		} else if (str.startsWith('new Composite')) {
+			value = str;
+		} else if (str.startsWith('new Promise')) {
 			value = str;
 		} else if (str.startsWith('new ')) {
 

@@ -460,6 +460,11 @@
 		"value": {}
 	},
 	{
+		"chunk": "promise",
+		"type": "Promise",
+		"value": {}
+	},
+	{
 		"chunk": "result",
 		"type": "Boolean",
 		"value": true
