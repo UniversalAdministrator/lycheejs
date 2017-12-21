@@ -225,7 +225,7 @@ lychee.define('harvester.mod.Packager').requires([
 					ext        = attachment.split('.').pop();
 				}
 
-				if (/(msc|snd|js|json|fnt|png|md|tpl)$/.test(ext)) {
+				if (/(fnt|html|js|json|md|msc|png|snd|tpl)$/g.test(ext)) {
 
 					if (pointer[identifier] instanceof Array) {
 

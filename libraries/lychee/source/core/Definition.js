@@ -9,7 +9,12 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	 * HELPERS
 	 */
 
-	const _create_detector = function(source) {
+	const _WARNING_CACHE = {};
+
+	const _create_detector = function(source, path) {
+
+		path = typeof path === 'string' ? path : 'global';
+
 
 		if (source === null) {
 			return source;
@@ -33,14 +38,20 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 						if (/boolean|number|string|function/g.test(type)) {
 							target[name] = source[name];
 						} else if (/object/g.test(type)) {
-							target[name] = _create_detector(source[name]);
+							target[name] = _create_detector(source[name], path + '.' + name);
 						} else if (/undefined/g.test(type)) {
 							target[name] = undefined;
 						}
 
 
 						if (target[name] === undefined) {
-							console.error('lychee.Definition: Unknown feature (data type) "' + name + '" in features.js');
+
+							let warned = _WARNING_CACHE[path + '.' + name] || false;
+							if (warned === false) {
+								_WARNING_CACHE[path + '.' + name] = true;
+								console.warn('lychee.Definition: Unknown feature (data type) "' + path + '.' + name + '" in features.js');
+							}
+
 						}
 
 					}
