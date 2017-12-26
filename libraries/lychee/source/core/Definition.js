@@ -12,10 +12,9 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	const _DETECTOR_CACHE = {};
 	const _WARNING_CACHE  = {};
 
-	const _create_detector = function(platform, id) {
+	const _create_detector = function(platform) {
 
 		platform = typeof platform === 'string' ? platform : null;
-		id       = typeof id === 'string'       ? id       : null;
 
 
 		if (platform !== null) {
@@ -28,7 +27,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 					let major = platform.split('-')[0];
 					let minor = platform.split('-')[1];
 					let clone = Object.assign({}, lychee.FEATURES[major], lychee.FEATURES[major + '-' + minor]);
-					let proxy = _create_proxy(clone, id);
+					let proxy = _create_proxy(clone);
 					if (proxy !== null) {
 						sandbox = proxy;
 					}
@@ -36,7 +35,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 				} else {
 
 					let clone = lychee.FEATURES[platform] || null;
-					let proxy = _create_proxy(clone, id);
+					let proxy = _create_proxy(clone);
 					if (proxy !== null) {
 						sandbox = proxy;
 					}
@@ -58,9 +57,8 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 	};
 
-	const _create_proxy = function(source, id, path) {
+	const _create_proxy = function(source, path) {
 
-		id   = typeof id === 'string'   ? id   : 'custom';
 		path = typeof path === 'string' ? path : 'global';
 
 
@@ -86,7 +84,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 						if (/boolean|number|string|function/g.test(type)) {
 							target[name] = source[name];
 						} else if (/object/g.test(type)) {
-							target[name] = _create_proxy(source[name], id, path + '.' + name);
+							target[name] = _create_proxy(source[name], path + '.' + name);
 						} else if (/undefined/g.test(type)) {
 							target[name] = undefined;
 						}
@@ -97,7 +95,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 							let warned = _WARNING_CACHE[path + '.' + name] || false;
 							if (warned === false) {
 								_WARNING_CACHE[path + '.' + name] = true;
-								console.warn('lychee.Definition ("' + id + '"): Unknown feature (data type) "' + path + '.' + name + '" in features.js');
+								console.warn('lychee.Definition: Unknown feature (data type) "' + path + '.' + name + '" in features.js');
 							}
 
 						}
@@ -551,7 +549,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 				let platform = this._tags.platform || null;
 				if (platform !== null) {
 
-					let detector = _create_detector(platform, this.id);
+					let detector = _create_detector(platform);
 					if (detector !== null) {
 						supported = this._supports.call(detector, lychee, detector);
 						features  = JSON.parse(JSON.stringify(detector));
@@ -748,14 +746,16 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 						} else {
 
-							namespace[name]                       = function() {};
+							namespace[name]                       = function() {
+								console.warn('Dummy Composite: Replace me with a real Definition!');
+							};
 							namespace[name].displayName           = id;
 							namespace[name].prototype             = {};
 							namespace[name].prototype.displayName = id;
 
 							Object.freeze(namespace[name].prototype);
 
-							console.error('lychee.Definition ("' + id + '"): Invalid Definition, is now a Dummy Composite.');
+							console.error('lychee.Definition ("' + id + '"): Invalid Definition, replaced with Dummy Composite.');
 
 
 							return true;
