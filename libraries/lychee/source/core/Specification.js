@@ -278,7 +278,7 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 
 						for (let i = 0, il = invalid_requires.length; i < il; i++) {
 							let tmp = invalid_requires[i];
-							console.error('lychee.Specification: Invalid Requirement of "' + tmp + '" in "' + id + '".');
+							console.error('lychee.Specification ("' + id + '"): Invalid Requirement of "' + tmp + '".');
 						}
 
 					}

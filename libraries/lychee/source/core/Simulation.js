@@ -133,7 +133,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 
 		if (debug === true) {
-			console.info('lychee-Simulation (' + this.id + '): BUILD END (' + (cache.end - cache.start) + 'ms)');
+			console.info('lychee.Simulation ("' + this.id + '"): BUILD END (' + (cache.end - cache.start) + 'ms).');
 		}
 
 
@@ -153,15 +153,15 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 
 		if (debug === true) {
-			console.warn('lychee-Simulation (' + this.id + '): BUILD TIMEOUT (' + (cache.end - cache.start) + 'ms)');
+			console.warn('lychee.Simulation ("' + this.id + '"): BUILD TIMEOUT (' + (cache.end - cache.start) + 'ms).');
 		}
 
 
 		if (cache.load.length > 0) {
 
-			console.error('lychee-Simulation (' + this.id + '): Invalid Dependencies\n' + cache.load.map(function(value) {
+			console.error('lychee.Simulation ("' + this.id + '"): Invalid Dependencies\n' + cache.load.map(function(value) {
 				return '\t - ' + value;
-			}).join('\n'));
+			}).join('\n') + '.');
 
 		}
 
@@ -460,7 +460,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 							let debug = _get_debug.call(this);
 							if (debug === true) {
-								console.log('lychee-Simulation (' + this.id + '): Loading "' + identifier + '" from Package "' + pkg.id + '"');
+								console.log('lychee.Simulation ("' + this.id + '"): Loading "' + identifier + '" from Package "' + pkg.id + '".');
 							}
 
 						}
@@ -502,8 +502,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 					for (let pid in packages) {
 
-						let pkg  = packages[pid];
-						let root = pkg.root;
+						let pkg = packages[pid];
 
 						if (url.startsWith(pkg.root)) {
 							new_pkg_id = pkg.id;
@@ -519,7 +518,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 					if (assimilation === true) {
 
 						if (debug === true) {
-							console.log('lychee-Simulation (' + this.id + '): Assimilating Specification "' + specification.id + '"');
+							console.log('lychee.Simulation ("' + this.id + '"): Assimilating Specification "' + specification.id + '".');
 						}
 
 
@@ -528,7 +527,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 					} else if (new_pkg_id !== null && new_pkg_id !== old_pkg_id) {
 
 						if (debug === true) {
-							console.log('lychee-Simulation (' + this.id + '): Injecting Specification "' + specification.id + '" into package "' + new_pkg_id + '"');
+							console.log('lychee.Simulation ("' + this.id + '"): Injecting Specification "' + specification.id + '" into Package "' + new_pkg_id + '".');
 						}
 
 
@@ -553,7 +552,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 
 				if (debug === true) {
-					console.log('lychee-Simulation (' + this.id + '): Mapping Specification "' + specification.id + '"');
+					console.log('lychee.Simulation ("' + this.id + '"): Mapping Specification "' + specification.id + '".');
 				}
 
 
@@ -565,7 +564,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 			}
 
 
-			console.error('lychee-Simulation (' + this.id + '): Invalid Specification "' + specification.id + '"');
+			console.error('lychee.Simulation ("' + this.id + '"): Invalid Specification "' + specification.id + '".');
 
 
 			return false;
@@ -590,7 +589,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 				if (result === true) {
 
 					if (debug === true) {
-						console.info('lychee-Simulation (' + this.id + '): BUILD START ("' + target + '")');
+						console.info('lychee.Simulation ("' + this.id + '"): BUILD START ("' + target + '").');
 					}
 
 
@@ -657,7 +656,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 					if (cache.retries < 3) {
 
 						if (debug === true) {
-							console.warn('lychee-Simulation (' + this.id + '): Package for "' + target + '" not ready, retrying in 100ms ...');
+							console.warn('lychee.Simulation ("' + this.id + '"): Unready Package "' + target + '" (retrying in 100ms ...).');
 						}
 
 						setTimeout(function() {
@@ -666,7 +665,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 					} else {
 
-						console.error('lychee-Simulation (' + this.id + '): Invalid Dependencies\n\t - ' + target + ' (target)');
+						console.error('lychee.Simulation ("' + this.id + '"): Invalid Dependencies\n\t - ' + target + ' (target).');
 
 
 						try {
