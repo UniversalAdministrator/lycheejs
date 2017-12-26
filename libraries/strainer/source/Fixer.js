@@ -45,8 +45,24 @@ lychee.define('strainer.Fixer').requires([
 
 			if (file !== null && project !== null) {
 
-				lychee.ROOT.project                           = _lychee.ROOT.lychee + project;
-				lychee.environment.global.lychee.ROOT.project = _lychee.ROOT.lychee + project;
+				let cwd = this.settings.cwd || null;
+				if (cwd === _lychee.ROOT.lychee) {
+
+					lychee.ROOT.project                           = _lychee.ROOT.lychee + project;
+					lychee.environment.global.lychee.ROOT.project = _lychee.ROOT.lychee + project;
+
+				} else {
+
+					lychee.ROOT.lychee                            = '';
+					lychee.ROOT.project                           = project;
+					lychee.environment.global.lychee.ROOT.project = project;
+
+					// XXX: This disables sandbox
+					lychee.environment.resolve = function(url) {
+						return url;
+					};
+
+				}
 
 
 				this.trigger('init');
@@ -141,7 +157,15 @@ lychee.define('strainer.Fixer').requires([
 
 					flow.errors.forEach(function(err) {
 
-						let path = '/opt/lycheejs' + err.url;
+						let path = err.url;
+						if (
+							path.startsWith('/opt/lycheejs') === false
+							&& path.startsWith(cwd) === false
+						) {
+							path = cwd + '/' + err.url;
+						}
+
+
 						let rule = err.rule    || 'parser-error';
 						let line = err.line    || 0;
 						let col  = err.column  || 0;

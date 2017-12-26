@@ -3,7 +3,7 @@
 
 const _fs   = require('fs');
 const _path = require('path');
-const _CWD  = process.cwd();
+const _CWD  = process.env.STRAINER_PWD  || process.cwd();
 const _ROOT = process.env.LYCHEEJS_ROOT || '/opt/lycheejs';
 
 
@@ -173,9 +173,12 @@ const _SETTINGS = (function() {
 
 		if (settings.file !== null) {
 
-			let path  = settings.file.split('/');
-			let index = path.findIndex(val => /^(projects|libraries)$/g.test(val));
-			if (index !== -1) {
+			let path   = settings.file.split('/');
+			let check1 = path.findIndex(val => /^(projects|libraries)$/g.test(val));
+			let check2 = path.findIndex(val => val === 'source');
+
+			// XXX: Allow /tmp/lycheejs usage
+			if (check1 !== -1) {
 
 				let project = '/' + path.slice(3, 5).join('/');
 
@@ -183,6 +186,35 @@ const _SETTINGS = (function() {
 
 					let stat1 = _fs.lstatSync(_ROOT + project);
 					let stat2 = _fs.lstatSync(_ROOT + project + '/lychee.pkg');
+					if (stat1.isDirectory() && stat2.isFile()) {
+						settings.project = project;
+					}
+
+				} catch (err) {
+
+					settings.project = null;
+
+				}
+
+
+				if (settings.project !== null) {
+
+					let index = settings.file.indexOf(settings.project);
+					if (index !== -1) {
+						settings.file = settings.file.substr(index + settings.project.length + 1);
+					}
+
+				}
+
+			// XXX: Allow /home/whatever/my-project usage
+			} else if (check2 !== -1) {
+
+				let project = path.slice(0, check2).join('/');
+
+                try {
+
+					let stat1 = _fs.lstatSync(project);
+					let stat2 = _fs.lstatSync(project + '/lychee.pkg');
 					if (stat1.isDirectory() && stat2.isFile()) {
 						settings.project = project;
 					}
