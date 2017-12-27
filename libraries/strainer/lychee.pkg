@@ -30,6 +30,14 @@
 					"json"
 				]
 			},
+			"fix": {
+				"API": [
+					"json"
+				],
+				"ESLINT": [
+					"json"
+				]
+			},
 			"flow": {
 				"Check": [
 					"json"
@@ -208,6 +216,14 @@
 					"json"
 				],
 				"Specification": [
+					"js"
+				]
+			},
+			"fix": {
+				"API": [
+					"js"
+				],
+				"ESLINT": [
 					"js"
 				]
 			},

@@ -51,13 +51,22 @@ lychee.define('strainer.Fixer').requires([
 					lychee.ROOT.project                           = _lychee.ROOT.lychee + project;
 					lychee.environment.global.lychee.ROOT.project = _lychee.ROOT.lychee + project;
 
+				} else if (cwd.startsWith(_lychee.ROOT.lychee)) {
+
+					if (project.startsWith(_lychee.ROOT.lychee)) {
+						project = project.substr(_lychee.ROOT.lychee.length);
+					}
+
+					lychee.ROOT.project                           = _lychee.ROOT.lychee + project;
+					lychee.environment.global.lychee.ROOT.project = _lychee.ROOT.lychee + project;
+
 				} else {
 
 					lychee.ROOT.lychee                            = '';
 					lychee.ROOT.project                           = project;
 					lychee.environment.global.lychee.ROOT.project = project;
 
-					// XXX: This disables sandbox
+					// XXX: Disable sandbox for external projects
 					lychee.environment.resolve = function(url) {
 						return url;
 					};
