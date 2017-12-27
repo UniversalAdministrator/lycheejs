@@ -95,9 +95,40 @@ lychee.define('strainer.api.Core').requires([
 			if (asset !== null) {
 
 				let stream = asset.buffer.toString('utf8');
-				let first  = stream.trim().split('\n')[0];
+
 
 				_parse_identifier(result, stream, errors);
+
+
+				let i1 = stream.indexOf('=');
+				let i2 = stream.indexOf(': (function(global) {\n', i1);
+				let i3 = stream.indexOf('= (function(global) {\n');
+
+				if (i1 === -1) {
+
+					errors.push({
+						url:       null,
+						rule:      'no-core-define',
+						reference: null,
+						message:   'Invalid Core (missing assignment).',
+						line:      0,
+						column:    0
+					});
+
+				}
+
+				if (i1 !== i3 && i2 === -1) {
+
+					errors.push({
+						url:       null,
+						rule:      'no-core-exports',
+						reference: null,
+						message:   'Invalid Core (missing (function(global) {})().',
+						line:      0,
+						column:    0
+					});
+
+				}
 
 			}
 

@@ -154,9 +154,7 @@ lychee.define('strainer.plugin.API').requires([
 				let tmp = err.url.split('/');
 				if (tmp.length > 3) {
 
-					let type   = tmp[1];
 					let folder = tmp[3];
-
 					if (folder === 'source') {
 
 						let i1 = code.indexOf('lychee.define(');

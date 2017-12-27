@@ -1,32 +1,12 @@
 
 lychee.define('strainer.plugin.ESLINT').tags({
-	platform: 'node'
+	platform: 'html'
 }).supports(function(lychee, global) {
 
-	try {
-
-		global.require('eslint');
-
-		return true;
-
-	} catch (err) {
-
-		// XXX: We warn the user later, which
-		// is better than generic failure
-
-		return true;
-
-	}
-
-
-	// XXX: See above
-	// return false;
+	return true;
 
 }).exports(function(lychee, global, attachments) {
 
-	const _CONFIG   = new Config('/.eslintrc.json');
-	let   _eslint   = null;
-	let   _escli    = null;
 	const _auto_fix = function(line, err) {
 
 		if (err.fix) {
@@ -200,54 +180,6 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 
 	/*
-	 * FEATURE DETECTION
-	 */
-
-	(function() {
-
-		try {
-
-			_eslint = global.require('eslint');
-
-
-		} catch (err) {
-
-			console.log('\n');
-			console.error('strainer.plugin.ESLINT: Please install ESLint globally.   ');
-			console.error('                        sudo npm install -g eslint;       ');
-			console.error('                        cd /opt/lycheejs; npm link eslint;');
-			console.log('\n');
-
-		}
-
-
-		_CONFIG.onload = function() {
-
-			let config = null;
-
-			if (this.buffer instanceof Object) {
-
-				config         = {};
-				config.envs    = Object.values(this.buffer.env);
-				config.globals = Object.values(this.buffer.globals).map(function(value) {
-					return value + ':true';
-				});
-
-			}
-
-			if (_eslint !== null && config !== null) {
-				_escli = new _eslint.CLIEngine(config);
-			}
-
-		};
-
-		_CONFIG.load();
-
-	})();
-
-
-
-	/*
 	 * HELPERS
 	 */
 
@@ -289,42 +221,7 @@ lychee.define('strainer.plugin.ESLINT').tags({
 
 			if (asset !== null) {
 
-				if (_escli !== null && _eslint !== null) {
-
-					let url    = asset.url;
-					let config = null;
-
-					try {
-						config = _escli.getConfigForFile(lychee.ROOT.lychee + url);
-					} catch (err) {
-						config = null;
-					}
-
-
-					// XXX: ESLint by default does ignore the config
-					// given in its CLIEngine constructor -_-
-					if (config === null) {
-
-						try {
-							config = _escli.getConfigForFile('/opt/lycheejs/bin/configure.js');
-						} catch (err) {
-							config = null;
-						}
-
-					}
-
-
-					let source = asset.buffer.toString('utf8');
-					let report = _escli.linter.verify(source, config);
-					if (report.length > 0) {
-
-						for (let r = 0, rl = report.length; r < rl; r++) {
-							errors.push(report[r]);
-						}
-
-					}
-
-				}
+				// XXX: No implementation for HTML platform possible
 
 			}
 

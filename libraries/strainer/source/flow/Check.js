@@ -974,8 +974,7 @@ lychee.define('strainer.flow.Check').requires([
 				console.log('strainer: WRITE-CODES ' + project);
 
 
-				let checks  = this.checks;
-				let codes   = this.codes.filter(function(code, c) {
+				let codes = this.codes.filter(function(code, c) {
 					return code._MODIFIED === true;
 				});
 

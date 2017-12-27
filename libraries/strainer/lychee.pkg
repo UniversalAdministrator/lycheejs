@@ -36,6 +36,13 @@
 				]
 			},
 			"platform": {
+				"html": {
+					"plugin": {
+						"ESLINT": [
+							"json"
+						]
+					}
+				},
 				"node": {
 					"plugin": {
 						"ESLINT": [
@@ -53,6 +60,34 @@
 	},
 	"build": {
 		"environments": {
+			"html/dist": {
+				"debug": false,
+				"packages": {
+					"strainer": "./lychee.pkg"
+				},
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html"
+					]
+				},
+				"target": "strainer.Main",
+				"variant": "library"
+			},
+			"html/main": {
+				"debug": false,
+				"packages": {
+					"strainer": "./lychee.pkg"
+				},
+				"sandbox": true,
+				"tags": {
+					"platform": [
+						"html"
+					]
+				},
+				"target": "strainer.Main",
+				"variant": "application"
+			},
 			"node-sdl/dist": {
 				"debug": false,
 				"packages": {
@@ -111,6 +146,13 @@
 			}
 		},
 		"files": {
+			"html": {
+				"dist": {
+					"index": [
+						"js"
+					]
+				}
+			},
 			"node": {
 				"dist": {
 					"index": [
@@ -134,6 +176,7 @@
 		"environments": {},
 		"tags": {
 			"platform": {
+				"html": "platform/html",
 				"node": "platform/node"
 			}
 		},
@@ -174,6 +217,13 @@
 				]
 			},
 			"platform": {
+				"html": {
+					"plugin": {
+						"ESLINT": [
+							"js"
+						]
+					}
+				},
 				"node": {
 					"plugin": {
 						"ESLINT": [

@@ -25,7 +25,7 @@ lychee.define('lychee.Renderer').tags({
 	 * HELPERS
 	 */
 
-	const _draw_ctx = function(x, y, value) {
+	const _draw_ctx = function(x, y, value, color) {
 
 		let max_x = (this[0] || '').length;
 		let max_y = (this    || '').length;
@@ -532,11 +532,49 @@ lychee.define('lychee.Renderer').tags({
 			lineWidth = typeof lineWidth === 'number' ? lineWidth : 1;
 
 
-			// TODO: Implement line-drawing ASCII art algorithm
-			// let ctx = this.__ctx;
+			let ctx = this.__ctx;
+			let dx  = x2 - x1;
+			let dy  = y2 - y1;
+			let chr = ' ';
 
 
-			return false;
+			if (dx === 0) {
+				chr = dy === 0 ? ' ' : '|';
+			} else if (dy === 0) {
+				chr = dx === 0 ? ' ' : '-';
+			} else if (dx > 0) {
+				chr = dy > 0 ? '\\' : '/';
+			} else if (dx < 0) {
+				chr = dy > 0 ? '/' : '\\';
+			}
+
+
+			if (lineWidth > 1) {
+
+				let dist = lineWidth - 1;
+
+				for (let x = x1 - dist; x < x2 + dist; x++) {
+
+					for (let y = y1 - dist; y < y2 + dist; y++) {
+						_draw_ctx.call(ctx, x, y, chr, color);
+					}
+
+				}
+
+			} else {
+
+				for (let x = x1; x < x2; x++) {
+
+					for (let y = y1; y < y2; y++) {
+						_draw_ctx.call(ctx, x, y, chr, color);
+					}
+
+				}
+
+			}
+
+
+			return true;
 
 		},
 
@@ -553,8 +591,23 @@ lychee.define('lychee.Renderer').tags({
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
 
 
-			// TODO: Implement triangle-drawing ASCII art algorithm
-			// let ctx = this.__ctx;
+			let dx_a = x2 - x1;
+			let dy_a = y2 - y1;
+			if (dx_a !== 0 || dy_a !== 0) {
+				this.drawLine(x1, y1, x2, y2, color, lineWidth);
+			}
+
+			let dx_b = y3 - y2;
+			let dy_b = y3 - y2;
+			if (dx_b !== 0 || dy_b !== 0) {
+				this.drawLine(x2, y2, x3, y3, color, lineWidth);
+			}
+
+			let dx_c = y1 - y3;
+			let dy_c = y1 - y3;
+			if (dx_c !== 0 || dy_c !== 0) {
+				this.drawLine(x3, y3, x1, y1, color, lineWidth);
+			}
 
 
 			return false;
@@ -603,8 +656,37 @@ lychee.define('lychee.Renderer').tags({
 				lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
 
 
-				// TODO: Implement polygon-drawing ASCII art algorithm
-				// let ctx = this.__ctx;
+				let ctx = this.__ctx;
+				let chr = background === true ? '#' : '+';
+
+
+				for (let p = 1; p < points; p++) {
+
+					let x = arguments[1 + p * 2]     | 0;
+					let y = arguments[1 + p * 2 + 1] | 0;
+
+					if (lineWidth > 1) {
+
+						let dist = lineWidth - 1;
+
+						for (let px = x - dist; px < x + dist; px++) {
+
+							for (let py = y - dist; py < y + dist; py++) {
+								_draw_ctx.call(ctx, px, py, chr, color);
+							}
+
+						}
+
+					} else {
+
+						_draw_ctx.call(ctx, x, y, chr, color);
+
+					}
+
+				}
+
+
+				return true;
 
 			}
 
