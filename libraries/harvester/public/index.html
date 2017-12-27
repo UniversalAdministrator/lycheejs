@@ -2,12 +2,12 @@
 <html>
 <head>
 	<title>Welcome to lychee.js Engine</title>
+	<link rel="shortcut icon" type="image/png" href="/desktop.png">
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="robots" content="noindex">
-	<link rel="shortcut icon" type="image/png" href="/desktop.png">
 
 	<!-- BOOTSTRAP -->
 	<script src="/libraries/lychee/build/html/core.js"></script>
@@ -31,7 +31,7 @@
 		Please also take a look at the <a href="lycheejs://file=/README.md">README.md</a> and the <a href="lycheejs://file=/CHANGELOG.md">CHANGELOG.md</a>.
 	</p>
 	<p>
-		Installed lychee.js Version: <span id="lychee-VERSION">2016-Q1</span>.
+		Installed lychee.js Version: <span id="lychee-VERSION">2017-Q4</span>.
 	</p>
 	<pre id="lychee-MESSAGE"><code># Please update your lychee.js Installation
 
@@ -39,8 +39,8 @@ cd /opt/lycheejs;
 ./bin/maintenance/do-update.sh;</code></pre>
 	<hr>
 	<div>
-		<button onclick="location.href='lycheejs://cmd=lycheejs-studio'">lychee.js&nbsp;Studio</button>
-		<button onclick="location.href='lycheejs://cmd=lycheejs-ranger'">lychee.js&nbsp;Ranger</button>
+		<a class="button" href="lycheejs://cmd=lycheejs-studio">lychee.js&nbsp;Studio</a>
+		<a class="button" href="lycheejs://cmd=lycheejs-ranger">lychee.js&nbsp;Ranger</a>
 	</div>
 	<hr>
 	<p>
@@ -48,7 +48,20 @@ cd /opt/lycheejs;
 	</p>
 </article>
 
-<main id="main"><!-- LIBRARIES AND PROJECTS --></main>
+<main id="main">
+	<article id="warning" class="warning">
+		<label>Warning: lychee.js Harvester is unreachable</label>
+		<p>
+			Please make sure that the lychee.js Harvester is booted correctly
+			(<a href="lycheejs://file=/README.md">README.md</a>) and that no
+			Firewall or Browser Extension blocks connections to or from it.
+			<br><br>
+			The lychee.js Harvester uses ports <q>4848</q> and <q>8080</q> as
+			management ports and ports <q>49152 to 65534</q> as dynamic ports
+			for project- or library-specific websocket servers.
+		</p>
+	</article>
+</main>
 
 <script>
 (function(global) {
@@ -57,22 +70,19 @@ cd /opt/lycheejs;
 	 * HELPERS
 	 */
 
-	const $$ = function(name) {
+	const $api = (url, callback) => {
 
-		let filtered = [];
+		let config = new Config(url);
 
-		if (name.startsWith('#')) {
-			filtered = Array.from(global.document.querySelectorAll(name)).map(v => $(v)).filter(v => v !== null);
-		} else {
-			filtered.push($(name));
-		}
+		config.onload = function(result) {
+			callback(result === true ? this.buffer : []);
+		};
 
-
-		return filtered;
+		config.load();
 
 	};
 
-	const $ = function(name) {
+	const $ = (name) => {
 
 		let el = null;
 
@@ -97,6 +107,7 @@ cd /opt/lycheejs;
 
 			let wrap = { _el: el };
 
+			wrap.clear    = _ => (el.parentNode !== null && el.parentNode.removeChild(el), wrap);
 			wrap.state    = a => (el.className = a, wrap);
 			wrap.html     = a => (el.innerHTML = a, wrap);
 			wrap.append   = a => ((a._el && el.appendChild(a._el)) || el.appendChild(a), wrap);
@@ -117,15 +128,19 @@ cd /opt/lycheejs;
 
 	};
 
-	const _render = function(project, mask) {
+	const _render = (project, mask) => {
 
 		let article = $('article').set({
 			'data-id': project.identifier
-		}).append(
+		});
+
+		article.append(
 			$('label').set({
 				html: project.identifier.split('/').pop()
 			})
-		).append(
+		);
+
+		article.append(
 			$('img').set({
 				src: project.identifier + '/icon.png'
 			})
@@ -172,8 +187,10 @@ cd /opt/lycheejs;
 	 * IMPLEMENTATION
 	 */
 
-	const version = $('#lychee-VERSION');
+	const main    = $('#main');
 	const message = $('#lychee-MESSAGE');
+	const version = $('#lychee-VERSION');
+
 
 	if (version !== null) {
 		version.html('' + lychee.VERSION);
@@ -192,73 +209,27 @@ cd /opt/lycheejs;
 			install_year < current_year && current_month > 0
 		)) {
 
-			setTimeout(function() {
-				message.state('visible');
-			}, 500);
+			setTimeout(_ => message.state('visible'), 500);
 
 		}
 
 	}
 
-
-	const main = $('#main');
-
 	if (main !== null) {
 
-		let host    = global.location.hostname || 'localhost';
-		let config1 = new Config('http://' + host + ':4848/api/library/index');
-		let config2 = new Config('http://' + host + ':4848/api/project/index');
-		let warning = true;
-
-		config1.onload = function(result) {
-
-			if (result === true && this.buffer instanceof Array) {
-				this.buffer.map(p => _render(p, /ranger|studio/g.test(p.identifier) ? 0b011 : 0b010)).forEach(a => a.appendTo(main));
-				warning = false;
-			}
-
-		};
-
-		config2.onload = function(result) {
-
-			if (result === true && this.buffer instanceof Array) {
-				this.buffer.map(p => _render(p, 0b111)).forEach(a => a.appendTo(main));
-				warning = false;
-			}
-
-		};
-
-		config1.load();
-		config2.load();
+		const host    = global.location.hostname || 'localhost';
+		const warning = $('#warning');
 
 
-		setTimeout(_ => {
+		$api('http://' + host + ':4848/api/library/index', buffer => {
+			buffer.map(p => _render(p, /ranger|studio/g.test(p.identifier) ? 0b011 : 0b010)).forEach(a => a.appendTo(main));
+			warning.clear();
+		});
 
-			if (warning === true) {
-
-				$('article.warning').append(
-					$('label').set({
-						html: 'Warning'
-					})
-				).append(
-					$('p').set({
-						html: [
-							'The lychee.js Harvester is unreachable.',
-							'<br><br>',
-							'Please make sure that the lychee.js Harvester is booted correctly',
-							'(<a href="lycheejs://file=/README.md">README.md</a>) and that no ',
-							'Firewall or Browser Extensions blocks connections to or from it.',
-							'<br><br>',
-							'The lychee.js Harvester uses ports <q>4848</q> and <q>8080</q> as',
-							'management ports and ports <q>49152 to 65534</q> as dynamic ports',
-							'for project- or library-specific websocket servers.'
-						].join('\n')
-					})
-				).appendTo(main);
-
-			}
-
-		}, 2000);
+		$api('http://' + host + ':4848/api/project/index', buffer => {
+			buffer.map(p => _render(p, 0b111)).forEach(a => a.appendTo(main));
+			warning.clear();
+		});
 
 	}
 

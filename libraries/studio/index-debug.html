@@ -63,58 +63,59 @@
 		_create_webfont_dummy("Museo Sans Light");
 
 
-		setTimeout(function() {
+		lychee.pkg('build', 'html/main', function(environment, profile) {
 
-			lychee.pkg('build', 'html/main', function(environment, profile) {
+			if (environment !== null) {
 
-				if (environment !== null) {
+				lychee.init(environment, {
+					debug:   false,
+					sandbox: false,
+					profile: profile
+				});
 
-					lychee.init(environment, {
-						debug:   false,
-						sandbox: false,
-						profile: profile
-					});
-
-				}
-
-			});
-
-			// XXX: Move window to right screen
-			setTimeout(function() {
 
 				if (typeof nw !== 'undefined') {
 
-					let screens = nw.Screen.screens;
-					if (screens.length > 1) {
+					setTimeout(_ => {
 
-						let target   = screens[screens.length - 1];
-						let offset_x = target['work_area'].x;
-						let offset_y = target['work_area'].y;
+						let screens = nw.Screen.screens;
+						if (screens.length > 1) {
 
-						let win = nw.Window.get();
-						if (win !== null) {
-							win.moveTo(offset_x, offset_y);
+							let target   = screens[screens.length - 1];
+							let offset_x = target['work_area'].x;
+							let offset_y = target['work_area'].y;
+
+							let win = nw.Window.get();
+							if (win !== null) {
+								win.moveTo(offset_x, offset_y);
+							}
+
 						}
-					}
+
+					}, 2000);
 
 				}
 
-			}, 2000);
 
-			// XXX: Start Debug Flow
-			setTimeout(function() {
+				setTimeout(_ => {
 
-				console.clear();
+					let main = global.MAIN || null;
+					if (main !== null) {
 
-				// XXX: Debug Flows for easy development
-				// lychee.assimilate('./flow/asset-font.js');
-				// lychee.assimilate('./flow/asset-sprite.js');
-				lychee.assimilate('./flow/scene-welcome.js');
+						console.clear();
 
-			}, 3000);
+						// XXX: Debug Flows for easy development
+						// lychee.assimilate('./flow/asset-font.js');
+						// lychee.assimilate('./flow/asset-sprite.js');
+						lychee.assimilate('./flow/scene-welcome.js');
 
+					}
 
-		}.bind(this), 200);
+				}, 3000);
+
+			}
+
+		});
 
 	})(lychee, typeof global !== 'undefined' ? global : this);
 	</script>
