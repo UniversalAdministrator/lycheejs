@@ -46,11 +46,14 @@ lychee.define('strainer.Fixer').requires([
 			if (file !== null && project !== null) {
 
 				let cwd = this.settings.cwd || null;
+
+				// XXX: lycheejs-strainer-fixer check /projects/my-project/source/Main.js
 				if (cwd === _lychee.ROOT.lychee) {
 
 					lychee.ROOT.project                           = _lychee.ROOT.lychee + project;
 					lychee.environment.global.lychee.ROOT.project = _lychee.ROOT.lychee + project;
 
+				// XXX: cd /opt/lycheejs/projects && lycheejs-strainer-fixer check my-project/source/Main.js
 				} else if (cwd.startsWith(_lychee.ROOT.lychee)) {
 
 					if (project.startsWith(_lychee.ROOT.lychee)) {
@@ -60,6 +63,7 @@ lychee.define('strainer.Fixer').requires([
 					lychee.ROOT.project                           = _lychee.ROOT.lychee + project;
 					lychee.environment.global.lychee.ROOT.project = _lychee.ROOT.lychee + project;
 
+				// XXX: lycheejs-strainer-fixer check /home/whatever/my-project/source/Main.js
 				} else {
 
 					lychee.ROOT.lychee                            = '';
@@ -68,7 +72,13 @@ lychee.define('strainer.Fixer').requires([
 
 					// XXX: Disable sandbox for external projects
 					lychee.environment.resolve = function(url) {
-						return url;
+
+						if (url.startsWith('/libraries') || url.startsWith('/projects')) {
+							return '/opt/lycheejs' + url;
+						} else {
+							return url;
+						}
+
 					};
 
 				}

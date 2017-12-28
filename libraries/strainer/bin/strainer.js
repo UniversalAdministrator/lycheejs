@@ -3,6 +3,7 @@
 
 const _fs   = require('fs');
 const _path = require('path');
+const _CWD  = process.env.STRAINER_CWD  || process.cwd();
 const _ROOT = process.env.LYCHEEJS_ROOT || '/opt/lycheejs';
 
 
@@ -182,6 +183,7 @@ const _SETTINGS = (function() {
 
 	let args     = process.argv.slice(2).filter(val => val !== '');
 	let settings = {
+		cwd:     _CWD,
 		action:  null,
 		project: null,
 		debug:   false
@@ -195,15 +197,35 @@ const _SETTINGS = (function() {
 
 	if (action === 'check') {
 
+		settings.action = action;
+
+
+		let path = args.find(val => val.includes('/'));
+
 		if (project !== undefined) {
-
-			settings.action = action;
-
 
 			try {
 
 				let stat1 = _fs.lstatSync(_ROOT + project);
 				let stat2 = _fs.lstatSync(_ROOT + project + '/lychee.pkg');
+				if (stat1.isDirectory() && stat2.isFile()) {
+					settings.project = project;
+				}
+
+			} catch (err) {
+
+				settings.project = null;
+
+			}
+
+		} else if (path !== undefined) {
+
+			let project = path;
+
+			try {
+
+				let stat1 = _fs.lstatSync(project);
+				let stat2 = _fs.lstatSync(project + '/lychee.pkg');
 				if (stat1.isDirectory() && stat2.isFile()) {
 					settings.project = project;
 				}
@@ -243,6 +265,7 @@ const _SETTINGS = (function() {
 	if (has_action && has_project) {
 
 		_bootup({
+			cwd:     settings.cwd,
 			action:  settings.action,
 			debug:   settings.debug === true,
 			project: settings.project

@@ -18,11 +18,13 @@ lychee.define('strainer.Main').requires([
 	const Composite = function(settings) {
 
 		this.settings = _lychee.assignunlink({
+			cwd:     lychee.ROOT.lychee,
 			action:  null,
 			project: null
 		}, settings);
 
 		this.defaults = _lychee.assignunlink({
+			cwd:     lychee.ROOT.lychee,
 			action:  null,
 			project: null
 		}, this.settings);
@@ -43,8 +45,43 @@ lychee.define('strainer.Main').requires([
 
 			if (action !== null && project !== null) {
 
-				lychee.ROOT.project                           = _lychee.ROOT.lychee + project;
-				lychee.environment.global.lychee.ROOT.project = _lychee.ROOT.lychee + project;
+				let cwd = this.settings.cwd || null;
+
+				// XXX: lycheejs-strainer check /projects/my-project
+				if (cwd === _lychee.ROOT.lychee) {
+
+					lychee.ROOT.project                           = _lychee.ROOT.lychee + project;
+					lychee.environment.global.lychee.ROOT.project = _lychee.ROOT.lychee + project;
+
+				// XXX: cd /opt/lycheejs/projects && lycheejs-strainer check my-project
+				} else if (cwd.startsWith(_lychee.ROOT.lychee)) {
+
+					if (project.startsWith(_lychee.ROOT.lychee)) {
+						project = project.substr(_lychee.ROOT.lychee.length);
+					}
+
+					lychee.ROOT.project                           = _lychee.ROOT.lychee + project;
+					lychee.environment.global.lychee.ROOT.project = _lychee.ROOT.lychee + project;
+
+				// XXX: lycheejs-strainer check /home/whatever/my-project
+				} else {
+
+					lychee.ROOT.lychee                            = '';
+					lychee.ROOT.project                           = project;
+					lychee.environment.global.lychee.ROOT.project = project;
+
+					// XXX: Disable sandbox for external projects
+					lychee.environment.resolve = function(url) {
+
+						if (url.startsWith('/libraries') || url.startsWith('/projects')) {
+							return '/opt/lycheejs' + url;
+						} else {
+							return url;
+						}
+
+					};
+
+				}
 
 
 				this.trigger('init', [ project, action ]);

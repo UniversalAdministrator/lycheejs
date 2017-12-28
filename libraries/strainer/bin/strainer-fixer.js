@@ -3,7 +3,7 @@
 
 const _fs   = require('fs');
 const _path = require('path');
-const _CWD  = process.env.STRAINER_PWD  || process.cwd();
+const _CWD  = process.env.STRAINER_CWD  || process.cwd();
 const _ROOT = process.env.LYCHEEJS_ROOT || '/opt/lycheejs';
 
 
@@ -211,7 +211,7 @@ const _SETTINGS = (function() {
 
 				let project = path.slice(0, check2).join('/');
 
-                try {
+				try {
 
 					let stat1 = _fs.lstatSync(project);
 					let stat2 = _fs.lstatSync(project + '/lychee.pkg');
