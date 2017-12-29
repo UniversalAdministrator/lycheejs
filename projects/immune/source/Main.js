@@ -1,7 +1,9 @@
 
 lychee.define('game.Main').requires([
-//	'game.state.Campaign',
-//	'game.state.Editor',
+	'lychee.app.Flow',
+	//	'game.state.Campaign',
+	//	'game.state.Editor',
+	'game.state.Game',
 	'game.state.Menu'
 ]).includes([
 	'lychee.app.Main'
@@ -68,6 +70,7 @@ lychee.define('game.Main').requires([
 
 			// this.setState('campaign', new _game.state.Campaign(this));
 			// this.setState('editor',   new _game.state.Editor(this));
+			this.setState('game',     new _game.state.Game(this));
 			this.setState('menu',     new _game.state.Menu(this));
 
 

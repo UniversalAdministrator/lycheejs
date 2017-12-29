@@ -1,23 +1,36 @@
 
-lychee.define('game.state.Game').requires(
+lychee.define('game.state.Game').requires([
 	'game.app.entity.Cell',
 	'game.app.entity.Unit',
 	'game.app.entity.Vesicle',
 	'lychee.app.Layer',
-	'lychee.ui.Layer',
-	'lychee.ui.entity.Label'
-).includes([
+	'lychee.ui.Layer'
+]).includes([
 	'lychee.app.State'
 ]).exports(function(lychee, global, attachments) {
 
-	const _State = lychee.import('lychee.app.State');
-	const _BLOB  = attachments["json"].buffer;
+	const _State  = lychee.import('lychee.app.State');
+	const _BLOB   = attachments["json"].buffer;
+	const _LEVELS = attachments["levels.json"].buffer;
 
 
 
 	/*
 	 * HELPERS
 	 */
+
+	const _on_touch = function(id, position, delta) {
+
+		let game   = this.getLayer('game');
+		let entity = game.getEntity(null, position);
+		if (entity !== null) {
+			// TODO: Touched an Entity
+			console.log('Touched entity', entity);
+		} else {
+			console.log('you cant touch this', position);
+		}
+
+	};
 
 
 
@@ -57,13 +70,32 @@ lychee.define('game.state.Game').requires(
 
 		},
 
+
 		enter: function(oncomplete, data) {
 
 			oncomplete = oncomplete instanceof Function ? oncomplete : null;
 			data       = typeof data === 'string'       ? data       : 'immune-01';
 
 
-			// TODO: data is level identifier
+			let layer = this.getLayer('ui');
+			if (layer !== null) {
+				layer.bind('touch', _on_touch, this);
+			}
+
+
+			let level = _LEVELS[data] || null;
+			if (level !== null) {
+
+				let entities = level.map(function(value) {
+					return lychee.deserialize(value);
+				});
+
+				let game = this.getLayer('game');
+				if (game !== null) {
+					game.setEntities(entities);
+				}
+
+			}
 
 
 			return _State.prototype.enter.call(this, oncomplete);
@@ -73,6 +105,17 @@ lychee.define('game.state.Game').requires(
 		leave: function(oncomplete) {
 
 			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
+
+			let layer = this.getLayer('ui');
+			if (layer !== null) {
+				layer.unbind('touch', _on_touch, this);
+			}
+
+			let game = this.getLayer('game');
+			if (game !== null) {
+				game.removeEntities();
+			}
 
 
 			return _State.prototype.leave.call(this, oncomplete);

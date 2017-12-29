@@ -1,0 +1,37 @@
+{
+	"immune-01": [
+		{
+			"constructor": "game.app.entity.Cell",
+			"arguments": [{
+				"team": "neutral",
+				"radius": 120,
+				"position": {
+					"x": 160,
+					"y": -80
+				}
+			}]
+		}, {
+			"constructor": "game.app.entity.Cell",
+			"arguments": [{
+				"team": "neutral",
+				"radius": 120,
+				"position": {
+					"x": -140,
+					"y": -80
+				}
+			}]
+		}, {
+			"constructor": "game.app.entity.Cell",
+			"arguments": [{
+				"team": "neutral",
+				"radius": 120,
+				"position": {
+					"x": 60,
+					"y": 200
+				}
+			}]
+		}
+	],
+	"immune-02": [
+	]
+}

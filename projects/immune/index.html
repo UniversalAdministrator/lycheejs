@@ -29,6 +29,19 @@
 					debug:   false,
 					sandbox: false,
 					profile: profile
+				}, function(sandbox) {
+
+					let lychee = sandbox.lychee;
+					let game   = sandbox.game;
+
+					sandbox.MAIN = new game.Main(profile);
+					sandbox.MAIN.init();
+
+
+					setTimeout(_ => {
+						lychee.assimilate('./flow/campaign-immune.js');
+					}, 500);
+
 				});
 
 			}

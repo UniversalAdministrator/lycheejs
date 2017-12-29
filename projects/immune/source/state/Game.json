@@ -1,0 +1,35 @@
+{
+	"layers": {
+		"background": {
+			"constructor": "lychee.app.Layer",
+			"arguments": [
+				{}
+			],
+			"blob": {
+				"entities": [
+					{
+						"constructor": "lychee.app.sprite.Emblem",
+						"arguments": [
+							{}
+						]
+					}
+				],
+				"map": {
+					"emblem": 0
+				}
+			}
+		},
+		"game": {
+			"constructor": "lychee.app.Layer",
+			"arguments": [
+				{}
+			]
+		},
+		"ui": {
+			"constructor": "lychee.ui.Layer",
+			"arguments": [
+				{}
+			]
+		}
+	}
+}

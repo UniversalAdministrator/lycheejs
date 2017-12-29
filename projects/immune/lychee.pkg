@@ -129,7 +129,9 @@
 			},
 			"state": {
 				"Game": [
-					"js"
+					"js",
+					"json",
+					"levels.json"
 				],
 				"Menu": [
 					"js",

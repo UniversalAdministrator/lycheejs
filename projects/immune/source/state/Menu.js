@@ -152,6 +152,7 @@ lychee.define('game.state.Menu').requires([
 						y: found.position.y + vesicle.position.y
 					});
 
+
 					if (team !== unit.team) {
 						unit.setTeam(team);
 					}
