@@ -12,6 +12,7 @@ if [ -z "$LYCHEEJS_ROOT" ]; then
 	LYCHEEJS_ROOT="/opt/lycheejs";
 fi;
 
+LYCHEEJS_VERSION=$(grep "VERSION" "$LYCHEEJS_ROOT/libraries/lychee/source/core/lychee.js" | cut -d"\"" -f2);
 CHILD_PID="";
 
 
@@ -47,64 +48,59 @@ fi;
 _print_help() {
 
 	echo " (L) ";
-	echo -e "\e[42m\e[97m (I) lychee.js Helper \e[0m";
+	echo -e "\e[42m\e[97m (I) lychee.js $LYCHEEJS_VERSION Helper \e[0m";
 	echo " (L) ";
-	echo " (L) Usage: lycheejs-helper [lycheejs://Action=Library/Project]     ";
-	echo " (L)        lycheejs-helper [Action] [Library/Project]              ";
-	echo " (L)        lycheejs-helper [Helper:Platform] [Library/Project]     ";
+	echo " (L) Usage: lycheejs-helper lycheejs://[Action]=[Library/Project]             ";
+	echo " (L)        lycheejs-helper lycheejs://[Action]=[Command/Profile]?data=[Data] ";
+	echo " (L)        lycheejs-helper [Helper]:[Platform/Identifier]                    ";
+	echo " (L)        lycheejs-helper [Action] [Library/Project]                        ";
+	echo " (L)        lycheejs-helper [Action] [Command/Profile] [Data]                 ";
 	echo " (L) ";
-	echo " (L) Notes:                                                         ";
+	echo " (L) Usage Notes: ";
 	echo " (L) ";
-	echo " (L)     The [JSON] data is encoded as base64.                      ";
+	echo " (L)     [Command] has to exist in /usr/local/bin/. ";
+	echo " (L)     [Data] is always base64 encoded.           ";
 	echo " (L) ";
-	echo " (L)     The \"env:\" can be used as a Shebang in shell scripts:    ";
-	echo " (L)     #!/usr/local/bin/lycheejs-helper env:node                  ";
-	echo " (L) ";
-	echo " (L) Platforms:                                                     ";
-	echo " (L) ";
-	echo " (L)    html, html-nwjs, nidium, node, node-sdl                     ";
-	echo " (L) ";
+	echo " (L)     The \"env:\" can be used as a Shebang in shell scripts: ";
+	echo " (L)     #!/usr/local/bin/lycheejs-helper env:node               ";
 	echo " (L) ";
 	echo " (L) ";
-	echo " (L) Available Actions:                                             ";
+	echo " (L) Available Actions: ";
 	echo " (L) ";
-	echo " (L)    boot=[Profile]                                              ";
-	echo " (L)    profile=[Profile]?data=[base64]                             ";
-	echo " (L)    unboot                                                      ";
+	echo " (L)     start, stop, file, edit  Integrates lychee.js with native applications. ";
 	echo " (L) ";
-	echo " (L)    start=[Library/Project]                                     ";
-	echo " (L)    stop=[Library/Project]                                      ";
-	echo " (L)    file=[Library/Project]                                      ";
-	echo " (L)    edit=[Library/Project]                                      ";
+	echo " (L)     boot [Profile]           Boots the Harvester with [Profile].          ";
+	echo " (L)     profile [Profile] [Data] Changes the Harvester [Profile] with [Data]. ";
+	echo " (L)     unboot                   Unboots the Harvester.                       ";
 	echo " (L) ";
-	echo " (L)    cmd=[Command]?data=[JSON]                                   ";
-	echo " (L)    web=[URL]                                                   ";
+	echo " (L)     cmd [Command] [Data]     Executes a [Command] with [Data] as parameter. ";
+	echo " (L)     web [URL]                Opens the default web browser with a [URL].    ";
 	echo " (L) ";
-	echo " (L) Examples:                                                      ";
+	echo " (L) Available Helpers: ";
 	echo " (L) ";
-	echo " (L)    lycheejs-helper lycheejs://start=/projects/boilerplate      ";
-	echo " (L)    lycheejs-helper lycheejs://cmd=lycheejs-ranger              ";
-	echo " (L)    lycheejs-helper lycheejs://profile=production?data=[base64] ";
-	echo " (L)    lycheejs-helper lycheejs://web=https://lychee.js.org        ";
+	echo " (L)     which:Platform           Resolves a runtime execution path.          ";
+	echo " (L)     env:Platform             Executes a file in a runtime environment.   ";
+	echo " (L)     run:Platform/Identifier  Executes a project in a fertilized runtime. ";
 	echo " (L) ";
-	echo " (L)    lycheejs-helper start /projects/boilerplate                 ";
-	echo " (L)    lycheejs-helper edit /projects/boilerplate                  ";
-	echo " (L)    lycheejs-helper web https://lychee.js.org                   ";
+	echo " (L) Available Platforms: ";
 	echo " (L) ";
+	echo " (L)     html, html-nwjs, nidium, node, node-sdl ";
 	echo " (L) ";
+	echo " (L) Examples: ";
 	echo " (L) ";
-	echo " (L) Available Helpers:                                             ";
+	echo " (L)     lycheejs-helper boot development                                  ";
+	echo " (L)     lycheejs-helper start /projects/boilerplate                       ";
 	echo " (L) ";
-	echo " (L)    env:Platform                executes runtime env            ";
-	echo " (L)    which:Platform              returns runtime path            ";
-	echo " (L)    run:Platform/Identifier     executes fertilized runtime env ";
+	echo " (L)     lycheejs-helper lycheejs://cmd=lycheejs-ranger?data=[base64_data] ";
+	echo " (L)     lycheejs-helper lycheejs://web=https://lychee.js.org              ";
+	echo " (L)     lycheejs-helper cmd lycheejs-studio                               ";
 	echo " (L) ";
-	echo " (L) Examples:                                                      ";
+	echo " (L)     lycheejs-helper stop /projects/boilerplate                        ";
+	echo " (L)     lycheejs-helper unboot                                            ";
 	echo " (L) ";
-	echo " (L)    lycheejs-helper env:node /path/to/file.js                   ";
-	echo " (L)    lycheejs-helper env:html /path/to/file.html                 ";
-	echo " (L) ";
-	echo " (L)    lycheejs-helper run:html-nwjs/main /libraries/ranger        ";
+	echo " (L)     lycheejs-helper env:node ./projects/boilerplate/harvester.js       ";
+	echo " (L)     lycheejs-helper env:html ./projects/boilerplate/index.html         ";
+	echo " (L)     lycheejs-helper run:html-nwjs/main /libraries/ranger              ";
 	echo " (L) ";
 
 }
@@ -463,7 +459,6 @@ elif [ "$protocol" == "env" ]; then
 	arg6="${8}";
 	arg7="${9}";
 	arg8="${10}";
-
 
 	if [ "$program" != "" ]; then
 

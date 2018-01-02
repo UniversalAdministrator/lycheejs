@@ -66,45 +66,45 @@ const _print_help = function() {
 		.map(val => '/projects/' + val);
 
 
-	console.log('                                                   ');
+	console.log('                                                          ');
 	console.info('lychee.js ' + lychee.VERSION + ' Breeder');
-	console.log('                                                   ');
-	console.log('Usage: lycheejs-breeder [Action] [Library/Project] ');
-	console.log('                                                   ');
-	console.log('                                                   ');
-	console.log('Available Actions:                                 ');
-	console.log('                                                   ');
-	console.log('    init, fork, pull, push                         ');
-	console.log('                                                   ');
-	console.log('Available Libraries:                               ');
-	console.log('                                                   ');
+	console.log('                                                          ');
+	console.log('Usage: lycheejs-breeder [Action] [Library/Project] [Flag] ');
+	console.log('                                                          ');
+	console.log('                                                          ');
+	console.log('Available Actions:                                        ');
+	console.log('                                                          ');
+	console.log('    init, fork, pull, push                                ');
+	console.log('                                                          ');
+	console.log('Available Libraries:                                      ');
+	console.log('                                                          ');
 	libraries.forEach(function(library) {
-		let diff = ('                                               ').substr(library.length);
+		let diff = ('                                                      ').substr(library.length);
 		console.log('    ' + library + diff);
 	});
-	console.log('                                                   ');
-	console.log('Available Projects:                                ');
-	console.log('                                                   ');
+	console.log('                                                          ');
+	console.log('Available Projects:                                       ');
+	console.log('                                                          ');
 	projects.forEach(function(project) {
-		let diff = ('                                               ').substr(project.length);
+		let diff = ('                                                      ').substr(project.length);
 		console.log('    ' + project + diff);
 	});
-	console.log('                                                   ');
-	console.log('Available Flags:                                   ');
-	console.log('                                                   ');
-	console.log('   --debug          Debug Mode with debug messages ');
-	console.log('                                                   ');
-	console.log('Examples:                                          ');
-	console.log('                                                   ');
-	console.log('    cd /projects/my-project;                       ');
-	console.log('                                                   ');
-	console.log('    # Use either init or fork to start             ');
-	console.log('    lycheejs-breeder init;                         ');
-	console.log('    lycheejs-breeder fork /projects/boilerplate;   ');
-	console.log('                                                   ');
-	console.log('    lycheejs-breeder pull /libraries/harvester;    ');
-	console.log('    lycheejs-breeder push;                         ');
-	console.log('                                                   ');
+	console.log('                                                          ');
+	console.log('Available Flags:                                          ');
+	console.log('                                                          ');
+	console.log('    --debug    Enable debug messages.                     ');
+	console.log('                                                          ');
+	console.log('Examples:                                                 ');
+	console.log('                                                          ');
+	console.log('    cd /projects/my-project;                              ');
+	console.log('                                                          ');
+	console.log('    # Use either init or fork to start                    ');
+	console.log('    lycheejs-breeder init;                                ');
+	console.log('    lycheejs-breeder fork /projects/boilerplate;          ');
+	console.log('                                                          ');
+	console.log('    lycheejs-breeder pull /libraries/harvester;           ');
+	console.log('    lycheejs-breeder push;                                ');
+	console.log('                                                          ');
 
 };
 

@@ -101,8 +101,8 @@ const _print_help = function() {
 	console.log('                                                              ');
 	console.log('Available Flags:                                              ');
 	console.log('                                                              ');
-	console.log('   --debug          Debug Mode with debug messages            ');
-	console.log('   --sandbox        Sandbox Mode without software bots        ');
+	console.log('    --debug      Enable debug messages.                       ');
+	console.log('    --sandbox    Enable sandbox with isolated environment.    ');
 	console.log('                                                              ');
 	console.log('Examples:                                                     ');
 	console.log('                                                              ');
@@ -294,7 +294,7 @@ const _SETTINGS = (function() {
 
 		}
 
-	} else if ((identifier.startsWith('*') || identifier.endsWith('*')) && project !== undefined && _fs.existsSync(_ROOT + project) === true) {
+	} else if (identifier !== undefined && (identifier.startsWith('*') || identifier.endsWith('*')) && project !== undefined && _fs.existsSync(_ROOT + project) === true) {
 
 		settings.auto = true;
 

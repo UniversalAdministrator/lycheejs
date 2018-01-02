@@ -54,35 +54,39 @@ const _print_help = function() {
 		.map(val => val.substr(0, val.indexOf('.json')));
 
 
-	console.log('                                                       ');
+	console.log('                                                          ');
 	console.info('lychee.js ' + lychee.VERSION + ' Harvester');
-	console.log('                                                       ');
-	console.log('Usage: lycheejs-harvester [Action] [Profile] [Flag]    ');
-	console.log('                                                       ');
-	console.log('                                                       ');
-	console.log('Available Actions:                                     ');
-	console.log('                                                       ');
-	console.log('   start, status, stop                                 ');
-	console.log('                                                       ');
-	console.log('Available Profiles:                                    ');
-	console.log('                                                       ');
+	console.log('                                                          ');
+	console.log('Usage: lycheejs-harvester [Action] [Profile] [Flag]       ');
+	console.log('                                                          ');
+	console.log('Usage Notes:                                              ');
+	console.log('                                                          ');
+	console.log('    Profiles are stored in /libraries/harvester/profiles. ');
+	console.log('                                                          ');
+	console.log('                                                          ');
+	console.log('Available Actions:                                        ');
+	console.log('                                                          ');
+	console.log('    start, status, stop                                   ');
+	console.log('                                                          ');
+	console.log('Available Profiles:                                       ');
+	console.log('                                                          ');
 	profiles.forEach(function(profile) {
-		let diff = ('                                                   ').substr(profile.length);
+		let diff = ('                                                      ').substr(profile.length);
 		console.log('    ' + profile + diff);
 	});
-	console.log('                                                       ');
-	console.log('Available Flags:                                       ');
-	console.log('                                                       ');
-	console.log('   --debug          Debug Mode with debug messages     ');
-	console.log('   --sandbox        Sandbox Mode without software bots ');
-	console.log('                                                       ');
-	console.log('Examples:                                              ');
-	console.log('                                                       ');
-	console.log('    lycheejs-harvester start development;              ');
-	console.log('    lycheejs-harvester status;                         ');
-	console.log('    lycheejs-harvester stop;                           ');
-	console.log('    lycheejs-harvester start development --sandbox;    ');
-	console.log('                                                       ');
+	console.log('                                                          ');
+	console.log('Available Flags:                                          ');
+	console.log('                                                          ');
+	console.log('    --debug      Enable debug messages.                   ');
+	console.log('    --sandbox    Enable sandbox without software bots.    ');
+	console.log('                                                          ');
+	console.log('Examples:                                                 ');
+	console.log('                                                          ');
+	console.log('    lycheejs-harvester start development;                 ');
+	console.log('    lycheejs-harvester status;                            ');
+	console.log('    lycheejs-harvester stop;                              ');
+	console.log('    lycheejs-harvester start development --sandbox;       ');
+	console.log('                                                          ');
 
 };
 

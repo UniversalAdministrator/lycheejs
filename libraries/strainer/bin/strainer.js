@@ -65,38 +65,38 @@ const _print_help = function() {
 		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
 
 
-	console.log('                                                    ');
+	console.log('                                                           ');
 	console.info('lychee.js ' + lychee.VERSION + ' Strainer');
-	console.log('                                                    ');
-	console.log('Usage: lycheejs-strainer [Action] [Library/Project] ');
-	console.log('                                                    ');
-	console.log('                                                    ');
-	console.log('Available Actions:                                  ');
-	console.log('                                                    ');
-	console.log('    check                                           ');
-	console.log('                                                    ');
-	console.log('Available Libraries:                                ');
-	console.log('                                                    ');
+	console.log('                                                           ');
+	console.log('Usage: lycheejs-strainer [Action] [Library/Project] [Flag] ');
+	console.log('                                                           ');
+	console.log('                                                           ');
+	console.log('Available Actions:                                         ');
+	console.log('                                                           ');
+	console.log('    check                                                  ');
+	console.log('                                                           ');
+	console.log('Available Libraries:                                       ');
+	console.log('                                                           ');
 	libraries.forEach(function(library) {
-		let diff = ('                                                ').substr(library.length);
+		let diff = ('                                                       ').substr(library.length);
 		console.log('    ' + library + diff);
 	});
-	console.log('                                                    ');
-	console.log('Available Projects:                                 ');
-	console.log('                                                    ');
+	console.log('                                                           ');
+	console.log('Available Projects:                                        ');
+	console.log('                                                           ');
 	projects.forEach(function(project) {
-		let diff = ('                                                ').substr(project.length);
+		let diff = ('                                                       ').substr(project.length);
 		console.log('    ' + project + diff);
 	});
-	console.log('                                                    ');
-	console.log('Available Flags:                                    ');
-	console.log('                                                    ');
-	console.log('   --debug          Debug Mode with debug messages  ');
-	console.log('                                                    ');
-	console.log('Examples:                                           ');
-	console.log('                                                    ');
-	console.log('    lycheejs-strainer check /libraries/lychee;      ');
-	console.log('                                                    ');
+	console.log('                                                           ');
+	console.log('Available Flags:                                           ');
+	console.log('                                                           ');
+	console.log('    --debug    Enable debug messages.                      ');
+	console.log('                                                           ');
+	console.log('Examples:                                                  ');
+	console.log('                                                           ');
+	console.log('    lycheejs-strainer check /libraries/lychee;             ');
+	console.log('                                                           ');
 
 };
 

@@ -12,23 +12,140 @@ const _ROOT = process.env.LYCHEEJS_ROOT || '/opt/lycheejs';
  * USAGE
  */
 
+const _print_autocomplete = function(path) {
+
+	path = typeof path === 'string' ? path : '';
+
+
+	if (path.startsWith(_ROOT)) {
+		path = path.substr(_ROOT.length);
+	}
+
+
+	let libraries = _fs.readdirSync(_ROOT + '/libraries')
+		.sort()
+		.map(val => '/libraries/' + val)
+		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
+	let projects  = _fs.readdirSync(_ROOT + '/projects')
+		.sort()
+		.map(val => '/projects/' + val)
+		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
+
+
+	let suggestions = [];
+	let has_project = libraries.find(l => {
+		if (path.length > l.length) return path.startsWith(l);
+		return path === l;
+	}) || projects.find(p => {
+		if (path.length > p.length) return path.startsWith(p);
+		return path === p;
+	});
+
+
+	if (has_project) {
+
+		if (path.endsWith('/')) {
+			path = path.substr(0, path.length - 1);
+		}
+
+		let tmp = path.split('/');
+		if (tmp.length > 3) {
+
+			let dir  = tmp.slice(0, -1).join('/');
+			let file = tmp.slice(-1);
+
+			let found = false;
+
+			try {
+
+				let stat = _fs.lstatSync(_ROOT + dir + '/' + file);
+				if (stat.isDirectory()) {
+
+					suggestions = _fs.readdirSync(_ROOT + dir + '/' + file)
+						.filter(f => {
+							if (f.includes('.')) return f.endsWith('.js');
+							return true;
+						})
+						.map(f => dir + '/' + file + '/' + f);
+
+					found = true;
+
+				} else if (stat.isFile()) {
+
+					suggestions = [ dir + '/' + file ];
+					found = true;
+
+				}
+
+			} catch (err) {
+			}
+
+
+			if (found === false) {
+
+				try {
+
+					let stat = _fs.lstatSync(_ROOT + dir);
+					if (stat.isDirectory()) {
+
+						suggestions = _fs.readdirSync(_ROOT + dir)
+							.filter(f => {
+								if (f.includes('.')) return f.endsWith('.js');
+								return true;
+							})
+							.filter(f => f.startsWith(file))
+							.map(f => dir + '/' + f);
+
+						found = true;
+
+					}
+
+				} catch (err) {
+				}
+
+			}
+
+		}
+
+	} else if (path !== '') {
+
+		if (path.startsWith('/libraries/')) {
+			suggestions = libraries.filter(l => l.startsWith(path));
+		} else if (path.startsWith('/projects/')) {
+			suggestions = projects.filter(p => p.startsWith(path));
+		} else {
+			suggestions.push.apply(suggestions, libraries.filter(l => l.startsWith(path)));
+			suggestions.push.apply(suggestions, projects.filter(p => p.startsWith(path)));
+		}
+
+	} else {
+
+		suggestions.push.apply(suggestions, libraries);
+		suggestions.push.apply(suggestions, projects);
+
+	}
+
+	return suggestions.sort();
+
+};
+
 const _print_help = function() {
 
-	console.log('                                                                 ');
+	console.log('                                                                  ');
 	console.info('lychee.js ' + lychee.VERSION + ' Strainer (Fixer)');
-	console.log('                                                                 ');
-	console.log('Usage: lycheejs-strainer-fixer [File]                            ');
-	console.log('                                                                 ');
-	console.log('                                                                 ');
-	console.log('Available Flags:                                                 ');
-	console.log('                                                                 ');
-	console.log('   --debug          Debug Mode with debug messages               ');
-	console.log('                                                                 ');
-	console.log('Examples:                                                        ');
-	console.log('                                                                 ');
-	console.log('    # cwd has to be /opt/lycheejs                                ');
-	console.log('    lycheejs-strainer-fixer projects/boilerplate/source/Main.js; ');
-	console.log('                                                                 ');
+	console.log('                                                                  ');
+	console.log('Usage: lycheejs-strainer-fixer [File] [Flag]                      ');
+	console.log('                                                                  ');
+	console.log('                                                                  ');
+	console.log('Available Flags:                                                  ');
+	console.log('                                                                  ');
+	console.log('    --debug    Enable debug messages.                             ');
+	console.log('                                                                  ');
+	console.log('Examples:                                                         ');
+	console.log('                                                                  ');
+	console.log('    # cwd has to be /opt/lycheejs                                 ');
+	console.log('    lycheejs-strainer-fixer /projects/boilerplate/source/Main.js; ');
+	console.log('                                                                  ');
 
 };
 
@@ -110,10 +227,22 @@ const _bootup = function(settings) {
 
 
 
-/*
- * XXX: Quickfix Mode doesn't need console.info() calls.
- * This strips out all bootstrap info
- */
+if (process.argv.includes('--autocomplete')) {
+
+	let tmp1   = process.argv.indexOf('--autocomplete');
+	let words  = process.argv.slice(tmp1 + 1);
+	let result = _print_autocomplete.apply(null, words);
+
+	process.stdout.write(result.join(' '));
+
+	process.exit(0);
+	return;
+
+}
+
+
+
+// XXX: Quickfix Mode doesn't need console.info() calls.
 
 const lychee = (function() {
 
@@ -126,7 +255,6 @@ const lychee = (function() {
 
 	let lychee = require(_ROOT + '/libraries/lychee/build/node/core.js')(_ROOT);
 	process.stdout.write = _old_write;
-
 
 	return lychee;
 
@@ -153,6 +281,10 @@ const _SETTINGS = (function() {
 
 		if (file.startsWith('./')) {
 			file = _CWD + '/' + file.substr(2);
+		} else if (file.startsWith('/libraries')) {
+			file = _CWD + file;
+		} else if (file.startsWith('/projects')) {
+			file = _CWD + file;
 		} else if (file.startsWith('/') === false) {
 			file = _CWD + '/' + file;
 		}
