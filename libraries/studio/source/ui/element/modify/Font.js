@@ -181,6 +181,7 @@ lychee.define('studio.ui.element.modify.Font').requires([
 
 
 		this.setValue(settings.value);
+		this.trigger('relayout');
 
 		settings = null;
 

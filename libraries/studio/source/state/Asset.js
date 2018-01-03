@@ -2,8 +2,8 @@
 lychee.define('studio.state.Asset').requires([
 	'studio.codec.FONT',
 	'studio.ui.element.modify.Font',
-	// 'studio.ui.element.modify.Music',
-	// 'studio.ui.element.modify.Sound',
+	'studio.ui.element.modify.Music',
+	'studio.ui.element.modify.Sound',
 	'studio.ui.element.modify.Sprite',
 	'studio.ui.element.preview.Font',
 	// 'studio.ui.element.preview.Music',
@@ -49,7 +49,14 @@ lychee.define('studio.state.Asset').requires([
 		let preview = this.query('ui > asset > preview');
 
 
-		if (!(modify instanceof _modify[type])) {
+		if (_modify[type] === undefined) {
+
+			if (modify !== null) {
+				layer.removeEntity(modify);
+				modify = null;
+			}
+
+		} else if ((modify instanceof _modify[type]) === false) {
 
 			if (modify !== null) {
 				layer.removeEntity(modify);
@@ -66,7 +73,7 @@ lychee.define('studio.state.Asset').requires([
 			modify.bind('change', _on_modify_change, this);
 			layer.setEntity('modify', modify);
 
-		} else {
+		} else if (modify !== null) {
 
 			modify.visible = true;
 			modify.setValue(asset);
@@ -74,7 +81,14 @@ lychee.define('studio.state.Asset').requires([
 		}
 
 
-		if (!(preview instanceof _preview[type])) {
+		if (_preview[type] === undefined) {
+
+			if (preview !== null) {
+				layer.removeEntity(preview);
+				preview = null;
+			}
+
+		} else if ((preview instanceof _preview[type]) === false) {
 
 			if (preview !== null) {
 				layer.removeEntity(preview);
@@ -91,7 +105,7 @@ lychee.define('studio.state.Asset').requires([
 			preview.bind('change', _on_preview_change, this);
 			layer.setEntity('preview', preview);
 
-		} else {
+		} else if (preview !== null) {
 
 			preview.visible = true;
 			preview.setValue(asset);
@@ -188,7 +202,7 @@ lychee.define('studio.state.Asset').requires([
 			let asset = new Sound(path);
 
 			asset.onload = function(result) {
-				_update_view.call(that, 'Music', asset);
+				_update_view.call(that, 'Sound', asset);
 			}.bind(this);
 
 			asset.load();

@@ -129,9 +129,10 @@ lychee.define('lychee.ui.entity.Upload').tags({
 						name = name.split('.').slice(0, -1).join('.');
 					}
 
-					// XXX: Assume Music Upload when name doesn't suggest it
-					if (name.endsWith('.msc') === false && name.endsWith('.snd') === false) {
+					if (type === Composite.TYPE.music && name.endsWith('.msc') === false) {
 						name = name + '.msc';
+					} else if (type === Composite.TYPE.sound && name.endsWith('.snd') === false) {
+						name = name + '.snd';
 					}
 
 
