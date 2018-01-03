@@ -106,11 +106,39 @@ lychee.define('lychee.Stash').tags({
 					if (asset !== null) {
 
 						let data = lychee.serialize(asset);
-						if (data !== null && data.blob !== null && typeof data.blob.buffer === 'string') {
 
-							let index = data.blob.buffer.indexOf('base64,') + 7;
-							if (index > 7) {
-								this.data[id] = data;
+						if (data !== null && data.blob instanceof Object) {
+
+							let buffer = data.blob.buffer || null;
+							if (buffer instanceof Object) {
+
+								let valid = true;
+
+								for (let sub in buffer) {
+
+									if (typeof buffer[sub] === 'string') {
+
+										let index = buffer[sub].indexOf('base64,') + 7;
+										if (index <= 7) {
+											valid = false;
+											break;
+										}
+
+									}
+
+								}
+
+								if (valid === true) {
+									this.data[id] = data;
+								}
+
+							} else if (typeof buffer === 'string') {
+
+								let index = buffer.indexOf('base64,') + 7;
+								if (index > 7) {
+									this.data[id] = data;
+								}
+
 							}
 
 						}

@@ -20,6 +20,12 @@ are listed in this specific order: `changed`, `removed`, `added`
 and `fixed`.
 
 
+## [2018-Q1] - UNRELEASED
+
+- Fixed: lychee.Stash supports Music and Sound data types.
+- Fixed: lychee.js Studio supports Music and Sound data types.
+
+
 ## [2017-Q4] - 2017-12-20
 
 - **Changed**: lychee.pkg environment settings changes to `{ packages: { namespace: url }}`.
@@ -172,7 +178,8 @@ and `fixed`.
 
 # GIT CHANGELOG
 
-- [Unreleased](https://github.com/Artificial-Engineering/lycheejs/compare/2017-Q4...HEAD)
+- [Unreleased](https://github.com/Artificial-Engineering/lycheejs/compare/2018-Q1...HEAD)
+- [2018-Q1](https://github.com/Artificial-Engineering/lycheejs/compare/2017-Q4...2018-Q1)
 - [2017-Q4](https://github.com/Artificial-Engineering/lycheejs/compare/2017-Q3...2017-Q4)
 - [2017-Q3](https://github.com/Artificial-Engineering/lycheejs/compare/2017-Q2...2017-Q3)
 - [2017-Q2](https://github.com/Artificial-Engineering/lycheejs/compare/2017-Q1...2017-Q2)

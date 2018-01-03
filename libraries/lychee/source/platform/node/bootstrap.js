@@ -1125,11 +1125,11 @@
 			if (blob.buffer instanceof Object) {
 
 				if (typeof blob.buffer.ogg === 'string') {
-					this.__buffer.ogg = new Buffer(blob.buffer.substr(28), 'base64');
+					this.__buffer.ogg = new Buffer(blob.buffer.ogg.substr(28), 'base64');
 				}
 
 				if (typeof blob.buffer.mp3 === 'string') {
-					this.__buffer.mp3 = new Buffer(blob.buffer.substr(22), 'base64');
+					this.__buffer.mp3 = new Buffer(blob.buffer.mp3.substr(22), 'base64');
 				}
 
 
@@ -1301,11 +1301,11 @@
 			if (blob.buffer instanceof Object) {
 
 				if (typeof blob.buffer.ogg === 'string') {
-					this.__buffer.ogg = new Buffer(blob.buffer.substr(28), 'base64');
+					this.__buffer.ogg = new Buffer(blob.buffer.ogg.substr(28), 'base64');
 				}
 
 				if (typeof blob.buffer.mp3 === 'string') {
-					this.__buffer.mp3 = new Buffer(blob.buffer.substr(22), 'base64');
+					this.__buffer.mp3 = new Buffer(blob.buffer.mp3.substr(22), 'base64');
 				}
 
 

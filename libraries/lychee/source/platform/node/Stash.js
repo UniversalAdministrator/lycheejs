@@ -142,19 +142,49 @@ lychee.define('lychee.Stash').tags({
 
 
 						let data = lychee.serialize(asset);
-						if (data !== null && data.blob !== null && typeof data.blob.buffer === 'string') {
+						let enc  = _ENCODING[data.constructor] || _ENCODING['Stuff'];
 
-							let encoding = _ENCODING[data.constructor] || _ENCODING['Stuff'];
-							let index    = data.blob.buffer.indexOf('base64,') + 7;
-							if (index > 7) {
+						if (data !== null && data.blob instanceof Object) {
 
-								let buffer = new Buffer(data.blob.buffer.substr(index, data.blob.buffer.length - index), 'base64');
+							let buffer = data.blob.buffer || null;
+							if (buffer instanceof Object) {
 
-								try {
-									_fs.writeFileSync(path, buffer, encoding);
-									result = true;
-								} catch (err) {
-									result = false;
+								for (let sub in buffer) {
+
+									if (typeof buffer[sub] === 'string') {
+
+										let index = buffer[sub].indexOf('base64,') + 7;
+										if (index > 7) {
+
+											let raw = new Buffer(buffer[sub].substr(index, buffer[sub].length - index), 'base64');
+
+											try {
+												_fs.writeFileSync(path + '.' + sub, raw, enc);
+												result = true;
+											} catch (err) {
+												result = false;
+											}
+
+										}
+
+									}
+
+								}
+
+							} else if (typeof buffer === 'string') {
+
+								let index = buffer.indexOf('base64,') + 7;
+								if (index > 7) {
+
+									let raw = new Buffer(buffer.substr(index, buffer.length - index), 'base64');
+
+									try {
+										_fs.writeFileSync(path, raw, enc);
+										result = true;
+									} catch (err) {
+										result = false;
+									}
+
 								}
 
 							}

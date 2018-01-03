@@ -1835,13 +1835,13 @@
 				let that   = this;
 				let buffer = new Audio();
 
-				buffer.onload = function() {
+
+				buffer.onloadedmetadata = function() {
 
 					that.buffer         = this;
 					that.__buffer[type] = this;
 
-					this.toString('base64');
-					this.__load = false;
+					that.__load = false;
 
 					if (that.onload instanceof Function) {
 						that.onload(true);
@@ -1850,7 +1850,17 @@
 
 				};
 
+				buffer.onloadeddata = function() {
+					this.toString('base64');
+				};
+
+				// XXX: onerror is fired after onload -_-
 				buffer.onerror = function() {
+
+					if (that.buffer === this) {
+						that.buffer       = null;
+						that.buffer[type] = null;
+					}
 
 					if (that.onload instanceof Function) {
 						that.onload(false);
@@ -1860,8 +1870,8 @@
 				};
 
 				buffer.addEventListener('ended', function() {
-					that.play();
-				}, true);
+					this.play();
+				}.bind(this), true);
 
 				buffer.autobuffer = true;
 				buffer.preload    = true;
@@ -1876,7 +1886,6 @@
 
 
 				buffer.load();
-				buffer.onload();
 
 			} else {
 
@@ -2147,13 +2156,12 @@
 				let that   = this;
 				let buffer = new Audio();
 
-				buffer.onload = function() {
+				buffer.onloadedmetadata = function() {
 
 					that.buffer         = this;
 					that.__buffer[type] = this;
 
-					this.toString('base64');
-					this.__load = false;
+					that.__load = false;
 
 					if (that.onload instanceof Function) {
 						that.onload(true);
@@ -2162,7 +2170,17 @@
 
 				};
 
+				buffer.onloadeddata = function() {
+					this.toString('base64');
+				};
+
+				// XXX: onerror is fired after onload -_-
 				buffer.onerror = function() {
+
+					if (that.buffer === this) {
+						that.buffer         = null;
+						that.__buffer[type] = null;
+					}
 
 					if (that.onload instanceof Function) {
 						that.onload(false);
@@ -2172,9 +2190,9 @@
 				};
 
 				buffer.addEventListener('ended', function() {
-					that.isIdle = true;
-					that.stop();
-				}, true);
+					this.isIdle = true;
+					this.stop();
+				}.bind(this), true);
 
 				buffer.autobuffer = true;
 				buffer.preload    = true;
@@ -2189,7 +2207,6 @@
 
 
 				buffer.load();
-				buffer.onload();
 
 			} else {
 

@@ -4,6 +4,14 @@
 			"Main": [
 				"json"
 			],
+			"codec": {
+				"MUSIC": [
+					"json"
+				],
+				"SOUND": [
+					"json"
+				]
+			},
 			"data": {
 				"Project": [
 					"json"
@@ -56,7 +64,13 @@
 						"Font": [
 							"json"
 						],
+						"Music": [
+							"json"
+						],
 						"Project": [
+							"json"
+						],
+						"Sound": [
 							"json"
 						],
 						"Sprite": [
@@ -65,6 +79,12 @@
 					},
 					"preview": {
 						"Font": [
+							"json"
+						],
+						"Music": [
+							"json"
+						],
+						"Sound": [
 							"json"
 						],
 						"Sprite": [
@@ -204,6 +224,14 @@
 			"Main": [
 				"js"
 			],
+			"codec": {
+				"MUSIC": [
+					"js"
+				],
+				"SOUND": [
+					"js"
+				]
+			},
 			"data": {
 				"Project": [
 					"js"
@@ -259,7 +287,13 @@
 						"Font": [
 							"js"
 						],
+						"Music": [
+							"js"
+						],
 						"Project": [
+							"js"
+						],
+						"Sound": [
 							"js"
 						],
 						"Sprite": [
@@ -268,6 +302,12 @@
 					},
 					"preview": {
 						"Font": [
+							"js"
+						],
+						"Music": [
+							"js"
+						],
+						"Sound": [
 							"js"
 						],
 						"Sprite": [
