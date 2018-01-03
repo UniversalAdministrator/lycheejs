@@ -20,9 +20,10 @@ lychee.define('lychee.ui.entity.Upload').tags({
 
 }).exports(function(lychee, global, attachments) {
 
-	const _Button    = lychee.import('lychee.ui.entity.Button');
-	const _INSTANCES = [];
-	const _WRAPPERS  = [];
+	const _Button     = lychee.import('lychee.ui.entity.Button');
+	const _FileReader = global.FileReader;
+	const _INSTANCES  = [];
+	const _WRAPPERS   = [];
 
 
 
@@ -108,40 +109,128 @@ lychee.define('lychee.ui.entity.Upload').tags({
 			}
 
 
-			let val    = [];
-			let change = false;
+			let val   = [];
+			let files = Array.from(this.files);
+
+			if (files.length > 0) {
+
+				let check_mp3 = files.find(function(file) {
+					return file.name.endsWith('.mp3');
+				}) || null;
+
+				let check_ogg = files.find(function(file) {
+					return file.name.endsWith('.ogg');
+				}) || null;
+
+				if (check_mp3 !== null || check_ogg !== null) {
+
+					let name = (check_mp3 || check_ogg).name.split('/').pop();
+					if (name.endsWith('.mp3') || name.endsWith('.ogg')) {
+						name = name.split('.').slice(0, -1).join('.');
+					}
+
+					// XXX: Assume Music Upload when name doesn't suggest it
+					if (name.endsWith('.msc') === false && name.endsWith('.snd') === false) {
+						name = name + '.msc';
+					}
 
 
-			[].slice.call(this.files).forEach(function(file) {
+					let tmp = {
+						mp3: null,
+						ogg: null
+					};
 
-				change = true;
+					if (check_mp3 !== null) {
 
-				let reader = new global.FileReader();
+						let reader = new _FileReader();
 
-				reader.onload = function() {
+						reader.onload = function() {
 
-					// TODO: If file.name is msc.ogg or msc.mp3 use both buffers
-					// TODO: If file.name is snd.ogg or snd.mp3 use both buffers
+							tmp['mp3'] = reader.result;
 
-					let asset = new lychee.Asset('/tmp/' + file.name, null, true);
-					if (asset !== null) {
+							if (check_ogg === null || tmp['ogg'] !== null) {
 
-						asset.deserialize({
-							buffer: reader.result
-						});
+								let asset = new lychee.Asset('/tmp/' + name, null, true);
+								if (asset !== null) {
 
-						val.push(asset);
+									asset.deserialize({
+										buffer: {
+											mp3: tmp['mp3'],
+											ogg: tmp['ogg']
+										}
+									});
+
+									val.push(asset);
+
+								}
+
+							}
+
+						};
+
+						reader.readAsDataURL(check_mp3);
 
 					}
 
-				};
+					if (check_ogg !== null) {
 
-				reader.readAsDataURL(file);
+						let reader = new _FileReader();
 
-			});
+						reader.onload = function() {
 
+							tmp['ogg'] = reader.result;
 
-			if (change === true) {
+							if (check_mp3 === null || tmp['mp3'] !== null) {
+
+								let asset = new lychee.Asset('/tmp/' + name, null, true);
+								if (asset !== null) {
+
+									asset.deserialize({
+										buffer: {
+											mp3: tmp['mp3'],
+											ogg: tmp['ogg']
+										}
+									});
+
+									val.push(asset);
+
+								}
+
+							}
+
+						};
+
+						reader.readAsDataURL(check_ogg);
+
+					}
+
+				} else {
+
+					files.forEach(function(file) {
+
+						let reader = new _FileReader();
+
+						reader.onload = function() {
+
+							let asset = new lychee.Asset('/tmp/' + file.name, null, true);
+							if (asset !== null) {
+
+								asset.deserialize({
+									buffer: reader.result
+								});
+
+								val.push(asset);
+
+							}
+
+						};
+
+						reader.readAsDataURL(file);
+
+					});
+
+				}
+
 
 				setTimeout(function() {
 
