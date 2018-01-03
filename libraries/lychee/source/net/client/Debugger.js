@@ -85,7 +85,7 @@ lychee.define('lychee.net.client.Debugger').includes([
 				let scope    = (lychee.environment !== null ? lychee.environment.global : global);
 				let value    = null;
 				let instance = _resolve_reference.call(scope, data.reference);
-				let bindargs = [].slice.call(data.arguments, 0).map(function(value) {
+				let bindargs = Array.from(data.arguments).map(function(value) {
 
 					if (typeof value === 'string' && value.charAt(0) === '#') {
 

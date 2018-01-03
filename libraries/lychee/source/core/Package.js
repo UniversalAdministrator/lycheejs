@@ -187,7 +187,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 			let map = {
 				id:           id,
 				candidate:    null,
-				candidates:   [].concat(candidates),
+				candidates:   Array.from(candidates),
 				attachments:  [],
 				dependencies: [],
 				loading:      1

@@ -889,7 +889,7 @@ lychee = (function(global) {
 					let resolved_composite = _resolve_reference.call(scope, data.constructor);
 					if (typeof resolved_composite === 'function') {
 
-						let bindargs = [].splice.call(data.arguments, 0).map(function(value) {
+						let bindargs = Array.from(data.arguments).map(function(value) {
 
 							if (typeof value === 'string' && value.charAt(0) === '#') {
 

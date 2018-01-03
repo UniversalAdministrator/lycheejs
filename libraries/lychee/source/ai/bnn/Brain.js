@@ -267,7 +267,7 @@ lychee.define('lychee.ai.bnn.Brain').exports(function(lychee, global, attachment
 
 				let control = controls[c];
 				let length  = controls_map[c];
-				let values  = [].slice.call(outputs, offset, length);
+				let values  = outputs.slice(offset, length);
 
 				if (values.length > 0) {
 					control.control(values);

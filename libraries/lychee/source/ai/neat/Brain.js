@@ -302,7 +302,7 @@ lychee.define('lychee.ai.neat.Brain').exports(function(lychee, global, attachmen
 
 				let control = controls[c];
 				let length  = controls_map[c];
-				let values  = [].slice.call(outputs, offset, length);
+				let values  = outputs.slice(offset, length);
 
 				if (values.length > 0) {
 					control.control(values);

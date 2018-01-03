@@ -181,7 +181,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 			let blob     = (data['blob'] || {});
 
 
-			if (this.options.length !== 0) settings.options = [].slice.call(this.options, 0);
+			if (this.options.length !== 0) settings.options = Array.from(this.options);
 			if (this.value !== '')         settings.value   = this.value;
 
 

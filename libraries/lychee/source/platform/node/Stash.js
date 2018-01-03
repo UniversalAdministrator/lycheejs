@@ -522,7 +522,7 @@ lychee.define('lychee.Stash').tags({
 			if (action !== null) {
 
 				let cache  = {
-					load:  [].slice.call(ids),
+					load:  Array.from(ids),
 					ready: []
 				};
 
