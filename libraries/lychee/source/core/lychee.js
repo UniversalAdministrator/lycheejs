@@ -16,6 +16,57 @@ lychee = (function(global) {
 	 * POLYFILLS
 	 */
 
+	if (typeof Array.from !== 'function') {
+
+		Array.from = function(alike/*, predicate, thisArg */) {
+
+			if (alike === null || alike === undefined) {
+				throw new TypeError('Array.from requires an array-like object - not null or undefined');
+			}
+
+
+			let construct = this;
+			let list      = Object(alike);
+			let predicate = arguments.length > 1 ? arguments[1] : void 0;
+			let thisArg   = arguments.length > 2 ? arguments[2] : void 0;
+
+			if (typeof predicate !== 'undefined') {
+
+				if (typeof predicate !== 'function') {
+					throw new TypeError('Array.from: when provided, the second argument must be a function');
+				}
+
+			}
+
+			let length = list.length >>> 0;
+			let array  = typeof construct === 'function' ? Object(new construct(length)) : new Array(length);
+
+			for (let i = 0; i < length; i++) {
+
+				let value = list[i];
+
+				if (predicate !== undefined) {
+
+					if (thisArg === undefined) {
+						array[i] = predicate(value, i);
+					} else {
+						array[i] = predicate.call(thisArg, value, i);
+					}
+
+				} else {
+					array[i] = value;
+				}
+
+			}
+
+			array.length = length;
+
+			return array;
+
+		};
+
+	}
+
 	if (typeof Array.prototype.unique !== 'function') {
 
 		Array.prototype.unique = function() {
