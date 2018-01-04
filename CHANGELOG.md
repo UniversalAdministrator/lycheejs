@@ -24,6 +24,7 @@ and `fixed`.
 
 - Fixed: lychee.Stash supports Music and Sound data types.
 - Fixed: lychee.js Studio supports Music and Sound data types.
+- Fixed: lychee.ui.element Stack supports correct `relayout` event flow.
 
 
 ## [2017-Q4] - 2017-12-20

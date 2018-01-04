@@ -9,6 +9,59 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 
 	/*
+	 * HELPERS
+	 */
+
+	const _render_buffer = function(renderer) {
+
+		let font = this.font;
+		if (font !== null && font.texture !== null) {
+
+			if (this.__buffer !== null) {
+				this.__buffer.resize(this.width, this.height);
+			} else {
+				this.__buffer = renderer.createBuffer(this.width, this.height);
+			}
+
+
+			renderer.clear(this.__buffer);
+			renderer.setBuffer(this.__buffer);
+			renderer.setAlpha(1.0);
+
+
+			let lh      = this.__height;
+			let buffer  = this.__buffer;
+			let options = this.options;
+
+			for (let o = 0, ol = options.length; o < ol; o++) {
+
+				let option   = options[o];
+				let offset_y = o * lh;
+				if (offset_y + lh > buffer.height) {
+					break;
+				}
+
+				renderer.drawText(
+					36,
+					offset_y + (font.lineheight / 2) - 2,
+					option,
+					font,
+					false
+				);
+
+			}
+
+
+			renderer.setBuffer(null);
+			this.__isDirty = false;
+
+		}
+
+	};
+
+
+
+	/*
 	 * IMPLEMENTATION
 	 */
 
@@ -21,21 +74,23 @@ lychee.define('lychee.ui.entity.Select').includes([
 		this.options = [];
 		this.value   = '';
 
-		this.__cursor = {
+		this.__buffer  = null;
+		this.__cursor  = {
 			active:   false,
 			alpha:    0.0,
 			duration: 600,
 			start:    null,
 			pingpong: false
 		};
-		this.__height = 32;
-		this.__pulse  = {
+		this.__height  = 32;
+		this.__pulse   = {
 			active:   false,
 			duration: 300,
 			start:    null,
 			alpha:    0.0,
 			previous: null
 		};
+		this.__isDirty = true;
 
 
 		this.setFont(settings.font);
@@ -72,6 +127,10 @@ lychee.define('lychee.ui.entity.Select').includes([
 		/*
 		 * INITIALIZATION
 		 */
+
+		this.bind('relayout', function() {
+			this.__isDirty = true;
+		}, this);
 
 		this.bind('touch', function(id, position, delta) {
 
@@ -137,18 +196,6 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 		this.bind('blur', function() {
 			this.setState('default');
-		}, this);
-
-		this.bind('relayout', function() {
-
-			let lh = this.__height;
-
-			if (this.options.length > 0) {
-				this.height = lh * this.options.length;
-			} else {
-				this.height = lh;
-			}
-
 		}, this);
 
 
@@ -248,7 +295,6 @@ lychee.define('lychee.ui.entity.Select').includes([
 			let position = this.position;
 			let cursor   = this.__cursor;
 			let pulse    = this.__pulse;
-			let font     = this.font;
 			let value    = this.value;
 			let x        = position.x + offsetX;
 			let y        = position.y + offsetY;
@@ -261,15 +307,22 @@ lychee.define('lychee.ui.entity.Select').includes([
 			}
 
 
+			if (this.__isDirty === true) {
+				_render_buffer.call(this, renderer);
+			}
+
+
 			let x1 = x - hwidth;
+			let y1 = y - hheight;
+			let y2 = y + hheight;
 			let lh = this.__height;
+
 
 			for (let o = 0, ol = this.options.length; o < ol; o++) {
 
-				let option = this.options[o];
-				let y1     = y - hheight + o * lh;
-
-				if (y1 + lh > y + hheight) {
+				let option   = this.options[o];
+				let offset_y = y - hheight + o * lh;
+				if (offset_y + lh > y2) {
 					break;
 				}
 
@@ -280,7 +333,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 						renderer.drawCircle(
 							x1 + 16,
-							y1 + 16,
+							offset_y + 16,
 							11,
 							'#32afe5',
 							false,
@@ -291,7 +344,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 						renderer.drawCircle(
 							x1 + 16,
-							y1 + 16,
+							offset_y + 16,
 							12,
 							'#32afe5',
 							true
@@ -303,7 +356,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 						renderer.drawCircle(
 							x1 + 16,
-							y1 + 16,
+							offset_y + 16,
 							11,
 							'#545454',
 							false,
@@ -314,7 +367,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 						renderer.drawCircle(
 							x1 + 16,
-							y1 + 16,
+							offset_y + 16,
 							11,
 							'#32afe5',
 							false,
@@ -327,7 +380,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 						renderer.drawCircle(
 							x1 + 16,
-							y1 + 16,
+							offset_y + 16,
 							11,
 							'#545454',
 							false,
@@ -342,7 +395,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 						renderer.drawCircle(
 							x1 + 16,
-							y1 + 16,
+							offset_y + 16,
 							11,
 							'#32afe5',
 							false,
@@ -356,7 +409,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 							renderer.drawCircle(
 								x1 + 16,
-								y1 + 16,
+								offset_y + 16,
 								12,
 								'#32afe5',
 								true
@@ -370,7 +423,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 						renderer.drawCircle(
 							x1 + 16,
-							y1 + 16,
+							offset_y + 16,
 							11,
 							'#545454',
 							false,
@@ -381,17 +434,22 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 				}
 
+			}
 
-				renderer.drawText(
-					x1 + 36,
-					y1 + (font.lineheight / 2),
-					option,
-					font,
-					false
+
+			if (alpha !== 1) {
+				renderer.setAlpha(alpha);
+			}
+
+			if (this.__buffer !== null) {
+
+				renderer.drawBuffer(
+					x1,
+					y1,
+					this.__buffer
 				);
 
 			}
-
 
 			if (alpha !== 1) {
 				renderer.setAlpha(1.0);
@@ -433,8 +491,6 @@ lychee.define('lychee.ui.entity.Select').includes([
 				this.options = options.map(function(option) {
 					return '' + option;
 				});
-
-				this.trigger('relayout');
 
 
 				if (this.options.indexOf(this.value) === -1) {

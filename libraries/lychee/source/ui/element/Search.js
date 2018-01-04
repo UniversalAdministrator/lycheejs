@@ -55,6 +55,7 @@ lychee.define('lychee.ui.element.Search').requires([
 				if (filtered.length === 0) {
 
 					select.setOptions([ '- No matches -' ]);
+					select.height = 32;
 					this.trigger('relayout');
 
 					this.value = value;
@@ -63,6 +64,7 @@ lychee.define('lychee.ui.element.Search').requires([
 				} else {
 
 					select.setOptions(filtered);
+					select.height = Math.min(32 * filtered.length, this.height - 128);
 					this.trigger('relayout');
 
 				}
@@ -86,17 +88,10 @@ lychee.define('lychee.ui.element.Search').requires([
 
 		}, this);
 
-		select.unbind('relayout');
-		select.bind('relayout', function() {
-			select.height = this.height - 128;
-		}, this);
-
 
 		this.addEntity(input);
 		this.addEntity(select);
 
-
-		// XXX: This must be done afterwards
 
 		this.setData(settings.data);
 		delete settings.data;
@@ -162,6 +157,7 @@ lychee.define('lychee.ui.element.Search').requires([
 				let select = this.getEntity('select');
 				if (select !== null) {
 					select.setOptions(this.data);
+					select.height = Math.min(32 * this.data.length, this.height - 128);
 					this.trigger('relayout');
 				}
 

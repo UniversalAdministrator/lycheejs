@@ -46,7 +46,6 @@ lychee.define('lychee.ui.Element').requires([
 
 		let entities = this.entities;
 		let entity   = null;
-		let label    = null;
 		let layout   = [
 			this.getEntity('@order'),
 			this.getEntity('@label'),
@@ -76,55 +75,66 @@ lychee.define('lychee.ui.Element').requires([
 
 		if (entities.length > 4) {
 
-			let offset   = 64 + 16;
-			let boundary = 0;
+			let boundary_x = 0;
 
 			for (let e = 2, el = entities.length - 2; e < el; e += 2) {
 
-				label    = entities[e];
-				entity   = entities[e + 1];
-				boundary = 0;
+				let label  = entities[e];
+				let entity = entities[e + 1];
 
+				if (entity.visible === true) {
+
+					if (label.value !== '') {
+						boundary_x = Math.max(label.width, boundary_x);
+					}
+
+				}
+
+			}
+
+
+			let offset_x = Math.round(boundary_x / 16) * 16;
+			let offset_y = 64 + 16;
+
+			if (offset_x - boundary_x < 16) {
+				offset_x += 16;
+			}
+
+			for (let e = 2, el = entities.length - 2; e < el; e += 2) {
+
+				let label  = entities[e];
+				let entity = entities[e + 1];
 
 				if (entity.visible === true) {
 
 					if (label.value !== '') {
 
 						label.position.x  = x1 + 16 + label.width / 2;
-						label.position.y  = y1 + offset + label.height / 2;
 						label.visible     = true;
 
-						entity.width      = 1 / 2 * (this.width - 32);
-						entity.position.x = 1 / 4 * (this.width - 32);
-						entity.position.y = y1 + offset + entity.height / 2;
-						entity.visible    = true;
-						entity.trigger('relayout');
-
-						boundary = Math.max(label.height, entity.height);
-						label.position.y  = y1 + offset + boundary / 2;
-						entity.position.y = y1 + offset + boundary / 2;
-
-						offset += boundary + 16;
+						entity.width      = this.width - offset_x - 32;
+						entity.position.x = (this.width - entity.width - 32) / 2;
 
 					} else {
 
-						label.position.x  = -1 / 2 * this.width;
-						label.position.y  = y1 + offset + label.height / 2;
+						label.position.x  = x1 + 16 + label.width / 2;
 						label.visible     = false;
 
 						entity.width      = this.width - 32;
 						entity.position.x = 0;
-						entity.position.y = y1 + offset + entity.height / 2;
-						entity.visible    = true;
-						entity.trigger('relayout');
-
-						boundary = Math.max(label.height, entity.height);
-						label.position.y  = y1 + offset + boundary / 2;
-						entity.position.y = y1 + offset + boundary / 2;
-
-						offset += boundary + 16;
 
 					}
+
+
+					entity.trigger('relayout');
+
+
+					let boundary_y = Math.max(label.height, entity.height);
+
+					label.position.y  = y1 + offset_y + boundary_y / 2;
+					entity.position.y = y1 + offset_y + boundary_y / 2;
+
+					offset_y += boundary_y + 16;
 
 				} else {
 
@@ -266,7 +276,7 @@ lychee.define('lychee.ui.Element').requires([
 
 
 			if (this.label !== 'CONTENT')                 settings.label   = this.label;
-			if (this.options.join(',') !== 'Okay,Cancel') settings.options = this.options.slice(0, this.options.length);
+			if (this.options.join(',') !== 'Okay,Cancel') settings.options = Array.from(this.options);
 			if (this.order !== 1)                         settings.order   = this.order;
 
 

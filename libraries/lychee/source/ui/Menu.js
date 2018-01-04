@@ -215,6 +215,7 @@ lychee.define('lychee.ui.Menu').requires([
 				entity.position.y =  y1 + 21 + entity.height / 2;
 
 				entity = this.getEntity('@select');
+				entity.height     = 32 * entity.options.length;
 				entity.position.x = 8;
 				entity.position.y = y1 + 64 + entity.height / 2;
 
