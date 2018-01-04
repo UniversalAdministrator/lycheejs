@@ -22,6 +22,7 @@ and `fixed`.
 
 ## [2018-Q1] - UNRELEASED
 
+- Added: lychee.ui.Element supports same `type` as lychee.ui.Blueprint.
 - Fixed: lychee.Stash supports Music and Sound data types.
 - Fixed: lychee.js Studio supports Music and Sound data types.
 - Fixed: lychee.ui.element Stack supports correct `relayout` event flow.

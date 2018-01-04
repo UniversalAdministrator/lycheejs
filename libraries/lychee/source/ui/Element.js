@@ -52,6 +52,7 @@ lychee.define('lychee.ui.Element').requires([
 			this.getEntity('@options-prev'),
 			this.getEntity('@options-next')
 		];
+		let type     = this.type;
 
 
 		let x1 = -1 / 2 * this.width;
@@ -107,21 +108,43 @@ lychee.define('lychee.ui.Element').requires([
 
 				if (entity.visible === true) {
 
-					if (label.value !== '') {
+					let has_label = label.value !== '';
 
-						label.position.x  = x1 + 16 + label.width / 2;
-						label.visible     = true;
+					label.position.x  = x1 + 16 + label.width / 2;
+					label.visible     = has_label;
 
-						entity.width      = this.width - offset_x - 32;
-						entity.position.x = (this.width - entity.width - 32) / 2;
 
-					} else {
+					if (type === Composite.TYPE.view) {
 
-						label.position.x  = x1 + 16 + label.width / 2;
-						label.visible     = false;
+						if (has_label === true) {
 
-						entity.width      = this.width - 32;
+							entity.width      = 1 / 2 * (this.width - 32);
+							entity.position.x = 1 / 4 * (this.width - 32);
+
+						} else {
+
+							entity.width      = this.width - 32;
+							entity.position.x = 0;
+
+						}
+
+					} else if (type === Composite.TYPE.full) {
+
 						entity.position.x = 0;
+
+					} else if (type === Composite.TYPE.auto) {
+
+						if (has_label === true) {
+
+							entity.width      = this.width - offset_x - 32;
+							entity.position.x = (this.width - entity.width - 32) / 2;
+
+						} else {
+
+							entity.width      = this.width - 32;
+							entity.position.x = 0;
+
+						}
 
 					}
 
@@ -185,6 +208,7 @@ lychee.define('lychee.ui.Element').requires([
 		this.label   = 'CONTENT';
 		this.options = [ 'Okay', 'Cancel' ];
 		this.order   = 1;
+		this.type    = Composite.TYPE.view;
 
 
 		settings.width    = typeof settings.width === 'number'     ? settings.width    : 256;
@@ -239,6 +263,7 @@ lychee.define('lychee.ui.Element').requires([
 		this.setLabel(settings.label);
 		this.setOptions(settings.options);
 		this.setOrder(settings.order);
+		this.setType(settings.type);
 
 
 		if (init_relayout === true) {
@@ -249,6 +274,13 @@ lychee.define('lychee.ui.Element').requires([
 
 		settings = null;
 
+	};
+
+
+	Composite.TYPE = {
+		view: 0,
+		full: 1,
+		auto: 2
 	};
 
 
@@ -673,6 +705,28 @@ lychee.define('lychee.ui.Element').requires([
 				this.getEntity('@order').setValue('' + order);
 				this.order = order;
 
+
+				return true;
+
+			}
+
+
+			return false;
+
+		},
+
+		setType: function(type) {
+
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
+
+
+			if (type !== null) {
+
+				this.type = type;
+
+				if (this.__relayout === true) {
+					this.trigger('relayout');
+				}
 
 				return true;
 

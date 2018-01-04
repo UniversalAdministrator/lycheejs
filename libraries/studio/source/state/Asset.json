@@ -22,7 +22,7 @@
 									"arguments": [
 										{
 											"label": "Select",
-											"width": 320,
+											"width": 240,
 											"height": 620,
 											"data": []
 										}
@@ -32,8 +32,9 @@
 									"constructor": "studio.ui.element.modify.Font",
 									"arguments": [
 										{
-											"width": 320,
+											"width": 240,
 											"height": 620,
+											"type": 2,
 											"visible": false
 										}
 									]
@@ -42,8 +43,9 @@
 									"constructor": "studio.ui.element.preview.Font",
 									"arguments": [
 										{
-											"width": 400,
+											"width": 480,
 											"height": 620,
+											"type": 1,
 											"visible": false
 										}
 									]

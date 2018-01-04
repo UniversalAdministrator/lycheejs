@@ -17,6 +17,7 @@ lychee.define('studio.state.Asset').requires([
 	'lychee.ui.State'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Element = lychee.import('lychee.ui.Element');
 	const _State   = lychee.import('lychee.ui.State');
 	const _modify  = lychee.import('studio.ui.element.modify');
 	const _preview = lychee.import('studio.ui.element.preview');
@@ -64,8 +65,9 @@ lychee.define('studio.state.Asset').requires([
 			}
 
 			modify = new _modify[type]({
-				width:   320,
+				width:   240,
 				height:  620,
+				type:    _Element.TYPE.auto,
 				value:   asset,
 				visible: true
 			});
@@ -96,8 +98,9 @@ lychee.define('studio.state.Asset').requires([
 			}
 
 			preview = new _preview[type]({
-				width:   400,
+				width:   480,
 				height:  620,
+				type:    _Element.TYPE.full,
 				value:   asset,
 				visible: true
 			});
