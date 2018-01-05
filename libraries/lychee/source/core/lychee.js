@@ -67,6 +67,45 @@ lychee = (function(global) {
 
 	}
 
+	if (typeof Array.prototype.find !== 'function') {
+
+		Array.prototype.find = function(predicate/*, thisArg */) {
+
+			if (this === null || this === undefined) {
+				throw new TypeError('Array.prototype.find called on null or undefined');
+			}
+
+			if (typeof predicate !== 'function') {
+				throw new TypeError('predicate must be a function');
+			}
+
+
+			let list    = Object(this);
+			let length  = list.length >>> 0;
+			let thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+			let value;
+
+			for (let i = 0; i < length; i++) {
+
+				if (i in list) {
+
+					value = list[i];
+
+					if (predicate.call(thisArg, value, i, list)) {
+						return value;
+					}
+
+				}
+
+			}
+
+
+			return undefined;
+
+		};
+
+	}
+
 	if (typeof Array.prototype.includes !== 'function') {
 
 		Array.prototype.includes = function(search/*, from */) {

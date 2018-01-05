@@ -67,6 +67,11 @@
 
 			if (environment !== null) {
 
+				let host = global.location.hostname || 'localhost';
+				if (host !== 'localhost') {
+					profile.client = "http://" + host + ":4848/api/server/connect?identifier=/libraries/studio";
+				}
+
 				lychee.init(environment, {
 					debug:   false,
 					sandbox: false,
