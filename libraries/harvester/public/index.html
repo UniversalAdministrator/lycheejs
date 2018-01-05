@@ -70,7 +70,7 @@ cd /opt/lycheejs;
 	 * HELPERS
 	 */
 
-	const $api = (url, callback) => {
+	const $api = function(url, callback) {
 
 		let config = new Config(url);
 
@@ -82,45 +82,102 @@ cd /opt/lycheejs;
 
 	};
 
-	const $ = (name) => {
+	const Wrap = function(element) {
+		this.element = element;
+	};
 
-		let el = null;
+	Wrap.prototype = {
+
+		appendTo: function(other) {
+
+			if (other.element !== null) {
+				other.element.appendChild(this.element);
+			} else {
+				other.appendChild(this.element);
+			}
+
+			return this;
+
+		},
+
+		clear: function() {
+
+			if (this.element.parentNode !== null) {
+				this.element.parentNode.removeChild(this.element);
+			}
+
+			return this;
+
+		},
+
+		html: function(html) {
+
+			this.element.innerHTML = html;
+
+			return this;
+
+		},
+
+		onclick: function(callback) {
+
+			this.element.onclick = function() {
+				callback();
+				return false;
+			};
+
+			return this;
+
+		},
+
+		set: function(options) {
+
+			for (let o in options) {
+
+				if (typeof this[o] === 'function') {
+					this[o](options[o]);
+				} else {
+					this.element.setAttribute(o, options[o]);
+				}
+
+			}
+
+			return this;
+
+		},
+
+		state: function(state) {
+
+			this.element.className = state;
+
+			return this;
+
+		}
+
+	};
+
+	const $ = function(name) {
+
+		let element = null;
 
 		if (name instanceof Element) {
 
-			el = name;
+			element = name;
 
 		} else if (typeof name === 'string') {
 
 			if (name.startsWith('#')) {
-				el = global.document.querySelector(name);
+				element = global.document.querySelector(name);
 			} else {
-				let tmp = name.split(/\.|\[|\]/g).filter(v => v !== '');
-				el = global.document.createElement(tmp[0]);
-				tmp[1] && (el.className = tmp[1]);
+				let tmp = name.split(/\.|\[|\]/g).filter(function(v) { return v !== ''; });
+				element = global.document.createElement(tmp[0]);
+				tmp[1] && (element.className = tmp[1]);
 			}
 
 		}
 
 
-		if (el !== null) {
-
-			let wrap = { _el: el };
-
-			wrap.clear    = _ => (el.parentNode !== null && el.parentNode.removeChild(el), wrap);
-			wrap.state    = a => (el.className = a, wrap);
-			wrap.html     = a => (el.innerHTML = a, wrap);
-			wrap.append   = a => ((a._el && el.appendChild(a._el)) || el.appendChild(a), wrap);
-			wrap.appendTo = b => ((b._el && b._el.appendChild(el)) || b.appendChild(el), wrap);
-			wrap.onclick  = c => (el.onclick = _ => (c(), false), wrap);
-			wrap.remove   = b => ((b._el && el.removeChild(b._el)) || el.removeChild(b), wrap);
-			wrap.set      = o => {
-				for (let i in o) (typeof wrap[i] === 'function' && wrap[i](o[i])) || el.setAttribute(i, o[i]);
-				return wrap;
-			};
-
-			return wrap;
-
+		if (element !== null) {
+			return new Wrap(element);
 		}
 
 
@@ -128,53 +185,55 @@ cd /opt/lycheejs;
 
 	};
 
-	const _render = (project, mask) => {
+	const _render = function(project, mask) {
 
 		let article = $('article').set({
 			'data-id': project.identifier
 		});
 
-		article.append(
-			$('label').set({
-				html: project.identifier.split('/').pop()
-			})
-		);
+		$('label').set({
+			html: project.identifier.split('/').pop()
+		}).appendTo(article);
 
-		article.append(
-			$('img').set({
-				src: project.identifier + '/icon.png'
-			})
-		);
+		$('img').set({
+			src: project.identifier + '/icon.png'
+		}).appendTo(article);
 
 
-		if (mask & 0b100) {
-			article.append(
-				$('a.button').set({
-					href:    'lycheejs://edit=' + project.identifier,
-					html:    'Edit',
-					onclick: _ => location.href = 'lycheejs://edit=' + project.identifier
-				})
-			);
+		if (mask[0] === 1) {
+
+			$('a.button').set({
+				href:    'lycheejs://edit=' + project.identifier,
+				html:    'Edit',
+				onclick: function() {
+					location.href = 'lycheejs://edit=' + project.identifier;
+				}
+			}).appendTo(article);
+
 		}
 
-		if (mask & 0b010) {
-			article.append(
-				$('a.button').set({
-					href:    'lycheejs://file=' + project.identifier,
-					html:    'File',
-					onclick: _ => location.href = 'lycheejs://file=' + project.identifier
-				})
-			);
+		if (mask[1] === 1) {
+
+			$('a.button').set({
+				href:    'lycheejs://file=' + project.identifier,
+				html:    'File',
+				onclick: function() {
+					location.href = 'lycheejs://file=' + project.identifier;
+				}
+			}).appendTo(article);
+
 		}
 
-		if (mask & 0b001) {
-			article.append(
-				$('a.button').set({
-					href:    project.identifier + '/index.html',
-					html:    'Open',
-					onclick: _ => global.open(project.identifier + '/index.html')
-				})
-			);
+		if (mask[2] === 1) {
+
+			$('a.button').set({
+				href:    project.identifier + '/index.html',
+				html:    'Open',
+				onclick: function() {
+					global.open(project.identifier + '/index.html');
+				}
+			}).appendTo(article);
+
 		}
 
 		return article;
@@ -209,7 +268,9 @@ cd /opt/lycheejs;
 			install_year < current_year && current_month > 0
 		)) {
 
-			setTimeout(_ => message.state('visible'), 500);
+			setTimeout(function() {
+				message.state('visible');
+			}, 500);
 
 		}
 
@@ -221,14 +282,28 @@ cd /opt/lycheejs;
 		const warning = $('#warning');
 
 
-		$api('http://' + host + ':4848/api/library/index', buffer => {
-			buffer.map(p => _render(p, /ranger|studio/g.test(p.identifier) ? 0b011 : 0b010)).forEach(a => a.appendTo(main));
+		$api('http://' + host + ':4848/api/library/index', function(buffer) {
+
+			buffer.map(function(library) {
+				return _render(library, /ranger|studio/g.test(library.identifier) ? [0,1,1] : [0,1,0]);
+			}).forEach(function(article) {
+				article.appendTo(main);
+			});
+
 			warning.clear();
+
 		});
 
-		$api('http://' + host + ':4848/api/project/index', buffer => {
-			buffer.map(p => _render(p, 0b111)).forEach(a => a.appendTo(main));
+		$api('http://' + host + ':4848/api/project/index', function(buffer) {
+
+			buffer.map(function(project) {
+				return _render(project, [1,1,1]);
+			}).forEach(function(article) {
+				article.appendTo(main);
+			});
+
 			warning.clear();
+
 		});
 
 	}

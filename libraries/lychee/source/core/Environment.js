@@ -996,7 +996,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 					cache.retries++;
 
 
-					if (cache.retries < 5) {
+					if (cache.retries < 10) {
 
 						if (this.debug === true) {
 							this.global.console.warn('lychee.Environment ("' + this.id + '"): Unready Package "' + target + '" (retrying in 100ms ...).');

@@ -67,6 +67,49 @@ lychee = (function(global) {
 
 	}
 
+	if (typeof Array.prototype.includes !== 'function') {
+
+		Array.prototype.includes = function(search/*, from */) {
+
+			if (this === null || this === undefined) {
+				throw new TypeError('Array.prototype.includes called on null or undefined');
+			}
+
+
+			let list   = Object(this);
+			let length = list.length >>> 0;
+			let from   = arguments.length >= 2 ? arguments[1] : 0;
+			let value;
+
+
+			if (length === 0 || from >= length) {
+				return false;
+			}
+
+
+			let start = Math.max(from >= 0 ? from : (length - Math.abs(from)), 0);
+
+			for (let i = start; i < length; i++) {
+
+				if (i in list) {
+
+					value = list[i];
+
+					if (value === search || (isNaN(value) && isNaN(search))) {
+						return true;
+					}
+
+				}
+
+			}
+
+
+			return false;
+
+		};
+
+	}
+
 	if (typeof Array.prototype.unique !== 'function') {
 
 		Array.prototype.unique = function() {
@@ -138,6 +181,39 @@ lychee = (function(global) {
 
 		Number.prototype.toJSON = function() {
 			return this.valueOf();
+		};
+
+	}
+
+	if (typeof Object.assign !== 'function') {
+
+		Object.assign = function(object /*, ... sources */) {
+
+			if (object !== Object(object)) {
+				throw new TypeError('Object.assign called on a non-object');
+			}
+
+
+			for (let a = 1, al = arguments.length; a < al; a++) {
+
+				let source = arguments[a];
+				if (source !== undefined && source !== null) {
+
+					for (let key in source) {
+
+						if (Object.prototype.hasOwnProperty.call(source, key) === true) {
+							object[key] = source[key];
+						}
+
+					}
+
+				}
+
+			}
+
+
+			return object;
+
 		};
 
 	}
@@ -355,13 +431,38 @@ lychee = (function(global) {
 			let length = tmp.length >>> 0;
 
 
-			let chunk = value.substr(0, from - length);
+			let chunk = value.substr(from - length);
 			if (chunk === tmp) {
 				return true;
 			}
 
 
 			return false;
+
+		};
+
+	}
+
+	if (typeof String.prototype.includes !== 'function') {
+
+		String.prototype.includes = function(search/*, from */) {
+
+			if (this === null || this === undefined) {
+				throw new TypeError('String.prototype.includes called on null or undefined');
+			}
+
+
+			let value  = String(this);
+			let from   = arguments.length >= 2 ? (arguments[1] | 0) : 0;
+			let tmp    = String(search);
+			let length = tmp.length >>> 0;
+
+			if (from + length > value.length) {
+				return false;
+			}
+
+
+			return value.indexOf(search, from) !== -1;
 
 		};
 

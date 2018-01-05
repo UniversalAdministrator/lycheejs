@@ -68,7 +68,10 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 
 			let clone = new Composite();
 
-			clone.genes     = this.genes.map(gene => gene.copyGene());
+			clone.genes = this.genes.map(function(gene) {
+				return gene.copyGene();
+			});
+
 			clone.maxneuron = this.maxneuron;
 
 
@@ -86,7 +89,7 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 					neurons.push(i);
 				});
 
-				this.genes.forEach(gene => {
+				this.genes.forEach(function(gene) {
 
 					if (neurons.indexOf(gene.into) === -1) {
 						neurons.push(gene.into);
@@ -100,7 +103,7 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 
 			} else {
 
-				this.genes.forEach(gene => {
+				this.genes.forEach(function(gene) {
 
 					if (neurons.indexOf(gene.into) === -1 && gene.into > inputs.length) {
 						neurons.push(gene.into);

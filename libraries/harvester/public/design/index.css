@@ -75,6 +75,7 @@ body > article > p:last-child {
 }
 
 main {
+	display: block;
 	max-width: 1152px;
 	margin: 32px auto;
 	text-align: center;
