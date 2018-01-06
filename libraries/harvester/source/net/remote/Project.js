@@ -14,24 +14,21 @@ lychee.define('harvester.net.remote.Project').requires([
 	 * HELPERS
 	 */
 
-	const _serialize_web = function(project) {
-
-		let main = global.MAIN || null;
-		if (main !== null) {
-			return main.getHosts();
-		}
-
-		return [];
-
-	};
-
 	const _serialize = function(project) {
 
 		let filesystem = null;
 		let server     = null;
+		let web        = false;
 
 		if (project.filesystem !== null) {
+
 			filesystem = project.filesystem.root;
+
+			let check = project.filesystem.info('/index.html');
+			if (check !== null && check.type === 'file') {
+				web = true;
+			}
+
 		}
 
 		if (project.server !== null) {
@@ -49,8 +46,8 @@ lychee.define('harvester.net.remote.Project').requires([
 			details:    project.details || null,
 			filesystem: filesystem,
 			server:     server,
-			web:        _serialize_web(project),
-			harvester:  project.harvester
+			harvester:  project.harvester,
+			web:        web
 		};
 
 	};

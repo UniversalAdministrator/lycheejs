@@ -18,9 +18,17 @@ lychee.define('harvester.net.remote.Library').requires([
 
 		let filesystem = null;
 		let server     = null;
+		let web        = false;
 
 		if (library.filesystem !== null) {
+
 			filesystem = library.filesystem.root;
+
+			let check = library.filesystem.info('/index.html');
+			if (check !== null && check.type === 'file') {
+				web = true;
+			}
+
 		}
 
 		if (library.server !== null) {
@@ -38,7 +46,8 @@ lychee.define('harvester.net.remote.Library').requires([
 			details:    library.details || null,
 			filesystem: filesystem,
 			server:     server,
-			harvester:  library.harvester
+			harvester:  library.harvester,
+			web:        web
 		};
 
 	};
