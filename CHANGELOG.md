@@ -22,7 +22,9 @@ and `fixed`.
 
 ## [2018-Q1] - UNRELEASED
 
+- **Changed**: `./bin/configure.js` supports source maps for core and platform adapters.
 - Added: lychee.ui.Element supports same `type` as lychee.ui.Blueprint.
+- Added: lychee.crypto.BLAKE2B.
 - Fixed: lychee.Stash supports Music and Sound data types.
 - Fixed: lychee.js Studio supports Music and Sound data types.
 - Fixed: lychee.ui.element Stack supports correct `relayout` event flow.

@@ -142,6 +142,9 @@
 				]
 			},
 			"crypto": {
+				"BLAKE2B": [
+					"json"
+				],
 				"CRC32": [
 					"json"
 				],
@@ -868,6 +871,9 @@
 				]
 			},
 			"crypto": {
+				"BLAKE2B": [
+					"js"
+				],
 				"CRC32": [
 					"js"
 				],
