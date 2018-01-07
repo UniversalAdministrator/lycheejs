@@ -47,7 +47,10 @@ lychee.define('harvester.net.server.File').requires([
 	 * HELPERS
 	 */
 
-	const _get_headers = function(info, mime) {
+	const _get_headers = function(info, mime, custom) {
+
+		custom = custom instanceof Object ? custom : null;
+
 
 		let headers = {
 			'status':          '200 OK',
@@ -59,6 +62,15 @@ lychee.define('harvester.net.server.File').requires([
 			'vary':            'Accept-Encoding',
 			'@binary':         mime.binary
 		};
+
+
+		if (custom !== null) {
+
+			for (let c in custom) {
+				headers['@' + c] = custom[c];
+			}
+
+		}
 
 
 		if (mime.type.startsWith('text')) {
@@ -147,6 +159,20 @@ lychee.define('harvester.net.server.File').requires([
 
 			if (project !== null && info !== null && info.type === 'file') {
 
+				let custom = null;
+
+				if (path.startsWith('/build/') && path.endsWith('.js')) {
+
+					let check = project.filesystem.info(path + '.map');
+					if (check !== null && check.type === 'file') {
+						custom = {
+							'sourcemap': url + '.map'
+						};
+					}
+
+				}
+
+
 				let timestamp = headers['if-modified-since'] || null;
 				if (timestamp !== null) {
 
@@ -163,7 +189,7 @@ lychee.define('harvester.net.server.File').requires([
 					} else {
 
 						project.filesystem.read(path, function(payload) {
-							tunnel.send(payload, _get_headers(info, mime));
+							tunnel.send(payload, _get_headers(info, mime, custom));
 						});
 
 						return true;
@@ -173,7 +199,7 @@ lychee.define('harvester.net.server.File').requires([
 				} else {
 
 					project.filesystem.read(path, function(payload) {
-						tunnel.send(payload, _get_headers(info, mime));
+						tunnel.send(payload, _get_headers(info, mime, custom));
 					});
 
 

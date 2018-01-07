@@ -7,7 +7,7 @@
 	const _fs        = require('fs');
 	const _path      = require('path');
 	const _process   = global.process;
-	let   _CORE      = '';
+	const _CORE      = [];
 	const _ASSETS    = {};
 	const _BOOTSTRAP = {};
 	let   _PACKAGE   = null;
@@ -49,6 +49,93 @@
 		}
 
 		process.stderr.write('\u001b[41m\u001b[97m ' + line + ' \u001b[39m\u001b[49m\u001b[0m\n');
+
+	};
+
+
+
+	/*
+	 * SOURCE MAP
+	 */
+
+	const _BASE64     = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+	const _base64_vlq = function(raw) {
+
+		let val = '';
+		let vlq = raw < 0 ? ((-raw) << 1) + 1 : (raw << 1) + 0;
+
+		do {
+
+			let digit = vlq & ((1 << 5) - 1);
+
+			vlq >>>= 5;
+
+			if (vlq > 0) {
+				digit |= (1 << 5);
+			}
+
+			val += _BASE64[digit];
+
+		} while (vlq > 0);
+
+		return val;
+
+	};
+
+	const _get_sourcemaps = function(file, entries) {
+
+		let last_id   = 0;
+		let last_line = 0;
+		let remaining = 0;
+
+		let sources  = entries.map(function(entry) {
+			return entry.file;
+		});
+
+		let mappings = entries.map(function(entry) {
+
+			let id    = sources.indexOf(entry.file);
+			let code  = entry.code;
+			let diff  = entry.diff || 0;
+			let lines = code.split('\n').length - 1;
+			let chunk = '';
+
+			chunk += remaining === 0 ? "A" : "," + _base64_vlq(remaining); // build column 0
+			chunk += _base64_vlq(id - last_id);                            // file index
+			chunk += _base64_vlq(1  - last_line - diff);                   // line index
+			chunk += _base64_vlq(0);                                       // source column 0
+			chunk += Array(lines).join(';AACA');
+
+			last_id   = id;
+			last_line = lines;
+
+
+			let check = code.lastIndexOf('\n');
+			if (check !== -1) {
+				remaining = code.length - check - 1;
+			} else {
+				remaining = code.length;
+			}
+
+			chunk += remaining === 0 ? ';' : (lines !== 0 ? ';AACA' : '');
+
+			if (remaining !== 0) {
+				last_line++;
+			}
+
+			return chunk;
+
+		}).join('');
+
+
+		return {
+			version:  3,
+			file:     file,
+			sources:  sources,
+			mappings: mappings
+		};
+
+		return null;
 
 	};
 
@@ -506,13 +593,13 @@
 
 		let errors = 0;
 		let files  = _package_files(_PACKAGE).filter(function(value) {
-			return value.substr(0, 4) === 'core';
+			return value.startsWith('core/');
 		});
 
 		if (files.indexOf('core/lychee.js') !== 0) {
 
 			files.reverse();
-			files.push(files.splice(files.indexOf('core/lychee.js'), 1));
+			files.push(files.splice(files.indexOf('core/lychee.js'), 1)[0]);
 			files.reverse();
 
 		}
@@ -525,7 +612,12 @@
 
 			let path = _path.resolve(_ROOT, './libraries/lychee/source/' + file);
 			if (_is_file(path) === true) {
-				_CORE += _fs.readFileSync(path, 'utf8');
+
+				_CORE.push({
+					code: _fs.readFileSync(path, 'utf8'),
+					file: file
+				});
+
 			} else {
 				errors++;
 			}
@@ -558,13 +650,20 @@
 		let platforms = Object.keys(_PACKAGE.source.tags.platform);
 		if (platforms.length > 0) {
 
-			_CORE += '\n';
-			_CORE += JSON.stringify(platforms) + '.forEach(function(platform) {\n';
-			_CORE += '\tif (lychee.PLATFORMS.includes(platform) === false) {\n';
-			_CORE += '\t\tlychee.PLATFORMS.push(platform);\n';
-			_CORE += '\t}\n';
-			_CORE += '});\n';
-			_CORE += '\n';
+			let code = '';
+
+			code += '\n';
+			code += JSON.stringify(platforms) + '.forEach(function(platform) {\n';
+			code += '\tif (lychee.PLATFORMS.includes(platform) === false) {\n';
+			code += '\t\tlychee.PLATFORMS.push(platform);\n';
+			code += '\t}\n';
+			code += '});\n';
+			code += '\n';
+
+			_CORE.push({
+				code: code,
+				file: '@platforms.js'
+			});
 
 		}
 
@@ -607,7 +706,12 @@
 				}
 
 				if (code !== null) {
-					_CORE += code;
+
+					_CORE.push({
+						code: code,
+						file: 'platform/' + platform + '/features.js'
+					});
+
 				}
 
 			});
@@ -634,17 +738,16 @@
 
 		let errors    = 0;
 		let assets    = _package_assets(_PACKAGE).filter(function(value) {
-			return value.substr(0, 8) === 'platform' && value.substr(-3) !== '.js';
+			return value.startsWith('platform/') && value.endsWith('.js') === false;
 		});
-		let bootstrap = {};
 
 		// XXX: This makes sure bootstrap.js comes first, always
 		let files = _package_files(_PACKAGE).filter(function(value) {
-			return value.startsWith('platform') && value.endsWith('bootstrap.js');
+			return value.startsWith('platform/') && value.endsWith('/bootstrap.js');
 		}).concat(_package_files(_PACKAGE).filter(function(value) {
-			return value.startsWith('platform') && value.endsWith('bootstrap.js') === false;
+			return value.startsWith('platform/') && value.endsWith('/bootstrap.js') === false;
 		}).filter(function(value) {
-			return value.startsWith('platform') && value.endsWith('features.js') === false;
+			return value.startsWith('platform/') && value.endsWith('/features.js') === false;
 		}).sort(function(a, b) {
 			if (a > b) return  1;
 			if (a < b) return -1;
@@ -692,20 +795,15 @@
 
 			platforms.forEach(function(platform) {
 
-				bootstrap[platform] = {};
+				let base = (platform.indexOf('-') ? _BOOTSTRAP[platform.split('-')[0]] : null) || null;
+				if (base !== null) {
+					_BOOTSTRAP[platform] = Array.from(base);
+				} else {
+					_BOOTSTRAP[platform] = [];
+				}
 
 
 				let prefix = 'platform/' + platform + '/';
-				let base   = platform.indexOf('-') ? platform.split('-')[0] : null;
-
-				if (base !== null) {
-
-					for (let file in bootstrap[base]) {
-						bootstrap[platform][file] = bootstrap[base][file];
-					}
-
-				}
-
 
 				files.filter(function(value) {
 					return value.substr(0, prefix.length) === prefix;
@@ -713,45 +811,58 @@
 					return value.substr(prefix.length);
 				}).forEach(function(adapter) {
 
-					let id   = (prefix + adapter).split('.').slice(0, -1).join('.');
-					let path = _path.resolve(_ROOT, './libraries/lychee/source/' + prefix + adapter);
+					let file = prefix + adapter;
+					let id   = file.split('.').slice(0, -1).join('.');
+					let path = _path.resolve(_ROOT, './libraries/lychee/source/' + file);
 
 					if (_is_file(path) === true) {
 
 						let code = _fs.readFileSync(path, 'utf8');
 
-						if (adapter === 'bootstrap.js' && typeof bootstrap[platform]['bootstrap.js'] === 'string') {
+						if (adapter === 'bootstrap.js') {
 
-							bootstrap[platform][adapter] += code;
+							_BOOTSTRAP[platform].push({
+								code: code,
+								file: file
+							});
 
 						} else if (_ASSETS[id] !== undefined) {
 
-							let i1   = code.indexOf('.exports(');
-							let tmp1 = '';
-							let tmp2 = [];
-
+							let i1 = code.indexOf('.exports(');
 							if (i1 !== -1) {
 
+								let diff = 0;
+								let tmp  = [];
 								for (let ext in _ASSETS[id]) {
-									tmp2.push('\n\t"' + ext + '": lychee.deserialize(' + JSON.stringify(_ASSETS[id][ext]) + ')');
+									tmp.push('\n\t"' + ext + '": lychee.deserialize(' + JSON.stringify(_ASSETS[id][ext]) + ')');
 								}
 
-								tmp1 += code.substr(0,  i1);
-								tmp1 += '.attaches({' + (tmp2.length > 0 ? tmp2.join(',') : '') + '\n})';
-								tmp1 += code.substr(i1, code.length - i1);
+								let inject = '.attaches({' + (tmp.length > 0 ? tmp.join(',') : '') + '\n})';
 
+								code = code.substr(0, i1) + inject + code.substr(i1, code.length - i1);
+								diff = inject.split('\n').length - 1;
 
-								code = tmp1;
-								tmp1 = '';
-								tmp2 = [];
+								_BOOTSTRAP[platform].push({
+									code: code,
+									diff: diff,
+									file: file
+								});
+
+							} else {
+
+								_BOOTSTRAP[platform].push({
+									code: code,
+									file: file
+								});
 
 							}
 
-							bootstrap[platform][adapter] = code;
-
 						} else {
 
-							bootstrap[platform][adapter] = code;
+							_BOOTSTRAP[platform].push({
+								code: code,
+								file: file
+							});
 
 						}
 
@@ -764,33 +875,55 @@
 
 			platforms.forEach(function(platform) {
 
-				if (Object.keys(bootstrap[platform]).length === 0) {
-					delete bootstrap[platform];
-				} else {
-					_BOOTSTRAP[platform] = Object.values(bootstrap[platform]).join('');
+				if (_BOOTSTRAP[platform].length === 0) {
+					delete _BOOTSTRAP[platform];
 				}
 
 			});
 
 
-			Object.keys(_BOOTSTRAP).forEach(function(platform) {
+			for (let platform in _BOOTSTRAP) {
 
+				let sources = Array.from(_CORE).concat(_BOOTSTRAP[platform]).map(function(src) {
+
+					return {
+						code: src.code,
+						diff: src.diff || 0,
+						file: src.file.startsWith('@') ? src.file : '/libraries/lychee/source/' + src.file
+					};
+
+				});
+
+
+				let file   = '/libraries/lychee/build/' + platform + '/core.js';
+				let maps   = _get_sourcemaps(file, sources);
+				let path   = _path.resolve(_ROOT, './' + file);
 				let result = true;
-				let code   = _CORE + _BOOTSTRAP[platform];
-				let path   = _path.resolve(_ROOT, './libraries/lychee/build/' + platform + '/core.js');
-				let dir    = _path.dirname(path);
 
-				if (_is_directory(dir) === false) {
-					_create_directory(dir);
+
+				let folder = _path.dirname(path);
+				if (_is_directory(folder) === false) {
+					_create_directory(folder);
 				}
 
+				if (_is_directory(folder) === true) {
 
-				if (_is_directory(dir) === true) {
+					let code = sources.map(function(src) {
+						return src.code;
+					}).join('');
 
 					try {
 						_fs.writeFileSync(path, code, 'utf8');
 					} catch (err) {
 						result = false;
+					}
+
+
+					let json = JSON.stringify(maps, null, '\t');
+
+					try {
+						_fs.writeFileSync(path + '.map', json, 'utf8');
+					} catch (err) {
 					}
 
 				} else {
@@ -805,7 +938,7 @@
 					console.log('\t' + platform + ': SUCCESS');
 				}
 
-			});
+			}
 
 
 			if (errors === 0) {
