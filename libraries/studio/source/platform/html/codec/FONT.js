@@ -298,15 +298,11 @@ lychee.define('studio.codec.FONT').tags({
 			font:       font.__font
 		};
 
-
-		return font;
-
 	};
 
-	const _decode = function(font, data) {
+	const _decode = function(font, settings) {
 
-		let settings = {};
-		let tmp      = font.__font;
+		let tmp = font.__font;
 
 
 		settings.baseline   = font.baseline;
@@ -324,9 +320,6 @@ lychee.define('studio.codec.FONT').tags({
 			size:    tmp.size    || 16,
 			style:   tmp.style   || 'normal'
 		};
-
-
-		return settings;
 
 	};
 
@@ -370,16 +363,16 @@ lychee.define('studio.codec.FONT').tags({
 
 		},
 
-		decode: function(data) {
+		decode: function(font) {
 
-			data = data instanceof Font ? data : null;
+			font = font instanceof Font ? font : null;
 
 
-			if (data !== null) {
+			if (font !== null) {
 
 				let object = {};
 
-				_decode(data, object);
+				_decode(font, object);
 
 				return object;
 

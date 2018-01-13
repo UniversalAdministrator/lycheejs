@@ -319,19 +319,12 @@ lychee.define('studio.codec.SPRITE').tags({
 		config.deserialize({ buffer: config_blob });
 		texture.deserialize({ buffer: texture_blob });
 
-
-		return {
-			config:  config,
-			texture: texture
-		};
-
 	};
 
-	const _decode = function(texture, config, data) {
+	const _decode = function(texture, config, settings) {
 
-		let settings = {};
-		let buffer   = config.buffer || {};
-		let tmp      = buffer.__sprite;
+		let buffer = config.buffer || {};
+		let tmp    = buffer.__sprite;
 
 
 		settings.shape = buffer.shape || _SHAPE.rectangle;
@@ -351,9 +344,6 @@ lychee.define('studio.codec.SPRITE').tags({
 		settings.sprite = {
 			textures: tmp.textures || []
 		};
-
-
-		return settings;
 
 	};
 

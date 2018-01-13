@@ -12,9 +12,6 @@ lychee.define('studio.codec.MUSIC').exports(function(lychee, global, attachments
 	const _encode = function(music, settings) {
 
 		let mp3 = settings.mp3 || null;
-		let ogg = settings.ogg || null;
-
-
 		if (mp3 !== null) {
 
 			let data = mp3.serialize();
@@ -35,6 +32,8 @@ lychee.define('studio.codec.MUSIC').exports(function(lychee, global, attachments
 
 		}
 
+
+		let ogg = settings.ogg || null;
 		if (ogg !== null) {
 
 			let data = ogg.serialize();
@@ -51,15 +50,11 @@ lychee.define('studio.codec.MUSIC').exports(function(lychee, global, attachments
 
 		}
 
-
-		return music;
-
 	};
 
-	const _decode = function(music, data) {
+	const _decode = function(music, settings) {
 
-		let settings = {};
-		let buffer   = music.__buffer;
+		let buffer = music.__buffer;
 
 
 		if (buffer.mp3 !== null) {
@@ -93,9 +88,6 @@ lychee.define('studio.codec.MUSIC').exports(function(lychee, global, attachments
 			settings.ogg = music;
 
 		}
-
-
-		return settings;
 
 	};
 
@@ -139,16 +131,16 @@ lychee.define('studio.codec.MUSIC').exports(function(lychee, global, attachments
 
 		},
 
-		decode: function(data) {
+		decode: function(music) {
 
-			data = data instanceof Object ? data : null;
+			music = music instanceof Music ? music : null;
 
 
-			if (data !== null) {
+			if (music !== null) {
 
 				let object = {};
 
-				_decode(data, object);
+				_decode(music, object);
 
 				return object;
 
