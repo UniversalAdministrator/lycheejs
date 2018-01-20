@@ -16,13 +16,14 @@
 	<link rel="stylesheet" href="/design/index.css">
 
 </head>
-<body>
-
+<body id="body">
 <header>
-	<h1><img alt="lychee.js Logo" src="/desktop.svg" width="128" height="128"></h1>
+	<h1>
+		<img alt="lychee.js Logo" src="/desktop.svg" width="128" height="128">
+		<img alt="lychee.js Retro Logo" src="/desktop-retro.png" width="128" height="128">
+	</h1>
 	<h2>lychee<span>js</span></h2>
 </header>
-
 <article>
 	<label>Welcome to lychee.js Engine</label>
 	<p>
@@ -47,7 +48,6 @@ cd /opt/lycheejs;
 		Need Help? Join our IRC channel <a target="_blank" href="https://webchat.freenode.net/?channels=%23artificial-engineering">#artificial-engineering @ freenode</a>
 	</p>
 </article>
-
 <main id="main">
 	<article id="warning" class="warning">
 		<label>Warning: lychee.js Harvester is unreachable</label>
@@ -62,7 +62,6 @@ cd /opt/lycheejs;
 		</p>
 	</article>
 </main>
-
 <script>
 (function(global) {
 
@@ -240,41 +239,34 @@ cd /opt/lycheejs;
 
 	};
 
+	const _retro = function() {
+
+		let body = $('#body');
+		if (body !== null) {
+
+			let time = new Date();
+			let hour = time.getHours() + time.getMinutes() / 60;
+			if (hour > 0 && hour < 6) {
+				body.state('retro');
+			} else {
+				body.state('');
+			}
+
+		}
+
+	};
+
 
 
 	/*
 	 * IMPLEMENTATION
 	 */
 
+	const body    = $('#body');
 	const main    = $('#main');
 	const message = $('#lychee-MESSAGE');
 	const version = $('#lychee-VERSION');
 
-
-	if (version !== null) {
-		version.html('' + lychee.VERSION);
-	}
-
-	if (message !== null) {
-
-		let install_year  = parseInt(lychee.VERSION.split('-')[0], 10);
-		let install_month = parseInt(lychee.VERSION.split('-Q')[1], 10) * 3;
-		let current_year  = new Date().getFullYear();
-		let current_month = ((new Date().getMonth() / 3) | 0) * 3;
-
-		if ((
-			install_year === current_year && current_month > install_month
-		) || (
-			install_year < current_year && current_month > 0
-		)) {
-
-			setTimeout(function() {
-				message.state('visible');
-			}, 500);
-
-		}
-
-	}
 
 	if (main !== null) {
 
@@ -306,6 +298,36 @@ cd /opt/lycheejs;
 
 		});
 
+	}
+
+	if (message !== null) {
+
+		let install_year  = parseInt(lychee.VERSION.split('-')[0], 10);
+		let install_month = parseInt(lychee.VERSION.split('-Q')[1], 10) * 3;
+		let current_year  = new Date().getFullYear();
+		let current_month = ((new Date().getMonth() / 3) | 0) * 3;
+
+		if ((
+			install_year === current_year && current_month > install_month
+		) || (
+			install_year < current_year && current_month > 0
+		)) {
+
+			setTimeout(function() {
+				message.state('visible');
+			}, 500);
+
+		}
+
+	}
+
+	if (version !== null) {
+		version.html('' + lychee.VERSION);
+	}
+
+	if (body !== null) {
+		setInterval(_retro, 1000 * 60 * 15);
+		_retro();
 	}
 
 })(typeof global !== 'undefined' ? global : this);

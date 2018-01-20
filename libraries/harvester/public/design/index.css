@@ -22,6 +22,7 @@ body {
 	font-size: 16px;
 	margin: 0px;
 	padding: 0px;
+	transition: all 1000ms ease-out;
 }
 
 body > article {
@@ -90,6 +91,7 @@ article {
 	padding: 0px 0px 16px 0px;
 	background: #363f3e;
 	vertical-align: top;
+	transition: all 1000ms ease-out;
 }
 
 article.warning {
@@ -110,7 +112,8 @@ article label {
 	font-family: 'museo-sans-300';
 	font-size: 24px;
 	line-height: 64px;
-	text-align: left;
+	text-align: center;
+	transition: all 1000ms ease-out;
 }
 
 article p {
@@ -220,19 +223,107 @@ header h3 {
 	line-height: 0px;
 }
 
+header h1 {
+	position: relative;
+	padding: 0px 0px 0px 128px;
+	height: 128px;
+}
+
+header h1 > img {
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	transition: all 1000ms ease-out;
+}
+
+header h1 > img:nth-of-type(1) {
+	opacity: 1;
+}
+
+header h1 > img:nth-of-type(2) {
+	image-rendering: optimizespeed;
+	image-rendering: pixelated;
+	opacity: 0;
+}
+
 header h2 {
 	margin: 0px;
 	padding: 0px;
 	color: #efefef;
 	font-size: 64px;
+	transition: all 1000ms ease-out;
 }
 
 header h2 span {
 	color: #d0494b;
+	transition: all 1000ms ease-out;
 }
 
 header h3 {
 	display: block;
 	font-size: 48px;
+}
+
+
+
+body.retro {
+	background: #111111;
+}
+
+body.retro header h1 > img:nth-of-type(1) {
+	opacity: 0;
+}
+
+body.retro header h1 > img:nth-of-type(2) {
+	opacity: 1;
+}
+
+body.retro header h2 {
+	color: #ffffff;
+}
+
+body.retro header h2 span {
+	color: #8f202f;
+}
+
+body.retro article {
+	background: #222222;
+	border-radius: 4px;
+}
+
+body.retro article label {
+	background: #8f202f;
+	border-radius: 4px 4px 0px 0px;
+}
+
+body.retro article a:not(.button) {
+	transition: color 250ms ease-out;
+	color: #8f202f;
+}
+
+body.retro article a:hover {
+	color: #ffffff;
+}
+
+body.retro article button,
+body.retro article a.button {
+	border-radius: 4px;
+}
+
+body.retro article button:focus,
+body.retro article button:hover,
+body.retro article a.button:focus,
+body.retro article a.button:hover {
+	background: #8f202f;
+}
+
+body.retro article button:active,
+body.retro article a.button:active {
+	background: #8f202f;
+}
+
+body.retro article pre {
+	background: #333333;
 }
 
