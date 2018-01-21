@@ -148,21 +148,22 @@ using a serialized `lychee.Environment` that is setup in
 each project's or library's `lychee.pkg` file.
 
 
-| Target       | Fertilizer                   | Package   | armv7 |  x86  | x86\_64 |
-|:-------------|:-----------------------------|:----------|:-----:|:-----:|:-------:|
-| Browser      | html                         | zip, html |   x   |   x   |    x    |
-| GNU/Linux    | html-nwjs, node, node-sdl    | bin       |   x   |   x   |    x    |
-| OSX          | html-nwjs, node, node-sdl    | app, bin  |       |       |    x    |
-| Windows      | html-nwjs, node, node-sdl    | exe       |       |   x   |    x    |
-| Android      | html-webview, node, node-sdl | apk, bin  |   x   |   x   |    x    |
-| BlackberryOS | html-webview, node, node-sdl | apk, bin  |   x   |   x   |    x    |
-| FirefoxOS    | html-webview                 | zip       |   x   |   x   |    x    |
-| iOS          | html                         |           |   x   |       |         |
-| Ubuntu Touch | html-webview, node           | deb, bin  |   x   |   x   |    x    |
+| Target       | Fertilizer                           | Package   | armv7 |  x86  | x86\_64 |
+|:-------------|:-------------------------------------|:----------|:-----:|:-----:|:-------:|
+| Browser      | html                                 | zip, html |   x   |   x   |    x    |
+| GNU/Linux    | html-nwjs, nidium, node, node-sdl    | bin       |   x   |   x   |    x    |
+| OSX          | html-nwjs, nidium, node, node-sdl    | app, bin  |       |       |    x    |
+| Windows      | html-nwjs, node, node-sdl            | exe       |       |   x   |    x    |
+| Android      | html-webview, nidium, node, node-sdl | apk, bin  |   x   |   x   |    x    |
+| BlackberryOS | html-webview, node, node-sdl         | apk, bin  |   x   |   x   |    x    |
+| FirefoxOS    | html-webview                         | zip       |   x   |   x   |    x    |
+| iOS          | html, nidium                         |           |   x   |       |         |
+| Ubuntu Touch | html-webview, node                   | deb, bin  |   x   |   x   |    x    |
 
 The iOS Fertilizer has currently no support for cross-compilation
-due to XCode's gcc limitations. You can still create an own WebView
-iOS App and use the `html` platform adapter.
+due to XCode's gcc limitations. It is still possible to create
+a WebView iOS App and use the `html` platform adapter. Advanced
+users are encouraged to use the `nidium` runtime on iOS and OSX.
 
 
 ## Quickstart Guide

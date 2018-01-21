@@ -396,7 +396,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 				return true;
 
-			} else {
+			} else if (error !== null) {
 
 				console.error(error);
 

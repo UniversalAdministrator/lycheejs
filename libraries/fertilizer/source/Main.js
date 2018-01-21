@@ -113,7 +113,7 @@ lychee.define('fertilizer.Main').requires([
 						if (sandbox !== null) {
 
 							// XXX: Don't use Environment's imperative API here!
-							// Environment identifier is /libraries/lychee/main instead of /libraries/lychee/html/main
+							// XXX: /libraries/lychee/main instead of /libraries/lychee/html/main
 
 							environment.id       = project + '/' + identifier.split('/').pop();
 							environment.type     = 'build';
@@ -137,7 +137,7 @@ lychee.define('fertilizer.Main').requires([
 								if (debug.blob !== null) {
 
 									(debug.blob.stderr || '').trim().split('\n').map(function(line) {
-										return (line.indexOf(':') !== -1 ? line.split(':')[1].trim() : '');
+										return (line.indexOf(':') !== -1 ? line.split(':')[1].trim() : line.trim());
 									}).forEach(function(line) {
 										console.error('fertilizer: ' + line);
 									});

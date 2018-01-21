@@ -83,6 +83,7 @@ lychee.define('studio.ui.element.modify.Project').requires([
 				'html',
 				'html-nwjs',
 				'html-webview',
+				'nidium',
 				'node',
 				'node-sdl'
 			],
@@ -90,6 +91,7 @@ lychee.define('studio.ui.element.modify.Project').requires([
 				'html':         true,
 				'html-nwjs':    true,
 				'html-webview': true,
+				'nidium':       true,
 				'node':         true,
 				'node-sdl':     true
 			}

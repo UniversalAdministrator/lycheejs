@@ -380,6 +380,30 @@
 						}
 					}
 				},
+				"nidium": {
+					"Input": [
+						"json"
+					],
+					"Renderer": [
+						"json"
+					],
+					"Stash": [
+						"json"
+					],
+					"Storage": [
+						"json"
+					],
+					"Viewport": [
+						"json"
+					],
+					"ui": {
+						"entity": {
+							"Helper": [
+								"json"
+							]
+						}
+					}
+				},
 				"node": {
 					"Input": [
 						"json"
@@ -624,6 +648,20 @@
 				"target": "lychee.DIST",
 				"variant": "library"
 			},
+			"nidium/dist": {
+				"debug": false,
+				"packages": {
+					"lychee": "./lychee.pkg"
+				},
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"nidium"
+					]
+				},
+				"target": "lychee.DIST",
+				"variant": "library"
+			},
 			"node-sdl/dist": {
 				"debug": false,
 				"packages": {
@@ -685,6 +723,11 @@
 					]
 				}
 			},
+			"nidium": {
+				"core": [
+					"js"
+				]
+			},
 			"node": {
 				"core": [
 					"js"
@@ -719,6 +762,7 @@
 				"html": "platform/html",
 				"html-nwjs": "platform/html-nwjs",
 				"html-webview": "platform/html-webview",
+				"nidium": "platform/nidium",
 				"node": "platform/node",
 				"node-sdl": "platform/node-sdl"
 			}
@@ -1132,6 +1176,38 @@
 					"features": [
 						"js"
 					]
+				},
+				"nidium": {
+					"Input": [
+						"js"
+					],
+					"Renderer": [
+						"js"
+					],
+					"Stash": [
+						"js"
+					],
+					"Storage": [
+						"js"
+					],
+					"Viewport": [
+						"js"
+					],
+					"bootstrap": [
+						"js"
+					],
+					"features": [
+						"js"
+					],
+					"ui": {
+						"entity": {
+							"Helper": [
+								"js",
+								"json",
+								"png"
+							]
+						}
+					}
 				},
 				"node": {
 					"Input": [

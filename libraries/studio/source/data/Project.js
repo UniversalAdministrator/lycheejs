@@ -207,6 +207,7 @@ lychee.define('studio.data.Project').exports(function(lychee, global, attachment
 			'html':         true,
 			'html-nwjs':    true,
 			'html-webview': true,
+			'nidium':       true,
 			'node':         true,
 			'node-sdl':     true
 		};

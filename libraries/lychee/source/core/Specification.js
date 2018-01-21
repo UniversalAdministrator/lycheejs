@@ -262,7 +262,7 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 							sandbox
 						) || null;
 					} catch (err) {
-						lychee.Debugger.report(null, err, this);
+						lychee.Debugger.report(lychee.environment, err, this);
 					}
 
 

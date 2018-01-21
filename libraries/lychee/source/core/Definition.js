@@ -613,7 +613,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 							) || null;
 
 						} catch (err) {
-							lychee.Debugger.report(null, err, this);
+							lychee.Debugger.report(lychee.environment, err, this);
 						}
 
 
