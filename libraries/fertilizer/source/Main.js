@@ -240,7 +240,7 @@ lychee.define('fertilizer.Main').requires([
 										}
 
 
-										that.trigger('init', [ project, identifier, platform, variant, environment, profile ]);
+										that.trigger('init', [ project, identifier, platform, variant, environment, profile, true ]);
 
 									} else {
 
@@ -294,7 +294,10 @@ lychee.define('fertilizer.Main').requires([
 
 		}, this, true);
 
-		this.bind('init', function(project, identifier, platform, variant, environment, profile) {
+		this.bind('init', function(project, identifier, platform, variant, environment, profile, modified) {
+
+			modified = modified === true;
+
 
 			let construct = null;
 			if (platform !== null && variant !== null && typeof _template[platform] === 'object') {
@@ -395,7 +398,7 @@ lychee.define('fertilizer.Main').requires([
 				template.bind('complete', function() {
 
 					console.info('fertilizer: SUCCESS ("' + project + ' | ' + identifier + '")');
-					this.destroy(0);
+					this.destroy(modified === true ? 2 : 0);
 
 				}, this);
 

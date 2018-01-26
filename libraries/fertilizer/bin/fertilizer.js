@@ -3,7 +3,7 @@
 const _child_process = require('child_process');
 const _fs            = require('fs');
 const _path          = require('path');
-const _CHILDREN      = [];
+const _PROCESSES     = [];
 const _ROOT          = process.env.LYCHEEJS_ROOT || '/opt/lycheejs';
 
 
@@ -175,36 +175,33 @@ const _bootup = function(settings) {
 
 const _spawn = function(program, args) {
 
-	let child  = _child_process.spawn(program, args, {
-		detached: true
+	let child = _child_process.spawn(program, args, {
+		detached: false
 	});
 
-	_CHILDREN.push(child.pid);
+	_PROCESSES.push(child.pid);
 
-	child.unref();
+
 	child.on('exit', function(code) {
 
 		let pid = this.pid;
 
-
 		if (code === 0) {
 			console.info('SUCCESS (' + pid + ') ("' + args[2] + '" | "' + args[1] + '")');
+		} else if (code === 2) {
+			console.warn('FAILURE (' + pid + ') ("' + args[2] + '" | "' + args[1] + '")');
 		} else {
 			console.error('FAILURE (' + pid + ') ("' + args[2] + '" | "' + args[1] + '")');
 		}
 
-
-		let index = _CHILDREN.indexOf(pid);
+		let index = _PROCESSES.indexOf(pid);
 		if (index !== -1) {
-			_CHILDREN.splice(index, 1);
-		}
-
-
-		if (_CHILDREN.length === 0) {
-			process.exit(0);
+			_PROCESSES.splice(index, 1);
 		}
 
 	});
+
+	child.unref();
 
 };
 
@@ -280,7 +277,17 @@ const _SETTINGS = (function() {
 				});
 
 
-				if (found === false) {
+				if (found === true) {
+
+					setInterval(function() {
+
+						if (_PROCESSES.length === 0) {
+							process.exit(0);
+						}
+
+					}, 100);
+
+				} else {
 					console.warn('No Target in "' + project + '"');
 				}
 
@@ -340,7 +347,17 @@ const _SETTINGS = (function() {
 				});
 
 
-				if (found === false) {
+				if (found === true) {
+
+					setInterval(function() {
+
+						if (_PROCESSES.length === 0) {
+							process.exit(0);
+						}
+
+					}, 100);
+
+				} else {
 					console.warn('No Target for "' + identifier + '" in "' + project + '"');
 				}
 
