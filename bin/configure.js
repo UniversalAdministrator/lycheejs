@@ -806,7 +806,7 @@
 				let prefix = 'platform/' + platform + '/';
 
 				files.filter(function(value) {
-					return value.substr(0, prefix.length) === prefix;
+					return value.startsWith(prefix) === true;
 				}).map(function(value) {
 					return value.substr(prefix.length);
 				}).forEach(function(adapter) {

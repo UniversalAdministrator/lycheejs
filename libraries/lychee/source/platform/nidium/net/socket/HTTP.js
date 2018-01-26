@@ -1,23 +1,14 @@
 
 lychee.define('lychee.net.socket.HTTP').tags({
-	platform: 'html-nwjs'
+	platform: 'nidium'
 }).requires([
 	'lychee.net.protocol.HTTP'
 ]).includes([
 	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
-	if (typeof global.require === 'function') {
-
-		try {
-
-			global.require('net');
-
-			return true;
-
-		} catch (err) {
-		}
-
+	if (typeof global.Socket === 'function') {
+		return true;
 	}
 
 
@@ -25,9 +16,9 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 }).exports(function(lychee, global, attachments) {
 
-	const _net      = global.require('net');
 	const _Emitter  = lychee.import('lychee.event.Emitter');
 	const _Protocol = lychee.import('lychee.net.protocol.HTTP');
+	const _Socket   = global.Socket;
 
 
 
@@ -35,21 +26,45 @@ lychee.define('lychee.net.socket.HTTP').tags({
 	 * HELPERS
 	 */
 
+	const _to_arraybuffer = function(buffer) {
+
+		let bytes = new ArrayBuffer(buffer.length);
+		let array = new Uint8Array(buffer.length);
+
+		for (let b = 0, bl = buffer.length; b < bl; b++) {
+			array[b] = buffer[b];
+		}
+
+		return bytes;
+
+	};
+
+	const _to_buffer = function(bytes) {
+
+		let buffer = new Buffer(bytes.byteLength);
+		let array  = new Uint8Array(bytes);
+
+		for (let b = 0; b < buffer.length; b++) {
+			buffer[b] = array[b];
+		}
+
+		return buffer;
+
+	};
+
 	const _connect_socket = function(socket, protocol) {
 
 		let that = this;
 		if (that.__connection !== socket) {
 
-			socket.on('data', function(raw) {
+			socket.onread = function(data) {
 
-				// XXX: nwjs has global scope problems
-				// XXX: Internal Buffer is not our global.Buffer interface
-
-				let blob = new Buffer(raw.length);
-				for (let b = 0; b < blob.length; b++) {
-					blob[b] = raw[b];
+				let blob = null;
+				if (typeof data === 'string') {
+					blob = new Buffer(data, 'utf8');
+				} else {
+					blob = _to_buffer(data);
 				}
-
 
 				let chunks = protocol.receive(blob);
 				if (chunks.length > 0) {
@@ -60,33 +75,22 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 				}
 
-			});
+			};
 
-			socket.on('error', function(err) {
-				that.trigger('error');
-				that.disconnect();
-			});
+			socket.onconnect = function() {
+				that.trigger('connect');
+			};
 
-			socket.on('timeout', function() {
-				that.trigger('error');
+			socket.ondisconnect = function() {
 				that.disconnect();
-			});
-
-			socket.on('close', function() {
-				that.disconnect();
-			});
-
-			socket.on('end', function() {
-				that.disconnect();
-			});
+			};
 
 
 			that.__connection = socket;
 			that.__protocol   = protocol;
 
-			that.trigger('connect');
-
 		}
+
 
 	};
 
@@ -95,18 +99,16 @@ lychee.define('lychee.net.socket.HTTP').tags({
 		let that = this;
 		if (that.__connection === socket) {
 
-			socket.removeAllListeners('data');
-			socket.removeAllListeners('error');
-			socket.removeAllListeners('timeout');
-			socket.removeAllListeners('close');
-			socket.removeAllListeners('end');
+			socket.onconnect    = function() {};
+			socket.ondisconnect = function() {};
+			socket.onread       = function() {};
 
-			socket.destroy();
+			socket.close();
 			protocol.close();
 
 
 			that.__connection = null;
-			that.__protocol   = null;
+			that.__socket     = null;
 
 			that.trigger('disconnect');
 
@@ -174,41 +176,29 @@ lychee.define('lychee.net.socket.HTTP').tags({
 						type: _Protocol.TYPE.remote
 					});
 
-					connection.allowHalfOpen = true;
-					connection.setTimeout(0);
-					connection.setNoDelay(true);
-					connection.setKeepAlive(true, 0);
-					connection.removeAllListeners('timeout');
 
+					// TODO: Allow half open
+					// TODO: setTimeout(0)
+					// TODO: setNoDelay(true)
+					// TODO: setKeepAlive(true, 0)
+					// TODO: removeAllListeners('timeout')
 
 					_connect_socket.call(that, connection, protocol);
 
-					connection.resume();
+					// TODO: connection.resume();
 
 				} else {
 
 					protocol   = new _Protocol({
 						type: _Protocol.TYPE.client
 					});
-					connection = new _net.Socket({
-						readable: true,
-						writable: true
-					});
+					connection = new _Socket(host, port);
 
-
-					connection.allowHalfOpen = true;
-					connection.setTimeout(0);
-					connection.setNoDelay(true);
-					connection.setKeepAlive(true, 0);
-					connection.removeAllListeners('timeout');
-
+					// TODO: Like above
 
 					_connect_socket.call(that, connection, protocol);
 
-					connection.connect({
-						host: host,
-						port: port
-					});
+					connection.connect();
 
 				}
 
@@ -237,13 +227,18 @@ lychee.define('lychee.net.socket.HTTP').tags({
 				if (connection !== null && protocol !== null) {
 
 					let chunk = protocol.send(payload, headers, binary);
-					let enc   = binary === true ? 'binary' : 'utf8';
-
 					if (chunk !== null) {
 
-						// XXX: nwjs has global scope problems
-						// XXX: Internal Buffer is not our global.Buffer interface
-						connection.write(chunk.toString(enc), enc);
+						if (binary === true) {
+
+							connection.write(_to_arraybuffer(chunk));
+
+						} else {
+
+							connection.write(chunk.toString('utf8'));
+
+						}
+
 
 						return true;
 
@@ -266,6 +261,7 @@ lychee.define('lychee.net.socket.HTTP').tags({
 			if (connection !== null && protocol !== null) {
 
 				_disconnect_socket.call(this, connection, protocol);
+
 
 				return true;
 
