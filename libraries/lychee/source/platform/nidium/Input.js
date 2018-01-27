@@ -154,13 +154,13 @@ lychee.define('lychee.Input').tags({
 		35:  'end',
 		36:  'home',
 
-		// 37:  'arrow-left',
-		// 38:  'arrow-up',
-		// 39:  'arrow-right',
-		// 40:  'arrow-down',
+		37:  'arrow-left',
+		38:  'arrow-up',
+		39:  'arrow-right',
+		40:  'arrow-down',
 
-		// 45:  'insert',
-		// 46:  'delete',
+		// 45:  'insert', // XXX: nidium fires incorrect 73
+		// 46:  'delete', // XXX: nidium fires incorrect 127
 
 		65:  'a',
 		66:  'b',
@@ -203,32 +203,24 @@ lychee.define('lychee.Input').tags({
 		107: '+',
 		109: '-',
 		110: '.',
-		111: '/',
+		111: '/'
 
-		58: 'f1',
-		59: 'f2',
-		60: 'f3',
-		// 187: 'f4', // XXX: This should be 61
-		62: 'f5',
-		63: 'f6',
-		64: 'f7'
-		// 65: 'f8', // XXX: This is "a"
-		// 66: 'f9', // This should be 120
-		// 67: 'f10',
-		// 68: 'f11',
-		// 69: 'f12'
+		// 112: 'f1',  // XXX: nidium fires incorrect 58
+		// 113: 'f2',  // XXX: nidium fires incorrect 59
+		// 114: 'f3',  // XXX: nidium fires incorrect 60
+		// 115: 'f4',  // XXX: nidium fires incorrect 187
+		// 116: 'f5',  // XXX: nidium fires incorrect 62
+		// 117: 'f6',  // XXX: nidium fires incorrect 63
+		// 118: 'f7',  // XXX: nidium fires incorrect 64
+		// 119: 'f8',  // XXX: nidium fires incorrect 65
+		// 120: 'f9',  // XXX: nidium fires incorrect 66
+		// 121: 'f10', // XXX: nidium fires incorrect 67
+		// 122: 'f11', // XXX: nidium fires incorrect 68
+		// 123: 'f12'  // XXX: nidium fires incorrect 69
 
 	};
 
 	const _SPECIALMAP = {
-
-		39:  [ '\'', '"' ],
-		46:  [ '.', '>' ],
-		47:  [ '/', '?' ],
-		59:  [ ';', ':' ],
-		91:  [ '[',  '{' ],
-		92:  [ '\\', '|' ],
-		93:  [ ']',  '}' ],
 
 		48:  [ '0', ')' ],
 		49:  [ '1', '!' ],
@@ -239,13 +231,21 @@ lychee.define('lychee.Input').tags({
 		54:  [ '6', '^' ],
 		55:  [ '7', '&' ],
 		56:  [ '8', '*' ],
-		// 57:  [ '9', '(' ], // XXX: This should be 57
+		// 57:  [ '9', '(' ], // XXX: nidium fires incorrect 20
 
 
+		// 186: [ ';', ':' ], // XXX: nidium fires incorrect 59
 		187: [ '=', '+' ],
 		188: [ ',', '<' ],
-		189: [ '-', '_' ],
-		192: [ '`', '~' ]
+		189: [ '-', '_' ]
+		// 190: [ '.', '>' ], // XXX: nidium fires incorrect 46
+		// 191: [ '/', '?' ], // XXX: nidium fires incorrect 47
+		// 192: [ '`', '~' ], // XXX: nidium fires incorrect 96
+
+		// 219: [ '[',  '{' ], // XXX: nidium fires incirrect 91
+		// 220: [ '\\', '|' ], // XXX: nidium fires incorrect 92
+		// 221: [ ']',  '}' ], // XXX: nidium fires incorrect 93
+		// 222: [ '\'', '"' ]  // XXX: nidium fires incorrect 39
 
 	};
 
