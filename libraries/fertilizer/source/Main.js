@@ -200,19 +200,32 @@ lychee.define('fertilizer.Main').requires([
 								_lychee.setEnvironment(null);
 
 
-								let definition = environment.definitions[environment.target] || null;
-								if (definition !== null) {
+								let remaining = Object.values(dependencies).length;
+								if (remaining > 0) {
 
-									let remaining = Object.values(dependencies).length;
+									let target = environment.definitions[environment.target] || null;
 
 									for (let req in dependencies) {
 
-										// let dep   = dependencies[req];
-										let check = definition._requires.indexOf(req);
-										if (check !== -1) {
+										let dep = dependencies[req];
 
-											definition._requires.splice(check, 1);
-											remaining--;
+										let definition = environment.definitions[req] || null;
+										if (definition !== null) {
+
+											let i0 = definition._requires.indexOf(dep);
+											if (i0 !== -1) {
+												definition._requires.splice(i0, 1);
+												remaining--;
+											}
+
+										}
+
+										if (target !== null) {
+
+											let i0 = target._requires.indexOf(req);
+											if (i0 !== -1) {
+												target._requires.splice(i0, 1);
+											}
 
 										}
 

@@ -40,12 +40,6 @@ lychee.define('lychee.Input').tags({
 				handled = _process_key.call(_INSTANCES[i], event.keyCode, event.ctrlKey, event.altKey, event.shiftKey) || handled;
 			}
 
-
-			if (handled === true) {
-				event.preventDefault();
-				event.stopPropagation();
-			}
-
 		},
 
 		mousedown: function(event) {
@@ -59,20 +53,11 @@ lychee.define('lychee.Input').tags({
 				handled = _process_touch.call(_INSTANCES[i], 0, event.x, event.y) || handled;
 			}
 
-
-			// Prevent drag of canvas as image
-			if (handled === true) {
-				event.preventDefault();
-				event.stopPropagation();
-			}
-
 		},
 
 		mousemove: function(event) {
 
 			if (_mouseactive === false) {
-				event.preventDefault();
-				event.stopPropagation();
 				return;
 			}
 
@@ -81,13 +66,6 @@ lychee.define('lychee.Input').tags({
 
 			for (let i = 0, l = _INSTANCES.length; i < l; i++) {
 				handled = _process_swipe.call(_INSTANCES[i], 0, 'move', event.x, event.y) || handled;
-			}
-
-
-			// Prevent selection of canvas as content
-			if (handled === true) {
-				event.preventDefault();
-				event.stopPropagation();
 			}
 
 		},
@@ -176,13 +154,13 @@ lychee.define('lychee.Input').tags({
 		35:  'end',
 		36:  'home',
 
-		37:  'arrow-left',
-		38:  'arrow-up',
-		39:  'arrow-right',
-		40:  'arrow-down',
+		// 37:  'arrow-left',
+		// 38:  'arrow-up',
+		// 39:  'arrow-right',
+		// 40:  'arrow-down',
 
-		45:  'insert',
-		46:  'delete',
+		// 45:  'insert',
+		// 46:  'delete',
 
 		65:  'a',
 		66:  'b',
@@ -227,22 +205,30 @@ lychee.define('lychee.Input').tags({
 		110: '.',
 		111: '/',
 
-		112: 'f1',
-		113: 'f2',
-		114: 'f3',
-		115: 'f4',
-		116: 'f5',
-		117: 'f6',
-		118: 'f7',
-		119: 'f8',
-		120: 'f9',
-		121: 'f10',
-		122: 'f11',
-		123: 'f12'
+		58: 'f1',
+		59: 'f2',
+		60: 'f3',
+		// 187: 'f4', // XXX: This should be 61
+		62: 'f5',
+		63: 'f6',
+		64: 'f7'
+		// 65: 'f8', // XXX: This is "a"
+		// 66: 'f9', // This should be 120
+		// 67: 'f10',
+		// 68: 'f11',
+		// 69: 'f12'
 
 	};
 
 	const _SPECIALMAP = {
+
+		39:  [ '\'', '"' ],
+		46:  [ '.', '>' ],
+		47:  [ '/', '?' ],
+		59:  [ ';', ':' ],
+		91:  [ '[',  '{' ],
+		92:  [ '\\', '|' ],
+		93:  [ ']',  '}' ],
 
 		48:  [ '0', ')' ],
 		49:  [ '1', '!' ],
@@ -253,20 +239,13 @@ lychee.define('lychee.Input').tags({
 		54:  [ '6', '^' ],
 		55:  [ '7', '&' ],
 		56:  [ '8', '*' ],
-		57:  [ '9', '(' ],
+		// 57:  [ '9', '(' ], // XXX: This should be 57
 
-		186: [ ';', ':' ],
+
 		187: [ '=', '+' ],
 		188: [ ',', '<' ],
 		189: [ '-', '_' ],
-		190: [ '.', '>' ],
-		191: [ '/', '?' ],
-		192: [ '`', '~' ],
-
-		219: [ '[',  '{' ],
-		220: [ '\\', '|' ],
-		221: [ ']',  '}' ],
-		222: [ '\'', '"' ]
+		192: [ '`', '~' ]
 
 	};
 
@@ -281,6 +260,8 @@ lychee.define('lychee.Input').tags({
 		alt   =   alt === true;
 		shift = shift === true;
 
+
+		console.log(code, _KEYMAP[code], _SPECIALMAP[code]);
 
 		if (_KEYMAP[code] === undefined && _SPECIALMAP[code] === undefined) {
 
@@ -647,7 +628,9 @@ lychee.define('lychee.Input').tags({
 
 			if (touch !== null) {
 
-				// XXX: Nidium has not (yet) touch support
+				this.touch = touch;
+
+				return true;
 
 			}
 
