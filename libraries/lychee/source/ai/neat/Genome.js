@@ -29,12 +29,14 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 
 		let settings = Object.assign({}, data);
 
-		// this.genes   = [];
+		this.genes   = [];
 		this.fitness = 0;
-		this.adjustFitness = 0;
 		// this.network = {};
-		// this.maxneuron = 0;
 		this.globalRank = 0;
+
+
+		this.setGenes(settings.genes);
+		this.setFitness(settings.fitness);
 
 		settings = null;
 
@@ -64,18 +66,11 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 		 * CUSTOM API
 		 */
 
-		copyGenome: function() {
+		clone: function() {
 
-			let clone = new Composite();
-
-			clone.genes = this.genes.map(function(gene) {
-				return gene.copyGene();
+			return new Composite({
+				genes: this.genes.map(lychee.serialize)
 			});
-
-			clone.maxneuron = this.maxneuron;
-
-
-			return clone;
 
 		},
 

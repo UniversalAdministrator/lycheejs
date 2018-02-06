@@ -5,18 +5,19 @@ lychee.define('lychee.ai.neat.Gene').exports(function(lychee, global, attachment
 
 		let settings = Object.assign({}, data);
 
-		this.into = 0;
-		this.out = 0;
-		this.weight = 0.0;
-		this.enabled = true;
-		this.innovation = 0;
+
+		this.enabled     = true;
+		this.innovation  = 0;
+		this.into        = null;
+		this.out         = null;
+		this.weight      = 0.0;
 
 
+		this.setEnabled(settings.enabled);
+		this.setInnovation(settings.innovation);
 		this.setInto(settings.into);
 		this.setOut(settings.out);
 		this.setWeight(settings.weight);
-		this.setEnabled(settings.enabled);
-		this.setInnovation(settings.innovation);
 
 		settings = null;
 
@@ -37,6 +38,84 @@ lychee.define('lychee.ai.neat.Gene').exports(function(lychee, global, attachment
 				'constructor': 'lychee.ai.neat.Gene',
 				'arguments':   []
 			};
+
+		},
+
+
+
+		/*
+		 * CUSTOM API
+		 */
+
+		setEnabled: function(enabled) {
+
+			enabled = typeof enabled === 'boolean' ? enabled : null;
+
+
+			if (enabled !== null) {
+
+				this.enabled = enabled;
+
+				return true;
+
+			}
+
+
+			return false;
+
+		},
+
+		setInnovation: function(innovation) {
+
+			innovation = typeof innovation === 'number' ? (innovation | 0) : null;
+
+
+			if (innovation !== null) {
+
+				this.innovation = innovation;
+
+				return true;
+
+			}
+
+
+			return false;
+
+		},
+
+		setInto: function(into) {
+
+			into = typeof into === 'number' ? into : null;
+
+
+			if (into !== null) {
+
+				this.into = into;
+
+				return true;
+
+			}
+
+
+			return false;
+
+		},
+
+		setOut: function(out) {
+
+			out = typeof out === 'number' ? out : null;
+
+
+			if (out !== null) {
+
+				this.out = out;
+
+				return true;
+
+			}
+
+
+			return false;
 
 		}
 

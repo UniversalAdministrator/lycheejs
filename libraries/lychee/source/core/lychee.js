@@ -856,7 +856,38 @@ lychee = (function(global) {
 			bobject = bobject !== undefined ? bobject : undefined;
 
 
-			if (aobject instanceof Object && bobject instanceof Object) {
+			if (aobject instanceof Array && bobject instanceof Array) {
+
+				for (let a = 0, al = aobject.length; a < al; a++) {
+
+					if (bobject[a] !== undefined) {
+
+						if (aobject[a] !== null && bobject[a] !== null) {
+
+							if (aobject[a] instanceof Object && bobject[a] instanceof Object) {
+
+								if (Module.diff(aobject[a], bobject[a]) === true) {
+
+									// Allows aobject[a].builds = {} and bobject[a].builds = { stuff: {}}
+									if (Object.keys(aobject[a]).length > 0) {
+										return true;
+									}
+
+								}
+
+							} else if (typeof aobject[a] !== typeof bobject[a]) {
+								return true;
+							}
+
+						}
+
+					} else {
+						return true;
+					}
+
+				}
+
+			} else if (aobject instanceof Object && bobject instanceof Object) {
 
 				let akeys = Object.keys(aobject);
 				let bkeys = Object.keys(bobject);
