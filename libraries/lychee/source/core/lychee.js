@@ -1509,8 +1509,9 @@ lychee = (function(global) {
 
 				} else if (environment instanceof lychee.Simulation) {
 
-					let simulation  = environment;
-					let environment = simulation.environment;
+					let simulation = environment;
+
+					environment = simulation.environment;
 
 
 					if (callback === null) {

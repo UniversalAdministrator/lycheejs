@@ -821,5 +821,5 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 	return Composite;
 
-});
+})(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));
 

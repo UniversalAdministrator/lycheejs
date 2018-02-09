@@ -21,15 +21,14 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 		attaches: {
 			json: new Config(),
 			fnt:  new Font(),
-			snd:  new Sound(),
+			snd:  new Sound()
 		}
 	});
 
 	sandbox.setProperty('id', function(assert, expect) {
 
-		let defaults = sandbox.settings;
-		let id       = 'sandbox.foo.Bar';
-		let check    = 'not.Allowed$';
+		let id    = 'sandbox.foo.Bar';
+		let check = 'not.Allowed$';
 
 		assert(this.id, sandbox.settings.id);
 
@@ -43,8 +42,7 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 
 	sandbox.setProperty('url', function(assert, expect) {
 
-		let defaults = sandbox.settings;
-		let url      = '/tmp/sandbox/source/foo/Bar.js';
+		let url = '/tmp/sandbox/source/foo/Bar.js';
 
 		assert(this.url, '/tmp/sandbox/source/foo/bar/Qux.js');
 
@@ -58,9 +56,7 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 
 	sandbox.setMethod('attaches', function(assert, expect) {
 
-		let that     = this;
-		let defaults = sandbox.settings;
-		let config   = new _Config();
+		let config = new _Config();
 
 
 		assert(this._attaches.json instanceof _Config, true);
