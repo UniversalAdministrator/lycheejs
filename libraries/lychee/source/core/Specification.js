@@ -258,7 +258,7 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 					try {
 						this._exports.call(
 							this._exports,
-							sandbox.lychee,
+							lychee,
 							sandbox
 						) || null;
 					} catch (err) {

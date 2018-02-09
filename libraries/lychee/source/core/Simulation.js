@@ -242,6 +242,119 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 	_Sandbox.prototype = {
 
 		/*
+		 * ENTITY API
+		 */
+
+		deserialize: function(blob) {
+
+			if (blob.instance instanceof Object) {
+				this._INSTANCE = lychee.deserialize(blob.instance);
+			}
+
+			if (blob.settings instanceof Object) {
+				this.settings = lychee.deserialize(blob.settings);
+			}
+
+			if (blob.properties instanceof Object) {
+
+				for (let p in blob.properties) {
+					this.properties[p] = lychee.deserialize(blob.properties[p]);
+				}
+
+			}
+
+			if (blob.enums instanceof Object) {
+
+				for (let e in blob.enums) {
+					this.enums[e] = lychee.deserialize(blob.enums[e]);
+				}
+
+			}
+
+			if (blob.events instanceof Object) {
+
+				for (let e in blob.events) {
+					this.events[e] = lychee.deserialize(blob.events[e]);
+				}
+
+			}
+
+			if (blob.methods instanceof Object) {
+
+				for (let m in blob.methods) {
+					this.methods[m] = lychee.deserialize(blob.methods[m]);
+				}
+
+			}
+
+		},
+
+		serialize: function() {
+
+			let blob = {};
+
+
+			if (Object.keys(this.settings).length > 0) {
+				blob.settings = lychee.serialize(this.settings);
+			}
+
+			if (Object.keys(this.properties).length > 0) {
+
+				blob.properties = {};
+
+				for (let p in this.properties) {
+					blob.properties[p] = lychee.serialize(this.properties[p]);
+				}
+
+			}
+
+			if (Object.keys(this.enums).length > 0) {
+
+				blob.enums = {};
+
+				for (let e in this.enums) {
+					blob.enums[e] = lychee.serialize(this.enums[e]);
+				}
+
+			}
+
+			if (Object.keys(this.events).length > 0) {
+
+				blob.events = {};
+
+				for (let e in this.events) {
+					blob.events[e] = lychee.serialize(this.events[e]);
+				}
+
+			}
+
+			if (Object.keys(this.methods).length > 0) {
+
+				blob.methods = {};
+
+				for (let m in this.methods) {
+					blob.methods[m] = lychee.serialize(this.methods[m]);
+				}
+
+			}
+
+
+			if (this._INSTANCE !== null) {
+				blob.instance = lychee.serialize(this._INSTANCE);
+			}
+
+
+			return {
+				'constructor': '_Sandbox',
+				'arguments':   [ this._IDENTIFIER ],
+				'blob':        Object.keys(blob).length > 0 ? blob : null
+			};
+
+		},
+
+
+
+		/*
 		 * CUSTOM API
 		 */
 

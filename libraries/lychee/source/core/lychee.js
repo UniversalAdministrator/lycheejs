@@ -1201,9 +1201,9 @@ lychee = (function(global) {
 					} else if (typeof definition.displayName !== 'undefined') {
 
 						if (definition.prototype instanceof Object) {
-							console.info('lychee.deserialize: Define ' + (definition.displayName) + '.prototype.serialize() to serialize it.');
+							console.info('lychee.serialize: Define ' + (definition.displayName) + '.prototype.serialize() to serialize it.');
 						} else {
-							console.info('lychee.deserialize: Define ' + (definition.displayName) + '.serialize() to serialize it.');
+							console.info('lychee.serialize: Define ' + (definition.displayName) + '.serialize() to serialize it.');
 						}
 
 					} else {
