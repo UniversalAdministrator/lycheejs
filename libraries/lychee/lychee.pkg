@@ -703,7 +703,12 @@
 			"html": {
 				"core": [
 					"js"
-				]
+				],
+				"dist": {
+					"index": [
+						"js"
+					]
+				}
 			},
 			"html-nwjs": {
 				"core": [

@@ -60,12 +60,12 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 		let config = new _Config();
 
 
-		assert(this._attaches.json instanceof _Config, true);
+		assert(this._attaches.json instanceof _Config, false);
 		assert(this._attaches.json === config,         false);
 
-		assert(this.attaches({
+		this.attaches({
 			json: config
-		}), true);
+		});
 
 		assert(this._attaches.json, config);
 

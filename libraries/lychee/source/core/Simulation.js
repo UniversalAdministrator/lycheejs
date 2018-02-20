@@ -410,9 +410,40 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 						let assert = _assert.bind(statistics.properties[id]);
 						let expect = _expect.bind(statistics.properties[id], assert);
 
-						// XXX: Scope here is not applied
-						// No fucking clue why this is the case
 						this.properties[id].call(this._INSTANCE, assert, expect);
+
+					}
+
+					for (let id in this.enums) {
+
+						statistics.enums[id] = [ 0, 0 ];
+
+						let assert = _assert.bind(statistics.enums[id]);
+						let expect = _expect.bind(statistics.enums[id], assert);
+
+						this.enums[id].call(this._INSTANCE, assert, expect);
+
+					}
+
+					for (let id in this.events) {
+
+						statistics.events[id] = [ 0, 0 ];
+
+						let assert = _assert.bind(statistics.events[id]);
+						let expect = _expect.bind(statistics.events[id], assert);
+
+						this.events[id].call(this._INSTANCE, assert, expect);
+
+					}
+
+					for (let id in this.methods) {
+
+						statistics.methods[id] = [ 0, 0 ];
+
+						let assert = _assert.bind(statistics.methods[id]);
+						let expect = _expect.bind(statistics.methods[id], assert);
+
+						this.methods[id].call(this._INSTANCE, assert, expect);
 
 					}
 
