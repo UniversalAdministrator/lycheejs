@@ -226,6 +226,25 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 	 * STRUCTS
 	 */
 
+	const _assert = function(a, b) {
+
+		let result = lychee.diff(a, b);
+		if (result === false) {
+			this[0]++;
+		} else {
+			this[1]++;
+		}
+
+	};
+
+	const _expect = function(assert, callback) {
+
+		callback(function(a, b) {
+			assert(a, b);
+		});
+
+	};
+
 	const _Sandbox = function(identifier) {
 
 		this._IDENTIFIER = identifier || null;
@@ -357,6 +376,54 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 		/*
 		 * CUSTOM API
 		 */
+
+		evaluate: function() {
+
+			let statistics = {
+				properties: {},
+				enums:      {},
+				events:     {},
+				methods:    {}
+			};
+
+
+			if (this._IDENTIFIER !== null) {
+
+				let Definition = lychee.import(this._IDENTIFIER);
+				if (Definition !== null) {
+
+					if (Definition.prototype instanceof Object) {
+						this._INSTANCE = new Definition(this.settings);
+					} else {
+						this._INSTANCE = Definition;
+					}
+
+				}
+
+
+				if (this._INSTANCE !== null) {
+
+					for (let id in this.properties) {
+
+						statistics.properties[id] = [ 0, 0 ];
+
+						let assert = _assert.bind(statistics.properties[id]);
+						let expect = _expect.bind(statistics.properties[id], assert);
+
+						// XXX: Scope here is not applied
+						// No fucking clue why this is the case
+						this.properties[id].call(this._INSTANCE, assert, expect);
+
+					}
+
+				}
+
+			}
+
+
+			return statistics;
+
+		},
 
 		setSettings: function(settings) {
 

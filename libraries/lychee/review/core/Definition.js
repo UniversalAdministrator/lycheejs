@@ -30,6 +30,7 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 		let id    = 'sandbox.foo.Bar';
 		let check = 'not.Allowed$';
 
+
 		assert(this.id, sandbox.settings.id);
 
 		assert(this.setId(id), true);
@@ -49,7 +50,7 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 		assert(this.setUrl(url), true);
 		assert(this.url,         url);
 
-		assert(this.setId(''), true);
+		assert(this.setId(''), false);
 		assert(this.id,        'sandbox.foo.Bar');
 
 	});
