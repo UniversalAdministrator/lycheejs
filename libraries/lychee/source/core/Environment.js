@@ -543,6 +543,8 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	_Sandbox.prototype = {
 
+		displayName: '_Sandbox',
+
 		deserialize: function(blob) {
 
 			if (blob.console instanceof Object) {

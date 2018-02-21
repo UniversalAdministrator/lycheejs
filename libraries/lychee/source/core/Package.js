@@ -428,8 +428,13 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 					} else {
 
-						let info = Object.keys(tags).length > 0 ? (' (' + JSON.stringify(tags) + ')') : '.';
-						console.error('lychee.Package ("' + this.id + '"): Invalid Definition "' + id + '"' + info);
+						if (tags !== null) {
+							let info = Object.keys(tags).length > 0 ? (' (' + JSON.stringify(tags) + ')') : '.';
+							console.error('lychee.Package ("' + this.id + '"): Invalid Definition "' + id + '"' + info);
+						} else {
+							console.error('lychee.Package ("' + this.id + '"): Invalid Definition "' + id + '"');
+						}
+
 
 						return false;
 

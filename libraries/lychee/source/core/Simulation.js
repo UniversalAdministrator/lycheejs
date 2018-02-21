@@ -666,7 +666,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 					let pkg = this.__packages[pkg_id] || null;
 					if (pkg !== null && pkg.config !== null) {
 
-						let result = pkg.load(def_id, this.tags);
+						let result = pkg.load(def_id);
 						if (result === true) {
 
 							let debug = _get_debug.call(this);
