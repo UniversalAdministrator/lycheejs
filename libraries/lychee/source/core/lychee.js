@@ -856,7 +856,11 @@ lychee = (function(global) {
 			bobject = bobject !== undefined ? bobject : undefined;
 
 
-			if (aobject instanceof Array && bobject instanceof Array) {
+			if (aobject === bobject) {
+
+				return false;
+
+			} else if (aobject instanceof Array && bobject instanceof Array) {
 
 				for (let a = 0, al = aobject.length; a < al; a++) {
 
