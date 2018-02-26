@@ -258,6 +258,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 		this._INSTANCE   = null;
 		this._timeout    = timeout;
 
+		this.blob       = {};
 		this.settings   = {};
 		this.properties = {};
 		this.enums      = {};
@@ -406,7 +407,16 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 					if (Definition !== null) {
 
 						if (Definition.prototype instanceof Object) {
+
 							this._INSTANCE = new Definition(this.settings);
+
+							if (
+								Object.keys(this.blob).length > 0
+								&& typeof this._INSTANCE.deserialize === 'function'
+							) {
+								this._INSTANCE.deserialize(this.blob);
+							}
+
 						} else {
 							this._INSTANCE = Definition;
 						}
@@ -542,6 +552,24 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 				}
 
 			}
+
+		},
+
+		setBlob: function(blob) {
+
+			blob = blob instanceof Object ? blob : null;
+
+
+			if (blob !== null) {
+
+				this.blob = blob;
+
+				return true;
+
+			}
+
+
+			return false;
 
 		},
 

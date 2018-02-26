@@ -17,12 +17,17 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 
 	sandbox.setSettings({
 		id:  'sandbox.foo.bar.Qux',
-		url: '/tmp/sandbox/source/foo/bar/Qux.js',
-		attaches: {
-			json: new Config(),
-			fnt:  new Font(),
-			snd:  new Sound()
-		}
+		url: '/tmp/sandbox/source/foo/bar/Qux.js'
+	});
+
+	sandbox.setBlob({
+		includes: [
+			'sandbox.foo.Bar',
+			'sandbox.foo.Qux'
+		],
+		requires: [
+			'sandbox.foo.Doo'
+		]
 	});
 
 	sandbox.setProperty('id', function(assert, expect) {
@@ -85,6 +90,63 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 
 		});
 
+	});
+
+	sandbox.setMethod('check', function(assert, expect) {
+		// TODO: check method
+	});
+
+	sandbox.setMethod('export', function(assert, expect) {
+		// TODO: export method
+	});
+
+	sandbox.setMethod('exports', function(assert, expect) {
+
+
+	});
+
+	sandbox.setMethod('includes', function(assert, expect) {
+
+		assert(this._includes,        sandbox.blob.includes);
+		assert(this._includes.length, sandbox.blob.includes.length);
+
+		this.includes([
+			'sandbox.foo.Bar'
+		]);
+
+		assert(this._includes.length, sandbox.blob.includes.length);
+
+		this.includes([
+			'sandbox.foo.Foo'
+		]);
+
+		assert(this._includes.length, sandbox.blob.includes.length + 1);
+
+	});
+
+	sandbox.setMethod('requires', function(assert, expect) {
+
+		assert(this._requires,        sandbox.blob.requires);
+		assert(this._requires.length, sandbox.blob.requires.length);
+
+		this.requires([
+			'sandbox.foo.Doo'
+		]);
+
+		assert(this._requires.length, sandbox.blob.requires.length);
+
+		this.requires([
+			'sandbox.foo.Foo'
+		]);
+
+		assert(this._requires.length, sandbox.blob.requires.length + 1);
+
+	});
+
+	sandbox.setMethod('supports', function(assert, expect) {
+	});
+
+	sandbox.setMethod('tags', function(assert, expect) {
 	});
 
 });
