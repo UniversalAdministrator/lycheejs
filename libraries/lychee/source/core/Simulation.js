@@ -49,8 +49,9 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 	const _build_loop = function(cache) {
 
-		let load  = cache.load;
-		let trace = cache.trace;
+		let load    = cache.load;
+		let trace   = cache.trace;
+		let timeout = this.timeout;
 
 
 		for (let l = 0, ll = load.length; l < ll; l++) {
@@ -95,7 +96,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 				} else {
 
-					let sandbox = new _Sandbox(identifier);
+					let sandbox = new _Sandbox(identifier, timeout);
 					specification.export(sandbox);
 					this.sandboxes[identifier] = sandbox;
 
@@ -230,25 +231,32 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 		let result = lychee.diff(a, b);
 		if (result === false) {
-			this[0]++;
-		} else {
-			this[1]++;
+			this.results.ok++;
 		}
+
+		this.results.all++;
 
 	};
 
 	const _expect = function(assert, callback) {
 
+		this._expect++;
+
+
+		let that = this;
+
 		callback(function(a, b) {
+			that._expect--;
 			assert(a, b);
 		});
 
 	};
 
-	const _Sandbox = function(identifier) {
+	const _Sandbox = function(identifier, timeout) {
 
 		this._IDENTIFIER = identifier || null;
 		this._INSTANCE   = null;
+		this._timeout    = timeout;
 
 		this.settings   = {};
 		this.properties = {};
@@ -377,82 +385,163 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 		 * CUSTOM API
 		 */
 
-		evaluate: function() {
+		evaluate: function(callback) {
 
-			let statistics = {
-				properties: {},
-				enums:      {},
-				events:     {},
-				methods:    {}
-			};
+			callback = callback instanceof Function ? callback : null;
 
 
-			if (this._IDENTIFIER !== null) {
+			if (callback !== null) {
 
-				let Definition = lychee.import(this._IDENTIFIER);
-				if (Definition !== null) {
+				let statistics = {
+					properties: {},
+					enums:      {},
+					events:     {},
+					methods:    {}
+				};
 
-					if (Definition.prototype instanceof Object) {
-						this._INSTANCE = new Definition(this.settings);
+
+				if (this._IDENTIFIER !== null) {
+
+					let Definition = lychee.import(this._IDENTIFIER);
+					if (Definition !== null) {
+
+						if (Definition.prototype instanceof Object) {
+							this._INSTANCE = new Definition(this.settings);
+						} else {
+							this._INSTANCE = Definition;
+						}
+
+					}
+
+
+					if (this._INSTANCE !== null) {
+
+						for (let id in this.properties) {
+
+							statistics.properties[id] = {
+								_expect: 0,
+								results: {
+									ok:  0,
+									all: 0
+								}
+							};
+
+							let assert = _assert.bind(statistics.properties[id]);
+							let expect = _expect.bind(statistics.properties[id], assert);
+
+							this.properties[id].call(this._INSTANCE, assert, expect);
+
+						}
+
+						for (let id in this.enums) {
+
+							statistics.enums[id] = {
+								_expect: 0,
+								results: {
+									ok:  0,
+									all: 0
+								}
+							};
+
+							let assert = _assert.bind(statistics.enums[id]);
+							let expect = _expect.bind(statistics.enums[id], assert);
+
+							this.enums[id].call(this._INSTANCE, assert, expect);
+
+						}
+
+						for (let id in this.events) {
+
+							statistics.events[id] = {
+								_expect: 0,
+								results: {
+									ok:  0,
+									all: 0
+								}
+							};
+
+							let assert = _assert.bind(statistics.events[id]);
+							let expect = _expect.bind(statistics.events[id], assert);
+
+							this.events[id].call(this._INSTANCE, assert, expect);
+
+						}
+
+						for (let id in this.methods) {
+
+							statistics.methods[id] = {
+								_expect: 0,
+								results: {
+									ok:  0,
+									all: 0
+								}
+							};
+
+							let assert = _assert.bind(statistics.methods[id]);
+							let expect = _expect.bind(statistics.methods[id], assert);
+
+							this.methods[id].call(this._INSTANCE, assert, expect);
+
+						}
+
+
+						let timeout  = Date.now() + this._timeout;
+						let interval = setInterval(function() {
+
+							if (Date.now() > timeout) {
+
+								clearInterval(interval);
+								interval = null;
+
+								callback(statistics);
+
+							} else {
+
+								let stop = true;
+
+								for (let type in statistics) {
+
+									for (let id in statistics[type]) {
+
+										if (statistics[type][id]._expect > 0) {
+											stop = false;
+											break;
+										}
+
+									}
+
+								}
+
+								if (stop === true) {
+
+									clearInterval(interval);
+									interval = null;
+
+									callback(statistics);
+
+								}
+
+							}
+
+						}.bind(this), 500);
+
 					} else {
-						this._INSTANCE = Definition;
-					}
 
-				}
-
-
-				if (this._INSTANCE !== null) {
-
-					for (let id in this.properties) {
-
-						statistics.properties[id] = [ 0, 0 ];
-
-						let assert = _assert.bind(statistics.properties[id]);
-						let expect = _expect.bind(statistics.properties[id], assert);
-
-						this.properties[id].call(this._INSTANCE, assert, expect);
+						if (callback !== null) {
+							callback(null);
+						}
 
 					}
 
-					for (let id in this.enums) {
+				} else {
 
-						statistics.enums[id] = [ 0, 0 ];
-
-						let assert = _assert.bind(statistics.enums[id]);
-						let expect = _expect.bind(statistics.enums[id], assert);
-
-						this.enums[id].call(this._INSTANCE, assert, expect);
-
-					}
-
-					for (let id in this.events) {
-
-						statistics.events[id] = [ 0, 0 ];
-
-						let assert = _assert.bind(statistics.events[id]);
-						let expect = _expect.bind(statistics.events[id], assert);
-
-						this.events[id].call(this._INSTANCE, assert, expect);
-
-					}
-
-					for (let id in this.methods) {
-
-						statistics.methods[id] = [ 0, 0 ];
-
-						let assert = _assert.bind(statistics.methods[id]);
-						let expect = _expect.bind(statistics.methods[id], assert);
-
-						this.methods[id].call(this._INSTANCE, assert, expect);
-
+					if (callback !== null) {
+						callback(null);
 					}
 
 				}
 
 			}
-
-
-			return statistics;
 
 		},
 
@@ -811,6 +900,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 					cache.active  = true;
 
 
+					let timeout  = this.timeout;
 					let interval = setInterval(function() {
 
 						let cache = this.__cache;
@@ -835,7 +925,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 									let specification = this.specifications[identifier] || null;
 									if (specification !== null) {
 
-										let sandbox = new _Sandbox(identifier);
+										let sandbox = new _Sandbox(identifier, timeout);
 										specification.export(sandbox);
 										this.sandboxes[identifier] = sandbox;
 

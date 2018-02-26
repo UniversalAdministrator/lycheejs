@@ -72,9 +72,16 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 
 		expect(assert => {
 
-			this.export(function(lychee, global, attachments) {
-				assert(attachments['msc'], config);
+			this.exports(function(lychee, global, attachments) {
+				assert(attachments['json'], config);
+				return {};
 			});
+
+
+			let scope  = {};
+			let result = this.export(scope);
+
+			assert(result, true);
 
 		});
 
