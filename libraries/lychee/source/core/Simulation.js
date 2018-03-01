@@ -1,8 +1,8 @@
 
 lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation : (function(global) {
 
-	const _console = global.console;
 	let   _id      = 0;
+	const _console = global.console;
 	const _lychee  = global.lychee;
 
 
@@ -909,6 +909,11 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 			let debug       = _get_debug.call(this);
 			let environment = this.environment;
 			let target      = this.target;
+
+
+			if (debug === true) {
+				global.lychee.SIMULATIONS[this.id] = this;
+			}
 
 
 			if (target !== null && environment !== null && cache.active === false) {

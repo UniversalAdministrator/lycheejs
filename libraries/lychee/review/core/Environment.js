@@ -1,8 +1,9 @@
 
 lychee.specify('lychee.Environment').exports(function(lychee, sandbox) {
 
-	const _Definition = lychee.import('lychee.Definition');
-	const _Package    = lychee.import('lychee.Package');
+	const _ENVIRONMENT = lychee.environment;
+	const _Definition  = lychee.import('lychee.Definition');
+	const _Package     = lychee.import('lychee.Package');
 
 
 
@@ -163,26 +164,55 @@ lychee.specify('lychee.Environment').exports(function(lychee, sandbox) {
 	});
 
 	sandbox.setMethod('define', function(assert, expect) {
-		// TODO: Implement me
+
+		let definition = new _Definition({
+			id:  'sandbox.foo.Bar',
+			url: '/tmp/sandbox/foo/Bar.js'
+		});
+
+		assert(this.define(definition, true), true);
+		assert(this.definitions[definition.id] === definition, true);
+
 	});
 
 	sandbox.setMethod('init', function(assert, expect) {
-		// TODO: Implement me
+
+		assert(this.setDebug(true),               true);
+		assert(this.setSandbox(false),            true);
+		assert(this.setTimeout(10000),            true);
+		assert(this.setType('source'),            true);
+		assert(this.setTarget('lychee.app.Main'), true);
+
+		assert(lychee.setEnvironment(this), true);
+
+		expect(assert => {
+
+			assert(this.load('lychee.app.Main'), true);
+
+			expect(assert => {
+
+				this.init(function(isolate) {
+
+					assert(isolate !== null,                    true);
+					assert(isolate.lychee instanceof Object,    true);
+					assert(lychee.setEnvironment(_ENVIRONMENT), true);
+
+				});
+
+			});
+
+		});
+
 	});
 
 	sandbox.setMethod('resolve', function(assert, expect) {
-		// TODO: Implement me
+
+		assert(this.resolve('./what/ever/Foo.js'),    lychee.ROOT.project + '/what/ever/Foo.js');
+		assert(this.resolve('/what/ever/Foo.js'),     lychee.ROOT.lychee  + '/what/ever/Foo.js');
+		assert(this.resolve('./what/ever/../Foo.js'), lychee.ROOT.project + '/what/Foo.js');
+		assert(this.resolve('/what/ever/../Foo.js'),  lychee.ROOT.lychee  + '/what/Foo.js');
+
 	});
-
-
-
-
-
-
-
-
-
-
 
 });
 

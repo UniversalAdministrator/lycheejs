@@ -2,8 +2,8 @@
 lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environment : (function(global) {
 
 	let   _id      = 0;
-	const _lychee  = global.lychee;
 	const _console = global.console;
+	const _lychee  = global.lychee;
 
 
 
@@ -425,6 +425,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		this.lychee.FEATURES     = global.lychee.FEATURES;
 		this.lychee.FILENAME     = global.lychee.FILENAME;
 		this.lychee.PLATFORMS    = global.lychee.PLATFORMS;
+		this.lychee.SIMULATIONS  = global.lychee.SIMULATIONS;
 		this.lychee.ROOT         = {};
 		this.lychee.ROOT.lychee  = global.lychee.ROOT.lychee;
 		this.lychee.ROOT.project = global.lychee.ROOT.project;

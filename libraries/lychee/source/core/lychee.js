@@ -697,6 +697,7 @@ lychee = (function(global) {
 		FEATURES:     {},
 		FILENAME:     null,
 		PLATFORMS:    [],
+		SIMULATIONS:  {},
 
 		ROOT: {
 			lychee:  '/opt/lycheejs',
