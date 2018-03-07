@@ -217,6 +217,9 @@
 				],
 				"Specification": [
 					"js"
+				],
+				"TRANSCRIPTOR": [
+					"js"
 				]
 			},
 			"fix": {
@@ -229,6 +232,9 @@
 			},
 			"flow": {
 				"Check": [
+					"js"
+				],
+				"Transcribe": [
 					"js"
 				]
 			},

@@ -29,7 +29,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 
 	};
 
-	const _md5_FF = function (a, b, c, d, x, s, t) {
+	const _md5_FF = function(a, b, c, d, x, s, t) {
 
 		let n = a + (b & c | ~b & d) + (x >>> 0) + t;
 
@@ -37,7 +37,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 
 	};
 
-	const _md5_GG = function (a, b, c, d, x, s, t) {
+	const _md5_GG = function(a, b, c, d, x, s, t) {
 
 		let n = a + (b & d | c & ~d) + (x >>> 0) + t;
 
@@ -45,7 +45,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 
 	};
 
-	const _md5_HH = function (a, b, c, d, x, s, t) {
+	const _md5_HH = function(a, b, c, d, x, s, t) {
 
 		let n = a + (b ^ c ^ d) + (x >>> 0) + t;
 
@@ -53,7 +53,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 
 	};
 
-	const _md5_II = function (a, b, c, d, x, s, t) {
+	const _md5_II = function(a, b, c, d, x, s, t) {
 
 		let n = a + (c ^ (b | ~d)) + (x >>> 0) + t;
 

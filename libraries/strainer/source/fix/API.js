@@ -46,25 +46,32 @@ lychee.define('strainer.fix.API').exports(function(lychee, global, attachments) 
 			let url = err.url || null;
 			if (url !== null) {
 
-				let filename = url.split('/').pop();
-				if (/^(bootstrap|features|harvester)\.js$/g.test(filename)) {
+				let tmp1   = url.split('/');
+				let file   = tmp1.pop();
+				let folder = tmp1.pop();
+
+
+				if (
+					/^(bootstrap|features|harvester)\.js$/g.test(file)
+					|| folder === 'bin'
+				) {
 					return code;
 				}
 
 
-				let tmp = url.split('/');
-				if (tmp.length > 3) {
+				let tmp2 = url.split('/');
+				if (tmp2.length > 3) {
 
-					let type   = tmp[1];
-					let folder = tmp[3];
+					let type   = tmp2[1];
+					let folder = tmp2[3];
 
 					if (folder === 'source') {
 
-						let is_platform = tmp[4] === 'platform';
+						let is_platform = tmp2[4] === 'platform';
 						if (is_platform === true) {
 
-							let platform = tmp[5];
-							let name     = [ type === 'libraries' ? tmp[2] : 'app' ].concat(tmp.slice(6));
+							let platform = tmp2[5];
+							let name     = [ type === 'libraries' ? tmp2[2] : 'app' ].concat(tmp2.slice(6));
 
 							let check = name[name.length - 1].indexOf('.');
 							if (check !== -1) {
@@ -75,7 +82,7 @@ lychee.define('strainer.fix.API').exports(function(lychee, global, attachments) 
 
 						} else {
 
-							let name  = [ type === 'libraries' ? tmp[2] : 'app' ].concat(tmp.slice(4));
+							let name  = [ type === 'libraries' ? tmp2[2] : 'app' ].concat(tmp2.slice(4));
 							let check = name[name.length - 1].indexOf('.');
 							if (check !== -1) {
 								name[name.length - 1] = name[name.length - 1].substr(0, check);
@@ -143,16 +150,22 @@ lychee.define('strainer.fix.API').exports(function(lychee, global, attachments) 
 			let url = err.url;
 			if (url !== null) {
 
-				let filename = url.split('/').pop();
-				if (/^(bootstrap|features|harvester)\.js$/g.test(filename)) {
+				let tmp1   = url.split('/');
+				let file   = tmp1.pop();
+				let folder = tmp1.pop();
+
+				if (
+					/^(bootstrap|features|harvester)\.js$/g.test(file)
+					|| folder === 'bin'
+				) {
 					return code;
 				}
 
 
-				let tmp = err.url.split('/');
-				if (tmp.length > 3) {
+				let tmp2 = err.url.split('/');
+				if (tmp2.length > 3) {
 
-					let folder = tmp[3];
+					let folder = tmp2[3];
 					if (folder === 'source') {
 
 						let i1 = code.indexOf('lychee.define(');

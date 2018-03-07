@@ -123,8 +123,8 @@ lychee.define('strainer.plugin.API').requires([
 
 					// XXX: autofix assumes lychee.Definition
 					report = {
-						errors: [],
 						memory: {},
+						errors: [],
 						result: {
 							constructor: {
 								body:       null,
@@ -246,6 +246,52 @@ lychee.define('strainer.plugin.API').requires([
 
 
 			return filtered;
+
+		},
+
+		transcribe: function(asset) {
+
+			asset = _validate_asset(asset) === true ? asset : null;
+
+
+			if (asset !== null) {
+
+				let report = asset.buffer || {
+					header: {},
+					memory: {},
+					errors: [],
+					result: {}
+				};
+
+
+				let api  = null;
+				let code = null;
+
+
+				let type = report.header.type || null;
+				if (type === 'Callback') {
+					api = _api['Callback'] || null;
+				} else if (type === 'Composite') {
+					api = _api['Composite'] || null;
+				} else if (type === 'Module') {
+					api = _api['Module'] || null;
+				}
+
+
+				if (api !== null) {
+					code = api.transcribe(asset);
+				}
+
+
+				console.log(code);
+
+
+				return code;
+
+			}
+
+
+			return null;
 
 		}
 

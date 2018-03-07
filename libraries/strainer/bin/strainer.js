@@ -14,7 +14,7 @@ const _ROOT = process.env.LYCHEEJS_ROOT || '/opt/lycheejs';
 
 const _print_autocomplete = function(action, project, flag) {
 
-	let actions   = [ 'check' ];
+	let actions   = [ 'check', 'transcribe' ];
 	let flags     = [ '--debug' ];
 	let libraries = _fs.readdirSync(_ROOT + '/libraries')
 		.sort()
@@ -65,38 +65,41 @@ const _print_help = function() {
 		.filter(val => _fs.existsSync(_ROOT + val + '/lychee.pkg'));
 
 
-	console.log('                                                           ');
+	console.log('                                                            ');
 	console.info('lychee.js ' + lychee.VERSION + ' Strainer');
-	console.log('                                                           ');
-	console.log('Usage: lycheejs-strainer [Action] [Library/Project] [Flag] ');
-	console.log('                                                           ');
-	console.log('                                                           ');
-	console.log('Available Actions:                                         ');
-	console.log('                                                           ');
-	console.log('    check                                                  ');
-	console.log('                                                           ');
-	console.log('Available Libraries:                                       ');
-	console.log('                                                           ');
+	console.log('                                                            ');
+	console.log('Usage: lycheejs-strainer [Action] [Library/Project] [Flag]  ');
+	console.log('                                                            ');
+	console.log('                                                            ');
+	console.log('Available Actions:                                          ');
+	console.log('                                                            ');
+	console.log('    check, transcribe                                       ');
+	console.log('                                                            ');
+	console.log('Available Libraries:                                        ');
+	console.log('                                                            ');
 	libraries.forEach(function(library) {
-		let diff = ('                                                       ').substr(library.length);
+		let diff = ('                                                        ').substr(library.length);
 		console.log('    ' + library + diff);
 	});
-	console.log('                                                           ');
-	console.log('Available Projects:                                        ');
-	console.log('                                                           ');
+	console.log('                                                            ');
+	console.log('Available Projects:                                         ');
+	console.log('                                                            ');
 	projects.forEach(function(project) {
-		let diff = ('                                                       ').substr(project.length);
+		let diff = ('                                                        ').substr(project.length);
 		console.log('    ' + project + diff);
 	});
-	console.log('                                                           ');
-	console.log('Available Flags:                                           ');
-	console.log('                                                           ');
-	console.log('    --debug    Enable debug messages.                      ');
-	console.log('                                                           ');
-	console.log('Examples:                                                  ');
-	console.log('                                                           ');
-	console.log('    lycheejs-strainer check /libraries/lychee;             ');
-	console.log('                                                           ');
+	console.log('                                                            ');
+	console.log('Available Flags:                                            ');
+	console.log('                                                            ');
+	console.log('    --debug    Enable debug messages.                       ');
+	console.log('                                                            ');
+	console.log('Examples:                                                   ');
+	console.log('                                                            ');
+	console.log('    lycheejs-strainer check /libraries/lychee;              ');
+	console.log('                                                            ');
+	console.log('    lycheejs-strainer transcribe /projects/pong /tmp/target;');
+	console.log('    lycheejs-strainer transcribe /tmp/source /projects/pong;');
+	console.log('                                                            ');
 
 };
 
@@ -185,12 +188,13 @@ const _SETTINGS = (function() {
 	let settings = {
 		cwd:     _CWD,
 		action:  null,
+		library: null,
 		project: null,
 		debug:   false
 	};
 
 
-	let action     = args.find(val => /^(check)/g.test(val));
+	let action     = args.find(val => /^(check|transcribe)/g.test(val));
 	let project    = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_/]+)$/g.test(val));
 	let debug_flag = args.find(val => /--([debug]{5})/g.test(val));
 
@@ -238,6 +242,59 @@ const _SETTINGS = (function() {
 
 		}
 
+	} else if (action === 'transcribe') {
+
+		settings.action = action;
+
+
+		let paths = args.filter(val => /^\/(libraries|projects)\/([A-Za-z0-9-_/]+)$/g.test(val));
+		if (paths.length === 2) {
+
+			let library = paths[0];
+			let project = paths[1];
+
+			if (library !== undefined) {
+
+				try {
+
+					let stat1 = _fs.lstatSync(_ROOT + library);
+					let stat2 = _fs.lstatSync(_ROOT + library + '/lychee.pkg');
+					if (stat1.isDirectory() && stat2.isFile()) {
+						settings.library = library;
+					}
+
+				} catch (err) {
+
+					settings.library = null;
+
+				}
+
+			}
+
+			if (project !== undefined) {
+
+				try {
+
+					let stat1 = _fs.lstatSync(_ROOT + project);
+					let stat2 = _fs.lstatSync(_ROOT + project + '/lychee.pkg');
+					if (stat1.isDirectory() === false && stat2.isFile() === false) {
+						settings.project = project;
+					}
+
+				} catch (err) {
+
+					if (err.code === 'ENOENT') {
+						settings.project = project;
+					} else {
+						settings.project = null;
+					}
+
+				}
+
+			}
+
+		}
+
 	}
 
 
@@ -258,16 +315,27 @@ const _SETTINGS = (function() {
 	 * IMPLEMENTATION
 	 */
 
-	let has_action  = settings.action !== null;
+	let action      = settings.action;
 	let has_project = settings.project !== null;
+	let has_library = settings.library !== null;
 
 
-	if (has_action && has_project) {
+	if (action === 'check' && has_project) {
 
 		_bootup({
 			cwd:     settings.cwd,
 			action:  settings.action,
 			debug:   settings.debug === true,
+			project: settings.project
+		});
+
+	} else if (action === 'transcribe' && has_project && has_library) {
+
+		_bootup({
+			cwd:     settings.cwd,
+			action:  settings.action,
+			debug:   settings.debug === true,
+			library: settings.library,
 			project: settings.project
 		});
 

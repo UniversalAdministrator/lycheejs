@@ -1018,10 +1018,9 @@ lychee.define('strainer.flow.Check').requires([
 				console.log('strainer: WRITE-API ' + project);
 
 
-				let configs = this.configs.filter(function(config, c) {
+				let configs = this.configs.filter(function(config) {
 					return config !== null;
 				});
-
 
 				if (configs.length > 0) {
 

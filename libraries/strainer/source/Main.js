@@ -1,6 +1,7 @@
 
 lychee.define('strainer.Main').requires([
-	'strainer.flow.Check'
+	'strainer.flow.Check',
+	'strainer.flow.Transcribe'
 ]).includes([
 	'lychee.event.Emitter'
 ]).exports(function(lychee, global, attachments) {

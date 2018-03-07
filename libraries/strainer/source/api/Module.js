@@ -577,6 +577,12 @@ lychee.define('strainer.api.Module').requires([
 				result: result
 			};
 
+		},
+
+		transcribe: function(asset) {
+
+			return null;
+
 		}
 
 	};

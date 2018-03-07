@@ -226,6 +226,12 @@ lychee.define('strainer.api.Callback').requires([
 				result: result
 			};
 
+		},
+
+		transcribe: function(asset) {
+
+			return null;
+
 		}
 
 	};

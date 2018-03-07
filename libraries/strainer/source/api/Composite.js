@@ -1,9 +1,11 @@
 
 lychee.define('strainer.api.Composite').requires([
-	'strainer.api.PARSER'
+	'strainer.api.PARSER',
+	'strainer.api.TRANSCRIPTOR'
 ]).exports(function(lychee, global, attachments) {
 
-	const _PARSER = lychee.import('strainer.api.PARSER');
+	const _PARSER       = lychee.import('strainer.api.PARSER');
+	const _TRANSCRIPTOR = lychee.import('strainer.api.TRANSCRIPTOR');
 
 
 
@@ -12,6 +14,7 @@ lychee.define('strainer.api.Composite').requires([
 	 */
 
 	const _SERIALIZE = {
+		type:       'function',
 		body:       'function() { return {}; }',
 		chunk:      'function() {',
 		hash:       _PARSER.hash('function() { return {}; }'),
@@ -27,6 +30,7 @@ lychee.define('strainer.api.Composite').requires([
 	};
 
 	const _DESERIALIZE = {
+		type:       'function',
 		body:       'function(blob) {}',
 		chunk:      'function(blob) {',
 		hash:       _PARSER.hash('function(blob) {}'),
@@ -193,6 +197,7 @@ lychee.define('strainer.api.Composite').requires([
 									}
 
 									memory[key] = {
+										type:       'function',
 										body:       chunk,
 										hash:       _PARSER.hash(chunk),
 										parameters: _PARSER.parameters(chunk),
@@ -227,6 +232,7 @@ lychee.define('strainer.api.Composite').requires([
 			let body = stream.substr(i1 + 20, i2 - i1 - 17).trim();
 			if (body.length > 0) {
 
+				constructor.type       = 'function';
 				constructor.body       = body;
 				constructor.hash       = _PARSER.hash(body);
 				constructor.parameters = _PARSER.parameters(body);
@@ -552,6 +558,7 @@ lychee.define('strainer.api.Composite').requires([
 					if (body !== 'undefined') {
 
 						methods[name] = {
+							type:       'function',
 							body:       body,
 							chunk:      chunk,
 							hash:       _PARSER.hash(body),
@@ -707,6 +714,7 @@ lychee.define('strainer.api.Composite').requires([
 			let memory = {};
 			let result = {
 				constructor: {
+					type:       null,
 					body:       null,
 					hash:       null,
 					parameters: []
@@ -946,6 +954,81 @@ lychee.define('strainer.api.Composite').requires([
 				memory: memory,
 				result: result
 			};
+
+		},
+
+		transcribe: function(asset) {
+
+			asset = _validate_asset(asset) === true ? asset : null;
+
+
+			if (asset !== null) {
+
+				let code = [];
+
+
+				let api = asset.buffer;
+				if (api instanceof Object) {
+
+					let memory = api.memory || null;
+					let result = api.result || null;
+
+
+					if (memory instanceof Object) {
+
+						for (let m in memory) {
+
+							let chunk = _TRANSCRIPTOR.transcribe(m, memory[m]);
+							if (chunk !== null) {
+								code.push('\t' + chunk);
+							}
+
+						}
+
+					}
+
+
+					let construct = result.constructor || null;
+					if (construct !== null) {
+
+						let chunk = _TRANSCRIPTOR.transcribe('Composite', construct);
+						if (chunk !== null) {
+							code.push('');
+							code.push('');
+							code.push('\t' + chunk);
+						}
+
+					}
+
+
+					if (Object.keys(result.methods).length > 0) {
+
+						let chunk = _TRANSCRIPTOR.transcribe('Composite.prototype', result.methods, true);
+						if (chunk !== null) {
+							code.push('');
+							code.push('');
+							code.push('\t' + chunk);
+						}
+
+					}
+
+
+					code.push('');
+					code.push('');
+					code.push('\treturn Composite;');
+					code.push('');
+
+				}
+
+
+				if (code.length > 0) {
+					return code.join('\n');
+				}
+
+			}
+
+
+			return null;
 
 		}
 
