@@ -46,12 +46,11 @@ lychee.define('strainer.api.TRANSCRIPTOR').exports(function(lychee, global, atta
 			assign = assign === true;
 
 
-			let code = [];
-
-
 			if (name !== null && value !== null) {
 
+				let code = [];
 				let type = value.type || null;
+
 				if (type === 'function') {
 					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.body + ';');
 				} else if (type === 'lychee.Definition') {
@@ -66,6 +65,7 @@ lychee.define('strainer.api.TRANSCRIPTOR').exports(function(lychee, global, atta
 
 					code.push((assign === false ? 'const ' : '') + name + ' = ' + '{');
 					code.push('');
+
 
 					for (let v in value) {
 
@@ -92,14 +92,10 @@ lychee.define('strainer.api.TRANSCRIPTOR').exports(function(lychee, global, atta
 
 				}
 
+				return code.join('\n');
 
 			} else {
 				// TODO: No name support (generating function bodies?)
-			}
-
-
-			if (code.length > 0) {
-				return code.join('\n');
 			}
 
 
