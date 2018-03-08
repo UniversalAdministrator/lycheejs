@@ -49,7 +49,7 @@ lychee.define('strainer.api.TRANSCRIPTOR').exports(function(lychee, global, atta
 			if (name !== null && value !== null) {
 
 				let code = [];
-				let type = value.type || null;
+				let type = value.type || '';
 
 				if (type === 'function') {
 					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.body + ';');
@@ -60,6 +60,10 @@ lychee.define('strainer.api.TRANSCRIPTOR').exports(function(lychee, global, atta
 				} else if (/^(Array|Number|String)$/g.test(type)) {
 					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.chunk + ';');
 				} else if (/^(Buffer|Config|Font|Music|Sound|Texture)$/g.test(type)) {
+					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.chunk + ';');
+				} else if (type === 'Object') {
+					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.chunk + ';');
+				} else if (type.startsWith('_')) {
 					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.chunk + ';');
 				} else if (value instanceof Object) {
 
@@ -91,6 +95,7 @@ lychee.define('strainer.api.TRANSCRIPTOR').exports(function(lychee, global, atta
 					code.push('\t};');
 
 				}
+
 
 				return code.join('\n');
 

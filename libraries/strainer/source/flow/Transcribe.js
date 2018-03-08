@@ -119,6 +119,7 @@ lychee.define('strainer.flow.Transcribe').requires([
 
 				console.log('strainer: READ ' + library);
 
+
 				this.__pkg        = new Config(library + '/lychee.pkg');
 				this.__pkg.onload = function(result) {
 

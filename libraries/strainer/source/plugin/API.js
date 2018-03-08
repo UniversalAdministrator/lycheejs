@@ -282,8 +282,10 @@ lychee.define('strainer.plugin.API').requires([
 					code = api.transcribe(asset);
 				}
 
+				// TODO: transcribe lychee.Definition
+				// TODO: transcribe lychee.Core
 
-				console.log(code);
+				// console.log(code);
 
 
 				return code;

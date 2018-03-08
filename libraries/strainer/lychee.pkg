@@ -28,6 +28,9 @@
 				],
 				"Specification": [
 					"json"
+				],
+				"TRANSCRIPTOR": [
+					"json"
 				]
 			},
 			"fix": {
@@ -40,6 +43,9 @@
 			},
 			"flow": {
 				"Check": [
+					"json"
+				],
+				"Transcribe": [
 					"json"
 				]
 			},
