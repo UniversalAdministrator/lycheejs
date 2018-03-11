@@ -277,9 +277,6 @@ lychee.define('strainer.plugin.API').requires([
 				let is_definition = is_core === false && asset.url.includes('/api/');
 
 
-				console.warn(asset.url);
-				console.log(is_core, is_definition);
-
 				if (is_definition === true) {
 					header = _api['Definition'].transcribe(asset);
 				} else if (is_core === true) {
