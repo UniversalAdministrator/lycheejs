@@ -323,6 +323,77 @@ lychee.define('strainer.api.Definition').requires([
 				result: result
 			};
 
+		},
+
+		transcribe: function(asset) {
+
+			asset = _validate_asset(asset) === true ? asset : null;
+
+
+			if (asset !== null) {
+
+				let code   = null;
+				let report = asset.buffer || {
+					header: {},
+					memory: {},
+					errors: [],
+					result: {}
+				};
+
+
+				if (report.header instanceof Object) {
+
+					let identifier = report.header.identifier || null;
+					if (identifier !== null) {
+
+						code = 'lychee.define(\'' + report.header.identifier + '\')';
+
+
+						let tags = report.header.tags || {};
+						if (Object.keys(tags).length > 0) {
+							code += '.tags(';
+							code += JSON.stringify(tags, null, '\t');
+							code += ')';
+						}
+
+						let requires = report.header.requires || [];
+						if (requires.length > 0) {
+							code += '.requires(';
+							code += JSON.stringify(requires, null, '\t');
+							code += ')';
+						}
+
+						let includes = report.header.includes || [];
+						if (includes.length > 0) {
+							code += '.includes(';
+							code += JSON.stringify(includes, null, '\t');
+							code += ')';
+						}
+
+						let supports = report.header.support || null;
+						if (supports !== null) {
+							code += '.supports(';
+							code += supports.body;
+							code += ')';
+						}
+
+
+						code += '.exports(function(lychee, global, attachments) {';
+						code += '\n\n%BODY%\n\n';
+						code += '});';
+
+
+						return code;
+
+					}
+
+				}
+
+			}
+
+
+			return null;
+
 		}
 
 	};

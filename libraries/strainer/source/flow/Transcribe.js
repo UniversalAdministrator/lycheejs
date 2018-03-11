@@ -170,13 +170,35 @@ lychee.define('strainer.flow.Transcribe').requires([
 
 			let api     = _plugin.API;
 			let configs = this.configs;
+			let library = this.settings.library;
+			let project = this.settings.project;
 
 			if (configs.length > 0) {
 
 				this.codes = this.configs.map(function(asset) {
-					return api.transcribe(asset);
+
+					let url = asset.url.replace(/api/, 'source').replace(/\.json$/, '.js');
+					if (url.startsWith(library) === true) {
+						url = project + url.substr(library.length);
+					}
+
+					let buffer = api.transcribe(asset);
+					let code   = new Stuff(url, true);
+
+					code.buffer = buffer;
+
+
+
+					console.log(url, buffer);
+
+
+
+					return null;
+
 				});
 
+
+				setTimeout(_ => process.exit(0), 500);
 
 				oncomplete(true);
 

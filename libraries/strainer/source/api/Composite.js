@@ -1045,7 +1045,6 @@ lychee.define('strainer.api.Composite').requires([
 					code.push('');
 					code.push('');
 					code.push('\treturn Composite;');
-					code.push('');
 
 				}
 

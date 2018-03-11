@@ -264,8 +264,27 @@ lychee.define('strainer.plugin.API').requires([
 				};
 
 
-				let api  = null;
-				let code = null;
+				// TODO: Replace asset.buffer.header.identifier
+				// in case library's definition starts with library namespace
+
+
+				let api    = null;
+				let header = null;
+				let code   = null;
+
+
+				let is_core       = asset.url.startsWith('/libraries/lychee/source/core');
+				let is_definition = is_core === false && asset.url.includes('/api/');
+
+
+				console.warn(asset.url);
+				console.log(is_core, is_definition);
+
+				if (is_definition === true) {
+					header = _api['Definition'].transcribe(asset);
+				} else if (is_core === true) {
+					header = _api['Core'].transcribe(asset);
+				}
 
 
 				let type = report.header.type || null;
@@ -278,14 +297,14 @@ lychee.define('strainer.plugin.API').requires([
 				}
 
 
-				if (api !== null) {
-					code = api.transcribe(asset);
+				if (header !== null && api !== null) {
+
+					let tmp = api.transcribe(asset);
+					if (tmp !== null) {
+						code = header.replace('%BODY%', tmp);
+					}
+
 				}
-
-				// TODO: transcribe lychee.Definition
-				// TODO: transcribe lychee.Core
-
-				// console.log(code);
 
 
 				return code;
