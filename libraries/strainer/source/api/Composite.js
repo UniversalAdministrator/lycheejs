@@ -556,48 +556,48 @@ lychee.define('strainer.api.Composite').requires([
 
 	const _parse_methods = function(methods, stream, errors) {
 
-		let i1 = stream.indexOf('\n\tComposite.prototype = {');
-		let i2 = stream.indexOf('\n\t};', i1);
+		let buffer = stream.split('\n');
+		let check1 = buffer.findIndex((line, l) => (line === '\tComposite.prototype = {'));
+		let check2 = buffer.findIndex((line, l) => (line === '\t};' && l > check1));
 
-		if (i1 !== -1 && i2 !== -1) {
+		if (check1 !== -1 && check2 !== -1) {
 
-			stream.substr(i1 + 25, i2 - i1 - 25).split('\n')
-				.filter(function(line) {
+			buffer.slice(check1 + 1, check2).filter(line => {
 
-					if (line.startsWith('\t\t')) {
+				if (line.startsWith('\t\t')) {
 
-						let tmp = line.substr(2);
-						if (/^([A-Za-z0-9]+):\sfunction/g.test(tmp)) {
-							return true;
-						} else if (tmp.startsWith('// deserialize: function(blob) {}')) {
-							methods['deserialize'] = Object.assign({}, _DESERIALIZE);
-						} else if (tmp.startsWith('// serialize: function() {}')) {
-							methods['serialize'] = Object.assign({}, _SERIALIZE);
-						}
-
+					let tmp = line.substr(2);
+					if (/^([A-Za-z0-9]+):\sfunction/g.test(tmp)) {
+						return true;
+					} else if (tmp.startsWith('// deserialize: function(blob) {}')) {
+						methods['deserialize'] = Object.assign({}, _DESERIALIZE);
+					} else if (tmp.startsWith('// serialize: function() {}')) {
+						methods['serialize'] = Object.assign({}, _SERIALIZE);
 					}
 
-					return false;
+				}
 
-				}).forEach(function(chunk) {
+				return false;
 
-					let name = chunk.split(':')[0].trim();
-					let body = _find_method(name, stream);
+			}).forEach(chunk => {
 
-					if (body !== 'undefined') {
+				let name = chunk.split(':')[0].trim();
+				let body = _find_method(name, stream);
 
-						methods[name] = {
-							type:       'function',
-							body:       body,
-							chunk:      chunk,
-							hash:       _PARSER.hash(body),
-							parameters: _PARSER.parameters(body),
-							values:     _PARSER.values(body)
-						};
+				if (body !== 'undefined') {
 
-					}
+					methods[name] = {
+						type:       'function',
+						body:       body,
+						chunk:      chunk,
+						hash:       _PARSER.hash(body),
+						parameters: _PARSER.parameters(body),
+						values:     _PARSER.values(body)
+					};
 
-				});
+				}
+
+			});
 
 
 			let deserialize = methods['deserialize'];

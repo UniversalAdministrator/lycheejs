@@ -71,17 +71,13 @@ lychee.define('strainer.plugin.API').requires([
 				let is_core          = asset.url.startsWith('/libraries/lychee/source/core') && first.endsWith('(function(global) {');
 				let is_definition    = first.startsWith('lychee.define(');
 				let is_specification = first.startsWith('lychee.specify(');
-				let is_callback      = stream.lastIndexOf('return Callback;')  > 0;
-				let is_composite     = stream.lastIndexOf('return Composite;') > 0;
-				let is_module        = stream.lastIndexOf('return Module;')    > 0;
-
-
-				// XXX: Well, yeah. Above algorithm will crash itself
-				if (asset.url === '/libraries/strainer/source/plugin/API.js') {
-					is_callback  = false;
-					is_composite = false;
-					is_module    = true;
-				}
+				let i_callback       = stream.lastIndexOf('return Callback;');
+				let i_composite      = stream.lastIndexOf('return Composite;');
+				let i_module         = stream.lastIndexOf('return Module;');
+				let i_check          = Math.max(i_callback, i_composite, i_module);
+				let is_callback      = i_check === i_callback;
+				let is_composite     = i_check === i_composite;
+				let is_module        = i_check === i_module;
 
 
 				if (is_definition === true) {
@@ -104,6 +100,12 @@ lychee.define('strainer.plugin.API').requires([
 					}
 
 				}
+
+
+				console.warn(asset.url);
+				console.log('callback?',  is_callback);
+				console.log('composite?', is_composite);
+				console.log('module?',    is_module);
 
 
 				if (is_callback === true) {
