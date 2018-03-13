@@ -299,15 +299,16 @@ lychee.define('strainer.api.Composite').requires([
 
 	const _parse_properties = function(properties, stream) {
 
-		let i1 = stream.indexOf('\n\tconst Composite =');
-		let i2 = stream.indexOf('\n\t};', i1);
+		let buffer = stream.split('\n');
+		let check1 = buffer.findIndex((line, l) => line.startsWith('\tconst Composite = '));
+		let check2 = buffer.findIndex((line, l) => (line === '\t};' && l > check1));
 
-		if (i1 !== -1 && i2 !== -1) {
+		if (check1 !== -1 && check2 !== -1) {
 
-			let body = stream.substr(i1 + 20, i2 - i1 - 17).trim();
+			let body = buffer.slice(check1, check2).join('\n').trim().substr(18);
 			if (body.length > 0) {
 
-				body.split('\n').forEach(function(line, l, self) {
+				body.split('\n').forEach(line => {
 
 					let chunk = line.trim();
 					if (chunk.startsWith('this.') && chunk.includes(' = ')) {
@@ -322,10 +323,7 @@ lychee.define('strainer.api.Composite').requires([
 						}
 
 
-						let tmp = chunk.split(/this\.([A-Za-z_]+)([\s]+)=([\s]+)([^\0]*);/g).filter(function(ch) {
-							return ch.trim() !== '';
-						});
-
+						let tmp = chunk.split(/this\.([A-Za-z_]+)([\s]+)=([\s]+)([^\0]*);/g).filter(ch => ch.trim() !== '');
 						if (tmp.length === 2) {
 
 							let name = tmp[0];

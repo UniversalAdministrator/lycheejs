@@ -235,48 +235,48 @@ lychee.define('strainer.api.Module').requires([
 
 	const _parse_methods = function(methods, stream, errors) {
 
-		let i1 = stream.indexOf('\n\tconst Module = {');
-		let i2 = stream.indexOf('\n\t};', i1);
+		let buffer = stream.split('\n');
+		let check1 = buffer.findIndex((line, l) => (line === '\tconst Module = {'));
+		let check2 = buffer.findIndex((line, l) => (line === '\t};' && l > check1));
 
-		if (i1 !== -1 && i2 !== -1) {
+		if (check1 !== -1 && check2 !== -1) {
 
-			stream.substr(i1 + 18, i2 - i1 - 18).split('\n')
-				.filter(function(line) {
+			buffer.slice(check1 + 1, check2).filter(line => {
 
-					if (line.startsWith('\t\t')) {
+				if (line.startsWith('\t\t')) {
 
-						let tmp = line.substr(2);
-						if (/^([A-Za-z0-9]+):\sfunction/g.test(tmp)) {
-							return true;
-						} else if (tmp.startsWith('// deserialize: function(blob) {}')) {
-							methods['deserialize'] = Object.assign({}, _DESERIALIZE);
-						} else if (tmp.startsWith('// serialize: function() {}')) {
-							methods['serialize'] = Object.assign({}, _SERIALIZE);
-						}
-
+					let tmp = line.substr(2);
+					if (/^([A-Za-z0-9]+):\sfunction/g.test(tmp)) {
+						return true;
+					} else if (tmp.startsWith('// deserialize: function(blob) {}')) {
+						methods['deserialize'] = Object.assign({}, _DESERIALIZE);
+					} else if (tmp.startsWith('// serialize: function() {}')) {
+						methods['serialize'] = Object.assign({}, _SERIALIZE);
 					}
 
+				}
 
-					return false;
 
-				}).forEach(function(chunk) {
+				return false;
 
-					let name = chunk.split(':')[0].trim();
-					let body = _find_method(name, stream);
+			}).forEach(chunk => {
 
-					if (body !== 'undefined') {
+				let name = chunk.split(':')[0].trim();
+				let body = _find_method(name, stream);
 
-						methods[name] = {
-							body:       body,
-							chunk:      chunk,
-							hash:       _PARSER.hash(body),
-							parameters: _PARSER.parameters(body),
-							values:     _PARSER.values(body)
-						};
+				if (body !== 'undefined') {
 
-					}
+					methods[name] = {
+						body:       body,
+						chunk:      chunk,
+						hash:       _PARSER.hash(body),
+						parameters: _PARSER.parameters(body),
+						values:     _PARSER.values(body)
+					};
 
-				});
+				}
+
+			});
 
 
 			let deserialize = methods['deserialize'];
@@ -392,87 +392,87 @@ lychee.define('strainer.api.Module').requires([
 
 	const _parse_properties = function(properties, stream, errors) {
 
-		let i1 = stream.indexOf('\n\tconst Module = {');
-		let i2 = stream.indexOf('\n\t};', i1);
+		let buffer = stream.split('\n');
+		let check1 = buffer.findIndex((line, l) => (line === '\tconst Module = {'));
+		let check2 = buffer.findIndex((line, l) => (line === '\t};' && l > check1));
 
-		if (i1 !== -1 && i2 !== -1) {
+		if (check1 !== -1 && check2 !== -1) {
 
-			stream.substr(i1 + 18, i2 - i1 - 18).split('\n')
-				.filter(function(line) {
+			buffer.slice(check1 + 1, check2).filter(line => {
 
-					if (line.startsWith('\t\t')) {
+				if (line.startsWith('\t\t')) {
 
-						let tmp = line.substr(2);
-						if (/^([A-Za-z0-9]+):\sfunction/g.test(tmp)) {
-							return false;
-						} else if (/^([A-Za-z0-9]+):\s/g.test(tmp)) {
-							return true;
-						}
-
+					let tmp = line.substr(2);
+					if (/^([A-Za-z0-9]+):\sfunction/g.test(tmp)) {
+						return false;
+					} else if (/^([A-Za-z0-9]+):\s/g.test(tmp)) {
+						return true;
 					}
 
-
-					return false;
-
-				}).forEach(function(chunk) {
-
-					if (chunk.endsWith(',')) {
-
-						chunk = chunk.substr(0, chunk.length - 1);
+				}
 
 
-						let tmp = chunk.split(':');
-						if (tmp.length === 2) {
+				return false;
 
-							let name = tmp[0].trim();
-							let prop = _PARSER.detect(tmp[1].trim());
+			}).forEach(chunk => {
 
-							if (
-								properties[name] === undefined
-								|| (
-									properties[name].value.type === 'undefined'
-									&& prop.type !== 'undefined'
-								)
-							) {
+				if (chunk.endsWith(',')) {
 
-								properties[name] = {
-									chunk: chunk,
-									value: prop
-								};
+					chunk = chunk.substr(0, chunk.length - 1);
 
-							}
 
-						}
+					let tmp = chunk.split(':');
+					if (tmp.length === 2) {
 
-					} else if (chunk.endsWith('{')) {
+						let name = tmp[0].trim();
+						let prop = _PARSER.detect(tmp[1].trim());
 
-						let tmp = chunk.split(':');
-						if (tmp.length === 2) {
+						if (
+							properties[name] === undefined
+							|| (
+								properties[name].value.type === 'undefined'
+								&& prop.type !== 'undefined'
+							)
+						) {
 
-							let name = tmp[0].trim();
-							let body = _find_property(name, stream);
-							let prop = _PARSER.detect(body);
-
-							if (
-								properties[name] === undefined
-								|| (
-									properties[name].value.type === 'undefined'
-									&& prop.type !== 'undefined'
-								)
-							) {
-
-								properties[name] = {
-									chunk: body,
-									value: prop
-								};
-
-							}
+							properties[name] = {
+								chunk: chunk,
+								value: prop
+							};
 
 						}
 
 					}
 
-				});
+				} else if (chunk.endsWith('{')) {
+
+					let tmp = chunk.split(':');
+					if (tmp.length === 2) {
+
+						let name = tmp[0].trim();
+						let body = _find_property(name, stream);
+						let prop = _PARSER.detect(body);
+
+						if (
+							properties[name] === undefined
+							|| (
+								properties[name].value.type === 'undefined'
+								&& prop.type !== 'undefined'
+							)
+						) {
+
+							properties[name] = {
+								chunk: body,
+								value: prop
+							};
+
+						}
+
+					}
+
+				}
+
+			});
 
 		}
 
