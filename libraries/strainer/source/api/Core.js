@@ -138,6 +138,45 @@ lychee.define('strainer.api.Core').requires([
 				result: result
 			};
 
+		},
+
+		transcribe: function(asset) {
+
+			asset = _validate_asset(asset) === true ? asset : null;
+
+
+			if (asset !== null) {
+
+				let code   = null;
+				let report = asset.buffer || {
+					header: {},
+					memory: {},
+					errors: [],
+					result: {}
+				};
+
+
+				if (report.header instanceof Object) {
+
+					let identifier = report.header.identifier || null;
+					if (identifier !== null) {
+
+						code = identifier + ' = typeof ' + identifier + ' !== undefined ? ' + identifier + ' : (function(global) {';
+						code += '\n\n%BODY%\n\n';
+						code += '})(typeof window !== undefined ? window : (typeof global !== undefined ? global : this));';
+
+
+						return code;
+
+					}
+
+				}
+
+			}
+
+
+			return null;
+
 		}
 
 	};
