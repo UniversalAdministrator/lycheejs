@@ -102,12 +102,6 @@ lychee.define('strainer.plugin.API').requires([
 				}
 
 
-				console.warn(asset.url);
-				console.log('callback?',  is_callback);
-				console.log('composite?', is_composite);
-				console.log('module?',    is_module);
-
-
 				if (is_callback === true) {
 					api = _api['Callback'] || null;
 				} else if (is_composite === true) {

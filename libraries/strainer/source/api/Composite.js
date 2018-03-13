@@ -274,12 +274,13 @@ lychee.define('strainer.api.Composite').requires([
 
 	const _parse_settings = function(settings, stream) {
 
-		let i1 = stream.indexOf('\n\tconst Composite =');
-		let i2 = stream.indexOf('\n\t};', i1);
+		let buffer = stream.split('\n');
+		let check1 = buffer.findIndex((line, l) => line.startsWith('\tconst Composite = '));
+		let check2 = buffer.findIndex((line, l) => (line === '\t};' && l > check1));
 
-		if (i1 !== -1 && i2 !== -1) {
+		if (check1 !== -1 && check2 !== -1) {
 
-			let body = stream.substr(i1 + 20, i2 - i1 - 17).trim();
+			let body = buffer.slice(check1, check2).join('\n').trim().substr(18);
 			if (body.length > 0) {
 
 				let object = _PARSER.settings(body);
