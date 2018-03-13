@@ -182,23 +182,22 @@ lychee.define('strainer.flow.Transcribe').requires([
 						url = project + url.substr(library.length);
 					}
 
+
 					let buffer = api.transcribe(asset);
-					let code   = new Stuff(url, true);
+					if (buffer !== null) {
 
-					code.buffer = buffer;
+						let code = new Stuff(url, true);
 
+						code.buffer = buffer;
 
+						return code;
 
-					console.log(url, buffer);
-
+					}
 
 
 					return null;
 
 				});
-
-
-				setTimeout(_ => process.exit(0), 500);
 
 				oncomplete(true);
 
