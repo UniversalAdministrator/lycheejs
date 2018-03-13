@@ -1,9 +1,11 @@
 
 lychee.define('strainer.api.Callback').requires([
-	'strainer.api.PARSER'
+	'strainer.api.PARSER',
+	'strainer.api.TRANSCRIPTOR'
 ]).exports(function(lychee, global, attachments) {
 
-	const _PARSER = lychee.import('strainer.api.PARSER');
+	const _PARSER       = lychee.import('strainer.api.PARSER');
+	const _TRANSCRIPTOR = lychee.import('strainer.api.TRANSCRIPTOR');
 
 
 
@@ -256,6 +258,62 @@ lychee.define('strainer.api.Callback').requires([
 		},
 
 		transcribe: function(asset) {
+
+			asset = _validate_asset(asset) === true ? asset : null;
+
+
+			if (asset !== null) {
+
+				let code = [];
+
+
+				let api = asset.buffer;
+				if (api instanceof Object) {
+
+					let memory = api.memory || null;
+					let result = api.result || null;
+
+
+					if (memory instanceof Object) {
+
+						for (let m in memory) {
+
+							let chunk = _TRANSCRIPTOR.transcribe(m, memory[m]);
+							if (chunk !== null) {
+								code.push('\t' + chunk);
+							}
+
+						}
+
+					}
+
+
+					let construct = result.constructor || null;
+					if (construct !== null) {
+
+						let chunk = _TRANSCRIPTOR.transcribe('Callback', construct);
+						if (chunk !== null) {
+							code.push('');
+							code.push('');
+							code.push('\t' + chunk);
+						}
+
+					}
+
+
+					code.push('');
+					code.push('');
+					code.push('\treturn Callback;');
+
+				}
+
+
+				if (code.length > 0) {
+					return code.join('\n');
+				}
+
+			}
+
 
 			return null;
 
