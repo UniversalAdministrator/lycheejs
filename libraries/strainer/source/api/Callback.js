@@ -67,6 +67,20 @@ lychee.define('strainer.api.Callback').requires([
 		let i0   = stream.indexOf(str0);
 		let i1   = stream.indexOf('\n', i0);
 
+
+		if (i0 === -1) {
+			str0 = 'let   ' + key;
+			i0   = stream.indexOf(str0);
+			i1   = stream.indexOf('\n', i0);
+		}
+
+		if (i0 === -1) {
+			str0 = 'let ' + key;
+			i0   = stream.indexOf(str0);
+			i1   = stream.indexOf('\n', i0);
+		}
+
+
 		if (i0 !== -1 && i1 !== -1) {
 
 			let tmp1 = stream.substr(i0 + str0.length, i1 - str0.length - i0).trim();

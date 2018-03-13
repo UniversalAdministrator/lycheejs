@@ -255,7 +255,7 @@ lychee.define('lychee.app.Main').requires([
 	 * and SERIALIZATION CACHE
 	 */
 
-	let _DEFAULTS = {
+	const _DEFAULTS = {
 
 		client: null,
 		server: null,

@@ -381,6 +381,7 @@ lychee.define('strainer.api.Definition').requires([
 						code += '.exports(function(lychee, global, attachments) {';
 						code += '\n\n%BODY%\n\n';
 						code += '});';
+						code += '\n';
 
 
 						return code;

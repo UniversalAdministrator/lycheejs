@@ -14,6 +14,7 @@ lychee.define('strainer.api.Module').requires([
 	 */
 
 	const _SERIALIZE = {
+		type:       'function',
 		body:       'function() { return {}; }',
 		chunk:      'function() {',
 		hash:       _PARSER.hash('function() { return {}; }'),
@@ -29,6 +30,7 @@ lychee.define('strainer.api.Module').requires([
 	};
 
 	const _DESERIALIZE = {
+		type:       'function',
 		body:       'function(blob) {}',
 		chunk:      'function(blob) {',
 		hash:       _PARSER.hash('function(blob) {}'),
@@ -102,6 +104,20 @@ lychee.define('strainer.api.Module').requires([
 		let str0 = 'const ' + key;
 		let i0   = stream.indexOf(str0);
 		let i1   = stream.indexOf('\n', i0);
+
+
+		if (i0 === -1) {
+			str0 = 'let   ' + key;
+			i0   = stream.indexOf(str0);
+			i1   = stream.indexOf('\n', i0);
+		}
+
+		if (i0 === -1) {
+			str0 = 'let ' + key;
+			i0   = stream.indexOf(str0);
+			i1   = stream.indexOf('\n', i0);
+		}
+
 
 		if (i0 !== -1 && i1 !== -1) {
 

@@ -164,6 +164,7 @@ lychee.define('strainer.api.Core').requires([
 						code = identifier + ' = typeof ' + identifier + ' !== undefined ? ' + identifier + ' : (function(global) {';
 						code += '\n\n%BODY%\n\n';
 						code += '})(typeof window !== undefined ? window : (typeof global !== undefined ? global : this));';
+						code += '\n';
 
 
 						return code;
