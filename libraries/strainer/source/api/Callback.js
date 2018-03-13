@@ -107,22 +107,29 @@ lychee.define('strainer.api.Callback').requires([
 	const _parse_memory = function(memory, stream, errors) {
 
 		let i1 = stream.indexOf('.exports(function(lychee, global, attachments) {');
-		let i2 = stream.indexOf('\n\tconst Module =');
+		let i2 = stream.indexOf('\n\tconst Callback =');
 
 		if (i1 !== -1 && i2 !== -1) {
 
-			let body = stream.substr(i1 + 48, i2 - i1 - 48).trim();
+			let body = stream.substr(i1 + 48, i2 - i1 - 48);
 			if (body.length > 0) {
 
 				body.split('\n')
-					.map(function(line) {
-						return line.trim();
-					}).filter(function(line) {
-						return line.startsWith('const ');
-					}).forEach(function(line) {
+					.filter(line => {
+						return line.startsWith('\tconst ') || line.startsWith('\tlet ');
+					})
+					.map(line => line.trim())
+					.forEach(line => {
 
-						let tmp = line.substr(6).trim();
-						let i1  = tmp.indexOf('=');
+						let tmp = '';
+						if (line.startsWith('const ')) {
+							tmp = line.substr(6).trim();
+						} else if (line.startsWith('let ')) {
+							tmp = line.substr(4).trim();
+						}
+
+
+						let i1 = tmp.indexOf('=');
 						if (i1 !== -1) {
 
 							let key   = tmp.substr(0, i1).trim();
@@ -130,15 +137,17 @@ lychee.define('strainer.api.Callback').requires([
 
 							if (key !== '' && chunk !== '') {
 
-								if (chunk.startsWith('function(')) {
+								if (chunk.endsWith(';')) {
+
+									chunk = chunk.substr(0, chunk.length - 1);
+									memory[key] = _PARSER.detect(chunk);
+
+								} else if (chunk.startsWith('function(')) {
 
 									chunk = _find_memory(key, stream);
 
-									if (chunk.endsWith(';')) {
-										chunk = chunk.substr(0, chunk.length - 1);
-									}
-
 									memory[key] = {
+										type:       'function',
 										body:       chunk,
 										hash:       _PARSER.hash(chunk),
 										parameters: _PARSER.parameters(chunk),
@@ -147,6 +156,7 @@ lychee.define('strainer.api.Callback').requires([
 
 								} else {
 
+									chunk = _find_memory(key, stream);
 									memory[key] = _PARSER.detect(chunk);
 
 								}

@@ -196,15 +196,15 @@ lychee.define('strainer.api.Composite').requires([
 
 		if (i1 !== -1 && i2 !== -1) {
 
-			let body = stream.substr(i1 + 48, i2 - i1 - 48).trim();
+			let body = stream.substr(i1 + 48, i2 - i1 - 48);
 			if (body.length > 0) {
 
 				body.split('\n')
-					.map(line => {
-						return line.trim();
-					}).filter(line => {
-						return line.startsWith('const ') || line.startsWith('let ');
-					}).forEach(line => {
+					.filter(line => {
+						return line.startsWith('\tconst ') || line.startsWith('\tlet ');
+					})
+					.map(line => line.trim())
+					.forEach(line => {
 
 						let tmp = '';
 						if (line.startsWith('const ')) {
