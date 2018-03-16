@@ -222,16 +222,7 @@ lychee.define('strainer.api.Module').requires([
 				let body = _find_method(name, stream);
 
 				if (body !== 'undefined') {
-
-					methods[name] = {
-						type:       'function',
-						body:       body,
-						chunk:      chunk,
-						hash:       _PARSER.hash(body),
-						parameters: _PARSER.parameters(body),
-						values:     _PARSER.values(body)
-					};
-
+					methods[name] = _PARSER.detect(body);
 				}
 
 			});
