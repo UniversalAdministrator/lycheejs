@@ -69,6 +69,10 @@ lychee.define('strainer.api.TRANSCRIPTOR').exports(function(lychee, global, atta
 					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.chunk + ';');
 				} else if (value instanceof Object) {
 
+					if (name === 'Module') {
+						console.log(value);
+					}
+
 					code.push((assign === false ? 'const ' : '') + name + ' = ' + '{');
 					code.push('');
 

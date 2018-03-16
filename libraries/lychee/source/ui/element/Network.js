@@ -37,7 +37,6 @@ lychee.define('lychee.ui.element.Network').requires([
 
 	})(global.location || {});
 
-
 	const _load_api = function(url, callback, scope) {
 
 		url = typeof url === 'string' ? url : '/api/server/connect?identifier=/projects/boilerplate';

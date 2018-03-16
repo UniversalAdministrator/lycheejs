@@ -197,6 +197,7 @@ lychee.define('strainer.api.Callback').requires([
 			let body = stream.substr(i1 + 19, i2 - i1 - 16).trim();
 			if (body.length > 0) {
 
+				constructor.type       = 'function';
 				constructor.body       = body;
 				constructor.hash       = _PARSER.hash(body);
 				constructor.parameters = _PARSER.parameters(body);

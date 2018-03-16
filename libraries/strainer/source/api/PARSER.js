@@ -1275,7 +1275,10 @@ lychee.define('strainer.api.PARSER').requires([
 			let first      = lines[0].trim();
 			let last       = lines[lines.length - 1].trim();
 
-			if (first.startsWith('function(') && first.endsWith(') {')) {
+			if (
+				(first.startsWith('function(') || first.startsWith('(function('))
+				&& first.endsWith(') {')
+			) {
 				lines.shift();
 			}
 

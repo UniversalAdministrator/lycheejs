@@ -293,6 +293,7 @@ lychee.define('strainer.api.Module').requires([
 				if (body !== 'undefined') {
 
 					methods[name] = {
+						type:       'function',
 						body:       body,
 						chunk:      chunk,
 						hash:       _PARSER.hash(body),
