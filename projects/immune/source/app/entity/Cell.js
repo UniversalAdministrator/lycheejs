@@ -404,9 +404,9 @@ lychee.define('game.app.entity.Cell').requires([
 					for (let v = 0, vl = vesicles.length; v < vl; v++) {
 
 						let vesicle = vesicles[v];
-						if (vesicle !== null && found !== null) {
+						if (vesicle !== null && vesicle.team === team && found !== null) {
 							found = _closest_vesicle(position, vesicle, found);
-						} else if (vesicle !== null) {
+						} else if (vesicle !== null && vesicle.team === team) {
 							found = vesicle;
 						}
 
@@ -426,7 +426,39 @@ lychee.define('game.app.entity.Cell').requires([
 
 				}
 
+			} else {
+
+				let vesicles = this.vesicles;
+
+				if (position !== null) {
+
+					for (let v = 0, vl = vesicles.length; v < vl; v++) {
+
+						let vesicle = vesicles[v];
+						if (vesicle !== null && found !== null) {
+							found = _closest_vesicle(position, vesicle, found);
+						} else if (vesicle !== null) {
+							found = vesicle;
+						}
+
+					}
+
+				} else {
+
+					for (let v = 0, vl = vesicles.length; v < vl; v++) {
+
+						let vesicle = vesicles[v];
+						if (vesicle !== null) {
+							found = vesicle;
+							break;
+						}
+
+					}
+
+				}
+
 			}
+
 
 			return found;
 
