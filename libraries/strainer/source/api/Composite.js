@@ -597,12 +597,7 @@ lychee.define('strainer.api.Composite').requires([
 
 				if (params.length > 0) {
 
-					let found = params.filter(function(other) {
-						return other.type === 'undefined' && other.value === undefined;
-					}).map(function(other) {
-						return other.name;
-					});
-
+					let found = params.filter(p => p.type === 'undefined' && p.value === undefined).map(p => p.name);
 					if (found.length > 0) {
 
 						if (/^(control|render|update|deserialize|serialize)$/g.test(mid) === false) {
@@ -655,7 +650,7 @@ lychee.define('strainer.api.Composite').requires([
 
 					if (/^(serialize|deserialize)$/g.test(mid) === false) {
 
-						values.forEach(function(val) {
+						values.forEach(val => {
 
 							if (val.type === 'undefined' && val.value === undefined) {
 
