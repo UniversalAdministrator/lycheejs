@@ -63,6 +63,8 @@ lychee.define('strainer.api.TRANSCRIPTOR').exports(function(lychee, global, atta
 					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.chunk + ';');
 				} else if (/^(Buffer|Config|Font|Music|Sound|Texture)$/g.test(type)) {
 					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.chunk + ';');
+				} else if (type === 'RegExp') {
+					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.chunk + ';');
 				} else if (type === 'Object') {
 					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.chunk + ';');
 				} else if (type.startsWith('_')) {

@@ -190,6 +190,8 @@ lychee.define('strainer.api.PARSER').requires([
 			type = 'String';
 		} else if (str.includes('toString(') || str.includes('join(')) {
 			type = 'String';
+		} else if (str.startsWith('/') || str.endsWith('/g')) {
+			type = 'RegExp';
 		} else if (str.startsWith('0b') || str.startsWith('0x') || str.startsWith('0o') || /^[0-9.]+$/g.test(str) || /^-[0-9.]+$/g.test(str)) {
 			type = 'Number';
 		} else if (str === 'Infinity') {
@@ -442,6 +444,24 @@ lychee.define('strainer.api.PARSER').requires([
 			value = "<string>";
 		} else if (str.includes('toString(') || str.includes('join(')) {
 			value = "<string>";
+		} else if (str.startsWith('/') || str.endsWith('/g')) {
+
+			let tmp1 = str;
+			let tmp2 = str.substr(str.lastIndexOf('/') + 1);
+
+			if (tmp1.startsWith('/')) {
+				tmp1 = tmp1.substr(1);
+			}
+
+			if (tmp1.endsWith('/g')) {
+				tmp1 = tmp1.substr(0, tmp1.length - 2);
+			}
+
+			value = {
+				'constructor': 'RegExp',
+				'arguments':   [ tmp1, tmp2 ]
+			};
+
 		} else if (str.startsWith('0b') || str.startsWith('0x') || str.startsWith('0o') || /^[0-9.]+$/g.test(str) || /^-[0-9.]+$/g.test(str)) {
 			value = _parse_value(str);
 		} else if (str === 'Infinity') {
