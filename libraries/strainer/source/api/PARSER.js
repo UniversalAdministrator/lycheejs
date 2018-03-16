@@ -1041,6 +1041,91 @@ lychee.define('strainer.api.PARSER').requires([
 
 		},
 
+		find: function(key, code) {
+
+			key  = typeof key === 'string'  ? key  : null;
+			code = typeof code === 'string' ? code : null;
+
+
+			if (key !== null && code !== null) {
+
+				let str0 = 'const ' + key;
+				let i0   = code.indexOf(str0);
+				let i1   = code.indexOf('\n', i0);
+
+
+				if (i0 === -1) {
+					str0 = 'let   ' + key;
+					i0   = code.indexOf(str0);
+					i1   = code.indexOf('\n', i0);
+				}
+
+				if (i0 === -1) {
+					str0 = 'let ' + key;
+					i0   = code.indexOf(str0);
+					i1   = code.indexOf('\n', i0);
+				}
+
+
+				if (i0 !== -1 && i1 !== -1) {
+
+					let tmp1 = code.substr(i0 + str0.length, i1 - str0.length - i0).trim();
+					if (
+						tmp1.startsWith('=')
+						&& tmp1.endsWith(';')
+					) {
+
+						return tmp1.substr(1, tmp1.length - 2).trim();
+
+					} else if (
+						tmp1.startsWith('=')
+						&& tmp1.includes('(function(')
+						&& tmp1.endsWith('{')
+					) {
+
+						let str2 = '\n\t})';
+						let str3 = ');\n';
+						let i2   = code.indexOf(str2, i0);
+						let i3   = code.indexOf(str3, i2);
+
+						if (i2 !== -1 && i3 !== -1) {
+
+							let tmp2 = code.substr(i0 + str0.length, i3 - str0.length - i0 + str3.length).trim();
+							if (tmp2.startsWith('=') && tmp2.endsWith(';')) {
+								return tmp2.substr(1, tmp2.length - 2).trim();
+							}
+
+						}
+
+					} else if (
+						tmp1.startsWith('=')
+						&& tmp1.endsWith('{')
+					) {
+
+						let str2 = '\n\t};';
+						let i2   = code.indexOf(str2, i0);
+						if (i2 !== -1) {
+
+							let tmp2 = code.substr(i0 + str0.length, i2 - str0.length - i0 + str2.length).trim();
+							if (tmp2.startsWith('=') && tmp2.endsWith(';')) {
+
+								return tmp2.substr(1, tmp2.length - 2).trim();
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+
+			return 'undefined';
+
+		},
+
 		hash: function(code) {
 
 			code = typeof code === 'string' ? code : '';

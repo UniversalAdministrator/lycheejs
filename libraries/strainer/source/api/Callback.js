@@ -61,63 +61,6 @@ lychee.define('strainer.api.Callback').requires([
 
 	};
 
-	const _find_memory = function(key, stream) {
-
-		let str0 = 'const ' + key;
-		let i0   = stream.indexOf(str0);
-		let i1   = stream.indexOf('\n', i0);
-
-
-		if (i0 === -1) {
-			str0 = 'let   ' + key;
-			i0   = stream.indexOf(str0);
-			i1   = stream.indexOf('\n', i0);
-		}
-
-		if (i0 === -1) {
-			str0 = 'let ' + key;
-			i0   = stream.indexOf(str0);
-			i1   = stream.indexOf('\n', i0);
-		}
-
-
-		if (i0 !== -1 && i1 !== -1) {
-
-			let tmp1 = stream.substr(i0 + str0.length, i1 - str0.length - i0).trim();
-			if (
-				tmp1.startsWith('=')
-				&& tmp1.endsWith(';')
-			) {
-
-				return tmp1.substr(1, tmp1.length - 2).trim();
-
-			} else if (
-				tmp1.startsWith('=')
-				&& tmp1.endsWith('{')
-			) {
-
-				let str2 = '\n\t};';
-				let i2   = stream.indexOf(str2, i0);
-				if (i2 !== -1) {
-
-					let tmp2 = stream.substr(i0 + str0.length, i2 - str0.length - i0 + str2.length).trim();
-					if (tmp2.startsWith('=') && tmp2.endsWith(';')) {
-
-						return tmp2.substr(1, tmp2.length - 2).trim();
-
-					}
-
-				}
-
-			}
-
-		}
-
-
-		return 'undefined';
-
-	};
-
 	const _parse_memory = function(memory, stream, errors) {
 
 		let i1 = stream.indexOf('.exports(function(lychee, global, attachments) {');
@@ -158,7 +101,7 @@ lychee.define('strainer.api.Callback').requires([
 
 								} else if (chunk.startsWith('function(')) {
 
-									chunk = _find_memory(key, stream);
+									chunk = _PARSER.find(key, stream);
 
 									memory[key] = {
 										type:       'function',
@@ -170,7 +113,7 @@ lychee.define('strainer.api.Callback').requires([
 
 								} else {
 
-									chunk = _find_memory(key, stream);
+									chunk = _PARSER.find(key, stream);
 									memory[key] = _PARSER.detect(chunk);
 
 								}

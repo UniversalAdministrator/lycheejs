@@ -129,83 +129,6 @@ lychee.define('strainer.api.Composite').requires([
 
 	};
 
-	const _find_memory = function(key, stream) {
-
-		let str0 = 'const ' + key;
-		let i0   = stream.indexOf(str0);
-		let i1   = stream.indexOf('\n', i0);
-
-
-		if (i0 === -1) {
-			str0 = 'let   ' + key;
-			i0   = stream.indexOf(str0);
-			i1   = stream.indexOf('\n', i0);
-		}
-
-		if (i0 === -1) {
-			str0 = 'let ' + key;
-			i0   = stream.indexOf(str0);
-			i1   = stream.indexOf('\n', i0);
-		}
-
-
-		if (i0 !== -1 && i1 !== -1) {
-
-			let tmp1 = stream.substr(i0 + str0.length, i1 - str0.length - i0).trim();
-			if (
-				tmp1.startsWith('=')
-				&& tmp1.endsWith(';')
-			) {
-
-				return tmp1.substr(1, tmp1.length - 2).trim();
-
-			} else if (
-				tmp1.startsWith('=')
-				&& tmp1.includes('(function(')
-				&& tmp1.endsWith('{')
-			) {
-
-				let str2 = '\n\t})';
-				let str3 = ');\n';
-				let i2   = stream.indexOf(str2, i0);
-				let i3   = stream.indexOf(str3, i2);
-
-				if (i2 !== -1 && i3 !== -1) {
-
-					let tmp2 = stream.substr(i0 + str0.length, i3 - str0.length - i0 + str3.length).trim();
-					if (tmp2.startsWith('=') && tmp2.endsWith(';')) {
-						return tmp2.substr(1, tmp2.length - 2).trim();
-					}
-
-				}
-
-			} else if (
-				tmp1.startsWith('=')
-				&& tmp1.endsWith('{')
-			) {
-
-				let str2 = '\n\t};';
-				let i2   = stream.indexOf(str2, i0);
-				if (i2 !== -1) {
-
-					let tmp2 = stream.substr(i0 + str0.length, i2 - str0.length - i0 + str2.length).trim();
-					if (tmp2.startsWith('=') && tmp2.endsWith(';')) {
-
-						return tmp2.substr(1, tmp2.length - 2).trim();
-
-					}
-
-				}
-
-			}
-
-		}
-
-
-		return 'undefined';
-
-	};
-
 	const _find_method = function(key, stream) {
 
 		let str1 = '\n\t\t' + key + ': function';
@@ -263,7 +186,7 @@ lychee.define('strainer.api.Composite').requires([
 
 								} else if (chunk.startsWith('(function(')) {
 
-									chunk = _find_memory(key, body);
+									chunk = _PARSER.find(key, body);
 
 									memory[key] = {
 										type:       'function',
@@ -275,7 +198,7 @@ lychee.define('strainer.api.Composite').requires([
 
 								} else if (chunk.startsWith('function(')) {
 
-									chunk = _find_memory(key, body);
+									chunk = _PARSER.find(key, body);
 
 									memory[key] = {
 										type:       'function',
@@ -287,7 +210,7 @@ lychee.define('strainer.api.Composite').requires([
 
 								} else {
 
-									chunk = _find_memory(key, body);
+									chunk = _PARSER.find(key, body);
 									memory[key] = _PARSER.detect(chunk);
 
 								}
