@@ -52,7 +52,7 @@ lychee.define('strainer.api.TRANSCRIPTOR').exports(function(lychee, global, atta
 				let type = value.type || '';
 
 				if (type === 'function') {
-					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.body + ';');
+					code.push((assign === false ? 'const ' : '') + name + ' = ' + value.chunk + ';');
 				} else if (type === 'lychee.Definition') {
 					code.push((assign === false ? 'const ' : '') + name + ' = lychee.import(\'' + value.value.reference + '\');');
 				} else if (type === 'lychee.Namespace') {
@@ -79,7 +79,7 @@ lychee.define('strainer.api.TRANSCRIPTOR').exports(function(lychee, global, atta
 
 						let entry = value[v];
 						if (entry.type === 'function') {
-							code.push('\t\t' + v + ': ' + entry.body + ',');
+							code.push('\t\t' + v + ': ' + entry.chunk + ',');
 						} else if (entry.type === 'lychee.Definition') {
 							code.push('\t\t' + v + ': ' + entry.value.reference + ',');
 						} else if (entry.type === 'lychee.Namespace') {

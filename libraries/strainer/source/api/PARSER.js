@@ -158,6 +158,10 @@ lychee.define('strainer.api.PARSER').requires([
 			type = 'null';
 		} else if (str === 'true' || str === 'false') {
 			type = 'Boolean';
+		} else if (str.startsWith('function')) {
+			type = 'function';
+		} else if (str.startsWith('(function(')) {
+			type = 'function';
 		} else if (str.includes('===') && !str.includes('?')) {
 			type = 'Boolean';
 		} else if (str.includes('&&') && !str.includes('?')) {
@@ -661,9 +665,9 @@ lychee.define('strainer.api.PARSER').requires([
 
 			let val = {
 				chunk: 'undefined',
-				type:  'undefined',
-				value: undefined
+				type:  'undefined'
 			};
+
 
 
 			// XXX: This is explicitely to prevent parser
@@ -671,7 +675,18 @@ lychee.define('strainer.api.PARSER').requires([
 
 			val.chunk = str;
 			val.type  = _detect_type(str);
-			val.value = _detect_value(str);
+
+			if (val.type === 'function') {
+
+				val.hash       = Module.hash(str);
+				val.parameters = Module.parameters(str);
+				val.values     = Module.values(str);
+
+			} else {
+
+				val.value = _detect_value(str);
+
+			}
 
 
 			let dictionary = [];
@@ -1149,7 +1164,10 @@ lychee.define('strainer.api.PARSER').requires([
 			let first      = lines[0].trim();
 			let last       = lines[lines.length - 1].trim();
 
-			if (first.startsWith('function(') && first.endsWith(') {')) {
+			if (
+				(first.startsWith('function(') || first.startsWith('(function('))
+				&& first.endsWith(') {')
+			) {
 
 				lines.shift();
 

@@ -171,21 +171,9 @@ lychee.define('strainer.api.Module').requires([
 									chunk = chunk.substr(0, chunk.length - 1);
 									memory[key] = _PARSER.detect(chunk);
 
-								} else if (chunk.startsWith('function(')) {
-
-									chunk = _PARSER.find(key, stream);
-
-									memory[key] = {
-										type:       'function',
-										body:       chunk,
-										hash:       _PARSER.hash(chunk),
-										parameters: _PARSER.parameters(chunk),
-										values:     _PARSER.values(chunk)
-									};
-
 								} else {
 
-									chunk = _PARSER.find(key, stream);
+									chunk = _PARSER.find(key, body);
 									memory[key] = _PARSER.detect(chunk);
 
 								}

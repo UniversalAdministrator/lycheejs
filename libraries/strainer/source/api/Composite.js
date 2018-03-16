@@ -184,30 +184,6 @@ lychee.define('strainer.api.Composite').requires([
 									chunk = chunk.substr(0, chunk.length - 1);
 									memory[key] = _PARSER.detect(chunk);
 
-								} else if (chunk.startsWith('(function(')) {
-
-									chunk = _PARSER.find(key, body);
-
-									memory[key] = {
-										type:       'function',
-										body:       chunk,
-										hash:       _PARSER.hash(chunk),
-										parameters: _PARSER.parameters(chunk),
-										values:     _PARSER.values(chunk)
-									};
-
-								} else if (chunk.startsWith('function(')) {
-
-									chunk = _PARSER.find(key, body);
-
-									memory[key] = {
-										type:       'function',
-										body:       chunk,
-										hash:       _PARSER.hash(chunk),
-										parameters: _PARSER.parameters(chunk),
-										values:     _PARSER.values(chunk)
-									};
-
 								} else {
 
 									chunk = _PARSER.find(key, body);
