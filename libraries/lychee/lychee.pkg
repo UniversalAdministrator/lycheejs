@@ -765,6 +765,9 @@
 				],
 				"Environment": [
 					"js"
+				],
+				"Package": [
+					"js"
 				]
 			}
 		},

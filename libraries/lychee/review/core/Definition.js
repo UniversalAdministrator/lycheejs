@@ -21,13 +21,18 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 	});
 
 	sandbox.setBlob({
+		exports: 'function(lychee, global, attachments) {\n\n\tconst Module = {};\n\n\treturn Module;\n\n}',
 		includes: [
 			'sandbox.foo.Bar',
 			'sandbox.foo.Qux'
 		],
 		requires: [
 			'sandbox.foo.Doo'
-		]
+		],
+		tags: {
+			foo: 'bar',
+			bar: 'qux'
+		}
 	});
 
 	sandbox.setProperty('id', function(assert, expect) {
@@ -44,6 +49,9 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 		assert(this.setId(check), false);
 		assert(this.id,           id);
 
+		assert(this.setId(sandbox.settings.id), true);
+		assert(this.id, sandbox.settings.id);
+
 	});
 
 	sandbox.setProperty('url', function(assert, expect) {
@@ -56,7 +64,7 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 		assert(this.url,         url);
 
 		assert(this.setId(''), false);
-		assert(this.id,        'sandbox.foo.Bar');
+		assert(this.id,        'sandbox.foo.bar.Qux');
 
 	});
 
@@ -77,27 +85,89 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 
 		expect(assert => {
 
+			this._includes = [];
+			this._requires = [];
+
 			this.exports(function(lychee, global, attachments) {
 				assert(attachments['json'], config);
 				return {};
 			});
 
+			expect(assert => {
 
-			let scope  = {};
-			let result = this.export(scope);
+				let scope  = {};
+				let result = this.export(scope);
 
-			assert(result, true);
+				this.deserialize({
+					includes: sandbox.blob.includes,
+					requires: sandbox.blob.requires,
+					exports:  sandbox.blob.exports
+				});
+
+				assert(result, true);
+
+			});
 
 		});
 
 	});
 
 	sandbox.setMethod('check', function(assert, expect) {
-		// TODO: check method
+
+		assert(this._tags, sandbox.blob.tags);
+
+
+		let check1 = this.check({ foo: 'bar' });
+		let check2 = this.check({ bar: [ 'qux', 'doo' ] });
+		let check3 = this.check({ foo: 'qux' });
+		let check4 = this.check({ bar: [ 'doo', 'foo' ] });
+
+		assert(check1.tagged,    true);
+		assert(check1.supported, true);
+
+		assert(check2.tagged,    true);
+		assert(check2.supported, true);
+
+		assert(check3.tagged,    false);
+		assert(check3.supported, true);
+
+		assert(check4.tagged,    false);
+		assert(check4.supported, true);
+
 	});
 
 	sandbox.setMethod('export', function(assert, expect) {
-		// TODO: export method
+
+		assert(this.id, sandbox.settings.id);
+
+
+		expect(assert => {
+
+			this._includes = [];
+			this._requires = [];
+
+			this.exports(function(lychee, global, attachments) {
+				return { id: 'unique' };
+			});
+
+			expect(assert => {
+
+				let scope  = {};
+				let result = this.export(scope);
+
+				assert(result, true);
+				assert(scope['sandbox']['foo']['bar']['Qux'].id, 'unique');
+
+			});
+
+			this.deserialize({
+				includes: sandbox.blob.includes,
+				requires: sandbox.blob.requires,
+				exports:  sandbox.blob.exports
+			});
+
+		});
+
 	});
 
 	sandbox.setMethod('exports', function(assert, expect) {
@@ -144,9 +214,33 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 	});
 
 	sandbox.setMethod('supports', function(assert, expect) {
+
+		assert(this._supports, null);
+
+		this.supports(function(lychee, global) {
+			return true;
+		});
+
+		let check1 = this.check({});
+		assert(check1.supported, true);
+
+
+		this.supports(function(lychee, global) {
+			return false;
+		});
+
+		let check2 = this.check({});
+		assert(check2.supported, false);
+
 	});
 
 	sandbox.setMethod('tags', function(assert, expect) {
+
+		assert(this._tags, sandbox.blob.tags);
+
+		this.tags({ qux: 'doo' });
+		assert(this._tags.qux, 'doo');
+
 	});
 
 });

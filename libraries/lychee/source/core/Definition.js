@@ -331,21 +331,32 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 			}
 
 
-			let index1   = 0;
-			let index2   = 0;
-			let tmp      = null;
-			let bindargs = null;
-
 			if (typeof blob.supports === 'string') {
 
 				// Function head
-				tmp      = blob.supports.split('{')[0].trim().substr('function '.length);
-				bindargs = tmp.substr(1, tmp.length - 2).split(',');
+				let tmp = blob.exports.split('{')[0].trim();
+				if (tmp.startsWith('function')) {
+					tmp = tmp.substr('function'.length).trim();
+				}
+
+				if (tmp.startsWith('anonymous')) tmp = tmp.substr('anonymous'.length).trim();
+				if (tmp.startsWith('('))         tmp = tmp.substr(1).trim();
+				if (tmp.endsWith(')'))           tmp = tmp.substr(0, tmp.length - 1).trim();
+
+				let bindargs = tmp.split(',').map(function(name) {
+					return name.trim();
+				});
+
+				let check = bindargs[bindargs.length - 1];
+				if (check.includes('\n')) {
+					bindargs[bindargs.length - 1] = check.split('\n')[0];
+				}
+
 
 				// Function body
-				index1 = blob.supports.indexOf('{') + 1;
-				index2 = blob.supports.lastIndexOf('}') - 1;
-				bindargs.push(blob.supports.substr(index1, index2 - index1));
+				let i1 = blob.supports.indexOf('{') + 1;
+				let i2 = blob.supports.lastIndexOf('}') - 1;
+				bindargs.push(blob.supports.substr(i1, i2 - i1));
 
 				this.supports(Function.apply(Function, bindargs));
 
@@ -354,13 +365,29 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 			if (typeof blob.exports === 'string') {
 
 				// Function head
-				tmp      = blob.exports.split('{')[0].trim().substr('function '.length);
-				bindargs = tmp.substr(1, tmp.length - 2).split(',');
+				let tmp = blob.exports.split('{')[0].trim();
+				if (tmp.startsWith('function')) {
+					tmp = tmp.substr('function'.length).trim();
+				}
+
+				if (tmp.startsWith('anonymous')) tmp = tmp.substr('anonymous'.length).trim();
+				if (tmp.startsWith('('))         tmp = tmp.substr(1).trim();
+				if (tmp.endsWith(')'))           tmp = tmp.substr(0, tmp.length - 1).trim();
+
+				let bindargs = tmp.split(',').map(function(name) {
+					return name.trim();
+				});
+
+				let check = bindargs[bindargs.length - 1];
+				if (check.includes('\n')) {
+					bindargs[bindargs.length - 1] = check.split('\n')[0];
+				}
+
 
 				// Function body
-				index1 = blob.exports.indexOf('{') + 1;
-				index2 = blob.exports.lastIndexOf('}') - 1;
-				bindargs.push(blob.exports.substr(index1, index2 - index1));
+				let i1 = blob.exports.indexOf('{') + 1;
+				let i2 = blob.exports.lastIndexOf('}') - 1;
+				bindargs.push(blob.exports.substr(i1, i2 - i1));
 
 				this.exports(Function.apply(Function, bindargs));
 
@@ -900,9 +927,9 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 				for (let tag in map) {
 
-					let value = map[tag];
-					if (typeof value === 'string') {
-						this._tags[tag] = value;
+					let val = map[tag];
+					if (typeof val === 'string') {
+						this._tags[tag] = val;
 					} else {
 						console.warn('lychee.Definition ("' + this.id + '"): Invalid Tag "' + tag + '".');
 					}
