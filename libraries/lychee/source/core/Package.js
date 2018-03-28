@@ -117,11 +117,17 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 		let candidates    = [];
 		let filter_values = function(tags, tag) {
 
-			return tags[tag].map(function(value) {
-				return _resolve_tag.call(that, tag, value) + '/' + candidatepath;
-			}).filter(function(path) {
-				return _resolve_path.call(that, path);
-			});
+			if (tags[tag] instanceof Array) {
+
+				return tags[tag].map(function(value) {
+					return _resolve_tag.call(that, tag, value) + '/' + candidatepath;
+				}).filter(function(path) {
+					return _resolve_path.call(that, path);
+				});
+
+			}
+
+			return [];
 
 		};
 
@@ -536,6 +542,9 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 				};
 
 				config.load();
+
+
+				return true;
 
 			}
 
