@@ -172,6 +172,35 @@ lychee.specify('lychee.Definition').exports(function(lychee, sandbox) {
 
 	sandbox.setMethod('exports', function(assert, expect) {
 
+		assert(this.id, sandbox.settings.id);
+
+
+		expect(assert => {
+
+			this._includes = [];
+			this._requires = [];
+
+			this.exports(function(lychee, global, attachments) {
+				return { id: 'unique' };
+			});
+
+			expect(assert => {
+
+				let scope  = {};
+				let result = this.export(scope);
+
+				assert(result, true);
+				assert(scope['sandbox']['foo']['bar']['Qux'].id, 'unique');
+
+			});
+
+			this.deserialize({
+				includes: sandbox.blob.includes,
+				requires: sandbox.blob.requires,
+				exports:  sandbox.blob.exports
+			});
+
+		});
 
 	});
 
