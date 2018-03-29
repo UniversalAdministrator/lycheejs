@@ -569,6 +569,10 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 				return true;
 
+			} else {
+
+				this.environment = null;
+
 			}
 
 

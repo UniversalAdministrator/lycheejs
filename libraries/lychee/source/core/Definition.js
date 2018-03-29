@@ -186,8 +186,10 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			for (let pid in lychee.environment.packages) {
 
-				let pkg = lychee.environment.packages[pid];
-				if (this.url.startsWith(pkg.url)) {
+				let pkg  = lychee.environment.packages[pid];
+				let base = pkg.url.split('/').slice(0, -1).join('/');
+
+				if (this.url.startsWith(base)) {
 					namespace = pkg.id;
 				}
 
@@ -205,11 +207,25 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 					ns[ns.length - 1] = tmp_s.split('.').slice(0, -1).join('.');
 				}
 
+				if (tmp_i !== -1 && ns[tmp_i + 1] === 'core') {
+
+					if (ns[tmp_i + 2] === 'lychee') {
+						ns.splice(tmp_i + 1, 2);
+					} else {
+						ns.splice(tmp_i + 1, 1);
+					}
+
+				}
+
 				if (tmp_i !== -1) {
 					id = ns.slice(tmp_i + 1).join('.');
 				}
 
-				found = namespace + '.' + id;
+				if (id !== '') {
+					found = namespace + '.' + id;
+				} else {
+					found = namespace;
+				}
 
 			}
 
@@ -290,8 +306,9 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 		this._supports = null;
 
 
-		this.setId(settings.id);
+		// XXX: url has to be set first for fuzzing
 		this.setUrl(settings.url);
+		this.setId(settings.id);
 
 		settings = null;
 
