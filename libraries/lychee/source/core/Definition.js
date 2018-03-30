@@ -875,8 +875,13 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 					let definition = definitions[d];
 					if (typeof definition === 'string') {
 
-						if (definition.indexOf('.') !== -1 && this._includes.indexOf(definition) === -1) {
-							this._includes.push(definition);
+						let is_definition = definition.includes('.');
+						if (is_definition === true) {
+
+							if (this._includes.includes(definition) === false) {
+								this._includes.push(definition);
+							}
+
 						}
 
 					} else {
@@ -904,8 +909,13 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 					let definition = definitions[d];
 					if (typeof definition === 'string') {
 
-						if (definition.indexOf('.') !== -1 && this._requires.indexOf(definition) === -1) {
-							this._requires.push(definition);
+						let is_definition = definition.includes('.');
+						if (is_definition === true) {
+
+							if (this._requires.includes(definition) === false) {
+								this._requires.push(definition);
+							}
+
 						}
 
 					} else {

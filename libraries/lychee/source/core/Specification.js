@@ -335,7 +335,16 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 					let definition = definitions[d];
 					if (typeof definition === 'string') {
 
-						if (definition.indexOf('.') !== -1 && this._requires.indexOf(definition) === -1) {
+						let is_definition = definition.includes('.');
+						let is_namespace  = definition === definition.toLowerCase();
+
+						if (is_definition === true) {
+
+							if (this._requires.includes(definition) === false) {
+								this._requires.push(definition);
+							}
+
+						} else if (is_namespace === true) {
 							this._requires.push(definition);
 						}
 
