@@ -769,16 +769,21 @@ lychee = (function(global) {
 
 						if (object.hasOwnProperty(prop) === true) {
 
-							let tvalue = target[prop];
 							let ovalue = object[prop];
-							if (tvalue instanceof Array && ovalue instanceof Array) {
+							if (ovalue instanceof Array) {
+
 								target[prop] = [];
 								Module.assignunlink(target[prop], object[prop]);
-							} else if (tvalue instanceof Object && ovalue instanceof Object) {
+
+							} else if (ovalue instanceof Object) {
+
 								target[prop] = {};
 								Module.assignunlink(target[prop], object[prop]);
+
 							} else {
+
 								target[prop] = object[prop];
+
 							}
 
 						}
@@ -803,7 +808,7 @@ lychee = (function(global) {
 			if (template !== null && blob !== null) {
 
 				let tname    = template.displayName;
-				let bname    = blob.constructor || blob.reference || null;
+				let bname    = blob.reference || blob.constructor || null;
 				let hashable = typeof tname === 'string' && typeof bname === 'string';
 				let hashmap  = _BLOBOF_CACHE;
 
@@ -882,6 +887,8 @@ lychee = (function(global) {
 
 							} else if (typeof aobject[a] !== typeof bobject[a]) {
 								return true;
+							} else if (aobject[a] !== bobject[a]) {
+								return true;
 							}
 
 						}
@@ -922,6 +929,8 @@ lychee = (function(global) {
 								}
 
 							} else if (typeof aobject[key] !== typeof bobject[key]) {
+								return true;
+							} else if (aobject[key] !== bobject[key]) {
 								return true;
 							}
 
