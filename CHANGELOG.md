@@ -20,7 +20,10 @@ are listed in this specific order: `changed`, `removed`, `added`
 and `fixed`.
 
 
-## [2018-Q1] - UNRELEASED
+## [2018-Q2] - UNRELEASED
+
+
+## [2018-Q1] - 2018-03-31
 
 - **Changed**: `./bin/configure.js` supports source maps for core and platform adapters.
 - **Added**: lychee.js Strainer supports transcriptions.
