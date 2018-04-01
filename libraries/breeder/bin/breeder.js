@@ -216,7 +216,7 @@ const _SETTINGS = (function() {
 			try {
 
 				let stat1 = _fs.lstatSync(_ROOT + tmp);
-				if (stat1.isDirectory()) {
+				if (stat1.isDirectory() || stat1.isSymbolicLink()) {
 					settings.project = tmp;
 				}
 
@@ -242,8 +242,13 @@ const _SETTINGS = (function() {
 
 				let stat1 = _fs.lstatSync(_ROOT + library);
 				let stat2 = _fs.lstatSync(_ROOT + library + '/lychee.pkg');
-				if (stat1.isDirectory() && stat2.isFile()) {
-					settings.library = library;
+
+				if (stat1.isDirectory() || stat1.isSymbolicLink()) {
+
+					if (stat2.isFile()) {
+						settings.library = library;
+					}
+
 				}
 
 			} catch (err) {

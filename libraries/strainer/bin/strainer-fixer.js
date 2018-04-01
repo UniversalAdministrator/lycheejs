@@ -318,8 +318,13 @@ const _SETTINGS = (function() {
 
 					let stat1 = _fs.lstatSync(_ROOT + project);
 					let stat2 = _fs.lstatSync(_ROOT + project + '/lychee.pkg');
-					if (stat1.isDirectory() && stat2.isFile()) {
-						settings.project = project;
+
+					if (stat1.isDirectory() || stat1.isSymbolicLink()) {
+
+						if (stat2.isFile()) {
+							settings.project = project;
+						}
+
 					}
 
 				} catch (err) {
@@ -347,8 +352,13 @@ const _SETTINGS = (function() {
 
 					let stat1 = _fs.lstatSync(project);
 					let stat2 = _fs.lstatSync(project + '/lychee.pkg');
-					if (stat1.isDirectory() && stat2.isFile()) {
-						settings.project = project;
+
+					if (stat1.isDirectory() || stat1.isSymbolicLink()) {
+
+						if (stat2.isFile()) {
+							settings.project = project;
+						}
+
 					}
 
 				} catch (err) {
