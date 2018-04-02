@@ -40,7 +40,18 @@ lychee.define('harvester.data.Filesystem').tags({
 
 		try {
 
-			is_directory = _fs.lstatSync(path).isDirectory();
+			let stat1 = _fs.lstatSync(path);
+			if (stat1.isSymbolicLink()) {
+
+				let tmp   = _fs.realpathSync(path);
+				let stat2 = _fs.lstatSync(tmp);
+				if (stat2.isDirectory()) {
+					is_directory = true;
+				}
+
+			} else if (stat1.isDirectory()) {
+				is_directory = true;
+			}
 
 		} catch (err) {
 
@@ -51,7 +62,20 @@ lychee.define('harvester.data.Filesystem').tags({
 				}
 
 				try {
-					is_directory = _fs.lstatSync(path).isDirectory();
+
+					let stat2 = _fs.lstatSync(path);
+					if (stat2.isSymbolicLink()) {
+
+						let tmp   = _fs.realpathSync(path);
+						let stat3 = _fs.lstatSync(tmp);
+						if (stat3.isDirectory()) {
+							is_directory = true;
+						}
+
+					} else if (stat2.isDirectory()) {
+						is_directory = true;
+					}
+
 				} catch (err) {
 				}
 

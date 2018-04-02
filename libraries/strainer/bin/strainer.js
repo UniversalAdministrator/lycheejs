@@ -213,7 +213,17 @@ const _SETTINGS = (function() {
 				let stat1 = _fs.lstatSync(_ROOT + project);
 				let stat2 = _fs.lstatSync(_ROOT + project + '/lychee.pkg');
 
-				if (stat1.isDirectory() || stat1.isSymbolicLink()) {
+				if (stat1.isSymbolicLink()) {
+
+					let tmp   = _fs.realpathSync(_ROOT + project);
+					let stat3 = _fs.lstatSync(tmp);
+					let stat4 = _fs.lstatSync(tmp + '/lychee.pkg');
+
+					if (stat3.isDirectory() && stat4.isFile()) {
+						settings.project = project;
+					}
+
+				} else if (stat1.isDirectory()) {
 
 					if (stat2.isFile()) {
 						settings.project = project;
@@ -236,7 +246,17 @@ const _SETTINGS = (function() {
 				let stat1 = _fs.lstatSync(project);
 				let stat2 = _fs.lstatSync(project + '/lychee.pkg');
 
-				if (stat1.isDirectory() || stat1.isSymbolicLink()) {
+				if (stat1.isSymbolicLink()) {
+
+					let tmp   = _fs.realpathSync(_ROOT + project);
+					let stat3 = _fs.lstatSync(tmp);
+					let stat4 = _fs.lstatSync(tmp + '/lychee.pkg');
+
+					if (stat3.isDirectory() && stat4.isFile()) {
+						settings.project = project;
+					}
+
+				} else if (stat1.isDirectory()) {
 
 					if (stat2.isFile()) {
 						settings.project = project;
@@ -270,11 +290,22 @@ const _SETTINGS = (function() {
 					let stat1 = _fs.lstatSync(_ROOT + library);
 					let stat2 = _fs.lstatSync(_ROOT + library + '/lychee.pkg');
 
-					if (stat1.isDirectory() || stat1.isSymbolicLink()) {
+					if (stat1.isSymbolicLink()) {
+
+						let tmp   = _fs.realpathSync(_ROOT + library);
+						let stat3 = _fs.lstatSync(tmp);
+						let stat4 = _fs.lstatSync(tmp + '/lychee.pkg');
+
+						if (stat3.isDirectory() && stat4.isFile()) {
+							settings.library = library;
+						}
+
+					} else if (stat1.isDirectory()) {
 
 						if (stat2.isFile()) {
 							settings.library = library;
 						}
+
 					}
 
 				} catch (err) {
