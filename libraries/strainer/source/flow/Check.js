@@ -368,8 +368,9 @@ lychee.define('strainer.flow.Check').requires([
 			type: _Stash.TYPE.persistent
 		});
 
-		this.__pkg      = null;
-		this.__packages = {};
+		this.__pkg         = null;
+		this.__packages    = {};
+		this.__simulations = [];
 
 
 		this.setSandbox(settings.sandbox);
@@ -964,6 +965,124 @@ lychee.define('strainer.flow.Check').requires([
 
 		}, this);
 
+		this.bind('verify-api', function(oncomplete) {
+
+			let cache   = this.__simulations;
+			let errors  = this.errors;
+			let pkg     = this.__pkg;
+			let project = this.settings.project;
+			let sandbox = this.sandbox;
+
+			if (pkg !== null) {
+
+				console.log('strainer: VERIFY-API ' + project);
+
+
+				let simulations = pkg.buffer.review.simulations || null;
+				if (simulations !== null) {
+
+					for (let id in simulations) {
+
+						let raw      = simulations[id];
+						let settings = {
+							id: id
+						};
+
+
+						let env = raw.environment || null;
+						if (env !== null) {
+
+							let pkgs = raw.environment.packages;
+							if (pkgs instanceof Object) {
+
+								for (let ns in pkgs) {
+
+									let url = pkgs[ns];
+									if (url === './lychee.pkg') {
+										url = sandbox + '/lychee.pkg';
+									}
+
+									pkgs[ns] = url;
+
+								}
+
+							}
+
+
+							settings.environment = new lychee.Environment(raw.environment);
+
+							let target = raw.target || null;
+							if (target !== null) {
+								settings.target = target;
+								cache.push(settings);
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+
+			if (cache.length > 0) {
+
+				console.log('strainer: VERIFY-API "' + cache[0].id + '"');
+
+				// TODO: Implement iterations over simulations cache via event flow
+
+				// let environment = new lychee.Environment(settings.environment);
+				// let simulation  = new lychee.Simulation({
+				//     environment: environment,
+				//     target:      target
+				// });
+				//
+				// lychee.setEnvironment(environment);
+				// lychee.setSimulation(simulation);
+				//
+				// lychee.init(simulation, {
+				// }, function(sandboxes) {
+				//
+				//     let remaining = 0;
+				//
+				//     Object.keys(sandboxes).sort().forEach(function(sid) {
+				//
+				//         remaining++;
+				//
+				//         sandboxes[sid].evaluate(function(statistics) {
+				//             _render_statistics(sid, statistics);
+				//             remaining--;
+				//         });
+				//
+				//     });
+				//
+				//     setInterval(function() {
+				//
+				//         if (remaining === 0) {
+				//             oncomplete(true);
+				//         }
+				//
+				//     }, 250);
+				//
+				// });
+
+				oncomplete(true);
+
+			} else {
+
+				oncomplete(true);
+
+			}
+
+		}, this);
+
+		this.bind('verify-pkg', function(oncomplete) {
+
+			oncomplete(true);
+
+		}, this);
+
 		this.bind('write-codes', function(oncomplete) {
 
 			let project = this.settings.project;
@@ -1144,6 +1263,9 @@ lychee.define('strainer.flow.Check').requires([
 		this.then('trace-deps');
 		this.then('trace-api');
 		this.then('clean-deps');
+
+		this.then('verify-api');
+		this.then('verify-pkg');
 
 		this.then('write-codes');
 		this.then('write-api');

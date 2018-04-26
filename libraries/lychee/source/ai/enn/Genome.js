@@ -1,5 +1,5 @@
 
-lychee.define('lychee.ai.Genome').exports(function(lychee, global, attachments) {
+lychee.define('lychee.ai.enn.Genome').exports(function(lychee, global, attachments) {
 
 	/*
 	 * IMPLEMENTATION
@@ -102,7 +102,7 @@ lychee.define('lychee.ai.Genome').exports(function(lychee, global, attachments) 
 
 
 			return {
-				'constructor': 'lychee.ai.Genome',
+				'constructor': 'lychee.ai.enn.Genome',
 				'arguments':   [],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};

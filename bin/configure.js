@@ -333,41 +333,16 @@
 
 	};
 
-	const _package_definitions = function(json) {
+	const _package_files = function(json, type) {
+
+		type = typeof type === 'string' ? type : 'source';
+
 
 		let files = [];
 
 		if (json !== null) {
 
-			let root = json.source.files || null;
-			if (root !== null) {
-				_walk_directory(files, root, '', false);
-			}
-
-		}
-
-
-		return files.map(function(value) {
-			return value.substr(1);
-		}).filter(function(value) {
-			return value.startsWith('core') === false;
-		}).filter(function(value) {
-			return value.startsWith('platform') === false;
-		}).map(function(value) {
-			return 'lychee.' + value.split('.')[0].split('/').join('.');
-		}).filter(function(value) {
-			return value.includes('__') === false;
-		});
-
-	};
-
-	const _package_files = function(json) {
-
-		let files = [];
-
-		if (json !== null) {
-
-			let root = json.source.files || null;
+			let root = json[type].files || null;
 			if (root !== null) {
 				_walk_directory(files, root, '', false);
 			}
@@ -382,7 +357,7 @@
 			if (a < b) return -1;
 			return 0;
 		}).filter(function(value) {
-			return value.indexOf('__') === -1;
+			return value.includes('__') === false;
 		});
 
 	};
@@ -519,7 +494,13 @@
 		console.log('Distributing lychee.js Library');
 
 
-		let dist = _package_definitions(_PACKAGE).filter(function(value) {
+		let dist = _package_files(_PACKAGE, 'source').filter(function(value) {
+			return value.startsWith('core') === false;
+		}).filter(function(value) {
+			return value.startsWith('platform') === false;
+		}).map(function(value) {
+			return 'lychee.' + value.split('.')[0].split('/').join('.');
+		}).filter(function(value) {
 			return value !== 'lychee.DIST';
 		});
 
@@ -586,13 +567,85 @@
 
 
 	/*
+	 * 1: LIBRARY SPECIFICATION (SYNC)
+	 */
+
+	(function() {
+
+		console.log('Specifying lychee.js Library');
+
+
+		let dist = _package_files(_PACKAGE, 'review').map(function(value) {
+
+			let tmp = value.split('.')[0].split('/');
+			if (tmp[0] === 'core') {
+				tmp = tmp.slice(1);
+			}
+
+			let id = tmp.join('.');
+			if (id === 'lychee') {
+				return 'lychee';
+			} else {
+				return 'lychee.' + id;
+			}
+
+		}).filter(function(value) {
+			return value !== 'lychee.DIST';
+		});
+
+		let code = (function () {/*
+			lychee.specify('lychee.DIST').requires([{{requires}}]).exports(function(lychee, sandbox) {
+				// XXX: lychee.DIST has no tests
+			});
+
+		*/}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1].split('\n').map(function(val) {
+			return val.substr(3);
+		}).join('\n').replace('{{requires}}', '\n\t' + dist.map(function(val) {
+			return '\'' + val + '\'';
+		}).join(',\n\t') + '\n');
+
+
+		let result = true;
+		let path   = _path.resolve(_ROOT, './libraries/lychee/review/DIST.js');
+		let dir    = _path.dirname(path);
+
+		if (_is_directory(dir) === false) {
+			_create_directory(dir);
+		}
+
+
+		if (_is_directory(dir) === true) {
+
+			try {
+				_fs.writeFileSync(path, code, 'utf8');
+			} catch (err) {
+				result = false;
+			}
+
+		} else {
+			result = false;
+		}
+
+
+		if (result === true) {
+			console.info('SUCCESS');
+		} else {
+			console.error('FAILURE');
+			_process.exit(1);
+		}
+
+	})();
+
+
+
+	/*
 	 * 2: CORE GENERATION (SYNC)
 	 */
 
 	(function() {
 
 		let errors = 0;
-		let files  = _package_files(_PACKAGE).filter(function(value) {
+		let files  = _package_files(_PACKAGE, 'source').filter(function(value) {
 			return value.startsWith('core/');
 		});
 
@@ -742,9 +795,9 @@
 		});
 
 		// XXX: This makes sure bootstrap.js comes first, always
-		let files = _package_files(_PACKAGE).filter(function(value) {
+		let files = _package_files(_PACKAGE, 'source').filter(function(value) {
 			return value.startsWith('platform/') && value.endsWith('/bootstrap.js');
-		}).concat(_package_files(_PACKAGE).filter(function(value) {
+		}).concat(_package_files(_PACKAGE, 'source').filter(function(value) {
 			return value.startsWith('platform/') && value.endsWith('/bootstrap.js') === false;
 		}).filter(function(value) {
 			return value.startsWith('platform/') && value.endsWith('/features.js') === false;

@@ -35,6 +35,7 @@ Desktop.ini
 /libraries/*/api
 /libraries/*/build
 /libraries/*/lychee.store
+/libraries/lychee/review/DIST.js
 /libraries/lychee/source/DIST.js
 !/libraries/README.md
 

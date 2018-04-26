@@ -45,6 +45,9 @@
 					],
 					"Pool": [
 						"json"
+					],
+					"Species": [
+						"json"
 					]
 				}
 			},
@@ -774,10 +777,27 @@
 				]
 			}
 		},
-		"environments": {}
+		"simulations": {
+			"node/dist": {
+				"environment": {
+					"debug": false,
+					"packages": {
+						"lychee": "./lychee.pkg"
+					},
+					"sandbox": false,
+					"tags": {
+						"platform": [
+							"node"
+						]
+					},
+					"target": "lychee.DIST",
+					"variant": "library"
+				},
+				"target": "lychee.DIST"
+			}
+		}
 	},
 	"source": {
-		"environments": {},
 		"tags": {
 			"platform": {
 				"html": "platform/html",
@@ -796,9 +816,6 @@
 				"Agent": [
 					"js"
 				],
-				"Genome": [
-					"js"
-				],
 				"Layer": [
 					"js"
 				],
@@ -808,6 +825,9 @@
 					],
 					"Brain": [
 						"js"
+					],
+					"Layer": [
+						"js"
 					]
 				},
 				"enn": {
@@ -815,6 +835,12 @@
 						"js"
 					],
 					"Brain": [
+						"js"
+					],
+					"Genome": [
+						"js"
+					],
+					"Layer": [
 						"js"
 					]
 				},
@@ -832,6 +858,9 @@
 						"js"
 					],
 					"Pool": [
+						"js"
+					],
+					"Species": [
 						"js"
 					]
 				}

@@ -1,6 +1,6 @@
 
 lychee.define('game.state.Game').requires([
-	'lychee.ai.Layer',
+	'lychee.ai.bnn.Layer',
 	'lychee.effect.Color',
 	'lychee.effect.Shake',
 	'lychee.ui.entity.Label',

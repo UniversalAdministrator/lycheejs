@@ -15,7 +15,7 @@ lychee.define('lychee.ai.bnn.Brain').exports(function(lychee, global, attachment
 	};
 
 	const _sigmoid = function(value) {
-		return (1 / (1 + Math.exp((-1 * value) / 1)));
+		return 1.0 / (1 + Math.exp(-1 * value));
 	};
 
 	const _init_network = function() {

@@ -1,14 +1,14 @@
 
 lychee.define('lychee.ai.enn.Agent').requires([
-	'lychee.ai.Genome',
-	'lychee.ai.enn.Brain'
+	'lychee.ai.enn.Brain',
+	'lychee.ai.enn.Genome'
 ]).includes([
 	'lychee.ai.Agent'
 ]).exports(function(lychee, global, attachments) {
 
 	const _Agent          = lychee.import('lychee.ai.Agent');
-	const _Genome         = lychee.import('lychee.ai.Genome');
 	const _Brain          = lychee.import('lychee.ai.enn.Brain');
+	const _Genome         = lychee.import('lychee.ai.enn.Genome');
 	const _MUTATION_RANGE = 0.25;
 	const _MUTATION_RATE  = 0.1;
 

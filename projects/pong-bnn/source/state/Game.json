@@ -70,7 +70,7 @@
 			}
 		},
 		"ai": {
-			"constructor": "lychee.ai.Layer",
+			"constructor": "lychee.ai.bnn.Layer",
 			"arguments": [
 				{}
 			]

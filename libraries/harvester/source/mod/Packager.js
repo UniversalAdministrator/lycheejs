@@ -99,25 +99,31 @@ lychee.define('harvester.mod.Packager').requires([
 		}
 
 
-		if (json === null)                                   json                     = {};
-		if (typeof json.api === 'undefined')                 json.api                 = {};
-		if (typeof json.api.files === 'undefined')           json.api.files           = {};
-		if (typeof json.build  === 'undefined')              json.build               = {};
-		if (typeof json.build.environments === 'undefined')  json.build.environments  = {};
-		if (typeof json.build.files === 'undefined')         json.build.files         = {};
-		if (typeof json.review === 'undefined')              json.review              = {};
-		if (typeof json.review.environments === 'undefined') json.review.environments = {};
-		if (typeof json.review.files === 'undefined')        json.review.files        = {};
-		if (typeof json.source === 'undefined')              json.source              = {};
-		if (typeof json.source.environments === 'undefined') json.source.environments = {};
-		if (typeof json.source.files === 'undefined')        json.source.files        = {};
-		if (typeof json.source.tags === 'undefined')         json.source.tags         = {};
+		if (json === null) json = {};
 
-
+		if (typeof json.api === 'undefined')                 json.api       = {};
+		if (typeof json.api.files === 'undefined')           json.api.files = {};
 		if (typeof json.api.environments !== 'undefined')    delete json.api.environments;
+		if (typeof json.api.simulations !== 'undefined')     delete json.api.simulations;
 		if (typeof json.api.tags !== 'undefined')            delete json.api.tags;
+
+		if (typeof json.build  === 'undefined')              json.build              = {};
+		if (typeof json.build.environments === 'undefined')  json.build.environments = {};
+		if (typeof json.build.files === 'undefined')         json.build.files        = {};
+		if (typeof json.build.simulations !== 'undefined')   delete json.build.simulations;
 		if (typeof json.build.tags !== 'undefined')          delete json.build.tags;
+
+		if (typeof json.review === 'undefined')              json.review             = {};
+		if (typeof json.review.simulations === 'undefined')  json.review.simulations = {};
+		if (typeof json.review.files === 'undefined')        json.review.files       = {};
+		if (typeof json.review.environments !== 'undefined') delete json.review.environments;
 		if (typeof json.review.tags !== 'undefined')         delete json.review.tags;
+
+		if (typeof json.source === 'undefined')              json.source       = {};
+		if (typeof json.source.files === 'undefined')        json.source.files = {};
+		if (typeof json.source.tags === 'undefined')         json.source.tags  = {};
+		if (typeof json.source.environments !== 'undefined') delete json.source.environments;
+		if (typeof json.source.simulations !== 'undefined')  delete json.source.simulations;
 
 
 		json.api.files = {};
@@ -136,10 +142,8 @@ lychee.define('harvester.mod.Packager').requires([
 
 		json.source.files = {};
 		_walk_directory.call(project.filesystem, tmp, '/source');
-		json.source.environments = _sort_recursive(json.source.environments);
-		json.source.simulations  = _sort_recursive(json.source.simulations);
-		json.source.files        = _sort_recursive(tmp.source);
-		json.source.tags         = _walk_tags(json.source.files);
+		json.source.files       = _sort_recursive(tmp.source);
+		json.source.tags        = _walk_tags(json.source.files);
 
 
 		return {
@@ -214,8 +218,8 @@ lychee.define('harvester.mod.Packager').requires([
 
 			if (info.type === 'file') {
 
-				let identifier = path.split('/').pop().split('.')[0];
-				let attachment = path.split('/').pop().split('.').slice(1).join('.');
+				let identifier = name.split('.')[0];
+				let attachment = name.split('.').slice(1).join('.');
 
 				// Music and Sound asset have a trailing mp3 or ogg
 				// extension which is dynamically chosen at runtime
@@ -234,7 +238,9 @@ lychee.define('harvester.mod.Packager').requires([
 						}
 
 					} else {
+
 						pointer[identifier] = [ attachment ];
+
 					}
 
 				}
