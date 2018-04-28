@@ -75,9 +75,9 @@ lychee.define('strainer.plugin.API').requires([
 				let i_composite      = stream.lastIndexOf('return Composite;');
 				let i_module         = stream.lastIndexOf('return Module;');
 				let i_check          = Math.max(i_callback, i_composite, i_module);
-				let is_callback      = i_check === i_callback;
-				let is_composite     = i_check === i_composite;
-				let is_module        = i_check === i_module;
+				let is_callback      = i_check !== -1 && i_check === i_callback;
+				let is_composite     = i_check !== -1 && i_check === i_composite;
+				let is_module        = i_check !== -1 && i_check === i_module;
 
 
 				if (is_definition === true) {
