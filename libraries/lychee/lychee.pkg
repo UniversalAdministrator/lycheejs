@@ -8,9 +8,6 @@
 				"Agent": [
 					"json"
 				],
-				"Genome": [
-					"json"
-				],
 				"Layer": [
 					"json"
 				],
@@ -20,6 +17,9 @@
 					],
 					"Brain": [
 						"json"
+					],
+					"Layer": [
+						"json"
 					]
 				},
 				"enn": {
@@ -27,6 +27,12 @@
 						"json"
 					],
 					"Brain": [
+						"json"
+					],
+					"Genome": [
+						"json"
+					],
+					"Layer": [
 						"json"
 					]
 				},
@@ -762,6 +768,9 @@
 	},
 	"review": {
 		"files": {
+			"DIST": [
+				"js"
+			],
 			"core": {
 				"Definition": [
 					"js"

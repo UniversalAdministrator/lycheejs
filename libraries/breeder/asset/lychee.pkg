@@ -9,6 +9,10 @@
 				"packages": {
 					"app": "./lychee.pkg"
 				},
+				"profile": {
+					"client": "/api/server/connect?identifier=${id}",
+					"server": "/api/server/connect?identifier=${id}"
+				},
 				"sandbox": false,
 				"tags": {
 					"platform": [
@@ -17,16 +21,16 @@
 					]
 				},
 				"target": "app.Main",
-				"variant": "application",
-				"profile": {
-					"client": "/api/server/connect?identifier=${id}",
-					"server": "/api/server/connect?identifier=${id}"
-				}
+				"variant": "application"
 			},
 			"html-webview/main": {
 				"debug": false,
 				"packages": {
 					"app": "./lychee.pkg"
+				},
+				"profile": {
+					"client": "/api/server/connect?identifier=${id}",
+					"server": "/api/server/connect?identifier=${id}"
 				},
 				"sandbox": false,
 				"tags": {
@@ -36,16 +40,16 @@
 					]
 				},
 				"target": "app.Main",
-				"variant": "application",
-				"profile": {
-					"client": "/api/server/connect?identifier=${id}",
-					"server": "/api/server/connect?identifier=${id}"
-				}
+				"variant": "application"
 			},
 			"html/main": {
 				"debug": false,
 				"packages": {
 					"app": "./lychee.pkg"
+				},
+				"profile": {
+					"client": "/api/server/connect?identifier=${id}",
+					"server": "/api/server/connect?identifier=${id}"
 				},
 				"sandbox": false,
 				"tags": {
@@ -54,16 +58,15 @@
 					]
 				},
 				"target": "app.Main",
-				"variant": "application",
-				"profile": {
-					"client": "/api/server/connect?identifier=${id}",
-					"server": "/api/server/connect?identifier=${id}"
-				}
+				"variant": "application"
 			},
 			"node/main": {
 				"debug": false,
 				"packages": {
 					"app": "./lychee.pkg"
+				},
+				"profile": {
+					"client": null
 				},
 				"sandbox": false,
 				"tags": {
@@ -72,20 +75,15 @@
 					]
 				},
 				"target": "app.Main",
-				"variant": "application",
-				"profile": {
-					"client": null
-				}
+				"variant": "application"
 			}
-		},
-		"files": {}
+		}
 	},
 	"review": {
-		"environments": {},
+		"simulations": {},
 		"files": {}
 	},
 	"source": {
-		"environments": {},
 		"files": {
 			"Main": [
 				"js"

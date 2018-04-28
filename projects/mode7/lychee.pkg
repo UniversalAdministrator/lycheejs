@@ -82,10 +82,9 @@
 		}
 	},
 	"review": {
-		"environments": {}
+		"simulations": {}
 	},
 	"source": {
-		"environments": {},
 		"files": {
 			"Camera": [
 				"js"

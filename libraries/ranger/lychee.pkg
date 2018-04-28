@@ -90,10 +90,9 @@
 		}
 	},
 	"review": {
-		"environments": {}
+		"simulations": {}
 	},
 	"source": {
-		"environments": {},
 		"files": {
 			"Main": [
 				"js"

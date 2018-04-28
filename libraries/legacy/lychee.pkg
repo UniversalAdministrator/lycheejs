@@ -25,10 +25,9 @@
 		"environments": {}
 	},
 	"review": {
-		"environments": {}
+		"simulations": {}
 	},
 	"source": {
-		"environments": {},
 		"tags": {
 			"platform": {
 				"html": "platform/html"
