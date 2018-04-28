@@ -1,6 +1,7 @@
 
 lychee.define('strainer.flow.Check').requires([
 	'lychee.Stash',
+	'lychee.event.Queue',
 	'strainer.api.PARSER',
 	'strainer.plugin.API',
 	'strainer.plugin.ESLINT'
@@ -13,6 +14,7 @@ lychee.define('strainer.flow.Check').requires([
 		ESLINT: lychee.import('strainer.plugin.ESLINT')
 	};
 	const _Flow      = lychee.import('lychee.event.Flow');
+	const _Queue     = lychee.import('lychee.event.Queue');
 	const _Stash     = lychee.import('lychee.Stash');
 	const _PARSER    = lychee.import('strainer.api.PARSER');
 	const _PLATFORMS = lychee.PLATFORMS;
@@ -344,6 +346,50 @@ lychee.define('strainer.flow.Check').requires([
 
 
 		return files;
+
+	};
+
+	const _simulate = function(settings, oncomplete) {
+
+		console.log('strainer: VERIFY-API "' + settings.id + '"');
+
+
+		let simulation = new lychee.Simulation(settings);
+
+
+		lychee.setEnvironment(settings.environment);
+		lychee.setSimulation(simulation);
+
+
+		lychee.init(simulation, {
+		}, function(sandboxes) {
+
+			console.warn(simulation.id + ' done.');
+
+			oncomplete(true);
+
+			//     let remaining = 0;
+			//
+			//     Object.keys(sandboxes).sort().forEach(function(sid) {
+			//
+			//         remaining++;
+			//
+			//         sandboxes[sid].evaluate(function(statistics) {
+			//             _render_statistics(sid, statistics);
+			//             remaining--;
+			//         });
+			//
+			//     });
+			//
+			//     setInterval(function() {
+			//
+			//         if (remaining === 0) {
+			//             oncomplete(true);
+			//         }
+			//
+			//     }, 250);
+
+		});
 
 	};
 
@@ -968,7 +1014,6 @@ lychee.define('strainer.flow.Check').requires([
 		this.bind('verify-api', function(oncomplete) {
 
 			let cache   = this.__simulations;
-			let errors  = this.errors;
 			let pkg     = this.__pkg;
 			let project = this.settings.project;
 			let sandbox = this.sandbox;
@@ -1028,46 +1073,34 @@ lychee.define('strainer.flow.Check').requires([
 
 			if (cache.length > 0) {
 
-				console.log('strainer: VERIFY-API "' + cache[0].id + '"');
+				let env   = lychee.environment;
+				let queue = new _Queue();
 
-				// TODO: Implement iterations over simulations cache via event flow
+				queue.bind('update', _simulate, this);
 
-				// let environment = new lychee.Environment(settings.environment);
-				// let simulation  = new lychee.Simulation({
-				//     environment: environment,
-				//     target:      target
-				// });
-				//
-				// lychee.setEnvironment(environment);
-				// lychee.setSimulation(simulation);
-				//
-				// lychee.init(simulation, {
-				// }, function(sandboxes) {
-				//
-				//     let remaining = 0;
-				//
-				//     Object.keys(sandboxes).sort().forEach(function(sid) {
-				//
-				//         remaining++;
-				//
-				//         sandboxes[sid].evaluate(function(statistics) {
-				//             _render_statistics(sid, statistics);
-				//             remaining--;
-				//         });
-				//
-				//     });
-				//
-				//     setInterval(function() {
-				//
-				//         if (remaining === 0) {
-				//             oncomplete(true);
-				//         }
-				//
-				//     }, 250);
-				//
-				// });
+				queue.bind('complete', function() {
 
-				oncomplete(true);
+					lychee.setEnvironment(env);
+					lychee.setSimulation(null);
+
+					oncomplete(true);
+
+				}, this);
+
+				queue.bind('error', function() {
+
+					lychee.setEnvironment(env);
+					lychee.setSimulation(null);
+
+					oncomplete(true);
+
+				}, this);
+
+				cache.forEach(function(entry) {
+					queue.then(entry);
+				});
+
+				queue.init();
 
 			} else {
 
