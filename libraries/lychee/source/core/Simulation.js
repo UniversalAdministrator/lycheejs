@@ -1044,9 +1044,10 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 					let pkg = environment.packages[pid];
 
 					this.__packages[pid] = new lychee.Package({
-						id:   pkg.id,
-						url:  pkg.url,
-						type: 'review'
+						id:         pkg.id,
+						url:        pkg.url,
+						type:       'review',
+						simulation: this
 					});
 
 				}

@@ -643,6 +643,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 					settings.packages[pid] = new _lychee.Package({
 						id:          pid,
 						url:         value,
+						type:        'source',
 						environment: this
 					});
 
