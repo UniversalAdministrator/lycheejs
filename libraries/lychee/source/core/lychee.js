@@ -899,6 +899,24 @@ lychee = (function(global) {
 
 				}
 
+			} else if (aobject instanceof Date && bobject instanceof Date) {
+
+				let astr = aobject.toString();
+				let bstr = bobject.toString();
+
+				if (astr !== bstr) {
+					return true;
+				}
+
+			} else if (aobject instanceof RegExp && bobject instanceof RegExp) {
+
+				let astr = aobject.toString();
+				let bstr = bobject.toString();
+
+				if (astr !== bstr) {
+					return true;
+				}
+
 			} else if (aobject instanceof Object && bobject instanceof Object) {
 
 				let akeys = Object.keys(aobject);
