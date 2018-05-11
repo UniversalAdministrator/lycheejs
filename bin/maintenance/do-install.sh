@@ -114,6 +114,7 @@ else
 			REQUIRED_CMD="pacman -S --noconfirm --needed $REQUIRED_LIST";
 			OPTIONAL_LIST="jdk8-openjdk lib32-glibc lib32-libstdc++5 lib32-ncurses lib32-zlib";
 			OPTIONAL_CMD="pacman -S --noconfirm --needed $OPTIONAL_LIST";
+			UPDATE_CMD="pacman -Sy --noconfirm";
 
 		# Alpine
 		elif [ -x "/sbin/apk" ]; then
@@ -124,6 +125,7 @@ else
 			# XXX: openjdk8 lib32-glibc lib32-libstdc++5 lib32-ncurses lib32-zlib packages not available
 			OPTIONAL_LIST="";
 			OPTIONAL_CMD="apk add --no-cache $OPTIONAL_LIST";
+			UPDATE_CMD="apk update";
 
 		# Debian/Ubuntu
 		elif [ -x "/usr/bin/apt-get" ]; then
@@ -131,6 +133,7 @@ else
 			REQUIRED_CMD="apt-get -y install $REQUIRED_LIST";
 			OPTIONAL_LIST="openjdk-8-jdk libc6-i386 lib32stdc++6 lib32ncurses5 lib32z1";
 			OPTIONAL_CMD="apt-get -y install $OPTIONAL_LIST";
+			UPDATE_CMD="apt-get -y update";
 
 		# Fedora
 		elif [ -x "/usr/bin/dnf" ]; then
@@ -138,6 +141,7 @@ else
 			REQUIRED_CMD="dnf -y install $REQUIRED_LIST";
 			OPTIONAL_LIST="java-1.8.0-openjdk glibc.i686 libstdc++.i686 ncurses-libs.i686 zlib.i686";
 			OPTIONAL_CMD="dnf -y install $OPTIONAL_LIST";
+			UPDATE_CMD="";
 
 		# CentOS/old Fedora
 		elif [ -x "/usr/bin/yum" ]; then
@@ -145,6 +149,7 @@ else
 			REQUIRED_CMD="yum --setopt=alwaysprompt=no install $REQUIRED_LIST";
 			OPTIONAL_LIST="java-1.8.0-openjdk glibc.i686 libstdc++.i686 ncurses-libs.i686 zlib.i686";
 			OPTIONAL_CMD="yum --setopt=alwaysprompt=no install $OPTIONAL_LIST";
+			UPDATE_CMD="yum updateinfo";
 
 		# openSUSE
 		elif [ -x "/usr/bin/zypper" ]; then
@@ -152,18 +157,23 @@ else
 			REQUIRED_CMD="zypper --non-interactive install $REQUIRED_LIST";
 			OPTIONAL_LIST="java-1_8_0-openjdk glibc-32bit libstdc++6-32bit libncurses5-32bit libz1-32bit";
 			OPTIONAL_CMD="zypper --non-interactive install $OPTIONAL_LIST";
+			UPDATE_CMD="zypper update";
+
 		fi;
 
 	elif [ "$OS" == "bsd" ]; then
 
 		# FreeBSD, NetBSD
 		if [[ -x "/usr/sbin/pkg" ]]; then
+
 			export ASSUME_ALWAYS_YES="yes";
 			# XXX: icns-utils package not available
 			REQUIRED_LIST="bash binutils coreutils sed zip unzip tar curl git";
 			REQUIRED_CMD="pkg install $REQUIRED_LIST";
 			OPTIONAL_LIST="openjdk8 libstdc++ lzlib ncurses";
 			OPTIONAL_CMD="pkg install $OPTIONAL_LIST";
+			UPDATE_CMD="pkg update";
+
 		fi;
 
 	elif [ "$OS" == "osx" ]; then
@@ -174,6 +184,23 @@ else
 		elif [[ -x "/opt/local/bin/port" ]]; then
 			REQUIRED_LIST="binutils coreutils libicns gsed zip unzip gnutar curl git";
 			REQUIRED_CMD="port install $REQUIRED_LIST";
+		fi;
+
+	fi;
+
+
+
+	if [ "$UPDATE_CMD" != "" ]; then
+
+		echo " (L) ";
+		echo " (L) > Updating package information ...";
+
+		_install "$UPDATE_CMD";
+
+		if [ $? -eq 0 ]; then
+			echo -e "\e[42m\e[97m (I) > SUCCESS \e[0m";
+		else
+			echo -e "\e[41m\e[97m (E) > FAILURE \e[0m";
 		fi;
 
 	fi;
