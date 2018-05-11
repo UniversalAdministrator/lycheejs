@@ -28,6 +28,47 @@ lychee.define('strainer.flow.Check').requires([
 	 * HELPERS
 	 */
 
+	const _resolve = function(identifier) {
+
+		let pointer   = this;
+		let namespace = identifier.split('.');
+		let id        = namespace.pop();
+
+		for (let n = 0, nl = namespace.length; n < nl; n++) {
+
+			let name = namespace[n];
+
+			if (pointer[name] === undefined) {
+				pointer[name] = {};
+			}
+
+			pointer = pointer[name];
+
+		}
+
+
+		let check = id.toLowerCase();
+		if (check === id) {
+
+			if (pointer[id] === undefined) {
+				pointer[id] = {};
+			}
+
+			return pointer[id];
+
+		} else {
+
+			if (pointer[id] !== undefined) {
+				return pointer[id];
+			}
+
+		}
+
+
+		return null;
+
+	};
+
 	const _walk_directory = function(files, node, path, attachments) {
 
 		if (node instanceof Array) {
@@ -349,6 +390,61 @@ lychee.define('strainer.flow.Check').requires([
 
 	};
 
+	const _render_statistics = function(id, statistics) {
+
+		let types = Object.keys(statistics);
+		if (types.length > 0) {
+
+			let is_valid = false;
+
+			types.forEach(function(type) {
+
+				let names = Object.keys(statistics[type]);
+				if (names.length > 0) {
+
+					// XXX: This will log the headline only when
+					// it contains an actual statistics report
+					if (is_valid === false) {
+						console.log('strainer: VERIFY-API of "' + id + '":');
+						is_valid = true;
+					}
+
+
+					names.forEach(function(name) {
+
+						let obj   = statistics[type][name];
+						let title = name;
+						if (type === 'enums') {
+							title = '#' + name;
+						} else if (type === 'events') {
+							title = '@' + name;
+						} else if (type === 'methods') {
+							title = name + '()';
+						}
+
+
+						let info  = title + ': ' + obj.results.ok + '/' + obj.results.all;
+
+						if (obj._expect > 0) {
+							info += ' (' + obj._expect + ' incomplete)';
+						}
+
+						if (obj.results.ok < obj.results.all || obj._expect > 0) {
+							console.error('strainer: \t' + info);
+						} else {
+							console.log('strainer: \t' + info);
+						}
+
+					});
+
+				}
+
+			});
+
+		}
+
+	};
+
 	const _simulate = function(settings, oncomplete) {
 
 		console.log('strainer: VERIFY-API "' + settings.id + '"');
@@ -364,30 +460,50 @@ lychee.define('strainer.flow.Check').requires([
 		lychee.init(simulation, {
 		}, function(sandboxes) {
 
-			console.warn(simulation.id + ' done.');
+			let remaining      = 0;
+			let specifications = Object.keys(simulation.specifications);
+			if (specifications.length > 0) {
 
-			oncomplete(true);
+				specifications.map(function(sid) {
 
-			//     let remaining = 0;
-			//
-			//     Object.keys(sandboxes).sort().forEach(function(sid) {
-			//
-			//         remaining++;
-			//
-			//         sandboxes[sid].evaluate(function(statistics) {
-			//             _render_statistics(sid, statistics);
-			//             remaining--;
-			//         });
-			//
-			//     });
-			//
-			//     setInterval(function() {
-			//
-			//         if (remaining === 0) {
-			//             oncomplete(true);
-			//         }
-			//
-			//     }, 250);
+					return {
+						id:      sid,
+						sandbox: _resolve.call(sandboxes, sid)
+					};
+
+				}).filter(function(entry) {
+
+					let sandbox = entry.sandbox || null;
+					if (sandbox !== null && typeof sandbox.evaluate === 'function') {
+						return true;
+					}
+
+					return false;
+
+				}).forEach(function(entry) {
+
+					remaining++;
+
+					entry.sandbox.evaluate(function(statistics) {
+						_render_statistics(entry.id, statistics);
+						remaining--;
+					});
+
+				});
+
+				setInterval(function() {
+
+					if (remaining === 0) {
+						oncomplete(true);
+					}
+
+				}, 250);
+
+			} else {
+
+				oncomplete(true);
+
+			}
 
 		});
 
