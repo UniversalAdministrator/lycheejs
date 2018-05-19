@@ -28,8 +28,6 @@ lychee.define('game.state.Game').requires([
 		if (entity !== null) {
 			// TODO: Touched an Entity
 			console.log('Touched entity', entity);
-		} else {
-			console.log('you cant touch this', position);
 		}
 
 	};
@@ -108,7 +106,6 @@ lychee.define('game.state.Game').requires([
 
 							if (position_origin !== null && position_target !== null) {
 
-
 								renderer.drawLine(
 									renderer.width  / 2 + position_origin.x,
 									renderer.height / 2 + position_origin.y,
@@ -126,7 +123,7 @@ lychee.define('game.state.Game').requires([
 
 				}
 
-				renderer.clear();
+				renderer.flush();
 
 			}
 

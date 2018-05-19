@@ -6,8 +6,8 @@
 				"team": "neutral",
 				"radius": 120,
 				"position": {
-					"x": 160,
-					"y": -80
+					"x": 240,
+					"y": -120
 				}
 			}]
 		}, {
@@ -16,8 +16,8 @@
 				"team": "neutral",
 				"radius": 120,
 				"position": {
-					"x": -140,
-					"y": -80
+					"x": -320,
+					"y": -120
 				}
 			}]
 		}, {
@@ -26,8 +26,18 @@
 				"team": "neutral",
 				"radius": 120,
 				"position": {
-					"x": 60,
-					"y": 200
+					"x": 120,
+					"y": 320
+				}
+			}]
+		}, {
+			"constructor": "game.app.entity.Cell",
+			"arguments": [{
+				"team": "neutral",
+				"radius": 80,
+				"position": {
+					"x": 0,
+					"y": 0
 				}
 			}]
 		}
