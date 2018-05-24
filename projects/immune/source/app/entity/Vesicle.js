@@ -8,6 +8,7 @@ lychee.define('game.app.entity.Vesicle').requires([
 	const _Color   = lychee.import('lychee.effect.Color');
 	const _Entity  = lychee.import('lychee.app.Entity');
 	let   _id      = 0;
+	const _FONT    = attachments["fnt"];
 	const _PALETTE = {
 		immune:  '#32afe5',
 		virus:   '#d0494b',
@@ -27,6 +28,7 @@ lychee.define('game.app.entity.Vesicle').requires([
 
 		this.id     = 'vesicle-' + _id++;
 		this.color  = '#efefef';
+		this.font   = _FONT;
 		this.team   = 'neutral';
 		this.damage = 0;
 		this.health = 100;
@@ -114,6 +116,7 @@ lychee.define('game.app.entity.Vesicle').requires([
 		render: function(renderer, offsetX, offsetY) {
 
 			let color    = this.color;
+			let font     = this.font;
 			let position = this.position;
 			let radius   = this.radius;
 
@@ -133,6 +136,20 @@ lychee.define('game.app.entity.Vesicle').requires([
 				color,
 				true
 			);
+
+
+			let id = this.id.substr('vesicle-'.length);
+			if (id.length > 0) {
+
+				renderer.drawText(
+					position.x + offsetX,
+					position.y + offsetY,
+					'#' + id,
+					font,
+					true
+				);
+
+			}
 
 		},
 
