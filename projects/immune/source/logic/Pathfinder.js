@@ -13,8 +13,6 @@ lychee.define('game.logic.Pathfinder').requires([
 
 	const Module = {
 
-		// deserialize: function() {},
-
 		// deserialize: function(blob) {},
 
 		serialize: function() {
@@ -43,66 +41,66 @@ lychee.define('game.logic.Pathfinder').requires([
 				});
 
 
-				cells.forEach(function(cella) {
+				cells.forEach(function(cell_a) {
 
 					cells.filter(function(cell) {
-						return cell !== cella;
-					}).forEach(function(cellb) {
+						return cell !== cell_a;
+					}).forEach(function(cell_b) {
 
-						let vesiclea = cella.getVesicle(null, cellb.position);
-						let vesicleb = cellb.getVesicle(null, cella.position);
+						let vesicle_a = cell_a.getVesicle(null, cell_b.position);
+						let vesicle_b = cell_b.getVesicle(null, cell_a.position);
 
-						if (vesiclea !== null && vesicleb !== null) {
+						if (vesicle_a !== null && vesicle_b !== null) {
 
 							cells.filter(function(cell) {
-								return cell !== cella && cell !== cellb;
+								return cell !== cell_a && cell !== cell_b;
 							}).forEach(function(cell) {
 
-								if (cell.collidesWith(vesiclea) === true) {
-									vesiclea = null;
+								if (cell.collidesWith(vesicle_a) === true) {
+									vesicle_a = null;
 								}
 
-								if (cell.collidesWith(vesicleb) === true) {
-									vesicleb = null;
+								if (cell.collidesWith(vesicle_b) === true) {
+									vesicle_b = null;
 								}
 
 							});
 
 						}
 
-						if (vesiclea !== null && vesicleb !== null) {
+						if (vesicle_a !== null && vesicle_b !== null) {
 
-							if (map.vesicles[vesiclea.id] === undefined) {
-								map.vesicles[vesiclea.id] = {
+							if (map.vesicles[vesicle_a.id] === undefined) {
+								map.vesicles[vesicle_a.id] = {
 									position: {
-										x: cella.position.x + vesiclea.position.x,
-										y: cella.position.y + vesiclea.position.y
+										x: cell_a.position.x + vesicle_a.position.x,
+										y: cell_a.position.y + vesicle_a.position.y
 									},
-									vesicle: vesiclea
+									vesicle: vesicle_a
 								};
 							}
 
-							if (map.vesicles[vesicleb.id] === undefined) {
-								map.vesicles[vesicleb.id] = {
+							if (map.vesicles[vesicle_b.id] === undefined) {
+								map.vesicles[vesicle_b.id] = {
 									position: {
-										x: cellb.position.x + vesicleb.position.x,
-										y: cellb.position.y + vesicleb.position.y
+										x: cell_b.position.x + vesicle_b.position.x,
+										y: cell_b.position.y + vesicle_b.position.y
 									},
-									vesicle: vesicleb
+									vesicle: vesicle_b
 								};
 							}
 
 
-							if (map.paths[vesiclea.id] === undefined) {
-								map.paths[vesiclea.id] = [ vesicleb.id ];
-							} else if (map.paths[vesiclea.id].includes(vesicleb.id) === false) {
-								map.paths[vesiclea.id].push(vesicleb.id);
+							if (map.paths[vesicle_a.id] === undefined) {
+								map.paths[vesicle_a.id] = [ vesicle_b.id ];
+							} else if (map.paths[vesicle_a.id].includes(vesicle_b.id) === false) {
+								map.paths[vesicle_a.id].push(vesicle_b.id);
 							}
 
-							if (map.paths[vesicleb.id] === undefined) {
-								map.paths[vesicleb.id] = [ vesiclea.id ];
-							} else if (map.paths[vesicleb.id].includes(vesiclea.id) === false) {
-								map.paths[vesicleb.id].push(vesiclea.id);
+							if (map.paths[vesicle_b.id] === undefined) {
+								map.paths[vesicle_b.id] = [ vesicle_a.id ];
+							} else if (map.paths[vesicle_b.id].includes(vesicle_a.id) === false) {
+								map.paths[vesicle_b.id].push(vesicle_a.id);
 							}
 
 						}

@@ -116,6 +116,7 @@
 						"move.snd"
 					],
 					"Vesicle": [
+						"fnt",
 						"js"
 					],
 					"unit": {
