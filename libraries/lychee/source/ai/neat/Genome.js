@@ -74,11 +74,16 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 
 		},
 
-		randomNeuron: function(nonInput, inputs, outputs) {
+		randomNeuron: function(input, inputs, outputs) {
+
+			input   = input === true;
+			inputs  = inputs instanceof Array  ? inputs  : null;
+			outputs = outputs instanceof Array ? outputs : null;
+
 
 			let neurons = [];
 
-			if (nonInput === false) {
+			if (input === true) {
 
 				inputs.forEach(function(input, i) {
 					neurons.push(i);
