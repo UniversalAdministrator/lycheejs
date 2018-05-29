@@ -5,7 +5,7 @@ lychee.define('lychee.effect.Visible').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
 		this.delay    = 0;
 		this.visible  = true;
@@ -16,8 +16,8 @@ lychee.define('lychee.effect.Visible').exports(function(lychee, global, attachme
 
 		// No data validation garbage allowed for effects
 
-		this.delay   = typeof settings.delay === 'number' ? (settings.delay | 0) : 0;
-		this.visible = settings.visible === true;
+		this.delay   = typeof states.delay === 'number' ? (states.delay | 0) : 0;
+		this.visible = states.visible === true;
 
 	};
 
@@ -32,16 +32,16 @@ lychee.define('lychee.effect.Visible').exports(function(lychee, global, attachme
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.delay !== 0)      settings.delay   = this.delay;
-			if (this.visible !== true) settings.visible = this.visible;
+			if (this.delay !== 0)      states.delay   = this.delay;
+			if (this.visible !== true) states.visible = this.visible;
 
 
 			return {
 				'constructor': 'lychee.effect.Visible',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

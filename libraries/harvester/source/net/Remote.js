@@ -20,12 +20,12 @@ lychee.define('harvester.net.Remote').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		_Tunnel.call(this, settings);
+		_Tunnel.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

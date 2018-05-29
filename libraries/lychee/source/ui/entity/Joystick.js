@@ -33,7 +33,7 @@ lychee.define('lychee.ui.entity.Joystick').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.value = { x: 0, y: 0 };
@@ -58,19 +58,19 @@ lychee.define('lychee.ui.entity.Joystick').includes([
 		this.__isDirty = true;
 
 
-		this.setValue(settings.value);
+		this.setValue(states.value);
 
-		delete settings.value;
-
-
-		settings.width  = typeof settings.width === 'number'  ? settings.width  : 128;
-		settings.height = typeof settings.height === 'number' ? settings.height : 128;
-		settings.shape  = _Entity.SHAPE.rectangle;
+		delete states.value;
 
 
-		_Entity.call(this, settings);
+		states.width  = typeof states.width === 'number'  ? states.width  : 128;
+		states.height = typeof states.height === 'number' ? states.height : 128;
+		states.shape  = _Entity.SHAPE.rectangle;
 
-		settings = null;
+
+		_Entity.call(this, states);
+
+		states = null;
 
 
 
@@ -185,16 +185,16 @@ lychee.define('lychee.ui.entity.Joystick').includes([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Joystick';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
 			if (this.value.x !== 0 || this.value.y !== 0) {
 
-				settings.value = {};
+				states.value = {};
 
-				if (this.value.x !== 0) settings.value.x = this.value.x;
-				if (this.value.y !== 0) settings.value.y = this.value.y;
+				if (this.value.x !== 0) states.value.x = this.value.x;
+				if (this.value.y !== 0) states.value.y = this.value.y;
 
 			}
 

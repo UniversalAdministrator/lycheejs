@@ -50,7 +50,7 @@ lychee.define('lychee.net.Server').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.codec  = _JSON;
@@ -64,16 +64,16 @@ lychee.define('lychee.net.Server').tags({
 		this.__server      = null;
 
 
-		this.setCodec(settings.codec);
-		this.setHost(settings.host);
-		this.setPort(settings.port);
-		this.setRemote(settings.remote);
-		this.setType(settings.type);
+		this.setCodec(states.codec);
+		this.setHost(states.host);
+		this.setPort(states.port);
+		this.setRemote(states.remote);
+		this.setType(states.type);
 
 
 		_Emitter.call(this);
 
-		settings = null;
+		states = null;
 
 
 		/*
@@ -130,17 +130,17 @@ lychee.define('lychee.net.Server').tags({
 			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.net.Server';
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.codec !== _JSON)            settings.codec  = lychee.serialize(this.codec);
-			if (this.host !== 'localhost')       settings.host   = this.host;
-			if (this.port !== 1337)              settings.port   = this.port;
-			if (this.remote !== _Remote)         settings.remote = lychee.serialize(this.remote);
-			if (this.type !== Composite.TYPE.WS) settings.type   = this.type;
+			if (this.codec !== _JSON)            states.codec  = lychee.serialize(this.codec);
+			if (this.host !== 'localhost')       states.host   = this.host;
+			if (this.port !== 1337)              states.port   = this.port;
+			if (this.remote !== _Remote)         states.remote = lychee.serialize(this.remote);
+			if (this.type !== Composite.TYPE.WS) states.type   = this.type;
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 
 
 			return data;

@@ -381,7 +381,7 @@ lychee.define('lychee.Stash').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id   = 'lychee-Stash-' + _id++;
@@ -392,8 +392,8 @@ lychee.define('lychee.Stash').tags({
 		this.__operations = [];
 
 
-		this.setId(settings.id);
-		this.setType(settings.type);
+		this.setId(states.id);
+		this.setType(states.type);
 
 
 		_Emitter.call(this);
@@ -407,7 +407,7 @@ lychee.define('lychee.Stash').tags({
 		_read_stash.call(this);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -471,12 +471,12 @@ lychee.define('lychee.Stash').tags({
 			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.Stash';
 
-			let settings = {};
-			let blob     = (data['blob'] || {});
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.id.startsWith('lychee-Stash-') === false) settings.id   = this.id;
-			if (this.type !== Composite.TYPE.persistent)       settings.type = this.type;
+			if (this.id.startsWith('lychee-Stash-') === false) states.id   = this.id;
+			if (this.type !== Composite.TYPE.persistent)       states.type = this.type;
 
 
 			if (Object.keys(this.__assets).length > 0) {
@@ -490,7 +490,7 @@ lychee.define('lychee.Stash').tags({
 			}
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

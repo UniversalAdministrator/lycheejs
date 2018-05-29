@@ -638,7 +638,7 @@ lychee.define('legacy.Input').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.delay       = 0;
@@ -663,19 +663,19 @@ lychee.define('legacy.Input').tags({
 		};
 
 
-		this.setDelay(settings.delay);
-		this.setKey(settings.key);
-		this.setKeyModifier(settings.keymodifier);
-		this.setScroll(settings.scroll);
-		this.setSwipe(settings.swipe);
-		this.setTouch(settings.touch);
+		this.setDelay(states.delay);
+		this.setKey(states.key);
+		this.setKeyModifier(states.keymodifier);
+		this.setScroll(states.scroll);
+		this.setSwipe(states.swipe);
+		this.setTouch(states.touch);
 
 
 		_Emitter.call(this);
 
 		_INSTANCES.push(this);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -717,17 +717,19 @@ lychee.define('legacy.Input').tags({
 			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'legacy.Input';
 
-			let settings = {};
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.delay !== 0)           settings.delay       = this.delay;
-			if (this.key !== false)         settings.key         = this.key;
-			if (this.keymodifier !== false) settings.keymodifier = this.keymodifier;
-			if (this.touch !== false)       settings.touch       = this.touch;
-			if (this.swipe !== false)       settings.swipe       = this.swipe;
+			if (this.delay !== 0)           states.delay       = this.delay;
+			if (this.key !== false)         states.key         = this.key;
+			if (this.keymodifier !== false) states.keymodifier = this.keymodifier;
+			if (this.touch !== false)       states.touch       = this.touch;
+			if (this.swipe !== false)       states.swipe       = this.swipe;
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
+			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 
 			return data;

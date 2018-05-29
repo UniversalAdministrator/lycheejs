@@ -13,12 +13,12 @@ lychee.define('ranger.ui.entity.Identifier').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		_Label.call(this, settings);
+		_Label.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

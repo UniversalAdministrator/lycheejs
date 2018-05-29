@@ -152,12 +152,12 @@ lychee.define('breeder.Template').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		this.sandbox  = '';
-		this.settings = {};
-		this.stash    = new _Stash({
+		this.sandbox = '';
+		this.states  = {};
+		this.stash   = new _Stash({
 			type: _Stash.TYPE.persistent
 		});
 
@@ -167,13 +167,13 @@ lychee.define('breeder.Template').requires([
 		this.__main        = [];
 
 
-		this.setSandbox(settings.sandbox);
-		this.setSettings(settings.settings);
+		this.setSandbox(states.sandbox);
+		this.setSettings(states.settings);
 
 
 		_Flow.call(this);
 
-		settings = null;
+		states = null;
 
 
 

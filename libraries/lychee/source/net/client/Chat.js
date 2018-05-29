@@ -16,7 +16,7 @@ lychee.define('lychee.net.client.Chat').includes([
 		id = typeof id === 'string' ? id : 'chat';
 
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.room = null;
@@ -31,14 +31,14 @@ lychee.define('lychee.net.client.Chat').includes([
 		 * INITIALIZATION
 		 */
 
-		this.setRoom(settings.room);
-		this.setUser(settings.user);
+		this.setRoom(states.room);
+		this.setUser(states.user);
 
-		delete settings.room;
-		delete settings.user;
+		delete states.room;
+		delete states.user;
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -56,14 +56,14 @@ lychee.define('lychee.net.client.Chat').includes([
 			let data = _Service.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.net.client.Chat';
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.room !== null) settings.room = this.room;
-			if (this.user !== null) settings.user = this.user;
+			if (this.room !== null) states.room = this.room;
+			if (this.user !== null) states.user = this.user;
 
 
-			data['arguments'][2] = settings;
+			data['arguments'][2] = states;
 
 
 			return data;

@@ -243,7 +243,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id             = 'lychee-Simulation-' + _id++;
@@ -266,15 +266,15 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 		this.__packages = {};
 
 
-		this.setId(settings.id);
-		this.setSpecifications(settings.specifications);
-		this.setEnvironment(settings.environment);
+		this.setId(states.id);
+		this.setSpecifications(states.specifications);
+		this.setEnvironment(states.environment);
 
-		this.setTarget(settings.target);
-		this.setTimeout(settings.timeout);
+		this.setTarget(states.target);
+		this.setTimeout(states.timeout);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -299,13 +299,13 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 		serialize: function() {
 
-			let settings = {};
-			let blob     = {};
+			let states = {};
+			let blob   = {};
 
 
-			if (this.id !== '')             settings.id      = this.id;
-			if (this.target !== 'app.Main') settings.target  = this.target;
-			if (this.timeout !== 10000)     settings.timeout = this.timeout;
+			if (this.id !== '')             states.id      = this.id;
+			if (this.target !== 'app.Main') states.target  = this.target;
+			if (this.timeout !== 10000)     states.timeout = this.timeout;
 
 
 			if (Object.keys(this.specifications).length > 0) {
@@ -321,7 +321,7 @@ lychee.Simulation = typeof lychee.Simulation !== 'undefined' ? lychee.Simulation
 
 			return {
 				'constructor': 'lychee.Simulation',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 

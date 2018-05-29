@@ -61,12 +61,12 @@ lychee.define('legacy.app.Main').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		_Main.call(this, settings);
+		_Main.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

@@ -334,7 +334,7 @@ lychee.define('strainer.fix.API').exports(function(lychee, global, attachments) 
 
 		},
 
-		'no-settings': function(err, report, code) {
+		'no-states': function(err, report, code) {
 
 			let type = report.header.type;
 			if (type === 'Composite') {
@@ -346,7 +346,7 @@ lychee.define('strainer.fix.API').exports(function(lychee, global, attachments) 
 
 					let chunk = code.substr(i1, i2 - i1 + 4).split('\n');
 
-					chunk.splice(2, 0, '\n\t\tlet settings = Object.assign({}, data);\n');
+					chunk.splice(2, 0, '\n\t\tlet states = Object.assign({}, data);\n');
 
 					return code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
 
@@ -371,7 +371,7 @@ lychee.define('strainer.fix.API').exports(function(lychee, global, attachments) 
 
 					let chunk = code.substr(i1, i2 - i1 + 4).split('\n');
 
-					chunk.splice(chunk.length - 1, 0, '\n\t\tsettings = null;\n');
+					chunk.splice(chunk.length - 1, 0, '\n\t\tstates = null;\n');
 
 					return code.substr(0, i1) + chunk.join('\n') + code.substr(i2 + 4);
 
@@ -400,13 +400,13 @@ lychee.define('strainer.fix.API').exports(function(lychee, global, attachments) 
 
 						let chunk = code.substr(i1, i2 - i1 + 4).split('\n');
 						let i3    = chunk.findIndex(function(line) {
-							return line.includes('settings = null');
+							return line.includes('states = null');
 						});
 
 						if (i3 !== -1) {
-							chunk.splice(i3, 0, '\t\t' + name + '.call(this, settings);\n');
+							chunk.splice(i3, 0, '\t\t' + name + '.call(this, states);\n');
 						} else {
-							chunk.splice(chunk.length - 1, 0, '\n\t\t' + name + '.call(this, settings);\n');
+							chunk.splice(chunk.length - 1, 0, '\n\t\t' + name + '.call(this, states);\n');
 						}
 
 

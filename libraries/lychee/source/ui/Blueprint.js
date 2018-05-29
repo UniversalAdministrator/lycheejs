@@ -737,7 +737,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.type = Composite.TYPE.grid;
@@ -756,17 +756,17 @@ lychee.define('lychee.ui.Blueprint').requires([
 		};
 
 
-		this.setType(settings.type);
+		this.setType(states.type);
 
-		delete settings.type;
-
-
-		settings.relayout = false;
+		delete states.type;
 
 
-		_Layer.call(this, settings);
+		states.relayout = false;
 
-		settings = null;
+
+		_Layer.call(this, states);
+
+		states = null;
 
 
 
@@ -884,10 +884,14 @@ lychee.define('lychee.ui.Blueprint').requires([
 			let data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.Blueprint';
 
-			let settings = data['arguments'][0];
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.type !== Composite.TYPE.grid) settings.type = this.type;
+			if (this.type !== Composite.TYPE.grid) states.type = this.type;
+
+
+			data['blob'] = Object.keys(blob).length > 0 ? blob : null;
 
 
 			return data;

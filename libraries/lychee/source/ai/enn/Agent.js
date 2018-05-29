@@ -20,21 +20,21 @@ lychee.define('lychee.ai.enn.Agent').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.genome = null;
 
 
-		settings.brain  = settings.brain  || new _Brain();
-		settings.genome = settings.genome || new _Genome();
+		states.brain  = states.brain  || new _Brain();
+		states.genome = states.genome || new _Genome();
 
-		_Agent.call(this, settings);
+		_Agent.call(this, states);
 
 
-		this.setGenome(settings.genome);
+		this.setGenome(states.genome);
 
-		settings = null;
+		states = null;
 
 	};
 

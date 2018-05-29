@@ -193,7 +193,7 @@ lychee.define('lychee.ai.enn.Layer').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.__fitness = {
@@ -204,9 +204,9 @@ lychee.define('lychee.ai.enn.Layer').requires([
 		};
 
 
-		_Layer.call(this, settings);
+		_Layer.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 
@@ -228,11 +228,11 @@ lychee.define('lychee.ai.enn.Layer').requires([
 			let data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ai.enn.Layer';
 
-			let settings = {};
-			let blob     = (data['blob'] || {});
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

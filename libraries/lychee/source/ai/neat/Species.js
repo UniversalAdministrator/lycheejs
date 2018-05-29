@@ -3,10 +3,10 @@ lychee.define('lychee.ai.neat.Species').exports(function(lychee, global, attachm
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings = null;
+		states = null;
 
 	};
 

@@ -14,7 +14,7 @@ lychee.define('lychee.ui.entity.Button').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.label = null;
@@ -36,23 +36,23 @@ lychee.define('lychee.ui.entity.Button').includes([
 		};
 
 
-		this.setFont(settings.font);
-		this.setLabel(settings.label);
-		this.setValue(settings.value);
+		this.setFont(states.font);
+		this.setLabel(states.label);
+		this.setValue(states.value);
 
-		delete settings.font;
-		delete settings.label;
-		delete settings.value;
-
-
-		settings.width  = typeof settings.width === 'number'  ? settings.width  : 128;
-		settings.height = typeof settings.height === 'number' ? settings.height :  32;
-		settings.shape  = _Entity.SHAPE.rectangle;
+		delete states.font;
+		delete states.label;
+		delete states.value;
 
 
-		_Entity.call(this, settings);
+		states.width  = typeof states.width === 'number'  ? states.width  : 128;
+		states.height = typeof states.height === 'number' ? states.height :  32;
+		states.shape  = _Entity.SHAPE.rectangle;
 
-		settings = null;
+
+		_Entity.call(this, states);
+
+		states = null;
 
 
 
@@ -114,12 +114,12 @@ lychee.define('lychee.ui.entity.Button').includes([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Button';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.label !== null) settings.label = this.label;
-			if (this.value !== null) settings.value = this.value;
+			if (this.label !== null) states.label = this.label;
+			if (this.value !== null) states.value = this.value;
 
 
 			if (this.font !== null) blob.font = lychee.serialize(this.font);

@@ -202,7 +202,7 @@ lychee.define('lychee.ui.Element').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.label   = 'CONTENT';
@@ -211,14 +211,14 @@ lychee.define('lychee.ui.Element').requires([
 		this.type    = Composite.TYPE.view;
 
 
-		settings.width    = typeof settings.width === 'number'     ? settings.width    : 256;
-		settings.height   = typeof settings.height === 'number'    ? settings.height   : 384;
+		states.width  = typeof states.width === 'number'  ? states.width  : 256;
+		states.height = typeof states.height === 'number' ? states.height : 384;
 
-		let init_relayout = typeof settings.relayout === 'boolean' ? settings.relayout : false;
-		settings.relayout = false;
+		let init_relayout = typeof states.relayout === 'boolean' ? states.relayout : false;
+		states.relayout = false;
 
 
-		_Layer.call(this, settings);
+		_Layer.call(this, states);
 
 
 
@@ -260,10 +260,10 @@ lychee.define('lychee.ui.Element').requires([
 		}, this);
 
 
-		this.setLabel(settings.label);
-		this.setOptions(settings.options);
-		this.setOrder(settings.order);
-		this.setType(settings.type);
+		this.setLabel(states.label);
+		this.setOptions(states.options);
+		this.setOrder(states.order);
+		this.setType(states.type);
 
 
 		if (init_relayout === true) {
@@ -272,7 +272,7 @@ lychee.define('lychee.ui.Element').requires([
 		}
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -303,13 +303,13 @@ lychee.define('lychee.ui.Element').requires([
 			let data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.Element';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.label !== 'CONTENT')                 settings.label   = this.label;
-			if (this.options.join(',') !== 'Okay,Cancel') settings.options = Array.from(this.options);
-			if (this.order !== 1)                         settings.order   = this.order;
+			if (this.label !== 'CONTENT')                 states.label   = this.label;
+			if (this.options.join(',') !== 'Okay,Cancel') states.options = Array.from(this.options);
+			if (this.order !== 1)                         states.order   = this.order;
 
 
 			if (this.entities.length > 4) {

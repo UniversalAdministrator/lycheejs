@@ -287,7 +287,7 @@ lychee.define('lychee.Storage').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id    = 'lychee-Storage-' + _id++;
@@ -299,14 +299,14 @@ lychee.define('lychee.Storage').tags({
 		this.__operations = [];
 
 
-		this.setId(settings.id);
-		this.setModel(settings.model);
-		this.setType(settings.type);
+		this.setId(states.id);
+		this.setModel(states.model);
+		this.setType(states.type);
 
 
 		_Emitter.call(this);
 
-		settings = null;
+		states = null;
 
 
 
@@ -375,13 +375,13 @@ lychee.define('lychee.Storage').tags({
 			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.Storage';
 
-			let settings = {};
-			let blob     = (data['blob'] || {});
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.id.startsWith('lychee-Storage-') === false) settings.id    = this.id;
-			if (Object.keys(this.model).length !== 0)            settings.model = this.model;
-			if (this.type !== Composite.TYPE.persistent)         settings.type  = this.type;
+			if (this.id.startsWith('lychee-Storage-') === false) states.id    = this.id;
+			if (Object.keys(this.model).length !== 0)            states.model = this.model;
+			if (this.type !== Composite.TYPE.persistent)         states.type  = this.type;
 
 
 			if (Object.keys(this.__objects).length > 0) {
@@ -400,7 +400,7 @@ lychee.define('lychee.Storage').tags({
 			}
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

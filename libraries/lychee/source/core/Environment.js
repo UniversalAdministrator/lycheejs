@@ -556,14 +556,14 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		serialize: function() {
 
-			let settings = {};
-			let blob     = {};
+			let states = {};
+			let blob   = {};
 
 
 			Object.keys(this).filter(function(key) {
 				return key.charAt(0) !== '_' && key === key.toUpperCase();
 			}).forEach(function(key) {
-				settings[key] = _lychee.serialize(this[key]);
+				states[key] = _lychee.serialize(this[key]);
 			}.bind(this));
 
 
@@ -582,7 +582,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			return {
 				'constructor': '_Sandbox',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 
@@ -598,7 +598,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id          = 'lychee-Environment-' + _id++;
@@ -628,19 +628,19 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		// Alternative API for lychee.pkg
 
-		if (settings.packages instanceof Array) {
+		if (states.packages instanceof Array) {
 
 			this.global.console.error('lychee.Environment ("' + this.id + '"): Invalid Packages.');
-			delete settings.packages;
+			delete states.packages;
 
-		} else if (settings.packages instanceof Object) {
+		} else if (states.packages instanceof Object) {
 
-			for (let pid in settings.packages) {
+			for (let pid in states.packages) {
 
-				let value = settings.packages[pid];
+				let value = states.packages[pid];
 				if (typeof value === 'string') {
 
-					settings.packages[pid] = new _lychee.Package({
+					states.packages[pid] = new _lychee.Package({
 						id:          pid,
 						url:         value,
 						type:        'source',
@@ -654,23 +654,23 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		}
 
 
-		this.setSandbox(settings.sandbox);
-		this.setDebug(settings.debug);
+		this.setSandbox(states.sandbox);
+		this.setDebug(states.debug);
 
-		this.setDefinitions(settings.definitions);
-		this.setId(settings.id);
-		this.setPackages(settings.packages);
-		this.setTags(settings.tags);
-		this.setTimeout(settings.timeout);
+		this.setDefinitions(states.definitions);
+		this.setId(states.id);
+		this.setPackages(states.packages);
+		this.setTags(states.tags);
+		this.setTimeout(states.timeout);
 
 		// Needs this.packages to be ready
-		this.setType(settings.type);
+		this.setType(states.type);
 
 		// Needs this.type to be ready
-		this.setTarget(settings.target);
+		this.setTarget(states.target);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -710,34 +710,34 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		serialize: function() {
 
-			let settings = {};
-			let blob     = {};
+			let states = {};
+			let blob   = {};
 
 
-			if (this.id !== '')             settings.id      = this.id;
-			if (this.debug !== true)        settings.debug   = this.debug;
-			if (this.sandbox !== false)     settings.sandbox = this.sandbox;
-			if (this.timeout !== 10000)     settings.timeout = this.timeout;
-			if (this.target !== 'app.Main') settings.target  = this.target;
-			if (this.type !== 'source')     settings.type    = this.type;
+			if (this.id !== '')             states.id      = this.id;
+			if (this.debug !== true)        states.debug   = this.debug;
+			if (this.sandbox !== false)     states.sandbox = this.sandbox;
+			if (this.timeout !== 10000)     states.timeout = this.timeout;
+			if (this.target !== 'app.Main') states.target  = this.target;
+			if (this.type !== 'source')     states.type    = this.type;
 
 
 			if (Object.keys(this.packages).length > 0) {
 
-				settings.packages = {};
+				states.packages = {};
 
 				for (let pid in this.packages) {
-					settings.packages[pid] = this.packages[pid].url;
+					states.packages[pid] = this.packages[pid].url;
 				}
 
 			}
 
 			if (Object.keys(this.tags).length > 0) {
 
-				settings.tags = {};
+				states.tags = {};
 
 				for (let tagid in this.tags) {
-					settings.tags[tagid] = this.tags[tagid];
+					states.tags[tagid] = this.tags[tagid];
 				}
 
 			}
@@ -762,7 +762,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			return {
 				'constructor': 'lychee.Environment',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 

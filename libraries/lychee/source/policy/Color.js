@@ -31,9 +31,9 @@ lychee.define('lychee.policy.Color').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
-		this.entity = settings.entity instanceof Object ? settings.entity : null;
+		this.entity = states.entity instanceof Object ? states.entity : null;
 
 	};
 
@@ -48,14 +48,14 @@ lychee.define('lychee.policy.Color').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			let settings = {
+			let states = {
 				entity: null
 			};
 
 
 			return {
 				'constructor': 'lychee.policy.Color',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

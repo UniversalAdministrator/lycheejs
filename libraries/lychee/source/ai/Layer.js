@@ -43,7 +43,7 @@ lychee.define('lychee.ai.Layer').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		// XXX: Keep Layer API compatibility
@@ -62,12 +62,12 @@ lychee.define('lychee.ai.Layer').requires([
 		this.__map = {};
 
 
-		this.setAgents(settings.agents);
+		this.setAgents(states.agents);
 
 
 		_Emitter.call(this);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -85,8 +85,8 @@ lychee.define('lychee.ai.Layer').requires([
 			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ai.Layer';
 
-			let settings = {};
-			let blob     = (data['blob'] || {});
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
 			if (this.agents.length > 0) {
@@ -110,7 +110,7 @@ lychee.define('lychee.ai.Layer').requires([
 			}
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

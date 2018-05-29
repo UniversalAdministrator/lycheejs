@@ -5,9 +5,9 @@ lychee.define('lychee.policy.Visible').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
-		this.entity = settings.entity instanceof Object ? settings.entity : null;
+		this.entity = states.entity instanceof Object ? states.entity : null;
 
 	};
 
@@ -22,14 +22,14 @@ lychee.define('lychee.policy.Visible').exports(function(lychee, global, attachme
 
 		serialize: function() {
 
-			let settings = {
+			let states = {
 				entity: null
 			};
 
 
 			return {
 				'constructor': 'lychee.policy.Visible',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

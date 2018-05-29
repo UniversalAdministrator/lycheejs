@@ -79,7 +79,7 @@ lychee.define('strainer.flow.Transcribe').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.codes    = [];
@@ -95,13 +95,13 @@ lychee.define('strainer.flow.Transcribe').requires([
 		this.__pkg = null;
 
 
-		this.setSandbox(settings.sandbox);
-		this.setSettings(settings.settings);
+		this.setSandbox(states.sandbox);
+		this.setSettings(states.settings);
 
 
-		_Flow.call(this, settings);
+		_Flow.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 
@@ -328,12 +328,12 @@ lychee.define('strainer.flow.Transcribe').requires([
 			data['constructor'] = 'strainer.flow.Transcribe';
 
 
-			let settings = data['arguments'][0] || {};
-			let blob     = data['blob'] || {};
+			let states = data['arguments'][0] || {};
+			let blob   = data['blob'] || {};
 
 
-			if (this.sandbox !== '')                   settings.sandbox  = this.sandbox;
-			if (Object.keys(this.settings).length > 0) settings.settings = this.settings;
+			if (this.sandbox !== '')                   states.sandbox  = this.sandbox;
+			if (Object.keys(this.settings).length > 0) states.settings = this.settings;
 
 
 			if (this.stash !== null)     blob.stash   = lychee.serialize(this.stash);
@@ -341,7 +341,7 @@ lychee.define('strainer.flow.Transcribe').requires([
 			if (this.configs.length > 0) blob.configs = this.configs.map(lychee.serialize);
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

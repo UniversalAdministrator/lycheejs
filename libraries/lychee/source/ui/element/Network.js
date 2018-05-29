@@ -167,15 +167,15 @@ lychee.define('lychee.ui.element.Network').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.label    = 'Network';
-		settings.options  = [ 'Save' ];
-		settings.relayout = true;
+		states.label    = 'Network';
+		states.options  = [ 'Save' ];
+		states.relayout = true;
 
 
-		_Element.call(this, settings);
+		_Element.call(this, states);
 
 
 
@@ -241,7 +241,7 @@ lychee.define('lychee.ui.element.Network').requires([
 
 		_read.call(this);
 
-		settings = null;
+		states = null;
 
 	};
 

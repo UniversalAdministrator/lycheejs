@@ -287,13 +287,13 @@ lychee.define('lychee.ui.Layer').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		this.width  = typeof settings.width  === 'number' ? settings.width  : 0;
-		this.height = typeof settings.height === 'number' ? settings.height : 0;
-		this.depth  = typeof settings.depth === 'number'  ? settings.depth  : 0;
-		this.radius = typeof settings.radius === 'number' ? settings.radius : 0;
+		this.width  = typeof states.width  === 'number' ? states.width  : 0;
+		this.height = typeof states.height === 'number' ? states.height : 0;
+		this.depth  = typeof states.depth === 'number'  ? states.depth  : 0;
+		this.radius = typeof states.radius === 'number' ? states.radius : 0;
 
 		this.alpha      = 1;
 		this.effects    = [];
@@ -310,19 +310,19 @@ lychee.define('lychee.ui.Layer').requires([
 		this.__relayout = true;
 
 
-		this.setAlpha(settings.alpha);
-		this.setEntities(settings.entities);
-		this.setGrid(settings.grid);
-		this.setOffset(settings.offset);
-		this.setProjection(settings.projection);
-		this.setPosition(settings.position);
-		this.setRelayout(settings.relayout);
-		this.setVisible(settings.visible);
+		this.setAlpha(states.alpha);
+		this.setEntities(states.entities);
+		this.setGrid(states.grid);
+		this.setOffset(states.offset);
+		this.setProjection(states.projection);
+		this.setPosition(states.position);
+		this.setRelayout(states.relayout);
+		this.setVisible(states.visible);
 
 
 		_Emitter.call(this);
 
-		settings = null;
+		states = null;
 
 
 
@@ -410,51 +410,51 @@ lychee.define('lychee.ui.Layer').requires([
 			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.Layer';
 
-			let settings = {};
-			let blob     = (data['blob'] || {});
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.width  !== 0) settings.width  = this.width;
-			if (this.height !== 0) settings.height = this.height;
-			if (this.depth !== 0)  settings.depth  = this.depth;
-			if (this.radius !== 0) settings.radius = this.radius;
+			if (this.width  !== 0) states.width  = this.width;
+			if (this.height !== 0) states.height = this.height;
+			if (this.depth !== 0)  states.depth  = this.depth;
+			if (this.radius !== 0) states.radius = this.radius;
 
 
 			if (this.grid.width !== 0 || this.grid.height !== 0 || this.grid.depth !== 0) {
 
-				settings.grid = {};
+				states.grid = {};
 
-				if (this.grid.width !== 0)  settings.grid.width  = this.grid.width;
-				if (this.grid.height !== 0) settings.grid.height = this.grid.height;
-				if (this.grid.depth !== 0)  settings.grid.depth  = this.grid.depth;
+				if (this.grid.width !== 0)  states.grid.width  = this.grid.width;
+				if (this.grid.height !== 0) states.grid.height = this.grid.height;
+				if (this.grid.depth !== 0)  states.grid.depth  = this.grid.depth;
 
 			}
 
 			if (this.offset.x !== 0 || this.offset.y !== 0 || this.offset.z !== 0) {
 
-				settings.offset = {};
+				states.offset = {};
 
-				if (this.offset.x !== 0) settings.offset.x = this.offset.x;
-				if (this.offset.y !== 0) settings.offset.y = this.offset.y;
-				if (this.offset.z !== 0) settings.offset.z = this.offset.z;
+				if (this.offset.x !== 0) states.offset.x = this.offset.x;
+				if (this.offset.y !== 0) states.offset.y = this.offset.y;
+				if (this.offset.z !== 0) states.offset.z = this.offset.z;
 
 			}
 
 			if (this.position.x !== 0 || this.position.y !== 0 || this.position.z !== 0) {
 
-				settings.position = {};
+				states.position = {};
 
-				if (this.position.x !== 0) settings.position.x = this.position.x;
-				if (this.position.y !== 0) settings.position.y = this.position.y;
-				if (this.position.z !== 0) settings.position.z = this.position.z;
+				if (this.position.x !== 0) states.position.x = this.position.x;
+				if (this.position.y !== 0) states.position.y = this.position.y;
+				if (this.position.z !== 0) states.position.z = this.position.z;
 
 			}
 
-			if (this.alpha !== 1)                               settings.alpha      = this.alpha;
-			if (this.__project !== true)                        blob.project        = this.__project;
-			if (this.projection !== Composite.PROJECTION.pixel) settings.projection = this.projection;
-			if (this.__relayout !== true)                       settings.relayout   = this.__relayout;
-			if (this.visible !== true)                          settings.visible    = this.visible;
+			if (this.alpha !== 1)                               states.alpha      = this.alpha;
+			if (this.__project !== true)                        blob.project      = this.__project;
+			if (this.projection !== Composite.PROJECTION.pixel) states.projection = this.projection;
+			if (this.__relayout !== true)                       states.relayout   = this.__relayout;
+			if (this.visible !== true)                          states.visible    = this.visible;
 
 
 			if (this.entities.length > 0) {
@@ -479,7 +479,7 @@ lychee.define('lychee.ui.Layer').requires([
 			}
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

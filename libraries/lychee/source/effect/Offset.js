@@ -5,7 +5,7 @@ lychee.define('lychee.effect.Offset').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
@@ -18,14 +18,14 @@ lychee.define('lychee.effect.Offset').exports(function(lychee, global, attachmen
 
 		// No data validation garbage allowed for effects
 
-		this.type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : Composite.TYPE.easeout;
-		this.delay    = typeof settings.delay === 'number'           ? (settings.delay | 0)    : 0;
-		this.duration = typeof settings.duration === 'number'        ? (settings.duration | 0) : 250;
+		this.type     = lychee.enumof(Composite.TYPE, states.type) ? states.type           : Composite.TYPE.easeout;
+		this.delay    = typeof states.delay === 'number'           ? (states.delay | 0)    : 0;
+		this.duration = typeof states.duration === 'number'        ? (states.duration | 0) : 250;
 
 
-		if (settings.offset instanceof Object) {
-			this.offset.x = typeof settings.offset.x === 'number' ? (settings.offset.x | 0) : null;
-			this.offset.y = typeof settings.offset.y === 'number' ? (settings.offset.y | 0) : null;
+		if (states.offset instanceof Object) {
+			this.offset.x = typeof states.offset.x === 'number' ? (states.offset.x | 0) : null;
+			this.offset.y = typeof states.offset.y === 'number' ? (states.offset.y | 0) : null;
 		}
 
 	};
@@ -50,27 +50,27 @@ lychee.define('lychee.effect.Offset').exports(function(lychee, global, attachmen
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
-			if (this.delay !== 0)                     settings.delay    = this.delay;
-			if (this.duration !== 250)                settings.duration = this.duration;
+			if (this.type !== Composite.TYPE.easeout) states.type     = this.type;
+			if (this.delay !== 0)                     states.delay    = this.delay;
+			if (this.duration !== 250)                states.duration = this.duration;
 
 
 			if (this.offset.x !== null || this.offset.y !== null) {
 
-				settings.offset = {};
+				states.offset = {};
 
-				if (this.offset.x !== null) settings.offset.x = this.offset.x;
-				if (this.offset.y !== null) settings.offset.y = this.offset.y;
+				if (this.offset.x !== null) states.offset.x = this.offset.x;
+				if (this.offset.y !== null) states.offset.y = this.offset.y;
 
 			}
 
 
 			return {
 				'constructor': 'lychee.effect.Offset',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

@@ -15,22 +15,18 @@ lychee.define('strainer.Fixer').requires([
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
-		this.settings = _lychee.assignunlink({
+		this.settings = _lychee.assignsafe({
 			cwd:     lychee.ROOT.lychee,
 			file:    null,
 			project: null
-		}, settings);
-
-		this.defaults = _lychee.assignunlink({
-			cwd:     lychee.ROOT.lychee,
-			file:    null,
-			project: null
-		}, this.settings);
+		}, states);
 
 
 		_Emitter.call(this);
+
+		states = null;
 
 
 
@@ -245,11 +241,11 @@ lychee.define('strainer.Fixer').requires([
 			data['constructor'] = 'strainer.Fixer';
 
 
-			let settings = _lychee.assignunlink({}, this.settings);
-			let blob     = data['blob'] || {};
+			let states = _lychee.assignunlink({}, this.settings);
+			let blob   = data['blob'] || {};
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

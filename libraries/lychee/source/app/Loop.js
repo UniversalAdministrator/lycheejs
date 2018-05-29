@@ -204,7 +204,7 @@ lychee.define('lychee.app.Loop').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.update = 40;
@@ -222,15 +222,15 @@ lychee.define('lychee.app.Loop').includes([
 		this.__updatedelay = 1000 / this.render;
 
 
-		this.setUpdate(settings.update);
-		this.setRender(settings.render);
+		this.setUpdate(states.update);
+		this.setRender(states.render);
 
 
 		_Emitter.call(this);
 
 		_INSTANCES.push(this);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -294,12 +294,12 @@ lychee.define('lychee.app.Loop').includes([
 			data['constructor'] = 'lychee.app.Loop';
 
 
-			let settings = {};
-			let blob     = (data['blob'] || {});
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.update !== 40) settings.update = this.update;
-			if (this.render !== 40) settings.render = this.render;
+			if (this.update !== 40) states.update = this.update;
+			if (this.render !== 40) states.render = this.render;
 
 
 			if (Object.keys(this.__timeouts).length > 0) {
@@ -357,7 +357,7 @@ lychee.define('lychee.app.Loop').includes([
 
 			return {
 				'constructor': 'lychee.app.Loop',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        null
 			};
 

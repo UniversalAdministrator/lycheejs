@@ -1254,15 +1254,15 @@ lychee.define('strainer.api.PARSER').requires([
 
 		},
 
-		settings: function(code) {
+		states: function(code) {
 
 			code = typeof code === 'string' ? code : '';
 
 
-			let settings = {};
-			let lines    = code.split('\n');
-			let first    = lines[0].trim();
-			let last     = lines[lines.length - 1].trim();
+			let states = {};
+			let lines  = code.split('\n');
+			let first  = lines[0].trim();
+			let last   = lines[lines.length - 1].trim();
 
 			if (first.startsWith('function(') && first.endsWith(') {')) {
 				lines.shift();
@@ -1291,11 +1291,11 @@ lychee.define('strainer.api.PARSER').requires([
 
 			}).forEach(function(line) {
 
-				if (line.startsWith('this.set') && line.includes('settings.')) {
+				if (line.startsWith('this.set') && line.includes('states.')) {
 
-					let tmp = line.split(/\(settings\.([A-Za-z]+)\);/g);
+					let tmp = line.split(/\(states\.([A-Za-z]+)\);/g);
 					if (tmp.pop() === '') {
-						settings[tmp[1]] = tmp[0].split('.').pop();
+						states[tmp[1]] = tmp[0].split('.').pop();
 					}
 
 				}
@@ -1303,7 +1303,7 @@ lychee.define('strainer.api.PARSER').requires([
 			});
 
 
-			return settings;
+			return states;
 
 		},
 

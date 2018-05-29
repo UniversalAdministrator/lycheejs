@@ -151,7 +151,7 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.controls = [];
@@ -172,10 +172,10 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 		};
 
 
-		this.setSensors(settings.sensors);
-		this.setControls(settings.controls);
+		this.setSensors(states.sensors);
+		this.setControls(states.controls);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -200,12 +200,12 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			let settings = {};
-			let blob     = {};
+			let states = {};
+			let blob   = {};
 
 
-			if (this.controls.length > 0) settings.controls = lychee.serialize(this.controls);
-			if (this.sensors.length > 0)  settings.sensors  = lychee.serialize(this.sensors);
+			if (this.controls.length > 0) states.controls = lychee.serialize(this.controls);
+			if (this.sensors.length > 0)  states.sensors  = lychee.serialize(this.sensors);
 
 
 			if (this.__layers.length > 0) {
@@ -219,7 +219,7 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 
 			return {
 				'constructor': 'lychee.ai.enn.Brain',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 

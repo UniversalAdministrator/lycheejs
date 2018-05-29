@@ -7,7 +7,7 @@ lychee.define('lychee.ai.enn.Genome').exports(function(lychee, global, attachmen
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.genes = [];
@@ -15,9 +15,9 @@ lychee.define('lychee.ai.enn.Genome').exports(function(lychee, global, attachmen
 		this.__map = {};
 
 
-		this.setGenes(settings.genes);
+		this.setGenes(states.genes);
 
-		settings = null;
+		states = null;
 
 	};
 

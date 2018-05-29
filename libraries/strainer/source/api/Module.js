@@ -451,7 +451,7 @@ lychee.define('strainer.api.Module').requires([
 			let memory = {};
 			let result = {
 				constructor: {},
-				settings:    {},
+				states:      {},
 				properties:  {},
 				enums:       {},
 				events:      {},

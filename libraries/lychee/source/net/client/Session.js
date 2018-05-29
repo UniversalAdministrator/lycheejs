@@ -17,7 +17,7 @@ lychee.define('lychee.net.client.Session').includes([
 		id = typeof id === 'string' ? id : 'session';
 
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.admin     = false;
@@ -29,19 +29,19 @@ lychee.define('lychee.net.client.Session').includes([
 		this.sid       = 'session-' + _id++;
 
 
-		this.setAutoadmin(settings.autoadmin);
-		this.setAutolock(settings.autolock);
-		this.setAutostart(settings.autostart);
-		this.setMax(settings.max);
-		this.setMin(settings.min);
-		this.setSid(settings.sid);
+		this.setAutoadmin(states.autoadmin);
+		this.setAutolock(states.autolock);
+		this.setAutostart(states.autostart);
+		this.setMax(states.max);
+		this.setMin(states.min);
+		this.setSid(states.sid);
 
-		delete settings.autoadmin;
-		delete settings.autolock;
-		delete settings.autostart;
-		delete settings.max;
-		delete settings.min;
-		delete settings.sid;
+		delete states.autoadmin;
+		delete states.autolock;
+		delete states.autostart;
+		delete states.max;
+		delete states.min;
+		delete states.sid;
 
 
 		_Service.call(this, id, client, _Service.TYPE.client);
@@ -85,7 +85,7 @@ lychee.define('lychee.net.client.Session').includes([
 		}
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -109,22 +109,22 @@ lychee.define('lychee.net.client.Session').includes([
 			let data = _Service.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.net.client.Session';
 
-			let settings = {};
-			let blob     = (data['blob'] || {});
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.autoadmin !== true)                   settings.autoadmin = this.autoadmin;
-			if (this.autolock !== true)                    settings.autolock  = this.autolock;
-			if (this.autostart !== true)                   settings.autostart = this.autostart;
-			if (this.max !== 4)                            settings.max       = this.max;
-			if (this.min !== 2)                            settings.min       = this.min;
-			if (this.sid.startsWith('session-') === false) settings.sid       = this.sid;
+			if (this.autoadmin !== true)                   states.autoadmin = this.autoadmin;
+			if (this.autolock !== true)                    states.autolock  = this.autolock;
+			if (this.autostart !== true)                   states.autostart = this.autostart;
+			if (this.max !== 4)                            states.max       = this.max;
+			if (this.min !== 2)                            states.min       = this.min;
+			if (this.sid.startsWith('session-') === false) states.sid       = this.sid;
 
 
 			if (this.admin !== false) blob.admin = this.admin;
 
 
-			data['arguments'][2] = settings;
+			data['arguments'][2] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

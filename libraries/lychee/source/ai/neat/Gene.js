@@ -3,7 +3,7 @@ lychee.define('lychee.ai.neat.Gene').exports(function(lychee, global, attachment
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.enabled     = true;
@@ -13,13 +13,13 @@ lychee.define('lychee.ai.neat.Gene').exports(function(lychee, global, attachment
 		this.weight      = 0.0;
 
 
-		this.setEnabled(settings.enabled);
-		this.setInnovation(settings.innovation);
-		this.setInto(settings.into);
-		this.setOut(settings.out);
-		this.setWeight(settings.weight);
+		this.setEnabled(states.enabled);
+		this.setInnovation(states.innovation);
+		this.setInto(states.into);
+		this.setOut(states.out);
+		this.setWeight(states.weight);
 
-		settings = null;
+		states = null;
 
 	};
 

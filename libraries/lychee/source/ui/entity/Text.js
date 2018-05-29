@@ -64,7 +64,7 @@ lychee.define('lychee.ui.entity.Text').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.font  = _FONT;
@@ -75,21 +75,21 @@ lychee.define('lychee.ui.entity.Text').includes([
 		this.__isDirty = true;
 
 
-		this.setFont(settings.font);
-		this.setValue(settings.value);
+		this.setFont(states.font);
+		this.setValue(states.value);
 
-		delete settings.font;
-		delete settings.value;
-
-
-		settings.width  = this.width;
-		settings.height = this.height;
-		settings.shape  = _Entity.SHAPE.rectangle;
+		delete states.font;
+		delete states.value;
 
 
-		_Entity.call(this, settings);
+		states.width  = this.width;
+		states.height = this.height;
+		states.shape  = _Entity.SHAPE.rectangle;
 
-		settings = null;
+
+		_Entity.call(this, states);
+
+		states = null;
 
 
 
@@ -128,11 +128,11 @@ lychee.define('lychee.ui.entity.Text').includes([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Text';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.value !== '') settings.value = this.value;
+			if (this.value !== '') states.value = this.value;
 
 
 			if (this.font !== null) blob.font = lychee.serialize(this.font);

@@ -98,7 +98,7 @@ lychee.define('lychee.ui.sprite.Background').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.color  = null;
@@ -108,18 +108,18 @@ lychee.define('lychee.ui.sprite.Background').includes([
 		this.__isDirty = true;
 
 
-		this.setColor(settings.color);
+		this.setColor(states.color);
 
 
-		delete settings.color;
+		delete states.color;
 
 
-		settings.width  = typeof settings.width === 'number'  ? settings.width  : 512;
-		settings.height = typeof settings.height === 'number' ? settings.height : 512;
-		settings.shape  = lychee.ui.Entity.SHAPE.rectangle;
+		states.width  = typeof states.width === 'number'  ? states.width  : 512;
+		states.height = typeof states.height === 'number' ? states.height : 512;
+		states.shape  = lychee.ui.Entity.SHAPE.rectangle;
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
 
 
@@ -140,9 +140,9 @@ lychee.define('lychee.ui.sprite.Background').includes([
 		}, this);
 
 
-		this.setOrigin(settings.origin);
+		this.setOrigin(states.origin);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -160,20 +160,24 @@ lychee.define('lychee.ui.sprite.Background').includes([
 			let data = _Sprite.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.sprite.Background';
 
-			let settings = data['arguments'][0];
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.color !== null) settings.color = this.color;
+			if (this.color !== null) states.color = this.color;
 
 
 			if (this.origin.x !== 0 || this.origin.y !== 0) {
 
-				settings.origin = {};
+				states.origin = {};
 
-				if (this.origin.x !== 0) settings.origin.x = this.origin.x;
-				if (this.origin.y !== 0) settings.origin.y = this.origin.y;
+				if (this.origin.x !== 0) states.origin.x = this.origin.x;
+				if (this.origin.y !== 0) states.origin.y = this.origin.y;
 
 			}
+
+
+			data['blob'] = Object.keys(blob).length > 0 ? blob : null;
 
 
 			return data;

@@ -39,23 +39,23 @@ lychee.define('studio.ui.element.modify.Project').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.value = null;
 
 
-		this.setValue(settings.value);
+		this.setValue(states.value);
 
-		delete settings.value;
+		delete states.value;
 
 
-		settings.label   = 'Modify';
-		settings.options = [];
+		states.label   = 'Modify';
+		states.options = [];
 
-		_Element.call(this, settings);
+		_Element.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

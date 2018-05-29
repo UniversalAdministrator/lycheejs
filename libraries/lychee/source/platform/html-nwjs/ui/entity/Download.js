@@ -122,7 +122,7 @@ lychee.define('lychee.ui.entity.Download').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			label: 'DOWNLOAD'
 		}, data);
 
@@ -130,14 +130,14 @@ lychee.define('lychee.ui.entity.Download').tags({
 		this.value = [];
 
 
-		this.setValue(settings.value);
+		this.setValue(states.value);
 
-		delete settings.value;
+		delete states.value;
 
 
-		_Button.call(this, settings);
+		_Button.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

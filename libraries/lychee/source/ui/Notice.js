@@ -50,7 +50,7 @@ lychee.define('lychee.ui.Notice').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.font    = _FONT;
@@ -62,18 +62,18 @@ lychee.define('lychee.ui.Notice').requires([
 		this.__boundary = 0;
 
 
-		this.setState(settings.state);
+		this.setState(states.state);
 
-		delete settings.state;
-
-
-		settings.width    = 512;
-		settings.height   =  64;
-		settings.alpha    = 0.0;
-		settings.relayout = false;
+		delete states.state;
 
 
-		_Layer.call(this, settings);
+		states.width    = 512;
+		states.height   =  64;
+		states.alpha    = 0.0;
+		states.relayout = false;
+
+
+		_Layer.call(this, states);
 
 
 
@@ -130,15 +130,15 @@ lychee.define('lychee.ui.Notice').requires([
 		}, this);
 
 
-		this.setFont(settings.font);
-		this.setLabel(settings.label);
-		this.setOptions(settings.options);
+		this.setFont(states.font);
+		this.setLabel(states.label);
+		this.setOptions(states.options);
 
-		delete settings.font;
-		delete settings.label;
-		delete settings.options;
+		delete states.font;
+		delete states.label;
+		delete states.options;
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -163,13 +163,13 @@ lychee.define('lychee.ui.Notice').requires([
 			let data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.Notice';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.label !== 'Changes applied.') settings.label = this.label;
-			if (this.options.join(',') !== 'Undo') settings.options = this.options.slice(0, this.options.length);
-			if (this.state !== 'default')          settings.state = this.state;
+			if (this.label !== 'Changes applied.') states.label   = this.label;
+			if (this.options.join(',') !== 'Undo') states.options = this.options.slice(0, this.options.length);
+			if (this.state !== 'default')          states.state   = this.state;
 
 
 			if (this.font !== null) blob.font = lychee.serialize(this.font);

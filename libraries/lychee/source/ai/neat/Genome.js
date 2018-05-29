@@ -27,7 +27,7 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 		this.genes   = [];
 		this.fitness = 0;
@@ -35,10 +35,10 @@ lychee.define('lychee.ai.neat.Genome').exports(function(lychee, global, attachme
 		this.globalRank = 0;
 
 
-		this.setGenes(settings.genes);
-		this.setFitness(settings.fitness);
+		this.setGenes(states.genes);
+		this.setFitness(states.fitness);
 
-		settings = null;
+		states = null;
 
 	};
 

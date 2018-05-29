@@ -394,7 +394,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id          = 'app';
@@ -409,14 +409,14 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 		this.__requests  = {};
 
 
-		this.setId(settings.id);
-		this.setUrl(settings.url);
+		this.setId(states.id);
+		this.setUrl(states.url);
 
-		this.setEnvironment(settings.environment);
-		this.setSimulation(settings.simulation);
-		this.setType(settings.type);
+		this.setEnvironment(states.environment);
+		this.setSimulation(states.simulation);
+		this.setType(states.type);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -437,13 +437,13 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 		serialize: function() {
 
-			let blob     = {};
-			let settings = {};
+			let states = {};
+			let blob   = {};
 
 
-			if (this.id !== '')         settings.id   = this.id;
-			if (this.type !== 'source') settings.type = this.type;
-			if (this.url !== '')        settings.url  = this.url;
+			if (this.id !== '')         states.id   = this.id;
+			if (this.type !== 'source') states.type = this.type;
+			if (this.url !== '')        states.url  = this.url;
 
 
 			if (this.config !== null) {
@@ -453,7 +453,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 			return {
 				'constructor': 'lychee.Package',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 

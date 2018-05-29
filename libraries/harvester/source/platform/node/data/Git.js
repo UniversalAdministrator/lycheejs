@@ -218,16 +218,16 @@ lychee.define('harvester.data.Git').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		this.identifier = typeof settings.identifier === 'string' ? settings.identifier : '';
+		this.identifier = typeof states.identifier === 'string' ? states.identifier : '';
 		this.filesystem = new _Filesystem({
 			root: this.identifier + '/.git'
 		});
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -245,19 +245,28 @@ lychee.define('harvester.data.Git').tags({
 		 * ENTITY API
 		 */
 
-		// deserialize: function(blob) {},
+		deserialize: function(blob) {
+
+			if (blob.filesystem instanceof Object) {
+				this.filesystem = lychee.deserialize(blob.filesystem);
+			}
+
+		},
 
 		serialize: function() {
 
-			let blob = {};
+			let states = {};
+			let blob   = {};
 
+
+			if (this.identifier !== '') states.identifier = this.identifier;
 
 			if (this.filesystem !== null) blob.filesystem = lychee.serialize(this.filesystem);
 
 
 			return {
 				'constructor': 'harvester.data.Git',
-				'arguments':   [ this.identifier ],
+				'arguments':   [ states ],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 

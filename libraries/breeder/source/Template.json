@@ -6,8 +6,11 @@
 		"environments": {},
 		"files": {}
 	},
+	"review": {
+		"simulations": {},
+		"files": {}
+	},
 	"source": {
-		"environments": {},
 		"tags": {},
 		"files": {
 			"DIST": [

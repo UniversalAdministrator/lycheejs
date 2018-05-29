@@ -116,17 +116,12 @@ lychee.define('harvester.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
-		this.settings = lychee.assignunlink({
-			host: null,
-			port: null
-		}, settings);
-
-		this.defaults = lychee.assignunlink({
-			host: null,
-			port: null
-		}, this.settings);
+		this.settings = lychee.assignsafe({
+			host: 'localhost',
+			port: 8080
+		}, states);
 
 
 		// Updated by Watcher instance
@@ -140,11 +135,9 @@ lychee.define('harvester.Main').requires([
 		this.__interval = null;
 
 
-		settings.host = typeof settings.host === 'string' ? settings.host       : null;
-		settings.port = typeof settings.port === 'number' ? (settings.port | 0) : 8080;
-
-
 		_Emitter.call(this);
+
+		states = null;
 
 
 
@@ -154,14 +147,18 @@ lychee.define('harvester.Main').requires([
 
 		this.bind('load', function() {
 
+			let host = this.settings.host;
+			let port = this.settings.port;
+
+
 			this.admin  = new _harvester.net.Admin({
 				host: null,
 				port: 4848
 			});
 
 			this.server = new _harvester.net.Server({
-				host: settings.host === 'localhost' ? null : settings.host,
-				port: settings.port
+				host: host === 'localhost' ? null : host,
+				port: port
 			});
 
 		}, this, true);
@@ -229,15 +226,15 @@ lychee.define('harvester.Main').requires([
 			data['constructor'] = 'harvester.Main';
 
 
-			let settings = lychee.assignunlink({}, this.settings);
-			let blob     = data['blob'] || {};
+			let states = lychee.assignunlink({}, this.settings);
+			let blob   = data['blob'] || {};
 
 
 			if (this.admin !== null)  blob.admin  = lychee.serialize(this.admin);
 			if (this.server !== null) blob.server = lychee.serialize(this.server);
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

@@ -28,7 +28,7 @@ lychee.define('harvester.net.Client').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			host:      'localhost',
 			port:      4848,
 			codec:     _JSON,
@@ -37,9 +37,9 @@ lychee.define('harvester.net.Client').requires([
 		}, data);
 
 
-		_Tunnel.call(this, settings);
+		_Tunnel.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

@@ -102,7 +102,7 @@ lychee.define('lychee.math.Mersenne').exports(function(lychee, global, attachmen
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.N = 624;
@@ -113,11 +113,11 @@ lychee.define('lychee.math.Mersenne').exports(function(lychee, global, attachmen
 		this.seed    = (Math.random() * Number.MAX_SAFE_INTEGER) | 0;
 
 
-		this.setSeed(settings.seed);
+		this.setSeed(states.seed);
 
 		_initialize.call(this);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -132,15 +132,15 @@ lychee.define('lychee.math.Mersenne').exports(function(lychee, global, attachmen
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.seed !== 0) settings.seed = this.seed;
+			if (this.seed !== 0) states.seed = this.seed;
 
 
 			return {
 				'constructor': 'lychee.math.Mersenne',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        null
 			};
 

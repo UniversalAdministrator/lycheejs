@@ -83,7 +83,7 @@ lychee.define('lychee.verlet.Entity').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.constraints = [];
@@ -91,14 +91,14 @@ lychee.define('lychee.verlet.Entity').requires([
 		this.rigidity    = 1;
 
 
-		this.setRigidity(settings.rigidity);
+		this.setRigidity(states.rigidity);
 
-		delete settings.rigidity;
+		delete states.rigidity;
 
 
-		_Entity.call(this, settings);
+		_Entity.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -124,11 +124,11 @@ lychee.define('lychee.verlet.Entity').requires([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.verlet.Entity';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.position.length() > 0) settings.position = lychee.serialize(this.position);
+			if (this.position.length() > 0) states.position = lychee.serialize(this.position);
 
 
 			data['blob'] = Object.keys(blob).length > 0 ? blob : null;

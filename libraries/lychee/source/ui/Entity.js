@@ -37,13 +37,13 @@ lychee.define('lychee.ui.Entity').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		this.width  = typeof settings.width  === 'number' ? settings.width  : 0;
-		this.height = typeof settings.height === 'number' ? settings.height : 0;
-		this.depth  = typeof settings.depth === 'number'  ? settings.depth  : 0;
-		this.radius = typeof settings.radius === 'number' ? settings.radius : 0;
+		this.width  = typeof states.width  === 'number' ? states.width  : 0;
+		this.height = typeof states.height === 'number' ? states.height : 0;
+		this.depth  = typeof states.depth === 'number'  ? states.depth  : 0;
+		this.radius = typeof states.radius === 'number' ? states.radius : 0;
 
 		this.alpha     = 1;
 		this.collision = Composite.COLLISION.none;
@@ -55,17 +55,17 @@ lychee.define('lychee.ui.Entity').includes([
 		this.visible   = true;
 
 
-		this.setAlpha(settings.alpha);
-		this.setShape(settings.shape);
-		this.setStates(settings.states);
-		this.setState(settings.state);
-		this.setPosition(settings.position);
-		this.setVisible(settings.visible);
+		this.setAlpha(states.alpha);
+		this.setShape(states.shape);
+		this.setStates(states.states);
+		this.setState(states.state);
+		this.setPosition(states.position);
+		this.setVisible(states.visible);
 
 
 		_Emitter.call(this);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -102,33 +102,33 @@ lychee.define('lychee.ui.Entity').includes([
 			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.Entity';
 
-			let settings = {};
-			let blob     = (data['blob'] || {});
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.width  !== 0) settings.width  = this.width;
-			if (this.height !== 0) settings.height = this.height;
-			if (this.depth !== 0)  settings.depth  = this.depth;
-			if (this.radius !== 0) settings.radius = this.radius;
+			if (this.width  !== 0) states.width  = this.width;
+			if (this.height !== 0) states.height = this.height;
+			if (this.depth !== 0)  states.depth  = this.depth;
+			if (this.radius !== 0) states.radius = this.radius;
 
-			if (this.alpha !== 1)                          settings.alpha   = this.alpha;
-			if (this.shape !== Composite.SHAPE.rectangle)  settings.shape   = this.shape;
-			if (this.state !== 'default')                  settings.state   = this.state;
-			if (Object.keys(this.states).length > 0)       settings.states  = this.states;
-			if (this.visible !== true)                     settings.visible = this.visible;
+			if (this.alpha !== 1)                         states.alpha   = this.alpha;
+			if (this.shape !== Composite.SHAPE.rectangle) states.shape   = this.shape;
+			if (this.state !== 'default')                 states.state   = this.state;
+			if (Object.keys(this.states).length > 0)      states.states  = this.states;
+			if (this.visible !== true)                    states.visible = this.visible;
 
 
 			if (this.position.x !== 0 || this.position.y !== 0) {
 
-				settings.position = {};
+				states.position = {};
 
-				if (this.position.x !== 0) settings.position.x = this.position.x;
-				if (this.position.y !== 0) settings.position.y = this.position.y;
+				if (this.position.x !== 0) states.position.x = this.position.x;
+				if (this.position.y !== 0) states.position.y = this.position.y;
 
 			}
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

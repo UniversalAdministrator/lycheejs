@@ -13,16 +13,16 @@ lychee.define('lychee.math.Quaternion').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.data = new Float32Array(4);
 		this.set.call(this, Composite.IDENTITY);
 
 
-		this.setData(settings.data);
+		this.setData(states.data);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -42,15 +42,15 @@ lychee.define('lychee.math.Quaternion').requires([
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.data !== null) settings.data = this.data.slice(0);
+			if (this.data !== null) states.data = this.data.slice(0);
 
 
 			return {
 				'constructor': 'lychee.math.Quaternion',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        null
 			};
 

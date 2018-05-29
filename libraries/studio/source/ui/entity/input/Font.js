@@ -13,12 +13,12 @@ lychee.define('studio.ui.entity.input.Font').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		_Input.call(this, settings);
+		_Input.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

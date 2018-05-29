@@ -15,14 +15,16 @@ lychee.define('fork.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			/* CUSTOM SETTINGS */
 		}, data);
 
 
-		_Main.call(this, settings);
+		_Main.call(this, states);
+
+		states = null;
 
 	};
 

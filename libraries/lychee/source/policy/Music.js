@@ -5,9 +5,9 @@ lychee.define('lychee.policy.Music').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
-		this.music = settings.music instanceof Music ? settings.music : null;
+		this.music = states.music instanceof Music ? states.music : null;
 
 	};
 
@@ -22,14 +22,14 @@ lychee.define('lychee.policy.Music').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			let settings = {
+			let states = {
 				music: null
 			};
 
 
 			return {
 				'constructor': 'lychee.policy.Music',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

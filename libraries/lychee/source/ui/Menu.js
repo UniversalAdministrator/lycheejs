@@ -31,7 +31,7 @@ lychee.define('lychee.ui.Menu').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.font    = _FONT;
@@ -47,20 +47,20 @@ lychee.define('lychee.ui.Menu').requires([
 		this.__helpers  = [];
 
 
-		this.setState(settings.state);
-		this.setValue(settings.value);
+		this.setState(states.state);
+		this.setValue(states.value);
 
-		delete settings.state;
-		delete settings.value;
-
-
-		settings.width    = 144;
-		settings.height   = 144;
-		settings.alpha    = 0.0;
-		settings.relayout = false;
+		delete states.state;
+		delete states.value;
 
 
-		_Layer.call(this, settings);
+		states.width    = 144;
+		states.height   = 144;
+		states.alpha    = 0.0;
+		states.relayout = false;
+
+
+		_Layer.call(this, states);
 
 
 
@@ -258,17 +258,17 @@ lychee.define('lychee.ui.Menu').requires([
 		}, this);
 
 
-		this.setFont(settings.font);
-		this.setHelpers(settings.helpers);
-		this.setLabel(settings.label);
-		this.setOptions(settings.options);
+		this.setFont(states.font);
+		this.setHelpers(states.helpers);
+		this.setLabel(states.label);
+		this.setOptions(states.options);
 
-		delete settings.font;
-		delete settings.helpers;
-		delete settings.label;
-		delete settings.options;
+		delete states.font;
+		delete states.helpers;
+		delete states.label;
+		delete states.options;
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -293,16 +293,15 @@ lychee.define('lychee.ui.Menu').requires([
 			let data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.Menu';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.label !== 'MENU')     settings.label   = this.label;
-			if (this.helpers.length !== 0) settings.helpers = this.helpers.slice(0, this.helpers.length);
-			if (this.state !== 'default')  settings.state   = this.state;
-			if (this.value !== 'Settings') settings.value   = this.value;
-
-			if (this.options.join(',') !== 'Settings') settings.options = this.options.slice(0, this.options.length);
+			if (this.label !== 'MENU')                 states.label   = this.label;
+			if (this.helpers.length !== 0)             states.helpers = this.helpers.slice(0, this.helpers.length);
+			if (this.state !== 'default')              states.state   = this.state;
+			if (this.value !== 'Settings')             states.value   = this.value;
+			if (this.options.join(',') !== 'Settings') states.options = this.options.slice(0, this.options.length);
 
 
 			if (this.font !== null) blob.font = lychee.serialize(this.font);

@@ -5,16 +5,16 @@ lychee.define('lychee.policy.Offset').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
-		this.entity = settings.entity instanceof Object ? settings.entity : null;
+		this.entity = states.entity instanceof Object ? states.entity : null;
 		this.limit  = { x: Infinity, y: Infinity };
 
 
-		if (settings.limit instanceof Object) {
-			this.limit.x = typeof settings.limit.x === 'number' ? (settings.limit.x | 0) : Infinity;
-			this.limit.y = typeof settings.limit.y === 'number' ? (settings.limit.y | 0) : Infinity;
-			this.limit.z = typeof settings.limit.z === 'number' ? (settings.limit.z | 0) : Infinity;
+		if (states.limit instanceof Object) {
+			this.limit.x = typeof states.limit.x === 'number' ? (states.limit.x | 0) : Infinity;
+			this.limit.y = typeof states.limit.y === 'number' ? (states.limit.y | 0) : Infinity;
+			this.limit.z = typeof states.limit.z === 'number' ? (states.limit.z | 0) : Infinity;
 		}
 
 	};
@@ -30,7 +30,7 @@ lychee.define('lychee.policy.Offset').exports(function(lychee, global, attachmen
 
 		serialize: function() {
 
-			let settings = {
+			let states = {
 				entity: null,
 				limit:  this.limit
 			};
@@ -38,7 +38,7 @@ lychee.define('lychee.policy.Offset').exports(function(lychee, global, attachmen
 
 			return {
 				'constructor': 'lychee.policy.Offset',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

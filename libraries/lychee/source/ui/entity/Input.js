@@ -76,7 +76,7 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.font  = _FONT;
@@ -108,27 +108,27 @@ lychee.define('lychee.ui.entity.Input').includes([
 		this.__isDirty = true;
 
 
-		this.setFont(settings.font);
-		this.setMax(settings.max);
-		this.setMin(settings.min);
-		this.setType(settings.type);
-		this.setValue(settings.value);
+		this.setFont(states.font);
+		this.setMax(states.max);
+		this.setMin(states.min);
+		this.setType(states.type);
+		this.setValue(states.value);
 
-		delete settings.font;
-		delete settings.max;
-		delete settings.min;
-		delete settings.type;
-		delete settings.value;
-
-
-		settings.width  = typeof settings.width === 'number'  ? settings.width  : 128;
-		settings.height = typeof settings.height === 'number' ? settings.height :  32;
-		settings.shape  = _Entity.SHAPE.rectangle;
+		delete states.font;
+		delete states.max;
+		delete states.min;
+		delete states.type;
+		delete states.value;
 
 
-		_Entity.call(this, settings);
+		states.width  = typeof states.width === 'number'  ? states.width  : 128;
+		states.height = typeof states.height === 'number' ? states.height :  32;
+		states.shape  = _Entity.SHAPE.rectangle;
 
-		settings = null;
+
+		_Entity.call(this, states);
+
+		states = null;
 
 
 
@@ -295,14 +295,14 @@ lychee.define('lychee.ui.entity.Input').includes([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Input';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.max !== Infinity)         settings.max   = this.max;
-			if (this.min !== 0)                settings.min   = this.min;
-			if (this.type !== Composite.TYPE.text) settings.type  = this.type;
-			if (this.value !== null)           settings.value = this.value;
+			if (this.max !== Infinity)             states.max   = this.max;
+			if (this.min !== 0)                    states.min   = this.min;
+			if (this.type !== Composite.TYPE.text) states.type  = this.type;
+			if (this.value !== null)               states.value = this.value;
 
 
 			if (this.font !== null) blob.font = lychee.serialize(this.font);

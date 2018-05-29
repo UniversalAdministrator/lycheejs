@@ -104,15 +104,15 @@ lychee.define('lychee.ui.element.Stash').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.label    = 'Stash';
-		settings.options  = [ 'Save', 'Clear' ];
-		settings.relayout = true;
+		states.label    = 'Stash';
+		states.options  = [ 'Save', 'Clear' ];
+		states.relayout = true;
 
 
-		_Element.call(this, settings);
+		_Element.call(this, states);
 
 
 
@@ -143,7 +143,7 @@ lychee.define('lychee.ui.element.Stash').requires([
 
 		_read.call(this);
 
-		settings = null;
+		states = null;
 
 	};
 

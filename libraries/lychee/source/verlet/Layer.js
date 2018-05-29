@@ -16,7 +16,7 @@ lychee.define('lychee.verlet.Layer').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.friction   = 0.99;
@@ -25,16 +25,16 @@ lychee.define('lychee.verlet.Layer').requires([
 		this.__velocity = new _Vector3();
 
 
-		this.setFriction(settings.friction);
-		this.setGravity(settings.gravity);
+		this.setFriction(states.friction);
+		this.setGravity(states.gravity);
 
-		delete settings.friction;
-		delete settings.gravity;
+		delete states.friction;
+		delete states.gravity;
 
 
-		_Layer.call(this, settings);
+		_Layer.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -52,12 +52,12 @@ lychee.define('lychee.verlet.Layer').requires([
 			let data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.verlet.Layer';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.friction !== 0.99)      settings.friction = this.friction;
-			if (this.gravity.length() !== 0) settings.gravity  = lychee.serialize(this.gravity);
+			if (this.friction !== 0.99)      states.friction = this.friction;
+			if (this.gravity.length() !== 0) states.gravity  = lychee.serialize(this.gravity);
 
 
 			data['blob'] = Object.keys(blob).length > 0 ? blob : null;

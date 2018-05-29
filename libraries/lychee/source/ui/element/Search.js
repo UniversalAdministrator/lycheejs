@@ -18,19 +18,19 @@ lychee.define('lychee.ui.element.Search').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.data  = [];
 		this.value = '';
 
 
-		settings.label    = 'Search';
-		settings.options  = [];
-		settings.relayout = true;
+		states.label    = 'Search';
+		states.options  = [];
+		states.relayout = true;
 
 
-		_Element.call(this, settings);
+		_Element.call(this, states);
 
 
 
@@ -93,10 +93,10 @@ lychee.define('lychee.ui.element.Search').requires([
 		this.addEntity(select);
 
 
-		this.setData(settings.data);
-		delete settings.data;
+		this.setData(states.data);
+		delete states.data;
 
-		settings = null;
+		states = null;
 
 	};
 

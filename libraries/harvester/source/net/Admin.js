@@ -25,7 +25,7 @@ lychee.define('harvester.net.Admin').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			host:   'localhost',
 			port:   4848,
 			codec:  _JSON,
@@ -34,9 +34,9 @@ lychee.define('harvester.net.Admin').requires([
 		}, data);
 
 
-		_Server.call(this, settings);
+		_Server.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

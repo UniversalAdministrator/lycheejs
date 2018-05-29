@@ -7,16 +7,16 @@ lychee.define('harvester.data.Server').exports(function(lychee, global, attachme
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		this.host = typeof settings.host === 'string' ? settings.host : null;
-		this.port = typeof settings.port === 'number' ? settings.port : null;
+		this.host = typeof states.host === 'string' ? states.host : null;
+		this.port = typeof states.port === 'number' ? states.port : null;
 
-		this.__process = settings.process || null;
+		this.__process = states.process || null;
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -31,11 +31,11 @@ lychee.define('harvester.data.Server').exports(function(lychee, global, attachme
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.host !== null) settings.host = this.host;
-			if (this.port !== null) settings.port = this.port;
+			if (this.host !== null) states.host = this.host;
+			if (this.port !== null) states.port = this.port;
 
 
 			// XXX: native process instance can't be serialized :(
@@ -43,7 +43,7 @@ lychee.define('harvester.data.Server').exports(function(lychee, global, attachme
 
 			return {
 				'constructor': 'harvester.data.Server',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

@@ -97,7 +97,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			label: 'HELPER'
 		}, data);
 
@@ -105,9 +105,9 @@ lychee.define('lychee.ui.entity.Helper').tags({
 		this.__action = null;
 
 
-		_Button.call(this, settings);
+		_Button.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

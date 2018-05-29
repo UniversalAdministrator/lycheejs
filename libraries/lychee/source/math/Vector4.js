@@ -9,14 +9,14 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
-		this.x = typeof settings.x === 'number' ? (settings.x | 0) : 0;
-		this.y = typeof settings.y === 'number' ? (settings.y | 0) : 0;
-		this.z = typeof settings.z === 'number' ? (settings.z | 0) : 0;
-		this.w = typeof settings.w === 'number' ? (settings.w | 0) : 0;
+		this.x = typeof states.x === 'number' ? (states.x | 0) : 0;
+		this.y = typeof states.y === 'number' ? (states.y | 0) : 0;
+		this.z = typeof states.z === 'number' ? (states.z | 0) : 0;
+		this.w = typeof states.w === 'number' ? (states.w | 0) : 0;
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -31,18 +31,18 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.x !== 0) settings.x = this.x;
-			if (this.y !== 0) settings.y = this.y;
-			if (this.z !== 0) settings.z = this.z;
-			if (this.w !== 0) settings.w = this.w;
+			if (this.x !== 0) states.x = this.x;
+			if (this.y !== 0) states.y = this.y;
+			if (this.z !== 0) states.z = this.z;
+			if (this.w !== 0) states.w = this.w;
 
 
 			return {
 				'constructor': 'lychee.math.Vector4',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        null
 			};
 

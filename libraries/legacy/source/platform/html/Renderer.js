@@ -189,7 +189,7 @@ lychee.define('legacy.Renderer').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.__background = global.document.createElement('div');
@@ -203,9 +203,9 @@ lychee.define('legacy.Renderer').tags({
 		global.document.body.appendChild(this.__foreground);
 
 
-		_Renderer.call(this, settings);
+		_Renderer.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

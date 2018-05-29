@@ -265,7 +265,7 @@ lychee.define('lychee.ui.entity.Upload').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			label: 'UPLOAD'
 		}, data);
 
@@ -274,16 +274,16 @@ lychee.define('lychee.ui.entity.Upload').tags({
 		this.value = [];
 
 
-		this.setType(settings.type);
-		this.setValue(settings.value);
+		this.setType(states.type);
+		this.setValue(states.value);
 
-		delete settings.type;
-		delete settings.value;
+		delete states.type;
+		delete states.value;
 
 
-		_Button.call(this, settings);
+		_Button.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 		_INSTANCES.push(this);

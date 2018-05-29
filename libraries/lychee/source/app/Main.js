@@ -310,9 +310,9 @@ lychee.define('lychee.app.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
-		this.settings = lychee.assignunlink({}, _DEFAULTS, settings);
+		this.settings = lychee.assignunlink({}, _DEFAULTS, states);
 		this.defaults = lychee.assignunlink({}, this.settings);
 
 		this.client   = null;
@@ -380,8 +380,8 @@ lychee.define('lychee.app.Main').requires([
 			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.app.Main';
 
-			let settings = lychee.assignunlink({}, this.settings);
-			let blob     = data['blob'] || {};
+			let states = lychee.assignunlink({}, this.settings);
+			let blob   = data['blob'] || {};
 
 
 			if (this.client !== null)   blob.client   = lychee.serialize(this.client);
@@ -407,7 +407,7 @@ lychee.define('lychee.app.Main').requires([
 			}
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

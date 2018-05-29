@@ -115,11 +115,11 @@ lychee.define('lychee.net.Tunnel').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id        = 'localhost:1337';
-		this.codec     = lychee.interfaceof(_JSON, settings.codec) ? settings.codec : _JSON;
+		this.codec     = lychee.interfaceof(_JSON, states.codec) ? states.codec : _JSON;
 		this.host      = 'localhost';
 		this.port      = 1337;
 		this.reconnect = 0;
@@ -134,15 +134,15 @@ lychee.define('lychee.net.Tunnel').requires([
 		};
 
 
-		this.setHost(settings.host);
-		this.setPort(settings.port);
-		this.setReconnect(settings.reconnect);
-		this.setType(settings.type);
+		this.setHost(states.host);
+		this.setPort(states.port);
+		this.setReconnect(states.reconnect);
+		this.setType(states.type);
 
 
 		_Emitter.call(this);
 
-		settings = null;
+		states = null;
 
 
 
@@ -226,15 +226,15 @@ lychee.define('lychee.net.Tunnel').requires([
 			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.net.Tunnel';
 
-			let settings = {};
-			let blob     = (data['blob'] || {});
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.codec !== _JSON)            settings.codec     = lychee.serialize(this.codec);
-			if (this.host !== 'localhost')       settings.host      = this.host;
-			if (this.port !== 1337)              settings.port      = this.port;
-			if (this.reconnect !== 0)            settings.reconnect = this.reconnect;
-			if (this.type !== Composite.TYPE.WS) settings.type      = this.type;
+			if (this.codec !== _JSON)            states.codec     = lychee.serialize(this.codec);
+			if (this.host !== 'localhost')       states.host      = this.host;
+			if (this.port !== 1337)              states.port      = this.port;
+			if (this.reconnect !== 0)            states.reconnect = this.reconnect;
+			if (this.type !== Composite.TYPE.WS) states.type      = this.type;
 
 
 			if (this.__socket !== null) blob.socket = lychee.serialize(this.__socket);
@@ -255,7 +255,7 @@ lychee.define('lychee.net.Tunnel').requires([
 			}
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

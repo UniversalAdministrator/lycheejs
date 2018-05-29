@@ -115,7 +115,7 @@ lychee.define('lychee.Viewport').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.fullscreen = false;
@@ -130,7 +130,7 @@ lychee.define('lychee.Viewport').tags({
 		_INSTANCES.push(this);
 
 
-		this.setFullscreen(settings.fullscreen);
+		this.setFullscreen(states.fullscreen);
 
 
 
@@ -148,7 +148,7 @@ lychee.define('lychee.Viewport').tags({
 		}.bind(this), 100);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -190,13 +190,13 @@ lychee.define('lychee.Viewport').tags({
 			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.Viewport';
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.fullscreen !== false) settings.fullscreen = this.fullscreen;
+			if (this.fullscreen !== false) states.fullscreen = this.fullscreen;
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 
 
 			return data;

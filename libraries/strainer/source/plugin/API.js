@@ -127,7 +127,7 @@ lychee.define('strainer.plugin.API').requires([
 								hash:       null,
 								parameters: []
 							},
-							settings:    {},
+							states:      {},
 							properties:  {},
 							enums:       {},
 							events:      {},

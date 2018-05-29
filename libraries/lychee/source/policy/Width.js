@@ -5,10 +5,10 @@ lychee.define('lychee.policy.Width').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
-		this.entity = settings.entity instanceof Object ? settings.entity : null;
-		this.limit  = typeof settings.limit === 'number' ? (settings.limit | 0) : Infinity;
+		this.entity = states.entity instanceof Object ? states.entity : null;
+		this.limit  = typeof states.limit === 'number' ? (states.limit | 0) : Infinity;
 
 	};
 
@@ -23,7 +23,7 @@ lychee.define('lychee.policy.Width').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			let settings = {
+			let states = {
 				entity: null,
 				limit:  this.limit
 			};
@@ -31,7 +31,7 @@ lychee.define('lychee.policy.Width').exports(function(lychee, global, attachment
 
 			return {
 				'constructor': 'lychee.policy.Width',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

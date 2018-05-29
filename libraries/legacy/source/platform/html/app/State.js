@@ -39,14 +39,14 @@ lychee.define('legacy.app.State').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 		// TODO: Implement state._element
 		// TODO: Inherit from lychee.app.State
 
-		_State.call(this, settings);
+		_State.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -62,7 +62,7 @@ lychee.define('legacy.app.State').requires([
 		serialize: function() {
 
 			let data = _State.prototype.serialize.call(this);
-			data['constructor'] = 'legacy.app.Main';
+			data['constructor'] = 'legacy.app.State';
 
 
 			return data;

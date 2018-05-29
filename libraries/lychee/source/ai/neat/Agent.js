@@ -23,14 +23,14 @@ lychee.define('lychee.ai.neat.Agent').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.brain = settings.brain || new _Brain();
+		states.brain = states.brain || new _Brain();
 
-		_Agent.call(this, settings);
+		_Agent.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

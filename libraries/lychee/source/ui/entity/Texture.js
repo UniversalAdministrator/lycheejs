@@ -18,7 +18,7 @@ lychee.define('lychee.ui.entity.Texture').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.font  = null;
@@ -31,18 +31,18 @@ lychee.define('lychee.ui.entity.Texture').requires([
 		});
 
 
-		this.setFont(settings.font);
-		this.setLabel(settings.label);
-		this.setValue(settings.value);
+		this.setFont(states.font);
+		this.setLabel(states.label);
+		this.setValue(states.value);
 
-		delete settings.font;
-		delete settings.label;
-		delete settings.value;
+		delete states.font;
+		delete states.label;
+		delete states.value;
 
 
-		_Entity.call(this, settings);
+		_Entity.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 
@@ -124,11 +124,11 @@ lychee.define('lychee.ui.entity.Texture').requires([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Button';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.label !== null) settings.label = this.label;
+			if (this.label !== null) states.label = this.label;
 
 
 			if (this.font !== null)  blob.font  = lychee.serialize(this.font);

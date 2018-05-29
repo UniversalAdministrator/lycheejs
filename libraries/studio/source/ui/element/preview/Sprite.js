@@ -18,7 +18,7 @@ lychee.define('studio.ui.element.preview.Sprite').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.value = null;
@@ -26,16 +26,16 @@ lychee.define('studio.ui.element.preview.Sprite').requires([
 		this.__sprites = [];
 
 
-		settings.label   = 'Preview';
-		settings.options = [];
+		states.label   = 'Preview';
+		states.options = [];
 
 
-		_Element.call(this, settings);
+		_Element.call(this, states);
 
 
-		this.setValue(settings.value);
+		this.setValue(states.value);
 
-		settings = null;
+		states = null;
 
 	};
 

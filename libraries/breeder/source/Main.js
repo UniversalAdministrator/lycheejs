@@ -15,13 +15,13 @@ lychee.define('breeder.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
 		this.settings = _lychee.assignunlink({
 			action:  null,
 			project: null,
 			library: null
-		}, settings);
+		}, states);
 
 		this.defaults = _lychee.assignunlink({
 			action:  null,
@@ -32,7 +32,7 @@ lychee.define('breeder.Main').requires([
 
 		_Emitter.call(this);
 
-		settings = null;
+		states = null;
 
 
 
@@ -118,11 +118,11 @@ lychee.define('breeder.Main').requires([
 			data['constructor'] = 'breeder.Main';
 
 
-			let settings = _lychee.assignunlink({}, this.settings);
-			let blob     = data['blob'] || {};
+			let states = _lychee.assignunlink({}, this.settings);
+			let blob   = data['blob'] || {};
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

@@ -88,7 +88,7 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.font  = _FONT;
@@ -119,21 +119,21 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 		this.__isDirty = true;
 
 
-		this.setFont(settings.font);
-		this.setValue(settings.value);
+		this.setFont(states.font);
+		this.setValue(states.value);
 
-		delete settings.font;
-		delete settings.value;
-
-
-		settings.width  = typeof settings.width  === 'number' ? settings.width  : 256;
-		settings.height = typeof settings.height === 'number' ? settings.height : 128;
-		settings.shape  = _Entity.SHAPE.rectangle;
+		delete states.font;
+		delete states.value;
 
 
-		_Entity.call(this, settings);
+		states.width  = typeof states.width  === 'number' ? states.width  : 256;
+		states.height = typeof states.height === 'number' ? states.height : 128;
+		states.shape  = _Entity.SHAPE.rectangle;
 
-		settings = null;
+
+		_Entity.call(this, states);
+
+		states = null;
 
 
 
@@ -234,11 +234,11 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Textarea';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.value !== '') settings.value = this.value;
+			if (this.value !== '') states.value = this.value;
 
 
 			if (this.font !== null) blob.font = lychee.serialize(this.font);

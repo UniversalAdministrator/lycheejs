@@ -96,7 +96,7 @@ lychee.define('lychee.Renderer').tags({
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.alpha      = 1.0;
@@ -114,14 +114,14 @@ lychee.define('lychee.Renderer').tags({
 		}
 
 
-		this.setAlpha(settings.alpha);
-		this.setBackground(settings.background);
-		this.setId(settings.id);
-		this.setWidth(settings.width);
-		this.setHeight(settings.height);
+		this.setAlpha(states.alpha);
+		this.setBackground(states.background);
+		this.setId(states.id);
+		this.setWidth(states.width);
+		this.setHeight(states.height);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -149,19 +149,19 @@ lychee.define('lychee.Renderer').tags({
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.alpha !== 1.0)                               settings.alpha      = this.alpha;
-			if (this.background !== '#000000')                    settings.background = this.background;
-			if (this.id.startsWith('lychee-Renderer-') === false) settings.id         = this.id;
-			if (this.width !== null)                              settings.width      = this.width;
-			if (this.height !== null)                             settings.height     = this.height;
+			if (this.alpha !== 1.0)                               states.alpha      = this.alpha;
+			if (this.background !== '#000000')                    states.background = this.background;
+			if (this.id.startsWith('lychee-Renderer-') === false) states.id         = this.id;
+			if (this.width !== null)                              states.width      = this.width;
+			if (this.height !== null)                             states.height     = this.height;
 
 
 			return {
 				'constructor': 'lychee.Renderer',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        null
 			};
 

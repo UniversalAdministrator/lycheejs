@@ -5,7 +5,7 @@ lychee.define('lychee.effect.Velocity').exports(function(lychee, global, attachm
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
@@ -18,15 +18,15 @@ lychee.define('lychee.effect.Velocity').exports(function(lychee, global, attachm
 
 		// No data validation garbage allowed for effects
 
-		this.type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : Composite.TYPE.easeout;
-		this.delay    = typeof settings.delay === 'number'           ? (settings.delay | 0)    : 0;
-		this.duration = typeof settings.duration === 'number'        ? (settings.duration | 0) : 250;
+		this.type     = lychee.enumof(Composite.TYPE, states.type) ? states.type           : Composite.TYPE.easeout;
+		this.delay    = typeof states.delay === 'number'           ? (states.delay | 0)    : 0;
+		this.duration = typeof states.duration === 'number'        ? (states.duration | 0) : 250;
 
 
-		if (settings.velocity instanceof Object) {
-			this.velocity.x = typeof settings.velocity.x === 'number' ? (settings.velocity.x | 0) : null;
-			this.velocity.y = typeof settings.velocity.y === 'number' ? (settings.velocity.y | 0) : null;
-			this.velocity.z = typeof settings.velocity.z === 'number' ? (settings.velocity.z | 0) : null;
+		if (states.velocity instanceof Object) {
+			this.velocity.x = typeof states.velocity.x === 'number' ? (states.velocity.x | 0) : null;
+			this.velocity.y = typeof states.velocity.y === 'number' ? (states.velocity.y | 0) : null;
+			this.velocity.z = typeof states.velocity.z === 'number' ? (states.velocity.z | 0) : null;
 		}
 
 	};
@@ -51,28 +51,28 @@ lychee.define('lychee.effect.Velocity').exports(function(lychee, global, attachm
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
-			if (this.delay !== 0)                     settings.delay    = this.delay;
-			if (this.duration !== 250)                settings.duration = this.duration;
+			if (this.type !== Composite.TYPE.easeout) states.type     = this.type;
+			if (this.delay !== 0)                     states.delay    = this.delay;
+			if (this.duration !== 250)                states.duration = this.duration;
 
 
 			if (this.velocity.x !== null || this.velocity.y !== null || this.velocity.z !== null) {
 
-				settings.velocity = {};
+				states.velocity = {};
 
-				if (this.velocity.x !== null) settings.velocity.x = this.velocity.x;
-				if (this.velocity.y !== null) settings.velocity.y = this.velocity.y;
-				if (this.velocity.z !== null) settings.velocity.z = this.velocity.z;
+				if (this.velocity.x !== null) states.velocity.x = this.velocity.x;
+				if (this.velocity.y !== null) states.velocity.y = this.velocity.y;
+				if (this.velocity.z !== null) states.velocity.z = this.velocity.z;
 
 			}
 
 
 			return {
 				'constructor': 'lychee.effect.Velocity',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

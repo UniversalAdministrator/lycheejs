@@ -558,7 +558,7 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id  = '';
@@ -569,10 +569,10 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 
 
 		// XXX: url has to be set first for fuzzing
-		this.setUrl(settings.url);
-		this.setId(settings.id);
+		this.setUrl(states.url);
+		this.setId(states.id);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -614,12 +614,12 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 
 		serialize: function() {
 
-			let settings = {};
-			let blob     = {};
+			let states = {};
+			let blob   = {};
 
 
-			if (this.id !== '')  settings.id  = this.id;
-			if (this.url !== '') settings.url = this.url;
+			if (this.id !== '')  states.id  = this.id;
+			if (this.url !== '') states.url = this.url;
 
 			if (this._requires.length > 0)         blob.requires = this._requires.slice(0);
 			if (this._exports instanceof Function) blob.exports  = this._exports.toString();
@@ -627,7 +627,7 @@ lychee.Specification = typeof lychee.Specification !== 'undefined' ? lychee.Spec
 
 			return {
 				'constructor': 'lychee.Specification',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 

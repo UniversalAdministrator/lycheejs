@@ -96,13 +96,13 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		this.width  = typeof settings.width === 'number'  ? settings.width  : 0;
-		this.height = typeof settings.height === 'number' ? settings.height : 0;
-		this.depth  = typeof settings.depth === 'number'  ? settings.depth  : 0;
-		this.radius = typeof settings.radius === 'number' ? settings.radius : 0;
+		this.width  = typeof states.width === 'number'  ? states.width  : 0;
+		this.height = typeof states.height === 'number' ? states.height : 0;
+		this.depth  = typeof states.depth === 'number'  ? states.depth  : 0;
+		this.radius = typeof states.radius === 'number' ? states.radius : 0;
 
 		this.alpha     = 1;
 		this.collision = Composite.COLLISION.none;
@@ -114,16 +114,16 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 		this.velocity  = { x: 0, y: 0, z: 0 };
 
 
-		this.setAlpha(settings.alpha);
-		this.setCollision(settings.collision);
-		this.setShape(settings.shape);
-		this.setStates(settings.states);
-		this.setState(settings.state);
-		this.setPosition(settings.position);
-		this.setVelocity(settings.velocity);
+		this.setAlpha(states.alpha);
+		this.setCollision(states.collision);
+		this.setShape(states.shape);
+		this.setStates(states.states);
+		this.setState(states.state);
+		this.setPosition(states.position);
+		this.setVelocity(states.velocity);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -157,46 +157,46 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.width  !== 0) settings.width  = this.width;
-			if (this.height !== 0) settings.height = this.height;
-			if (this.depth  !== 0) settings.depth  = this.depth;
-			if (this.radius !== 0) settings.radius = this.radius;
+			if (this.width  !== 0) states.width  = this.width;
+			if (this.height !== 0) states.height = this.height;
+			if (this.depth  !== 0) states.depth  = this.depth;
+			if (this.radius !== 0) states.radius = this.radius;
 
-			if (this.alpha !== 1)                            settings.alpha     = this.alpha;
-			if (this.collision !== Composite.COLLISION.none) settings.collision = this.collision;
-			if (this.shape !== Composite.SHAPE.rectangle)    settings.shape     = this.shape;
-			if (this.state !== 'default')                    settings.state     = this.state;
-			if (Object.keys(this.states).length > 1)         settings.states    = this.states;
+			if (this.alpha !== 1)                            states.alpha     = this.alpha;
+			if (this.collision !== Composite.COLLISION.none) states.collision = this.collision;
+			if (this.shape !== Composite.SHAPE.rectangle)    states.shape     = this.shape;
+			if (this.state !== 'default')                    states.state     = this.state;
+			if (Object.keys(this.states).length > 1)         states.states    = this.states;
 
 
 			if (this.position.x !== 0 || this.position.y !== 0 || this.position.z !== 0) {
 
-				settings.position = {};
+				states.position = {};
 
-				if (this.position.x !== 0) settings.position.x = this.position.x;
-				if (this.position.y !== 0) settings.position.y = this.position.y;
-				if (this.position.z !== 0) settings.position.z = this.position.z;
+				if (this.position.x !== 0) states.position.x = this.position.x;
+				if (this.position.y !== 0) states.position.y = this.position.y;
+				if (this.position.z !== 0) states.position.z = this.position.z;
 
 			}
 
 
 			if (this.velocity.x !== 0 || this.velocity.y !== 0 || this.velocity.z !== 0) {
 
-				settings.velocity = {};
+				states.velocity = {};
 
-				if (this.velocity.x !== 0) settings.velocity.x = this.velocity.x;
-				if (this.velocity.y !== 0) settings.velocity.y = this.velocity.y;
-				if (this.velocity.z !== 0) settings.velocity.z = this.velocity.z;
+				if (this.velocity.x !== 0) states.velocity.x = this.velocity.x;
+				if (this.velocity.y !== 0) states.velocity.y = this.velocity.y;
+				if (this.velocity.z !== 0) states.velocity.z = this.velocity.z;
 
 			}
 
 
 			return {
 				'constructor': 'lychee.app.Entity',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        null
 			};
 

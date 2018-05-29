@@ -28,16 +28,16 @@ lychee.define('harvester.net.Server').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			codec:  _CODEC,
 			remote: _Remote,
 			type:   _Server.TYPE.HTTP
 		}, data);
 
 
-		_Server.call(this, settings);
+		_Server.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

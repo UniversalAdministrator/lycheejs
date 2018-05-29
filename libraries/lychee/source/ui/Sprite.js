@@ -49,7 +49,7 @@ lychee.define('lychee.ui.Sprite').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.frame   = 0;
@@ -68,16 +68,16 @@ lychee.define('lychee.ui.Sprite').includes([
 		};
 
 
-		this.setTexture(settings.texture);
-		this.setMap(settings.map);
+		this.setTexture(states.texture);
+		this.setMap(states.map);
 
-		delete settings.texture;
-		delete settings.map;
+		delete states.texture;
+		delete states.map;
 
 
-		_Entity.call(this, settings);
+		_Entity.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -106,18 +106,18 @@ lychee.define('lychee.ui.Sprite').includes([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.Sprite';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
 			if (Object.keys(this.__map).length > 0) {
 
-				settings.map = {};
+				states.map = {};
 
 
 				for (let state in this.__map) {
 
-					settings.map[state] = [];
+					states.map[state] = [];
 
 
 					let frames = this.__map[state] || null;
@@ -134,7 +134,7 @@ lychee.define('lychee.ui.Sprite').includes([
 							if (frame.h !== 0) sframe.h = frame.h;
 
 
-							settings.map[state].push(sframe);
+							states.map[state].push(sframe);
 
 						}
 

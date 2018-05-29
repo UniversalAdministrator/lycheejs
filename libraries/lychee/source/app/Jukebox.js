@@ -182,7 +182,7 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.channels = 8;
@@ -199,13 +199,13 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 		];
 
 
-		this.setChannels(settings.channels);
-		this.setMusic(settings.music);
-		this.setSound(settings.sound);
-		this.setVolume(settings.volume);
+		this.setChannels(states.channels);
+		this.setMusic(states.music);
+		this.setSound(states.sound);
+		this.setVolume(states.volume);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -220,18 +220,18 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.channels !== 8) settings.channels = this.channels;
-			if (this.music !== true) settings.music    = this.music;
-			if (this.sound !== true) settings.sound    = this.sound;
-			if (this.volume !== 1.0) settings.volume   = this.volume;
+			if (this.channels !== 8) states.channels = this.channels;
+			if (this.music !== true) states.music    = this.music;
+			if (this.sound !== true) states.sound    = this.sound;
+			if (this.volume !== 1.0) states.volume   = this.volume;
 
 
 			return {
 				'constructor': 'lychee.app.Jukebox',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        null
 			};
 

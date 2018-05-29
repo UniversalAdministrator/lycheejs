@@ -17,7 +17,7 @@ lychee.define('studio.ui.element.select.Scene').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.value = null;
@@ -25,12 +25,12 @@ lychee.define('studio.ui.element.select.Scene').requires([
 		this.__buffer  = null;
 
 
-		this.setValue(settings.value);
+		this.setValue(states.value);
 
 
-		_Element.call(this, settings);
+		_Element.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

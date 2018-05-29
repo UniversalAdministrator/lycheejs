@@ -137,7 +137,7 @@ lychee.define('lychee.app.Element').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.label     = 'CONTENT';
@@ -147,12 +147,12 @@ lychee.define('lychee.app.Element').requires([
 		this.__content = [];
 
 
-		settings.width    = typeof settings.width === 'number'  ? settings.width  : 256;
-		settings.height   = typeof settings.height === 'number' ? settings.height : 384;
-		settings.relayout = false;
+		states.width    = typeof states.width === 'number'  ? states.width  : 256;
+		states.height   = typeof states.height === 'number' ? states.height : 384;
+		states.relayout = false;
 
 
-		_Layer.call(this, settings);
+		_Layer.call(this, states);
 
 
 
@@ -176,10 +176,10 @@ lychee.define('lychee.app.Element').requires([
 		this.bind('relayout', _on_relayout, this);
 
 
-		this.setLabel(settings.label);
-		this.setOrder(settings.order);
+		this.setLabel(states.label);
+		this.setOrder(states.order);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -203,12 +203,12 @@ lychee.define('lychee.app.Element').requires([
 			let data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.app.Element';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.label !== 'CONTENT') settings.label = this.label;
-			if (this.order !== 1)         settings.order = this.order;
+			if (this.label !== 'CONTENT') states.label = this.label;
+			if (this.order !== 1)         states.order = this.order;
 
 
 			data['blob'] = Object.keys(blob).length > 0 ? blob : null;

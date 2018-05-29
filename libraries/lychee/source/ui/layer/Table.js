@@ -194,7 +194,7 @@ lychee.define('lychee.ui.layer.Table').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.font  = _FONT;
@@ -207,27 +207,27 @@ lychee.define('lychee.ui.layer.Table').requires([
 		this.__label  = [];
 
 
-		this.setFont(settings.font);
-		this.setModel(settings.model);
-		this.setType(settings.type);
-		this.setValue(settings.value);
+		this.setFont(states.font);
+		this.setModel(states.model);
+		this.setType(states.type);
+		this.setValue(states.value);
 
 
 		if (this.type === Composite.TYPE.horizontal) {
-			settings.width  = typeof settings.width === 'number'  ? settings.width  : 512;
-			settings.height = typeof settings.height === 'number' ? settings.height : 384;
+			states.width  = typeof states.width === 'number'  ? states.width  : 512;
+			states.height = typeof states.height === 'number' ? states.height : 384;
 		} else if (this.type === Composite.TYPE.vertical) {
-			settings.width  = typeof settings.width === 'number'  ? settings.width  : 384;
-			settings.height = typeof settings.height === 'number' ? settings.height : 512;
+			states.width  = typeof states.width === 'number'  ? states.width  : 384;
+			states.height = typeof states.height === 'number' ? states.height : 512;
 		}
 
-		settings.shape    = _Entity.SHAPE.rectangle;
-		settings.relayout = false;
+		states.shape    = _Entity.SHAPE.rectangle;
+		states.relayout = false;
 
 
-		_Layer.call(this, settings);
+		_Layer.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 
@@ -285,11 +285,11 @@ lychee.define('lychee.ui.layer.Table').requires([
 			let data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.layer.Table';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.type !== Composite.TYPE.horizontal) settings.type = this.type;
+			if (this.type !== Composite.TYPE.horizontal) states.type = this.type;
 
 
 			if (this.font !== null) blob.font = lychee.serialize(this.font);

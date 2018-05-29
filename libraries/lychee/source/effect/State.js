@@ -5,7 +5,7 @@ lychee.define('lychee.effect.State').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
 		this.delay = 0;
 		this.state = null;
@@ -15,8 +15,8 @@ lychee.define('lychee.effect.State').exports(function(lychee, global, attachment
 
 		// No data validation garbage allowed for effects
 
-		this.delay = typeof settings.delay === 'number' ? (settings.delay | 0) : 0;
-		this.state = typeof settings.state === 'string' ? settings.state       : null;
+		this.delay = typeof states.delay === 'number' ? (states.delay | 0) : 0;
+		this.state = typeof states.state === 'string' ? states.state       : null;
 
 	};
 
@@ -31,16 +31,16 @@ lychee.define('lychee.effect.State').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.delay !== 0)    settings.delay = this.delay;
-			if (this.state !== null) settings.state = this.state;
+			if (this.delay !== 0)    states.delay = this.delay;
+			if (this.state !== null) states.state = this.state;
 
 
 			return {
 				'constructor': 'lychee.effect.State',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

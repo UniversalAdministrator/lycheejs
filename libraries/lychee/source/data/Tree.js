@@ -71,7 +71,7 @@ lychee.define('lychee.data.Tree').exports(function(lychee, global, attachments) 
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.length = 0;
@@ -82,9 +82,9 @@ lychee.define('lychee.data.Tree').exports(function(lychee, global, attachments) 
 		};
 
 
-		this.setEntities(settings.entities);
+		this.setEntities(states.entities);
 
-		settings = null;
+		states = null;
 
 	};
 

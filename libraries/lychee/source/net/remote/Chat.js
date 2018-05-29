@@ -145,15 +145,15 @@ lychee.define('lychee.net.remote.Chat').includes([
 		id = typeof id === 'string' ? id : 'chat';
 
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.limit = 128;
 
 
-		this.setLimit(settings.limit);
+		this.setLimit(states.limit);
 
-		delete settings.limit;
+		delete states.limit;
 
 
 		_Service.call(this, id, remote, _Service.TYPE.remote);
@@ -170,7 +170,7 @@ lychee.define('lychee.net.remote.Chat').includes([
 		this.tunnel.bind('disconnect', _on_disconnect, this);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -188,14 +188,14 @@ lychee.define('lychee.net.remote.Chat').includes([
 			let data = _Service.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.net.remote.Chat';
 
-			let settings = {};
-			let blob     = (data['blob'] || {});
+			let states = {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.limit !== 128) settings.limit = this.limit;
+			if (this.limit !== 128) states.limit = this.limit;
 
 
-			data['arguments'] = [ this.id, null, settings ];
+			data['arguments'] = [ this.id, null, states ];
 			data['blob']      = Object.keys(blob).length > 0 ? blob : null;
 
 

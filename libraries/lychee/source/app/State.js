@@ -463,8 +463,8 @@ lychee.define('lychee.app.State').requires([
 
 		serialize: function() {
 
-			let settings = this.main !== null ? '#MAIN' : null;
-			let blob     = {};
+			let main = this.main !== null ? '#MAIN' : null;
+			let blob = {};
 
 
 			if (Object.keys(this.__layers).length > 0) {
@@ -480,7 +480,7 @@ lychee.define('lychee.app.State').requires([
 
 			return {
 				'constructor': 'lychee.app.State',
-				'arguments':   [ settings ],
+				'arguments':   [ main ],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 

@@ -116,7 +116,7 @@ lychee.define('ranger.ui.entity.Console').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.font  = _FONT;
@@ -127,16 +127,16 @@ lychee.define('ranger.ui.entity.Console').includes([
 		this.__isDirty = true;
 
 
-		this.setFont(settings.font);
-		this.setValue(settings.value);
+		this.setFont(states.font);
+		this.setValue(states.value);
 
-		delete settings.font;
-		delete settings.value;
+		delete states.font;
+		delete states.value;
 
 
-		_Entity.call(this, settings);
+		_Entity.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

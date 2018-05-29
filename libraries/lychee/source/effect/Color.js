@@ -31,7 +31,7 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
@@ -48,10 +48,10 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 
 		// No data validation garbage allowed for effects
 
-		this.type     = lychee.enumof(Composite.TYPE, settings.type)    ? settings.type           : Composite.TYPE.easeout;
-		this.delay    = typeof settings.delay === 'number'              ? (settings.delay | 0)    : 0;
-		this.duration = typeof settings.duration === 'number'           ? (settings.duration | 0) : 250;
-		this.color    = /(#[AaBbCcDdEeFf0-9]{6})/g.test(settings.color) ? settings.color          : '#000000';
+		this.type     = lychee.enumof(Composite.TYPE, states.type)    ? states.type           : Composite.TYPE.easeout;
+		this.delay    = typeof states.delay === 'number'              ? (states.delay | 0)    : 0;
+		this.duration = typeof states.duration === 'number'           ? (states.duration | 0) : 250;
+		this.color    = /(#[AaBbCcDdEeFf0-9]{6})/g.test(states.color) ? states.color          : '#000000';
 
 	};
 
@@ -75,18 +75,18 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
-			if (this.delay !== 0)                     settings.delay    = this.delay;
-			if (this.duration !== 250)                settings.duration = this.duration;
-			if (this.color !== '#000000')             settings.color    = this.color;
+			if (this.type !== Composite.TYPE.easeout) states.type     = this.type;
+			if (this.delay !== 0)                     states.delay    = this.delay;
+			if (this.duration !== 250)                states.duration = this.duration;
+			if (this.color !== '#000000')             states.color    = this.color;
 
 
 			return {
 				'constructor': 'lychee.effect.Color',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

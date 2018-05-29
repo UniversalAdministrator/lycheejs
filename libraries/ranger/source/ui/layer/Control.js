@@ -106,19 +106,19 @@ lychee.define('ranger.ui.layer.Control').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.label = [];
 		this.value = [];
 
 
-		settings.relayout = false;
+		states.relayout = false;
 
 
-		_Layer.call(this, settings);
+		_Layer.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

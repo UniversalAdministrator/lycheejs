@@ -5,7 +5,7 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
@@ -18,15 +18,15 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 
 		// No data validation garbage allowed for effects
 
-		this.type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : Composite.TYPE.easeout;
-		this.delay    = typeof settings.delay === 'number'           ? (settings.delay | 0)    : 0;
-		this.duration = typeof settings.duration === 'number'        ? (settings.duration | 0) : 250;
+		this.type     = lychee.enumof(Composite.TYPE, states.type) ? states.type           : Composite.TYPE.easeout;
+		this.delay    = typeof states.delay === 'number'           ? (states.delay | 0)    : 0;
+		this.duration = typeof states.duration === 'number'        ? (states.duration | 0) : 250;
 
 
-		if (settings.shake instanceof Object) {
-			this.shake.x = typeof settings.shake.x === 'number' ? (settings.shake.x | 0) : null;
-			this.shake.y = typeof settings.shake.y === 'number' ? (settings.shake.y | 0) : null;
-			this.shake.z = typeof settings.shake.z === 'number' ? (settings.shake.z | 0) : null;
+		if (states.shake instanceof Object) {
+			this.shake.x = typeof states.shake.x === 'number' ? (states.shake.x | 0) : null;
+			this.shake.y = typeof states.shake.y === 'number' ? (states.shake.y | 0) : null;
+			this.shake.z = typeof states.shake.z === 'number' ? (states.shake.z | 0) : null;
 		}
 
 	};
@@ -51,28 +51,28 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
-			if (this.delay !== 0)                     settings.delay    = this.delay;
-			if (this.duration !== 250)                settings.duration = this.duration;
+			if (this.type !== Composite.TYPE.easeout) states.type     = this.type;
+			if (this.delay !== 0)                     states.delay    = this.delay;
+			if (this.duration !== 250)                states.duration = this.duration;
 
 
 			if (this.shake.x !== null || this.shake.y !== null || this.shake.z !== null) {
 
-				settings.shake = {};
+				states.shake = {};
 
-				if (this.shake.x !== null) settings.shake.x = this.shake.x;
-				if (this.shake.y !== null) settings.shake.y = this.shake.y;
-				if (this.shake.z !== null) settings.shake.z = this.shake.z;
+				if (this.shake.x !== null) states.shake.x = this.shake.x;
+				if (this.shake.y !== null) states.shake.y = this.shake.y;
+				if (this.shake.z !== null) states.shake.z = this.shake.z;
 
 			}
 
 
 			return {
 				'constructor': 'lychee.effect.Shake',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

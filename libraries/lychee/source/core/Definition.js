@@ -284,7 +284,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id  = '';
@@ -307,10 +307,10 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 
 		// XXX: url has to be set first for fuzzing
-		this.setUrl(settings.url);
-		this.setId(settings.id);
+		this.setUrl(states.url);
+		this.setId(states.id);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -414,12 +414,12 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 		serialize: function() {
 
-			let settings = {};
-			let blob     = {};
+			let states = {};
+			let blob   = {};
 
 
-			if (this.id !== '')  settings.id  = this.id;
-			if (this.url !== '') settings.url = this.url;
+			if (this.id !== '')  states.id  = this.id;
+			if (this.url !== '') states.url = this.url;
 
 
 			if (Object.keys(this._attaches).length > 0) {
@@ -460,7 +460,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			return {
 				'constructor': 'lychee.Definition',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 

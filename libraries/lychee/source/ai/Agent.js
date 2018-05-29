@@ -52,7 +52,7 @@ lychee.define('lychee.ai.Agent').exports(function(lychee, global, attachments) {
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.alive     = true;
@@ -61,12 +61,12 @@ lychee.define('lychee.ai.Agent').exports(function(lychee, global, attachments) {
 		this.trainings = [];
 
 
-		this.setAlive(settings.alive);
-		this.setBrain(settings.brain);
-		this.setFitness(settings.fitness);
+		this.setAlive(states.alive);
+		this.setBrain(states.brain);
+		this.setFitness(states.fitness);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -92,11 +92,11 @@ lychee.define('lychee.ai.Agent').exports(function(lychee, global, attachments) {
 
 		serialize: function() {
 
-			let settings = {};
-			let blob     = {};
+			let states = {};
+			let blob   = {};
 
 
-			if (this.fitness !== 0) settings.fitness = this.fitness;
+			if (this.fitness !== 0) states.fitness = this.fitness;
 
 
 			if (this.brain !== null)       blob.brain     = lychee.serialize(this.brain);
@@ -105,7 +105,7 @@ lychee.define('lychee.ai.Agent').exports(function(lychee, global, attachments) {
 
 			return {
 				'constructor': 'lychee.ai.Agent',
-				'arguments':   [ settings ],
+				'arguments':   [ states ],
 				'blob':        Object.keys(blob).length > 0 ? blob : null
 			};
 

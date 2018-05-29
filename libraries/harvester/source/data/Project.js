@@ -17,10 +17,10 @@ lychee.define('harvester.data.Project').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		this.identifier = typeof settings.identifier === 'string' ? settings.identifier : '/projects/boilerplate';
+		this.identifier = typeof states.identifier === 'string' ? states.identifier : '/projects/boilerplate';
 		this.filesystem = new _Filesystem({
 			root: this.identifier
 		});
@@ -42,7 +42,7 @@ lychee.define('harvester.data.Project').requires([
 		}
 
 
-		settings = null;
+		states = null;
 
 	};
 

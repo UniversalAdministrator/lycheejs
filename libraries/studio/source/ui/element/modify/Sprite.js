@@ -64,7 +64,7 @@ lychee.define('studio.ui.element.modify.Sprite').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.value = null;
@@ -79,11 +79,11 @@ lychee.define('studio.ui.element.modify.Sprite').requires([
 		};
 
 
-		settings.label   = 'Modify';
-		settings.options = [];
+		states.label   = 'Modify';
+		states.options = [];
 
 
-		_Element.call(this, settings);
+		_Element.call(this, states);
 
 
 
@@ -226,10 +226,10 @@ lychee.define('studio.ui.element.modify.Sprite').requires([
 		}, this);
 
 
-		this.setValue(settings.value);
+		this.setValue(states.value);
 		this.trigger('relayout');
 
-		settings = null;
+		states = null;
 
 	};
 

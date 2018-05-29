@@ -53,7 +53,7 @@ lychee.define('lychee.ui.entity.Slider').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.font  = _FONT;
@@ -83,31 +83,31 @@ lychee.define('lychee.ui.entity.Slider').includes([
 		this.__isDirty = true;
 
 
-		this.setFont(settings.font);
-		this.setMax(settings.max);
-		this.setMin(settings.min);
-		this.setStep(settings.step);
-		this.setType(settings.type);
+		this.setFont(states.font);
+		this.setMax(states.max);
+		this.setMin(states.min);
+		this.setStep(states.step);
+		this.setType(states.type);
 
-		delete settings.font;
-		delete settings.max;
-		delete settings.min;
-		delete settings.step;
-		delete settings.type;
+		delete states.font;
+		delete states.max;
+		delete states.min;
+		delete states.step;
+		delete states.type;
 
 
 		if (this.type === Composite.TYPE.horizontal) {
-			settings.width  = typeof settings.width === 'number'  ? settings.width  : 192;
-			settings.height = typeof settings.height === 'number' ? settings.height :  32;
+			states.width  = typeof states.width === 'number'  ? states.width  : 192;
+			states.height = typeof states.height === 'number' ? states.height :  32;
 		} else if (this.type === Composite.TYPE.vertical) {
-			settings.width  = typeof settings.width === 'number'  ? settings.width  :  32;
-			settings.height = typeof settings.height === 'number' ? settings.height : 192;
+			states.width  = typeof states.width === 'number'  ? states.width  :  32;
+			states.height = typeof states.height === 'number' ? states.height : 192;
 		}
 
-		settings.shape = _Entity.SHAPE.rectangle;
+		states.shape = _Entity.SHAPE.rectangle;
 
 
-		_Entity.call(this, settings);
+		_Entity.call(this, states);
 
 
 
@@ -236,9 +236,9 @@ lychee.define('lychee.ui.entity.Slider').includes([
 		}, this);
 
 
-		this.setValue(settings.value);
+		this.setValue(states.value);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -269,15 +269,15 @@ lychee.define('lychee.ui.entity.Slider').includes([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Slider';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.max !== 100)                    settings.max   = this.max;
-			if (this.min !== 0)                      settings.min   = this.min;
-			if (this.step !== 1)                     settings.step  = this.step;
-			if (this.type !== Composite.TYPE.horizontal) settings.type  = this.type;
-			if (this.value !== 0)                    settings.value = this.value;
+			if (this.max !== 100)                        states.max   = this.max;
+			if (this.min !== 0)                          states.min   = this.min;
+			if (this.step !== 1)                         states.step  = this.step;
+			if (this.type !== Composite.TYPE.horizontal) states.type  = this.type;
+			if (this.value !== 0)                        states.value = this.value;
 
 
 			if (this.font !== null) blob.font = lychee.serialize(this.font);

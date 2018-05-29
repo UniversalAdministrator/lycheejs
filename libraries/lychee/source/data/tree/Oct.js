@@ -338,7 +338,7 @@ lychee.define('lychee.data.tree.Oct').exports(function(lychee, global, attachmen
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.__root = new _Quadrant(
@@ -351,9 +351,9 @@ lychee.define('lychee.data.tree.Oct').exports(function(lychee, global, attachmen
 		);
 
 
-		this.setEntities(settings.entities);
+		this.setEntities(states.entities);
 
-		settings = null;
+		states = null;
 
 	};
 
