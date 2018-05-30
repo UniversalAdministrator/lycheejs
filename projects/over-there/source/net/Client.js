@@ -43,14 +43,14 @@ lychee.define('app.net.Client').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			reconnect: 10000
 		}, data);
 
 
-		_Client.call(this, settings);
+		_Client.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

@@ -18,7 +18,7 @@ lychee.define('game.Main').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 
 			input: {
 				delay:       0,
@@ -48,9 +48,9 @@ lychee.define('game.Main').requires([
 		}, data);
 
 
-		_Main.call(this, settings);
+		_Main.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 
@@ -112,19 +112,15 @@ lychee.define('game.Main').requires([
 			let data = _Main.prototype.serialize.call(this);
 			data['constructor'] = 'game.Main';
 
-			let settings = data['arguments'][0] || {};
-			let blob     = data['blob'] || {};
+			let states = data['arguments'][0] || {};
+			let blob   = data['blob'] || {};
 
 
-			if (this.settings.gameclient !== null) {
-				settings.client = this.defaults.client;
-			}
-			if (this.settings.gameserver !== null) {
-				settings.server = this.defaults.server;
-			}
+			if (this.settings.gameclient !== null) states.client = this.defaults.client;
+			if (this.settings.gameserver !== null) states.server = this.defaults.server;
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

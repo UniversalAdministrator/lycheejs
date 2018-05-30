@@ -13,19 +13,19 @@ lychee.define('game.net.client.Control').includes([
 
 	const Composite = function(client) {
 
-		let settings = {};
+		let states = {};
 
 
-		settings.autostart = false;
-		settings.autolock  = true;
-		settings.min       = 2;
-		settings.max       = 6;
-		settings.sid       = 'wait-for-init';
+		states.autostart = false;
+		states.autolock  = true;
+		states.min       = 2;
+		states.max       = 6;
+		states.sid       = 'wait-for-init';
 
 
-		_Session.call(this, 'control', client, settings);
+		_Session.call(this, 'control', client, states);
 
-		settings = null;
+		states = null;
 
 
 

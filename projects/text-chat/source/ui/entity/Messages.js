@@ -113,7 +113,7 @@ lychee.define('app.ui.entity.Messages').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.avatar = null;
@@ -131,9 +131,9 @@ lychee.define('app.ui.entity.Messages').requires([
 		this.__isDirty = true;
 
 
-		_Entity.call(this, settings);
+		_Entity.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

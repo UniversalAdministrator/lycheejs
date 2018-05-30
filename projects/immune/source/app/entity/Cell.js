@@ -77,7 +77,7 @@ lychee.define('game.app.entity.Cell').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id       = 'cell-' + _id++;
@@ -99,24 +99,24 @@ lychee.define('game.app.entity.Cell').requires([
 		this.__health   = this.health;
 
 
-		this.setHealth(settings.health);
-		this.setTeam(settings.team);
-		this.setVesicles(settings.vesicles);
+		this.setHealth(states.health);
+		this.setTeam(states.team);
+		this.setVesicles(states.vesicles);
 
 
-		delete settings.health;
-		delete settings.team;
-		delete settings.vesicles;
+		delete states.health;
+		delete states.team;
+		delete states.vesicles;
 
 
-		settings.collision = _Entity.COLLISION.A;
-		settings.shape     = _Entity.SHAPE.circle;
-		settings.radius    = settings.radius || 128;
+		states.collision = _Entity.COLLISION.A;
+		states.shape     = _Entity.SHAPE.circle;
+		states.radius    = states.radius || 128;
 
 
-		_Entity.call(this, settings);
+		_Entity.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 
@@ -160,12 +160,12 @@ lychee.define('game.app.entity.Cell').requires([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'game.app.entity.Cell';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.health !== 100)     settings.health = this.health;
-			if (this.team !== 'neutral') settings.team   = this.team;
+			if (this.health !== 100)     states.health = this.health;
+			if (this.team !== 'neutral') states.team   = this.team;
 
 
 			if (this.__attacker !== null) blob.attacker = this.__attacker;
@@ -177,7 +177,7 @@ lychee.define('game.app.entity.Cell').requires([
 			}
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

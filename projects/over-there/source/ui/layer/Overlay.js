@@ -21,16 +21,16 @@ lychee.define('app.ui.layer.Overlay').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.__entity = null;
 		this.__orbit  = null;
 
 
-		_Layer.call(this, settings);
+		_Layer.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

@@ -13,7 +13,7 @@ lychee.define('game.app.entity.unit.Virus').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			team:   'virus',
 			damage: 30,
 			health: 50,
@@ -22,9 +22,9 @@ lychee.define('game.app.entity.unit.Virus').includes([
 		}, data);
 
 
-		_Unit.call(this, settings);
+		_Unit.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

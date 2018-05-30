@@ -20,21 +20,21 @@ lychee.define('game.ai.Agent').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this._control = new _Paddle({
-			entity: settings.paddle,
-			limit:  settings.limit
+			entity: states.paddle,
+			limit:  states.limit
 		});
 
 		this._sensor = new _Ball({
-			entity: settings.ball,
-			limit:  settings.limit
+			entity: states.ball,
+			limit:  states.limit
 		});
 
 
-		settings.brain = new _Brain({
+		states.brain = new _Brain({
 			sensors:  [
 				this._sensor,
 				this._control
@@ -45,9 +45,9 @@ lychee.define('game.ai.Agent').requires([
 		});
 
 
-		_Agent.call(this, settings);
+		_Agent.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

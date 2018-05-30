@@ -15,20 +15,20 @@ lychee.define('app.sprite.Airlock').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.width   = 0;
-		settings.height  = 0;
-		settings.map     = _CONFIG.map;
-		settings.state   = settings.state || 'horizontal-big';
-		settings.states  = _CONFIG.states;
-		settings.texture = _TEXTURE;
+		states.width   = 0;
+		states.height  = 0;
+		states.map     = _CONFIG.map;
+		states.state   = states.state || 'horizontal-big';
+		states.states  = _CONFIG.states;
+		states.texture = _TEXTURE;
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

@@ -18,22 +18,22 @@ lychee.define('game.app.sprite.Goal').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, _CONFIG, data);
+		let states = Object.assign({}, _CONFIG, data);
 
 
-		settings.texture  = _TEXTURE;
-		settings.position = {
+		states.texture  = _TEXTURE;
+		states.position = {
 			x: -4096,
 			y: 0
 		};
-		settings.velocity = {
+		states.velocity = {
 			x: -256
 		};
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

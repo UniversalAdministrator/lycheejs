@@ -18,19 +18,19 @@ lychee.define('app.sprite.Midground').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.repeat  = false;
-		settings.states  = _CONFIG.states;
-		settings.texture = _TEXTURE;
-		settings.map     = _CONFIG.map;
-		settings.position = { x: 0, y: 0 };
+		states.repeat  = false;
+		states.states  = _CONFIG.states;
+		states.texture = _TEXTURE;
+		states.map     = _CONFIG.map;
+		states.position = { x: 0, y: 0 };
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

@@ -23,7 +23,7 @@ lychee.define('game.app.entity.Vesicle').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id     = 'vesicle-' + _id++;
@@ -37,19 +37,19 @@ lychee.define('game.app.entity.Vesicle').requires([
 		this.__health   = this.health;
 
 
-		this.setColor(settings.color);
-		this.setHealth(settings.health);
+		this.setColor(states.color);
+		this.setHealth(states.health);
 
-		delete settings.color;
-		delete settings.health;
-
-
-		settings.collision = _Entity.COLLISION.A;
-		settings.shape     = _Entity.SHAPE.circle;
-		settings.radius    = 16;
+		delete states.color;
+		delete states.health;
 
 
-		_Entity.call(this, settings);
+		states.collision = _Entity.COLLISION.A;
+		states.shape     = _Entity.SHAPE.circle;
+		states.radius    = 16;
+
+
+		_Entity.call(this, states);
 
 
 
@@ -57,10 +57,10 @@ lychee.define('game.app.entity.Vesicle').requires([
 		 * INITIALIZATION
 		 */
 
-		this.setTeam(settings.team);
+		this.setTeam(states.team);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -92,12 +92,12 @@ lychee.define('game.app.entity.Vesicle').requires([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'game.app.entity.Vesicle';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.team !== 'neutral') settings.team   = this.team;
-			if (this.health !== 100)     settings.health = this.health;
+			if (this.team !== 'neutral') states.team   = this.team;
+			if (this.health !== 100)     states.health = this.health;
 
 
 			if (this.color !== _PALETTE.neutral) blob.color    = this.color;
@@ -105,7 +105,7 @@ lychee.define('game.app.entity.Vesicle').requires([
 			if (this.__health !== 100)           blob.health   = this.__health;
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

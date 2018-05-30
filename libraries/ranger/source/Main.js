@@ -22,10 +22,8 @@ lychee.define('ranger.Main').requires([
 	const Composite = function(data) {
 
 		let states = Object.assign({
-
 			client: {},
 			server: null
-
 		}, data);
 
 

@@ -7,16 +7,16 @@ lychee.define('game.policy.Control').exports(function(lychee, global, attachment
 
 	const Composite = function(data) {
 
-		let settings = lychee.assignsafe({
+		let states = lychee.assignsafe({
 			entity: null,
 			target: null
 		}, data);
 
 
-		this.entity = settings.entity instanceof Object ? settings.entity : null;
-		this.target = settings.target instanceof Object ? settings.target : null;
+		this.entity = states.entity instanceof Object ? states.entity : null;
+		this.target = states.target instanceof Object ? states.target : null;
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -31,7 +31,7 @@ lychee.define('game.policy.Control').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			let settings = {
+			let states = {
 				entity: null,
 				target: null
 			};
@@ -39,7 +39,7 @@ lychee.define('game.policy.Control').exports(function(lychee, global, attachment
 
 			return {
 				'constructor': 'game.policy.Control',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

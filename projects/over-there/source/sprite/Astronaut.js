@@ -28,29 +28,29 @@ lychee.define('app.sprite.Astronaut').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.properties = {};
 
 
-		settings.width   = 32;
-		settings.height  = 32;
-		settings.map     = _CONFIG.map;
-		settings.shape   = _Entity.SHAPE.rectangle;
-		settings.states  = _CONFIG.states;
-		settings.state   = settings.state || _CONFIG.state;
-		settings.texture = _TEXTURES[_id++];
+		states.width   = 32;
+		states.height  = 32;
+		states.map     = _CONFIG.map;
+		states.shape   = _Entity.SHAPE.rectangle;
+		states.states  = _CONFIG.states;
+		states.state   = states.state || _CONFIG.state;
+		states.texture = _TEXTURES[_id++];
 
 
-		this.setProperties(settings.properties);
+		this.setProperties(states.properties);
 
-		delete settings.properties;
+		delete states.properties;
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

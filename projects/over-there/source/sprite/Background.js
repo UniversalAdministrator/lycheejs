@@ -19,18 +19,18 @@ lychee.define('app.sprite.Background').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.map     = _CONFIG.map;
-		settings.repeat  = _CONFIG.repeat;
-		settings.states  = _CONFIG.states;
-		settings.texture = _TEXTURE;
+		states.map     = _CONFIG.map;
+		states.repeat  = _CONFIG.repeat;
+		states.states  = _CONFIG.states;
+		states.texture = _TEXTURE;
 
 
-		_Background.call(this, settings);
+		_Background.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

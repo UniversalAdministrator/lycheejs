@@ -224,12 +224,7 @@ lychee.define('game.net.remote.Control').includes([
 
 	const Composite = function(remote) {
 
-		let settings = {};
-
-
-		_Session.call(this, 'control', remote, settings);
-
-		settings = null;
+		_Session.call(this, 'control', remote, {});
 
 
 

@@ -16,13 +16,13 @@ lychee.define('game.net.Server').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 		}, data);
 
 
-		_Server.call(this, settings);
+		_Server.call(this, states);
 
-		settings = null;
+		states = null;
 
 
 

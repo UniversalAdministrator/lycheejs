@@ -18,22 +18,22 @@ lychee.define('game.Renderer').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 		this.camera     = null;
 		this.compositor = null;
 
 
-		this.setCamera(settings.camera);
-		this.setCompositor(settings.compositor);
+		this.setCamera(states.camera);
+		this.setCompositor(states.compositor);
 
-		delete settings.camera;
-		delete settings.compositor;
+		delete states.camera;
+		delete states.compositor;
 
 
-		_Renderer.call(this, settings);
+		_Renderer.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -62,15 +62,15 @@ lychee.define('game.Renderer').requires([
 			let data = _Renderer.prototype.serialize.call(this);
 			data['constructor'] = 'game.Renderer';
 
-			let settings = (data['arguments'][0] || {});
-			let blob     = (data['blob'] || {});
+			let states = (data['arguments'][0] || {});
+			let blob   = (data['blob'] || {});
 
 
 			if (this.camera !== null)     blob.camera     = lychee.serialize(this.camera);
 			if (this.compositor !== null) blob.compositor = lychee.serialize(this.compositor);
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

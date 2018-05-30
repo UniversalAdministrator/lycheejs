@@ -28,7 +28,7 @@ lychee.define('game.app.entity.Unit').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 		this.id     = 'unit-' + _id++;
 		this.color  = '#efefef';
@@ -47,22 +47,22 @@ lychee.define('game.app.entity.Unit').requires([
 		};
 
 
-		this.setColor(settings.color);
-		this.setDamage(settings.damage);
-		this.setHealth(settings.health);
-		this.setSpeed(settings.speed);
+		this.setColor(states.color);
+		this.setDamage(states.damage);
+		this.setHealth(states.health);
+		this.setSpeed(states.speed);
 
-		delete settings.color;
-		delete settings.damage;
-		delete settings.health;
-		delete settings.speed;
-
-
-		settings.collision = _Entity.COLLISION.A;
-		settings.shape     = _Entity.SHAPE.circle;
+		delete states.color;
+		delete states.damage;
+		delete states.health;
+		delete states.speed;
 
 
-		_Entity.call(this, settings);
+		states.collision = _Entity.COLLISION.A;
+		states.shape     = _Entity.SHAPE.circle;
+
+
+		_Entity.call(this, states);
 
 
 
@@ -70,10 +70,10 @@ lychee.define('game.app.entity.Unit').requires([
 		 * INITIALIZATION
 		 */
 
-		this.setTeam(settings.team);
+		this.setTeam(states.team);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -105,14 +105,14 @@ lychee.define('game.app.entity.Unit').requires([
 			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'game.app.entity.Unit';
 
-			let settings = data['arguments'][0];
-			let blob     = (data['blob'] || {});
+			let states = data['arguments'][0];
+			let blob   = (data['blob'] || {});
 
 
-			if (this.damage !== 0)       settings.damage = this.damage;
-			if (this.health !== 100)     settings.health = this.health;
-			if (this.speed !== 100)      settings.speed  = this.speed;
-			if (this.team !== 'neutral') settings.team   = this.team;
+			if (this.damage !== 0)       states.damage = this.damage;
+			if (this.health !== 100)     states.health = this.health;
+			if (this.speed !== 100)      states.speed  = this.speed;
+			if (this.team !== 'neutral') states.team   = this.team;
 
 
 			if (this.color !== _PALETTE.neutral) blob.color    = this.color;
@@ -120,7 +120,7 @@ lychee.define('game.app.entity.Unit').requires([
 			if (this.__health !== 100)           blob.health   = this.__health;
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

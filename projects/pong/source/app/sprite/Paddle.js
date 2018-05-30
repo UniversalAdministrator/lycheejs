@@ -18,15 +18,15 @@ lychee.define('game.app.sprite.Paddle').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, _CONFIG, data);
+		let states = Object.assign({}, _CONFIG, data);
 
 
-		settings.texture = _TEXTURES[settings.state || 'good'];
+		states.texture = _TEXTURES[states.state || 'good'];
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

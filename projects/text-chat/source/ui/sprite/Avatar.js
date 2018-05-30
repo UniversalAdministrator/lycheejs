@@ -38,23 +38,23 @@ lychee.define('app.ui.sprite.Avatar').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.value = _random_color();
 
 
-		this.setValue(settings.value);
+		this.setValue(states.value);
 
-		delete settings.value;
-
-
-		settings.texture = _TEXTURE;
-		settings.width   = _CONFIG.width;
-		settings.height  = _CONFIG.height;
+		delete states.value;
 
 
-		_Sprite.call(this, settings);
+		states.texture = _TEXTURE;
+		states.width   = _CONFIG.width;
+		states.height  = _CONFIG.height;
+
+
+		_Sprite.call(this, states);
 
 
 
@@ -70,7 +70,7 @@ lychee.define('app.ui.sprite.Avatar').includes([
 		}, this);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -88,14 +88,14 @@ lychee.define('app.ui.sprite.Avatar').includes([
 			let data = _Sprite.prototype.serialize.call(this);
 			data['constructor'] = 'app.ui.sprite.Avatar';
 
-			let settings = data['arguments'][0] || {};
-			let blob     = data['blob'] || {};
+			let states = data['arguments'][0] || {};
+			let blob   = data['blob'] || {};
 
 
-			if (this.value !== null) settings.value = this.value;
+			if (this.value !== null) states.value = this.value;
 
 
-			data['arguments'][0] = settings;
+			data['arguments'][0] = states;
 			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 

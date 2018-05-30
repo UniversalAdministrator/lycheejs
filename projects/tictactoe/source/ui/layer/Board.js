@@ -18,7 +18,7 @@ lychee.define('game.ui.layer.Board').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.__statemap = {
@@ -29,8 +29,8 @@ lychee.define('game.ui.layer.Board').requires([
 		};
 
 
-		settings.width  = _CONFIG.width;
-		settings.height = _CONFIG.height;
+		states.width  = _CONFIG.width;
+		states.height = _CONFIG.height;
 
 
 
@@ -38,7 +38,7 @@ lychee.define('game.ui.layer.Board').requires([
 		 * INITIALIZATION
 		 */
 
-		settings.entities = [];
+		states.entities = [];
 
 		for (let e = 0; e < 9; e++) {
 
@@ -48,7 +48,7 @@ lychee.define('game.ui.layer.Board').requires([
 			let posx = -96 + (x * 64 + 16 * x - 64);
 			let posy = -96 + (y * 64 + 16 * y - 64);
 
-			settings.entities.push(new _Tile({
+			states.entities.push(new _Tile({
 				x:        x,
 				y:        y,
 				position: {
@@ -60,9 +60,9 @@ lychee.define('game.ui.layer.Board').requires([
 		}
 
 
-		_Layer.call(this, settings);
+		_Layer.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

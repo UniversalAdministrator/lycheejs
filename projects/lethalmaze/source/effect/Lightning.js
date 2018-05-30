@@ -75,7 +75,7 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
@@ -88,13 +88,13 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 		this.__start  = null;
 
 
-		this.type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : Composite.TYPE.easeout;
-		this.delay    = typeof settings.delay === 'number'           ? (settings.delay | 0)    : 0;
-		this.duration = typeof settings.duration === 'number'        ? (settings.duration | 0) : 250;
+		this.type     = lychee.enumof(Composite.TYPE, states.type) ? states.type           : Composite.TYPE.easeout;
+		this.delay    = typeof states.delay === 'number'           ? (states.delay | 0)    : 0;
+		this.duration = typeof states.duration === 'number'        ? (states.duration | 0) : 250;
 
-		if (settings.position instanceof Object) {
-			this.position.x = typeof settings.position.x === 'number' ? (settings.position.x | 0) : null;
-			this.position.y = typeof settings.position.y === 'number' ? (settings.position.y | 0) : null;
+		if (states.position instanceof Object) {
+			this.position.x = typeof states.position.x === 'number' ? (states.position.x | 0) : null;
+			this.position.y = typeof states.position.y === 'number' ? (states.position.y | 0) : null;
 		}
 
 	};
@@ -119,27 +119,27 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
-			if (this.delay !== 0)                     settings.delay    = this.delay;
-			if (this.duration !== 250)                settings.duration = this.duration;
+			if (this.type !== Composite.TYPE.easeout) states.type     = this.type;
+			if (this.delay !== 0)                     states.delay    = this.delay;
+			if (this.duration !== 250)                states.duration = this.duration;
 
 
 			if (this.position.x !== null || this.position.y !== null || this.position.z !== null) {
 
-				settings.position = {};
+				states.position = {};
 
-				if (this.position.x !== null) settings.position.x = this.position.x;
-				if (this.position.y !== null) settings.position.y = this.position.y;
+				if (this.position.x !== null) states.position.x = this.position.x;
+				if (this.position.y !== null) states.position.y = this.position.y;
 
 			}
 
 
 			return {
 				'constructor': 'game.effect.Lightning',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

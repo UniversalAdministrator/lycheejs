@@ -14,14 +14,14 @@ lychee.define('game.ui.entity.Label').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			font: _FONT
 		}, data);
 
 
-		_Label.call(this, settings);
+		_Label.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

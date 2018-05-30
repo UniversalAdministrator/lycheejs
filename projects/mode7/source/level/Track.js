@@ -253,10 +253,10 @@ lychee.define('game.level.Track').exports(function(lychee, global, attachments) 
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		this.id         = typeof settings.id === 'string' ? settings.id : 'circuit';
+		this.id         = typeof states.id === 'string' ? states.id : 'circuit';
 		this.length     = 0;
 
 		this.__palette  = [];
@@ -269,7 +269,7 @@ lychee.define('game.level.Track').exports(function(lychee, global, attachments) 
 
 		_parse_track.call(this, (_TRACKS[this.id] || _TRACKS.circuit).buffer);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -297,15 +297,15 @@ lychee.define('game.level.Track').exports(function(lychee, global, attachments) 
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.id !== 'circuit') settings.id = this.id;
+			if (this.id !== 'circuit') states.id = this.id;
 
 
 			return {
 				'constructor': 'game.level.Track',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

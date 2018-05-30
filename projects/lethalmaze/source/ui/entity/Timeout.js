@@ -20,7 +20,7 @@ lychee.define('game.ui.entity.Timeout').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.timeout = 30000;
@@ -34,19 +34,19 @@ lychee.define('game.ui.entity.Timeout').requires([
 		};
 
 
-		this.setTimeout(settings.timeout);
+		this.setTimeout(states.timeout);
 
-		delete settings.timeout;
-
-
-		settings.width  = typeof settings.width === 'number'  ? settings.width  : 512;
-		settings.height = typeof settings.height === 'number' ? settings.height : 512;
-		settings.shape  = _Entity.SHAPE.rectangle;
+		delete states.timeout;
 
 
-		_Entity.call(this, settings);
+		states.width  = typeof states.width === 'number'  ? states.width  : 512;
+		states.height = typeof states.height === 'number' ? states.height : 512;
+		states.shape  = _Entity.SHAPE.rectangle;
 
-		settings = null;
+
+		_Entity.call(this, states);
+
+		states = null;
 
 
 

@@ -18,21 +18,21 @@ lychee.define('game.app.sprite.Bullet').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.collision = _Entity.COLLISION.A;
-		settings.texture   = _TEXTURE;
-		settings.map       = _CONFIG.map;
-		settings.radius    = _CONFIG.radius;
-		settings.shape     = _Entity.SHAPE.circle;
-		settings.states    = _CONFIG.states;
-		settings.state     = 'default';
+		states.collision = _Entity.COLLISION.A;
+		states.texture   = _TEXTURE;
+		states.map       = _CONFIG.map;
+		states.radius    = _CONFIG.radius;
+		states.shape     = _Entity.SHAPE.circle;
+		states.states    = _CONFIG.states;
+		states.state     = 'default';
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

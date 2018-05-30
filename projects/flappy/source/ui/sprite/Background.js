@@ -15,21 +15,21 @@ lychee.define('game.ui.sprite.Background').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.color   = '#050a0d';
-		settings.texture = _TEXTURE;
-		settings.map     = _CONFIG.map;
-		settings.states  = _CONFIG.states;
-		settings.state   = 'default';
-		settings.width   = _CONFIG.width;
-		settings.height  = _CONFIG.height;
+		states.color   = '#050a0d';
+		states.texture = _TEXTURE;
+		states.map     = _CONFIG.map;
+		states.states  = _CONFIG.states;
+		states.state   = 'default';
+		states.width   = _CONFIG.width;
+		states.height  = _CONFIG.height;
 
 
-		_Background.call(this, settings);
+		_Background.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

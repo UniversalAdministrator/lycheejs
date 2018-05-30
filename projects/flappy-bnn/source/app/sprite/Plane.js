@@ -15,7 +15,7 @@ lychee.define('game.app.sprite.Plane').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, _CONFIG, data);
+		let states = Object.assign({}, _CONFIG, data);
 
 
 		this.alive = true;
@@ -24,20 +24,20 @@ lychee.define('game.app.sprite.Plane').includes([
 		this.__timeout = null;
 
 
-		settings.texture = _TEXTURE;
-		settings.position = {
+		states.texture = _TEXTURE;
+		states.position = {
 			x: 0,
 			y: 0
 		};
-		settings.velocity = {
+		states.velocity = {
 			x: 0,
 			y: 0
 		};
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

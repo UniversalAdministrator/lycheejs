@@ -20,29 +20,29 @@ lychee.define('app.ui.entity.Bubble').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.key   = 'urine';
 		this.value = '0%';
 
 
-		this.setKey(settings.key);
-		this.setValue(settings.value);
+		this.setKey(states.key);
+		this.setValue(states.value);
 
 
-		delete settings.key;
-		delete settings.value;
+		delete states.key;
+		delete states.value;
 
 
-		settings.alpha  = 1.0;
-		settings.radius = 48;
-		settings.shape  = _Entity.SHAPE.circle;
+		states.alpha  = 1.0;
+		states.radius = 48;
+		states.shape  = _Entity.SHAPE.circle;
 
 
-		_Entity.call(this, settings);
+		_Entity.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -61,11 +61,16 @@ lychee.define('app.ui.entity.Bubble').includes([
 			data['constructor'] = 'app.ui.entity.Bubble';
 
 
-			let settings = data['arguments'][0] || {};
+			let states = data['arguments'][0] || {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.key !== 'urine') settings.key   = this.key;
-			if (this.value !== '0%')  settings.value = this.value;
+			if (this.key !== 'urine') states.key   = this.key;
+			if (this.value !== '0%')  states.value = this.value;
+
+
+			data['arguments'][0] = states;
+			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 
 			return data;

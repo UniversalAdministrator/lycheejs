@@ -18,21 +18,21 @@ lychee.define('game.app.sprite.Terrain').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.texture = _TEXTURE;
-		settings.map     = _CONFIG.map;
-		settings.width   = _CONFIG.width;
-		settings.height  = _CONFIG.height;
-		settings.shape   = _Entity.SHAPE.rectangle;
-		settings.states  = _CONFIG.states;
-		settings.state   = 'default';
+		states.texture = _TEXTURE;
+		states.map     = _CONFIG.map;
+		states.width   = _CONFIG.width;
+		states.height  = _CONFIG.height;
+		states.shape   = _Entity.SHAPE.rectangle;
+		states.states  = _CONFIG.states;
+		states.state   = 'default';
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

@@ -13,7 +13,7 @@ lychee.define('game.app.entity.unit.Leucocyte').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({
+		let states = Object.assign({
 			team:   'neutral',
 			damage: 100,
 			health: 200,
@@ -22,9 +22,9 @@ lychee.define('game.app.entity.unit.Leucocyte').includes([
 		}, data);
 
 
-		_Unit.call(this, settings);
+		_Unit.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

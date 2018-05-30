@@ -21,7 +21,7 @@ lychee.define('game.app.entity.Background').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.origin    = { bgx: 0, bgy: 0, fgx: 0, fgy: 0 };
@@ -30,20 +30,20 @@ lychee.define('game.app.entity.Background').includes([
 		this.__isDirty = true;
 
 
-		this.setOrigin(settings.origin);
+		this.setOrigin(states.origin);
 
 
-		delete settings.origin;
+		delete states.origin;
 
 
-		settings.width  = settings.width  || 1024;
-		settings.height = settings.height || 512;
-		settings.states = _CONFIG.states;
+		states.width  = states.width  || 1024;
+		states.height = states.height || 512;
+		states.states = _CONFIG.states;
 
 
-		_Entity.call(this, settings);
+		_Entity.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

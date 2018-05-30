@@ -18,22 +18,22 @@ lychee.define('game.app.sprite.Item').requires([
 
 	const Composite = function(data, main) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.collision = _Entity.COLLISION.A;
-		settings.texture   = _TEXTURE;
-		settings.map       = _CONFIG.map;
-		settings.width     = _CONFIG.width  - 4;
-		settings.height    = _CONFIG.height - 4;
-		settings.shape     = _Entity.SHAPE.rectangle;
-		settings.states    = _CONFIG.states;
-		settings.state     = 'default';
+		states.collision = _Entity.COLLISION.A;
+		states.texture   = _TEXTURE;
+		states.map       = _CONFIG.map;
+		states.width     = _CONFIG.width  - 4;
+		states.height    = _CONFIG.height - 4;
+		states.shape     = _Entity.SHAPE.rectangle;
+		states.states    = _CONFIG.states;
+		states.state     = 'default';
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

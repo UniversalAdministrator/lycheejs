@@ -18,17 +18,17 @@ lychee.define('app.sprite.Emblem').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
-		settings.texture = _TEXTURE;
-		settings.width   = _CONFIG.width;
-		settings.height  = _CONFIG.height;
+		states.texture = _TEXTURE;
+		states.width   = _CONFIG.width;
+		states.height  = _CONFIG.height;
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 

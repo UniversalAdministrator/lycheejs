@@ -7,7 +7,7 @@ lychee.define('game.policy.Paddle').exports(function(lychee, global, attachments
 
 	const Composite = function(data) {
 
-		let settings = lychee.assignsafe({
+		let states = lychee.assignsafe({
 			entity: null,
 			limit:  {
 				x: Infinity,
@@ -16,10 +16,10 @@ lychee.define('game.policy.Paddle').exports(function(lychee, global, attachments
 			}
 		}, data);
 
-		this.entity = settings.entity instanceof Object ? settings.entity : null;
-		this.limit  = settings.limit instanceof Object  ? settings.limit  : { x: Infinity, y: Infinity, z: Infinity };
+		this.entity = states.entity instanceof Object ? states.entity : null;
+		this.limit  = states.limit instanceof Object  ? states.limit  : { x: Infinity, y: Infinity, z: Infinity };
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -34,7 +34,7 @@ lychee.define('game.policy.Paddle').exports(function(lychee, global, attachments
 
 		serialize: function() {
 
-			let settings = {
+			let states = {
 				entity: null,
 				limit:  this.limit
 			};
@@ -42,7 +42,7 @@ lychee.define('game.policy.Paddle').exports(function(lychee, global, attachments
 
 			return {
 				'constructor': 'game.policy.Paddle',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

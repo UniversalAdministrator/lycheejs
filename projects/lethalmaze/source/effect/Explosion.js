@@ -11,7 +11,7 @@ lychee.define('game.effect.Explosion').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	const Composite = function(settings) {
+	const Composite = function(states) {
 
 		this.delay    = 0;
 		this.duration = 250;
@@ -25,13 +25,13 @@ lychee.define('game.effect.Explosion').exports(function(lychee, global, attachme
 		this.__sound  = true;
 
 
-		this.delay    = typeof settings.delay === 'number'    ? (settings.delay | 0)    : 0;
-		this.duration = typeof settings.duration === 'number' ? (settings.duration | 0) : 250;
+		this.delay    = typeof states.delay === 'number'    ? (states.delay | 0)    : 0;
+		this.duration = typeof states.duration === 'number' ? (states.duration | 0) : 250;
 
-		if (settings.position !== null) {
-			this.position.x = typeof settings.position.x === 'number' ? (settings.position.x | 0) : null;
-			this.position.y = typeof settings.position.y === 'number' ? (settings.position.y | 0) : null;
-			this.position.z = typeof settings.position.z === 'number' ? (settings.position.z | 0) : null;
+		if (states.position !== null) {
+			this.position.x = typeof states.position.x === 'number' ? (states.position.x | 0) : null;
+			this.position.y = typeof states.position.y === 'number' ? (states.position.y | 0) : null;
+			this.position.z = typeof states.position.z === 'number' ? (states.position.z | 0) : null;
 		}
 
 	};
@@ -43,27 +43,27 @@ lychee.define('game.effect.Explosion').exports(function(lychee, global, attachme
 
 		serialize: function() {
 
-			let settings = {};
+			let states = {};
 
 
-			if (this.delay !== 0)      settings.delay    = this.delay;
-			if (this.duration !== 250) settings.duration = this.duration;
+			if (this.delay !== 0)      states.delay    = this.delay;
+			if (this.duration !== 250) states.duration = this.duration;
 
 
 			if (this.position.x !== null || this.position.y !== null || this.position.z !== null) {
 
-				settings.position = {};
+				states.position = {};
 
-				if (this.position.x !== null) settings.position.x = this.position.x;
-				if (this.position.y !== null) settings.position.y = this.position.y;
-				if (this.position.z !== null) settings.position.z = this.position.z;
+				if (this.position.x !== null) states.position.x = this.position.x;
+				if (this.position.y !== null) states.position.y = this.position.y;
+				if (this.position.z !== null) states.position.z = this.position.z;
 
 			}
 
 
 			return {
 				'constructor': 'game.effect.Explosion',
-				'arguments':   [ settings ]
+				'arguments':   [ states ]
 			};
 
 		},

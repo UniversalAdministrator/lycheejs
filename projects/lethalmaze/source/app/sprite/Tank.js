@@ -27,7 +27,7 @@ lychee.define('game.app.sprite.Tank').requires([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, data);
+		let states = Object.assign({}, data);
 
 
 		this.id        = '' + _IDS[(_id++ % _IDS.length)];
@@ -41,25 +41,25 @@ lychee.define('game.app.sprite.Tank').requires([
 		this.__lifeclock = null;
 
 
-		this.setAmmo(settings.ammo);
-		this.setLife(settings.life);
+		this.setAmmo(states.ammo);
+		this.setLife(states.life);
 
 
-		delete settings.ammo;
-		delete settings.life;
+		delete states.ammo;
+		delete states.life;
 
 
-		settings.collision = _Entity.COLLISION.A;
-		settings.texture   = _TEXTURE;
-		settings.map       = _CONFIG.map;
-		settings.width     = _CONFIG.width;
-		settings.height    = _CONFIG.height;
-		settings.shape     = _Entity.SHAPE.rectangle;
-		settings.states    = _CONFIG.states;
-		settings.state     = this.id + '-' + this.direction;
+		states.collision = _Entity.COLLISION.A;
+		states.texture   = _TEXTURE;
+		states.map       = _CONFIG.map;
+		states.width     = _CONFIG.width;
+		states.height    = _CONFIG.height;
+		states.shape     = _Entity.SHAPE.rectangle;
+		states.states    = _CONFIG.states;
+		states.state     = this.id + '-' + this.direction;
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
 
 
@@ -67,10 +67,10 @@ lychee.define('game.app.sprite.Tank').requires([
 		 * INITIALIZATION
 		 */
 
-		this.setDirection(settings.direction);
+		this.setDirection(states.direction);
 
 
-		settings = null;
+		states = null;
 
 	};
 
@@ -97,12 +97,17 @@ lychee.define('game.app.sprite.Tank').requires([
 			data['constructor'] = 'game.app.sprite.Tank';
 
 
-			let settings = data['arguments'][0] || {};
+			let states = data['arguments'][0] || {};
+			let blob   = (data['blob'] || {});
 
 
-			if (this.ammo !== 16)         settings.ammo      = this.ammo;
-			if (this.direction !== 'top') settings.direction = this.direction;
-			if (this.life !== 4)          settings.life      = this.life;
+			if (this.ammo !== 16)         states.ammo      = this.ammo;
+			if (this.direction !== 'top') states.direction = this.direction;
+			if (this.life !== 4)          states.life      = this.life;
+
+
+			data['arguments'][0] = states;
+			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 
 			return data;

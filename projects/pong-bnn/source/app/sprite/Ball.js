@@ -15,15 +15,15 @@ lychee.define('game.app.sprite.Ball').includes([
 
 	const Composite = function(data) {
 
-		let settings = Object.assign({}, _CONFIG, data);
+		let states = Object.assign({}, _CONFIG, data);
 
 
-		settings.texture = _TEXTURE;
+		states.texture = _TEXTURE;
 
 
-		_Sprite.call(this, settings);
+		_Sprite.call(this, states);
 
-		settings = null;
+		states = null;
 
 	};
 
