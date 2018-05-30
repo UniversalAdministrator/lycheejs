@@ -19,8 +19,9 @@ lychee.define('strainer.Main').requires([
 	const Composite = function(states) {
 
 		this.settings = _lychee.assignsafe({
-			cwd:     lychee.ROOT.lychee,
 			action:  null,
+			cwd:     lychee.ROOT.lychee,
+			debug:   false,
 			project: null
 		}, states);
 

@@ -1356,7 +1356,7 @@ lychee.define('strainer.flow.Check').requires([
 							let result     = config.buffer.result;
 
 
-							knowledge.settings   = Object.keys(result.settings);
+							knowledge.states     = Object.keys(result.states);
 							knowledge.properties = Object.keys(result.properties);
 							knowledge.enums      = Object.keys(result.enums);
 							knowledge.events     = Object.keys(result.events);

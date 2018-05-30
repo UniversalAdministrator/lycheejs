@@ -274,6 +274,10 @@ lychee.define('strainer.api.PARSER').requires([
 
 				}
 
+			} else if (str.startsWith('lychee.assignsafe') || str.startsWith('_lychee.assignsafe')) {
+
+				type = 'Object';
+
 			} else if (str.startsWith('lychee.assignunlink') || str.startsWith('_lychee.assignunlink')) {
 
 				type = 'Object';
@@ -533,6 +537,10 @@ lychee.define('strainer.api.PARSER').requires([
 					}
 
 				}
+
+			} else if (str.startsWith('lychee.assignsafe') || str.startsWith('_lychee.assignsafe')) {
+
+				value = {};
 
 			} else if (str.startsWith('lychee.assignunlink') || str.startsWith('_lychee.assignunlink')) {
 

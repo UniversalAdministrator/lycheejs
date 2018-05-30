@@ -736,6 +736,10 @@ lychee = (function(global) {
 
 								Module.assignsafe(target[prop], object[prop]);
 
+							} else if (tvalue === null && ovalue !== null) {
+
+								target[prop] = object[prop];
+
 							} else if (typeof tvalue === typeof ovalue) {
 
 								target[prop] = object[prop];
